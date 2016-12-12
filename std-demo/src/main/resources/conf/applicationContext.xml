@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <description>Spring common configuration file</description>
+
+    <!-- use annotation -->
+    <context:annotation-config/>
+
+    <context:property-placeholder location="classpath:/system.properties"/>
+
+    <context:component-scan base-package="com.address" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <import resource="applicationContext-mybatis.xml"/>
+
+    <task:scheduler id="myScheduler" pool-size="20"/>
+    <task:annotation-driven scheduler="myScheduler"/>
+
+    <!-- 扫描service包下所有使用注解的类型 -->
+    <context:component-scan base-package="com.address.service"/>
+
+</beans>

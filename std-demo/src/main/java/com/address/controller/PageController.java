@@ -23,21 +23,19 @@ import javax.servlet.http.HttpServletResponse;
 public class PageController {
     // 执行性能跟踪
     @RequestMapping("std")
-    public String taskPerformance(HttpServletRequest request, HttpServletResponse response) {
-
+    public String taskPerformance() {
         return "std";
     }
-    
- // 执行性能跟踪
-    @RequestMapping("index")
-    public String indexPage(HttpServletRequest request, HttpServletResponse response) {
 
+    // 执行性能跟踪
+    @RequestMapping("index")
+    public String indexPage() {
         return "index";
     }
-    
+
     @RequestMapping(value = "/analysis", method = RequestMethod.GET)
     @ResponseBody
-	public Map<?, ?> analysis(@RequestParam("address")String address) {
+    public Map<?, ?> analysis(@RequestParam("address") String address) {
         Map<String, Object> result = new HashMap<>();
         StdModel stdModel = AddressExtractor.parseAll(address);
         if(stdModel!=null) {
@@ -52,6 +50,6 @@ public class PageController {
         }
         return result;
 
-	}
+    }
 
 }

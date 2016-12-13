@@ -22,10 +22,6 @@
     </context:component-scan>
 
     <import resource="applicationContext-mybatis.xml"/>
-
-    <task:scheduler id="myScheduler" pool-size="20"/>
-    <task:annotation-driven scheduler="myScheduler"/>
-
     <!-- 扫描service包下所有使用注解的类型 -->
     <context:component-scan base-package="com.address.service"/>
 

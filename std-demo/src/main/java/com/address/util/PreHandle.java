@@ -3,6 +3,7 @@ package com.address.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.address.model.StdModel;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -10,14 +11,15 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class PreHandle {
 
-    public static String handle(String input) {
+    public static StdModel handle(StdModel model) {
+        String input = model.getAddress();
         if (input == null)
             return null;
-
-        String result = removeDistrict(input);
-        result = filterReduplicate2_3(result);
-        result = trimFushi(result);
-        return result;
+        String temp;
+        model = removeDistrict(model);
+        temp = filterReduplicate2_3(model.getAddress());
+        model.setAddress(trimFushi(temp));
+        return model;
     }
 
     /**
@@ -34,6 +36,7 @@ public class PreHandle {
         }
         return input;
     }
+
     public static String filterReduplicate2_3(String input) {
         if (input == null)
             return null;
@@ -65,23 +68,28 @@ public class PreHandle {
         return input;
     }
 
-    private static String removeDistrict(String result) {
-
+    private static StdModel removeDistrict(StdModel model) {
+        String result = model.getAddress();
         result = StringUtils.removeStart(result, "上海市");
         result = StringUtils.removeStart(result, "上海");
+        for (String d : districts) {
+            if (result.contains(d)) {
+                model.setDistrict(d);
+            }
+            result = StringUtils.removeStart(result, d);
+        }
         Pattern pattern = Pattern.compile("^([\\u4E00-\\u9FA5]{2,3}[区县])");
         Matcher matcher = pattern.matcher(result);
 
         if (matcher.find()) {
             result = result.replaceFirst(matcher.group(1), "");
         }
-        for (String d : districts) {
-            result = StringUtils.removeStart(result, d);
-        }
 
-        return result;
+        model.setAddress(result);
+
+        return model;
     }
 
-    private static String[] districts = new String[]{"杨浦区", "宝山区", "嘉定区", "闸北区", "静安区", "浦东新区", "黄浦区",
-            "青浦区", "闵行区", "奉贤区", "普陀区", "南汇区", "金山区", "松江区", "崇明区", "崇明县"};
+    private static String[] districts = new String[] { "杨浦区", "宝山区", "嘉定区", "闸北区", "静安区", "浦东新区", "黄浦区",
+            "青浦区", "闵行区", "奉贤区", "普陀区", "南汇区", "金山区", "松江区", "崇明区", "崇明县" };
 }

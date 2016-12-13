@@ -7,6 +7,8 @@ public class StdModel {
 
     private String id;
 
+    private String address;
+
     private String residence;
 
     public String getResidence() {
@@ -45,18 +47,26 @@ public class StdModel {
 
     private String code;// 标准地址编码
 
-    private String analySu;// 是否解析成功
+    private String flag;// 状态 1：解析成功 ，2： 区县不对应， 3：解析失败
 
-    public String getAnalySu() {
-        return analySu;
+    public String getFlag() {
+        return flag;
     }
 
-    public void setAnalySu(String analySu) {
-        this.analySu = analySu;
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setId(String id) {
@@ -139,6 +149,7 @@ public class StdModel {
     public String toString() {
         final StringBuilder sb = new StringBuilder("StdModel{");
         sb.append("id='").append(id).append('\'');
+        sb.append(", address='").append(address).append('\'');
         sb.append(", residence='").append(residence).append('\'');
         sb.append(", city='").append(city).append('\'');
         sb.append(", district='").append(district).append('\'');
@@ -150,7 +161,16 @@ public class StdModel {
         sb.append(", building='").append(building).append('\'');
         sb.append(", houseNum='").append(houseNum).append('\'');
         sb.append(", code='").append(code).append('\'');
+        sb.append(", flag='").append(flag).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    public StdModel(String address) {
+        this.address = address;
+    }
+
+    public StdModel() {
+
     }
 }

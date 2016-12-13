@@ -69,12 +69,12 @@ public class AddressExtractor {
             + ")|(?<rn0>.+弄))" + ".*?" + __buildingRegex.pattern());
 
     private static final Pattern residenceBuilding_lowThanRoad_regex = Pattern
-            .compile("(?<rn1>.+?(?:号|村|坊|道|苑|园|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区))" + ".*?"
+            .compile("(?<rn1>.+?(?:号|村|坊|道|苑|园|典|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区))" + ".*?"
                     + __buildingRegex.pattern());
 
     // 直接解析出室号
     private static final Pattern residenceBuildingRoom_regex = Pattern.compile("(?:(?<rn2>" + allResidence
-            + ")|(?<rn0>.+弄)|(?<rn1>.+?(?:号|村|坊|道|苑|园|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区)))"
+            + ")|(?<rn0>.+弄)|(?<rn1>.+?(?:号|村|坊|道|苑|园|典|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区)))"
             + ".*?" + "[\\-/\\\\|](?<b>\\d+)号?[\\-/\\\\|](?<r>\\d+)室?");
 
     private static final Pattern roadBuilding_regex = Pattern.compile("(?:(?<rn0>.+[路街]))" + ".*?"
@@ -172,7 +172,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll("大康路859弄"));
+        System.out.println(parseAll("滨江晶典12号202室"));
     }
 
     private static boolean isMatch(String str, Pattern p) {

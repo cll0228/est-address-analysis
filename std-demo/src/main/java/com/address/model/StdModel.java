@@ -29,7 +29,7 @@ public class StdModel {
 
     private String road;// /路
 
-    private String lane;//弄
+    private String lane;// 弄
 
     public String getLane() {
         return lane;
@@ -44,6 +44,16 @@ public class StdModel {
     private String houseNum;// 房屋室号
 
     private String code;// 标准地址编码
+
+    private String analySu;// 是否解析成功
+
+    public String getAnalySu() {
+        return analySu;
+    }
+
+    public void setAnalySu(String analySu) {
+        this.analySu = analySu;
+    }
 
     public String getId() {
         return id;

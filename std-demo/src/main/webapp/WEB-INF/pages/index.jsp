@@ -19,13 +19,56 @@
     </div>
     <!-- /input-group -->
 </div>
+
+<div class="clearfix">
+                                        <div class="panel panel-success">
+                                            <!-- Default panel contents -->
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">地址解析结果</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <table height="30px">
+                                                	<tr>
+                                                		<td id="ts"></td>
+                                                	</tr>
+                                                </table>
+                                            </div>
+                                            <!-- Table -->
+                                            <table class="table" height="80px">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="17%">区县</th>
+                                                        <th width="17%">街道</th>
+                                                        <th width="17%">居委</th>
+                                                        <th width="17%">路弄</th>
+                                                        <th width="17%">号</th>
+                                                        <th width="17%">室</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td id="qx"></td>
+                                                        <td id="jd"></td>
+                                                        <td id="jw"></td>
+                                                        <td id="ln"></td>
+                                                        <td id="h"></td>
+                                                        <td id="s"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
 </div>
 <%@include file="/WEB-INF/pages/include/bottom.jsp" %>
 </body>
-<<script type="text/javascript">
+<script type="text/javascript">
 function analysis(){
 	var address = $("#in").val();
-	$.ajax({
+	if(address=="") {
+		bootbox.alert("地址不能为空，请重新输入");
+	} else {
+		$.ajax({
         url: '${ctx}/analysis?address=' + address,
         type: "GET",
         //data: param,
@@ -38,10 +81,22 @@ function analysis(){
             }
         },
         success: function (data) {
-            alert(data.aaa);
+            $("#qx").html(data.qx);
+            $("#jd").html(data.jd);
+            $("#jw").html(data.jw);
+            $("#ln").html(data.ln);
+            $("#h").html(data.h);
+            $("#s").html(data.s);
+            if(data.f=="1") {
+            	$("#ts").html("解析成功").css("color","green");
+            } else if(data.f=="2") {
+            	$("#ts").html("区县不对应").css("color","red");
+            } else if(data.f=="3") {
+            	$("#ts").html("解析失败").css("color","red");
+            }
         }
     });
-	
+	}
 }
 </script>
 </html>

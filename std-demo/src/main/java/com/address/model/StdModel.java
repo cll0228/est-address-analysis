@@ -47,7 +47,7 @@ public class StdModel {
 
     private String code;// 标准地址编码
 
-    private String flag;// 状态 1：解析成功 ，2： 区县不对应， 3：解析失败 ,4:未查到资源
+    private String flag;// 状态 1：解析成功 ，2： 区县不对应， 3：解析失败 ,4:未查到资源 ,5:道路不存在
 
     public String getFlag() {
         return flag;

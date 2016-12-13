@@ -27,6 +27,10 @@ public class StdService {
         // 判断区县是否对应
         if (model.getRoad() != null && model.getDistrict() != null) {
             String districtName = mapper.getDistrictByRoad(model.getRoad());
+            if (null == districtName) {
+                model.setFlag("5");
+                return model;
+            }
             if (null != districtName && !districtName.equals(model.getDistrict())) {
                 model.setFlag("2");// 区县不对应
                 return model;
@@ -62,6 +66,6 @@ public class StdService {
                 "classpath:/conf/applicationContext*.xml");
         context.start();
         StdService bean = context.getBean(StdService.class);
-         bean.analysis("杨浦区大康路859弄");
+        bean.analysis("文化花园");
     }
 }

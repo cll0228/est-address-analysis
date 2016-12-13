@@ -173,7 +173,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll(new StdModel("杨浦区大康路859弄")));
+        System.out.println(parseAll(new StdModel("保德小区")));
     }
 
     private static boolean isMatch(String str, Pattern p) {

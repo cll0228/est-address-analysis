@@ -128,14 +128,14 @@ public class AddressGenerator {
 					if(string.equals("解放街6号")){
 						System.out.println("in");
 					}
-					StdModel stdModel = AddressExtractor.parseAll(string+"1号101室");
-					if(stdModel==null||"nullnull".equals(stdModel.getResidence())||"null".equals(stdModel.getResidence())) {
-						Row row = sheet2.createRow(i);
-						Cell cell = row.createCell(0);
-						cell.setCellValue("\""+string+"\"");
-						System.out.println(string);
-						i++;
-					}
+//					StdModel stdModel = AddressExtractor.parseAll(string+"1号101室");
+//					if(stdModel==null||"nullnull".equals(stdModel.getResidence())||"null".equals(stdModel.getResidence())) {
+//						Row row = sheet2.createRow(i);
+//						Cell cell = row.createCell(0);
+//						cell.setCellValue("\""+string+"\"");
+//						System.out.println(string);
+//						i++;
+//					}
 				}
 			}
 			OutputStream outputStream = new FileOutputStream(path);
@@ -159,7 +159,7 @@ public class AddressGenerator {
 	/**
 	 * 查询数据库
 	 * 
-	 * @param startName
+//	 * @param startName
 	 * @return
 	 * @throws Exception
 	 */

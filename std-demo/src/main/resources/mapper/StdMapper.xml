@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.address.mapper.StdMapper">
+    <select id="getDistrictByRoad" resultType="java.lang.String">
+        SELECT adname FROM ocn_address.sh_road_name_dic WHERE name = #{road};
+    </select>
+    <select id="getStdAddr" resultType="com.address.model.StdModel" parameterType="java.lang.String">
+        SELECT
+            std_address.std_addr_id id,
+            std_address.road_lane road,
+            std_address.addr_code code,
+            std_address.of_block_id street,
+            std_address.of_committe_id committe
+        FROM
+            ocn_address.of_std_address std_address
+        LEFT JOIN ocn_address.of_road_lane_links road_lane_links ON std_address.std_addr_id = road_lane_links.std_addr_id
+        WHERE
+            road_lane_links.road_lane_id = (
+                SELECT
+                    road_lane_id
+                FROM
+                    ocn_address.of_road_lane_match
+                WHERE
+                    lianjia_residence_name = #{residence}
+                OR soufang_residence_name = #{residence}
+                OR iwjw_residence_name = #{residence}
+                OR centanet_residence_name = #{residence}
+                OR fangjia_residence_name = #{residence}
+                OR lezhi_residence_name = #{residence}
+            )
+    </select>
+
+    <select id="getStdAddr1" resultType="com.address.model.StdModel" parameterType="com.address.model.StdModel">
+        SELECT  	std_addr_id id,
+        addr_code code,
+        road_lane road,
+        building_no building,
+        house_no houseNum from ocn_address.of_std_address std_address WHERE road_lane = '${model.road}${model.lane}'
+        <if test="null != model.building">
+            AND building_no = '${model.building}号'
+        </if>
+        <if test="null != model.houseNum">
+            AND house_no = '${model.houseNum}室'
+        </if>
+    </select>
+</mapper>

@@ -8,10 +8,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.address.model.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
+
+import com.address.model.StdModel;
 
 @SuppressWarnings("all")
 public class AddressExtractor {
@@ -69,12 +70,12 @@ public class AddressExtractor {
             + ")|(?<rn0>.+弄))" + ".*?" + __buildingRegex.pattern());
 
     private static final Pattern residenceBuilding_lowThanRoad_regex = Pattern
-            .compile("(?<rn1>.+?(?:号|村|坊|道|苑|园|典|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区))" + ".*?"
+            .compile("(?<rn1>.+?(?:号|村|坊|道|苑|典|园|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区))" + ".*?"
                     + __buildingRegex.pattern());
 
     // 直接解析出室号
     private static final Pattern residenceBuildingRoom_regex = Pattern.compile("(?:(?<rn2>" + allResidence
-            + ")|(?<rn0>.+弄)|(?<rn1>.+?(?:号|村|坊|道|苑|园|典|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区)))"
+            + ")|(?<rn0>.+弄)|(?<rn1>.+?(?:号|村|坊|道|苑|园|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区)))"
             + ".*?" + "[\\-/\\\\|](?<b>\\d+)号?[\\-/\\\\|](?<r>\\d+)室?");
 
     private static final Pattern roadBuilding_regex = Pattern.compile("(?:(?<rn0>.+[路街]))" + ".*?"
@@ -172,7 +173,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll("滨江晶典12号202室"));
+        System.out.println(parseAll(new StdModel("杨浦区大康路859弄")));
     }
 
     private static boolean isMatch(String str, Pattern p) {
@@ -180,7 +181,9 @@ public class AddressExtractor {
         return m.find();
     }
 
-    private static String preProcess(String line) {
+    private static StdModel preProcess(StdModel model) {
+
+        String line = model.getAddress();
 
         if (line.contains("车库")) {
             return null;
@@ -197,9 +200,9 @@ public class AddressExtractor {
         if (matcher.find()) {
             line = line.replaceFirst(matcher.group(1), "");
         }
-
-        line = PreHandle.handle(line);
-
+        model.setAddress(line);
+        model = PreHandle.handle(model);
+        line = model.getAddress();
         pattern = Pattern.compile(".+?([\\d]{1,2}层[\\d]{1,2}室)");
         matcher = pattern.matcher(line);
         if (matcher.find()) {
@@ -241,26 +244,27 @@ public class AddressExtractor {
         if (matcher.find()) {
             line = line.replaceFirst(matcher.group(1), "");
         }
-
-        return line;
+        model.setAddress(line);
+        return model;
     }
 
-    public static StdModel parseAll(String line) {
+    public static StdModel parseAll(StdModel model) {
+        String line = model.getAddress();
         if (line != null)
             line = line.trim();
         else
             return null;
 
-        line = preProcess(line);
-        if (line == null)
+        model = preProcess(model);
+        if (model.getAddress() == null)
             return null;
 
-        return parseAll__(line);
+        return parseAll__(model);
     }
 
-    private static StdModel parseAll__(String line) {
+    private static StdModel parseAll__(StdModel model) {
 
-        StdModel model = new StdModel();
+        String line = model.getAddress();
 
         String[] arr = RegexUtil.regexGroup(line,
                 Pattern.compile("^([\\u4E00-\\u9FA5]+[路街])(\\d+)号楼?(\\d+)室?$"));
@@ -269,33 +273,64 @@ public class AddressExtractor {
             model.setRoad(arr[0]);
             model.setBuilding(arr[1] + "号");
             model.setHouseNum(room);
-
+            return model;
         }
+
+        // 大康路896弄恒达家园2号702
+        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)(\\d+)号(\\d+)$"));
+        if (arr != null) {
+            model.setRoad(arr[0] + "路");
+            model.setLane(arr[1] + "弄");
+            model.setResidence(arr[2]);
+            model.setBuilding(arr[3]);
+            model.setHouseNum(arr[4]);
+            return model;
+        }
+
+        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)(\\d+)号$"));
+        if (arr != null) {
+            model.setRoad(arr[0] + "路");
+            model.setLane(arr[1] + "弄");
+            model.setResidence(arr[2]);
+            model.setBuilding(arr[3]);
+            return model;
+        }
+
 
         arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
+            return model;
         }
 
-        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄[\\u4E00-\\u9FA5]+$"));
+        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)$"));
+        if (arr != null) {
+            model.setResidence(line);
+            return model;
+        }
+
+        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
-//            model.setResidence(arr[2]);
+            model.setResidence(arr[2]);
+            return model;
         }
 
         arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)号$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "号");
+            return model;
         }
 
-        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)号[\\u4E00-\\u9FA5]+$"));
+        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)号([\\u4E00-\\u9FA5]+)$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "号");
-//            model.setResidence(arr[2]);
+            model.setResidence(arr[2]);
+            return model;
         }
 
         arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄(\\d+)号(\\d+)室?$"));
@@ -305,6 +340,7 @@ public class AddressExtractor {
             model.setLane(arr[1] + "弄");
             model.setBuilding(arr[2]);
             model.setHouseNum(room);
+            return model;
         }
         arr = RegexUtil.regexGroup(line,
                 Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄[\\-/]?(\\d+)号?[\\-/](\\d+)$"));
@@ -314,6 +350,7 @@ public class AddressExtractor {
             model.setLane(arr[1] + "弄");
             model.setBuilding(arr[2]);
             model.setHouseNum(room);
+            return model;
         }
         arr = RegexUtil.regexGroup(line,
                 Pattern.compile("^(?:五村村|(.+))村([\\d一二三四五六七八九十]+)[组队](\\d+)号([a-zA-Z]?).*$"));
@@ -328,6 +365,7 @@ public class AddressExtractor {
             model.setRoad(arr[0]);
             model.setBuilding(arr[1] + "号");
             model.setHouseNum(arr[2]);
+            return model;
         }
         //
         arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+路\\d+号)(\\d+)号"));
@@ -336,6 +374,7 @@ public class AddressExtractor {
             model.setRoad(arr[0]);
             model.setBuilding(arr[1] + "号");
             model.setHouseNum(room);
+            return model;
         }
 
         // 西闸路75号别墅23幢全幢室
@@ -345,6 +384,7 @@ public class AddressExtractor {
             model.setRoad(arr[0]);
             model.setBuilding(arr[1] + "号");
             model.setHouseNum(room);
+            return model;
         }
 
         Map<String, String> map = RegexUtil
@@ -370,6 +410,7 @@ public class AddressExtractor {
                     model.setResidence(residenceName);
                     model.setBuilding(building);
                     model.setHouseNum(room);
+                    return model;
                 }
             }
         }

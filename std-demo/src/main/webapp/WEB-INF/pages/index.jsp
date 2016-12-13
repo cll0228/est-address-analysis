@@ -37,12 +37,13 @@
                                             <table class="table" height="80px">
                                                 <thead>
                                                     <tr>
-                                                        <th width="17%">区县</th>
-                                                        <th width="17%">街道</th>
-                                                        <th width="17%">居委</th>
-                                                        <th width="17%">路弄</th>
-                                                        <th width="17%">号</th>
-                                                        <th width="17%">室</th>
+                                                        <th width="14%">区县</th>
+                                                        <th width="14%">街道</th>
+                                                        <th width="14%">居委</th>
+                                                        <th width="14%">路弄</th>
+                                                        <th width="14%">号</th>
+                                                        <th width="14%">室</th>
+                                                        <th width="14%">标准地址编码</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -53,6 +54,7 @@
                                                         <td id="ln"></td>
                                                         <td id="h"></td>
                                                         <td id="s"></td>
+                                                        <td id="bm"></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -87,6 +89,7 @@ function analysis(){
             $("#ln").html(data.ln);
             $("#h").html(data.h);
             $("#s").html(data.s);
+            $("#bm").html(data.bm);
             if(data.f=="1") {
             	$("#ts").html("解析成功").css("color","green");
             } else if(data.f=="2") {

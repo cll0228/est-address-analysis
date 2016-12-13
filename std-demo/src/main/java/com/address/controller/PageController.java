@@ -52,6 +52,7 @@ public class PageController {
             result.put("ln", stdModel.getRoad());
             result.put("h", stdModel.getBuilding());
             result.put("s", stdModel.getHouseNum());
+            result.put("bm", stdModel.getCode());
             result.put("f", stdModel.getFlag());
         }
         return result;

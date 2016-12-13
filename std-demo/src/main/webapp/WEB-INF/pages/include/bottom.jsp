@@ -1,4 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+</div>
+<!-- END PAGE CONTENT INNER -->
+</div>
+</div>
+<!-- END PAGE CONTENT BODY -->
+<!-- END CONTENT BODY -->
+</div>
+<!-- END CONTENT -->
+
+</div>
 <!-- END CONTAINER -->
 <!-- BEGIN FOOTER -->
 
@@ -38,3 +49,6 @@
 <script src="${ctx}/static/assets/layouts/layout3/scripts/demo.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
 <!-- END THEME LAYOUT SCRIPTS -->
+<script src="${ctx}/static/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
+<script src="${ctx}/static/assets/global/scripts/app.min.js" type="text/javascript"></script>
+<script src="${ctx}/static/assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>

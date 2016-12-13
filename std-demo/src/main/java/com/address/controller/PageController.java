@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.address.model.StdModel;
+import com.address.util.AddressExtractor;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,7 +39,16 @@ public class PageController {
     @ResponseBody
 	public Map<?, ?> analysis(@RequestParam("address")String address) {
         Map<String, Object> result = new HashMap<>();
-        result.put("aaa", address);
+        StdModel stdModel = AddressExtractor.parseAll(address);
+        if(stdModel!=null) {
+        	result.put("qx", stdModel.getDistrict());
+            result.put("jd", stdModel.getStreet());
+            result.put("jw", stdModel.getCommitte());
+            result.put("ln", stdModel.getLane());
+            result.put("h", stdModel.getBuilding());
+            result.put("s", stdModel.getHouseNum());
+            result.put("s", stdModel.getFlag());
+        }
         return result;
 
 	}

@@ -8,10 +8,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -22,7 +20,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
-import com.address.model.AddressInfo;
 import com.address.model.StdModel;
 
 /**
@@ -85,8 +82,6 @@ public class AddressGenerator {
 	public static final String[] DAOQUARRAY = { "浦东北路", "长宁支路", "崇明支路", "金山大道",
 			"浦东大道", "浦东南路", "浦东水泥厂二路", "浦东水泥厂路", "金山工业区大道" };
 	public static final Pattern P = Pattern.compile("[a-zA-z]");
-
-	private List<AddressInfo> noMatchList = new ArrayList<AddressInfo>();
 
 	@Test
 	public void mainTest() throws Exception {
@@ -160,54 +155,9 @@ public class AddressGenerator {
 		}
 	}
 
-	/**
-	 * 清空未匹配数据库
-	 * 
-	 * @throws Exception
-	 */
-	public static void truncateNoMatchTable() throws Exception {
-		// 加载驱动
-		Class.forName("com.mysql.jdbc.Driver");
-		String url = "jdbc:mysql://192.168.201.26:3306/sts";
-		String userName = "wangyh";
-		String password = "wangyh";
-		Connection conn = DriverManager.getConnection(url, userName, password);
-		Statement stmt = conn.createStatement();
-		String sql = "truncate table no_match_address_info";
-		stmt.execute(sql);
-	}
 
 	/**
-	 * 插入未匹配数据库
-	 * 
-	 * @throws Exception
-	 */
-	public static void insertNoMatchTable(List<AddressInfo> aList)
-			throws Exception {
-		// 加载驱动
-		Class.forName("com.mysql.jdbc.Driver");
-		String url = "jdbc:mysql://192.168.201.26:3306/sts";
-		String userName = "wangyh";
-		String password = "wangyh";
-		Connection conn = DriverManager.getConnection(url, userName, password);
-		Statement stmt = conn.createStatement();
-		for (AddressInfo addressInfo : aList) {
-			String sql = "insert into no_match_address_info (residence_id,residence_name,address,source) values('"
-					+ addressInfo.getResidenceId()
-					+ "','"
-					+ addressInfo.getResidenceName().replaceAll("'", "")
-					+ "','"
-					+ addressInfo.getBeforeAddress().replaceAll("'", "")
-					+ "','"
-					+ addressInfo.getSource().replaceAll("'", "")
-					+ "')";
-			System.out.println(sql);
-			stmt.execute(sql);
-		}
-	}
-
-	/**
-	 * 其余5个数据来源数据
+	 * 查询数据库
 	 * 
 	 * @param startName
 	 * @return
@@ -226,161 +176,5 @@ public class AddressGenerator {
 
 		ResultSet rs = stmt.executeQuery(sql);
 		return rs;
-	}
-
-	/**
-	 * 插入对应表
-	 * 
-	 * @param aList
-	 * @param startName
-	 * @throws Exception
-	 */
-	public static void insertAddressInfo(List<AddressInfo> aList,
-			String startName) throws Exception {
-		if (aList.size() > 0) {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://192.168.201.26:3306/sts";
-			String userName = "wangyh";
-			String password = "wangyh";
-			Connection conn = DriverManager.getConnection(url, userName,
-					password);
-			Statement stmt = conn.createStatement();
-			String sql = "truncate table " + startName + "_address_info";
-			stmt.execute(sql);
-			for (AddressInfo addressInfo : aList) {
-				sql = "insert into "
-						+ startName
-						+ "_address_info (residence_id,residence_name,before_address,after_address) values('"
-						+ addressInfo.getResidenceId() + "','"
-						+ addressInfo.getResidenceName().replaceAll("'", "")
-						+ "','"
-						+ addressInfo.getBeforeAddress().replaceAll("'", "")
-						+ "','"
-						+ addressInfo.getAfterAddress().replaceAll("'", "")
-						+ "')";
-				System.out.println(sql);
-				stmt.execute(sql);
-			}
-		}
-	}
-
-	/**
-	 * 中文数字转int
-	 * 
-	 * @param chineseNumber
-	 * @return
-	 */
-	@SuppressWarnings("unused")
-	public static int chineseNumber2Int(String chineseNumber) {
-		int result = 0;
-		int temp = 1;// 存放一个单位的数字如：十万
-		int count = 0;// 判断是否有chArr
-		boolean flag = true;
-		char[] cnArr = new char[] { '一', '二', '三', '四', '五', '六', '七', '八',
-				'九', '零' };
-		char[] chArr = new char[] { '十', '百', '千', '万', '亿' };
-		for (int i = 0; i < chineseNumber.length(); i++) {
-			boolean b = true;// 判断是否是chArr
-			char c = chineseNumber.charAt(i);
-			for (int j = 0; j < cnArr.length; j++) {// 非单位，即数字
-				if (c == cnArr[j]) {
-					if (0 != count) {// 添加下一个单位之前，先把上一个单位值添加到结果中
-						result += temp;
-						temp = 1;
-						count = 0;
-					}
-					// 下标+1，就是对应的值
-					temp = j + 1;
-					b = false;
-					break;
-				}
-			}
-			if (b) {// 单位{'十','百','千','万','亿'}
-				flag = false;
-				for (int j = 0; j < chArr.length; j++) {
-					if (c == chArr[j]) {
-						switch (j) {
-						case 0:
-							temp *= 10;
-							break;
-						case 1:
-							temp *= 100;
-							break;
-						case 2:
-							temp *= 1000;
-							break;
-						case 3:
-							temp *= 10000;
-							break;
-						case 4:
-							temp *= 100000000;
-							break;
-						default:
-							break;
-						}
-						count++;
-					}
-				}
-			}
-			if (i == chineseNumber.length() - 1) {// 遍历到最后一个字符
-				result += temp;
-			}
-		}
-		String re = "";
-		int a = 0;
-		if (flag) {
-			for (int i = 0; i < chineseNumber.length(); i++) {
-				char c = chineseNumber.charAt(i);
-				for (int j = 0; j < cnArr.length; j++) {// 数字
-					if (c == cnArr[j]) {
-						if (j == 9) {
-							a = 0;
-						} else {
-							a = j + 1;
-						}
-						re += String.valueOf(a);
-						break;
-					}
-				}
-				// if (i == chineseNumber.length() - 1) {//遍历到最后一个字符
-				// result += temp;
-				// }
-			}
-		}
-		if (re != "") {
-			result = Integer.parseInt(re);
-			return result;
-		} else {
-			return result;
-		}
-
-	}
-
-	/**
-	 * 统计出现过几次
-	 * 
-	 * @param text
-	 * @param sub
-	 * @return
-	 */
-	public static int count(String text, String sub) {
-		int count = 0, start = 0;
-		while ((start = text.indexOf(sub, start)) >= 0) {
-			start += sub.length();
-			count++;
-		}
-		return count;
-	}
-
-	/**
-	 * 判断字符串是否是整数
-	 */
-	public static boolean isInteger(String value) {
-		try {
-			Integer.parseInt(value);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
 	}
 }

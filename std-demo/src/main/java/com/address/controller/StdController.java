@@ -37,11 +37,13 @@ public class StdController {
     @RequestMapping(value = "/analysis", method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String, Object>> analysis(@RequestParam("address") String address) {
+        LOGGER.info("正在执行请求address=" + address);
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         List<ReturnParam> paramList = stdService.analysis(address);
+        LOGGER.info("返回resultList条数=" + paramList.size());
         if (paramList != null) {
-        	for (ReturnParam returnParam : paramList) {
-        		Map<String, Object> result = new HashMap<>();
+            for (ReturnParam returnParam : paramList) {
+                Map<String, Object> result = new HashMap<>();
                 result.put("qx", returnParam.getDistrict());
                 result.put("jd", returnParam.getStreet());
                 result.put("jw", returnParam.getCommitte());
@@ -52,7 +54,7 @@ public class StdController {
                 result.put("f", returnParam.getFlag());
                 LOGGER.info("返回状态码 flag = " + returnParam.getFlag());
                 resultList.add(result);
-			}
+            }
         }
         return resultList;
 

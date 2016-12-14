@@ -30,6 +30,7 @@ public class StdService {
         }
 
         StdModel model = AddressExtractor.parseAll(new StdModel(address));
+        System.out.println("地址解析成功=" + model.toString());
         if (model.getResidence() == null && model.getRoad() == null) {
             reParam.setFlag("3");
             list.add(reParam);// 解析失败

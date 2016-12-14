@@ -55,34 +55,46 @@ public class StdService {
         // 小区名称
         if (null != model.getResidence() && model.getRoad() == null) {
             list = mapper.getStdAddr(model.getResidence());
-            if (null != list && list.size() == 1) {
-                reParam = list.get(0);
-            } else {
+            if (null != list && list.size() > 1) {
                 for (ReturnParam param : list) {
                     param.setFlag("1");
+                    if (null == model.getHouseNum()) {
+                        reParam.setHouseNo(null);
+                    }
+                    if (null == model.getBuilding()) {
+                        reParam.setBuilding(null);
+                    }
                 }
-            }
-            if (null == reParam) {
+                return list;
+            } else if (list.size() == 1) {
+                reParam = list.get(0);
+                reParam.setFlag("1");
+                if (null == model.getHouseNum()) {
+                    reParam.setHouseNo(null);
+                }
+                if (null == model.getBuilding()) {
+                    reParam.setBuilding(null);
+                }
+                list = new ArrayList<>();
+                list.add(reParam);
+                return list;
+            } else {
                 // 去标准地址库中查询
                 model.setRoad(model.getResidence());
                 ReturnParam stdAddr1 = this.getStdAddr1(model);
                 if (null == stdAddr1) {
                     reParam = new ReturnParam();
                     reParam.setFlag("4");
-                } else
+                    list = new ArrayList<>();
+                    list.add(reParam);
+                    return list;
+                } else {
+                    list = new ArrayList<>();
                     list.add(stdAddr1);
+                    return list;
+                }
 
-            } else {
-                reParam.setFlag("1");
             }
-            if (null == model.getHouseNum()) {
-                reParam.setHouseNo(null);
-            }
-            if (null == model.getBuilding()) {
-                reParam.setBuilding(null);
-            }
-            list.add(reParam);
-            return list;
         }
 
         // 路弄

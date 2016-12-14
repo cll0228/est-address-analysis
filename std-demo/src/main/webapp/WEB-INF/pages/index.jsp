@@ -84,6 +84,7 @@ function analysis(){
             	$("#s"+i).html(data[i].s);
             	$("#bm"+i).html(data[i].bm);
 			}
+			$("#tb").html(html);
             if(data.f=="1") {
             	$("#ts").html("地址标准化成功").css("color","green");
             } else if(data.f=="2") {

@@ -45,17 +45,7 @@
                                                         <th width="10%">室</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                    	<td id="bm"></td>
-                                                        <td id="qx"></td>
-                                                        <td id="jd"></td>
-                                                        <td id="jw"></td>
-                                                        <td id="ln"></td>
-                                                        <td id="h"></td>
-                                                        <td id="s"></td>
-                                                        
-                                                    </tr>
+                                                <tbody id="tb">
                                                 </tbody>
                                             </table>
                                         </div>
@@ -83,13 +73,17 @@ function analysis(){
             }
         },
         success: function (data) {
-            $("#qx").html(data.qx);
-            $("#jd").html(data.jd);
-            $("#jw").html(data.jw);
-            $("#ln").html(data.ln);
-            $("#h").html(data.h);
-            $("#s").html(data.s);
-            $("#bm").html(data.bm);
+        	var html = "";
+            for(var i = 0;i < data.size(); i++) {
+				html += "<tr><td id='bm"+i+"'></td><td id='qx"+i+"'></td><td id='jd"+i+"'></td><td id='jw"+i+"'></td><td id='ln"+i+"'></td><td id='h"+i+"'></td><td id='s"+i+"'></td></tr>";
+				$("#qx"+i).html(data[i].qx);
+            	$("#jd"+i).html(data[i].jd);
+            	$("#jw"+i).html(data[i].jw);
+            	$("#ln"+i).html(data[i].ln);
+            	$("#h"+i).html(data[i].h);
+            	$("#s"+i).html(data[i].s);
+            	$("#bm"+i).html(data[i].bm);
+			}
             if(data.f=="1") {
             	$("#ts").html("地址标准化成功").css("color","green");
             } else if(data.f=="2") {

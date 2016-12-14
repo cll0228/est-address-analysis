@@ -1,6 +1,8 @@
 package com.address.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -34,21 +36,25 @@ public class StdController {
 
     @RequestMapping(value = "/analysis", method = RequestMethod.GET)
     @ResponseBody
-    public Map<?, ?> analysis(@RequestParam("address") String address) {
-        Map<String, Object> result = new HashMap<>();
-        ReturnParam param = stdService.analysis(address);
-        if (param != null) {
-            result.put("qx", param.getDistrict());
-            result.put("jd", param.getStreet());
-            result.put("jw", param.getCommitte());
-            result.put("ln", param.getRoadLane());
-            result.put("h", param.getBuilding());
-            result.put("s", param.getHouseNo());
-            result.put("bm", param.getAddrCode());
-            result.put("f", param.getFlag());
-            LOGGER.info("返回状态码 flag = " + param.getFlag());
+    public List<Map<String, Object>> analysis(@RequestParam("address") String address) {
+        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+        List<ReturnParam> paramList = stdService.analysis(address);
+        if (paramList != null) {
+        	for (ReturnParam returnParam : paramList) {
+        		Map<String, Object> result = new HashMap<>();
+                result.put("qx", returnParam.getDistrict());
+                result.put("jd", returnParam.getStreet());
+                result.put("jw", returnParam.getCommitte());
+                result.put("ln", returnParam.getRoadLane());
+                result.put("h", returnParam.getBuilding());
+                result.put("s", returnParam.getHouseNo());
+                result.put("bm", returnParam.getAddrCode());
+                result.put("f", returnParam.getFlag());
+                LOGGER.info("返回状态码 flag = " + returnParam.getFlag());
+                resultList.add(result);
+			}
         }
-        return result;
+        return resultList;
 
     }
 

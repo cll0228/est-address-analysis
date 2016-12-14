@@ -23,7 +23,6 @@ public class PreHandle {
     }
 
     /**
-     *
      * @param input
      * @param minLen include
      * @return
@@ -75,21 +74,14 @@ public class PreHandle {
         for (String d : districts) {
             if (result.contains(d)) {
                 model.setDistrict(d);
+                result = result.replaceAll(d, "");
             }
-            result = StringUtils.removeStart(result, d);
         }
-        Pattern pattern = Pattern.compile("^([\\u4E00-\\u9FA5]{2,3}[区县])");
-        Matcher matcher = pattern.matcher(result);
-
-        if (matcher.find()) {
-            result = result.replaceFirst(matcher.group(1), "");
-        }
-
         model.setAddress(result);
 
         return model;
     }
 
-    private static String[] districts = new String[] { "杨浦区", "宝山区", "嘉定区", "闸北区", "静安区", "浦东新区", "黄浦区",
-            "青浦区", "闵行区", "奉贤区", "普陀区", "南汇区", "金山区", "松江区", "崇明区", "崇明县" };
+    private static String[] districts = new String[]{"杨浦区", "宝山区", "嘉定区", "闸北区", "静安区", "浦东新区", "黄浦区",
+            "青浦区", "闵行区", "奉贤区", "普陀区", "南汇区", "金山区", "松江区", "崇明区", "崇明县"};
 }

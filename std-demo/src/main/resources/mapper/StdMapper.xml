@@ -4,15 +4,19 @@
     <select id="getDistrictByRoad" resultType="java.lang.String">
         SELECT adname FROM ocn_address.sh_road_name_dic WHERE name = #{road};
     </select>
-    <select id="getStdAddr" resultType="com.address.model.StdModel" parameterType="java.lang.String">
-        SELECT
+    <select id="getStdAddr" resultType="com.address.model.ReturnParam" parameterType="java.lang.String">
+      SELECT
+          district.district_name district,
             std_address.std_addr_id id,
-            std_address.road_lane road,
-            std_address.addr_code code,
-            std_address.of_block_id street,
-            std_address.of_committe_id committe
+            std_address.road_lane roadLane,
+            std_address.addr_code addrCode,
+            substreet.sub_district_name street,
+            COMMIT .committee_name committe
         FROM
             ocn_address.of_std_address std_address
+        LEFT JOIN ocn_address.sa_district district ON std_address.of_district_id = district.district_id
+        LEFT JOIN ocn_address.sa_committee COMMIT ON std_address.of_committe_id = COMMIT.committee_id
+        LEFT JOIN ocn_address.sa_subdistrict substreet ON std_address.of_block_id = substreet.sub_district_id
         LEFT JOIN ocn_address.of_road_lane_links road_lane_links ON std_address.std_addr_id = road_lane_links.std_addr_id
         WHERE
             road_lane_links.road_lane_id = (
@@ -30,12 +34,21 @@
             )
     </select>
 
-    <select id="getStdAddr1" resultType="com.address.model.StdModel" parameterType="com.address.model.StdModel">
-        SELECT  	std_addr_id id,
-        addr_code code,
-        road_lane road,
+    <select id="getStdAddr1" resultType="com.address.model.ReturnParam" parameterType="com.address.model.StdModel">
+        SELECT
+        district.district_name district,
+        substreet.sub_district_name street,
+        COMMIT .committee_name committe,
+        max(std_addr_id) id,
+        addr_code addrCode,
+        road_lane roadLane,
         building_no building,
-        house_no houseNum from ocn_address.of_std_address std_address WHERE road_lane = '${model.road}${model.lane}'
+        house_no houseNo
+        FROM
+        ocn_address.of_std_address std_address
+        LEFT JOIN ocn_address.sa_district district ON std_address.of_district_id = district.district_id
+        LEFT JOIN ocn_address.sa_committee COMMIT ON std_address.of_committe_id = COMMIT .committee_id
+        LEFT JOIN ocn_address.sa_subdistrict substreet ON std_address.of_block_id = substreet.sub_district_id WHERE road_lane = '${model.road}${model.lane}'
         <if test="null != model.building">
             AND building_no = '${model.building}号'
         </if>

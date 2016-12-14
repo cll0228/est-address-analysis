@@ -1,6 +1,7 @@
 package com.address.service;
 
 import com.address.mapper.StdMapper;
+import com.address.model.ReturnParam;
 import com.address.model.StdModel;
 import com.address.util.AddressExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,47 +17,59 @@ public class StdService {
     @Autowired
     private StdMapper mapper;
 
-    public StdModel analysis(String address) {
+    public ReturnParam analysis(String address) {
+        ReturnParam reParam = new ReturnParam();
         StdModel model = AddressExtractor.parseAll(new StdModel(address));
         if (model.getResidence() == null && model.getRoad() == null) {
-            model.setFlag("3");
-            return model;// 解析失败
+            reParam.setFlag("3");
+            return reParam;// 解析失败
         }
-        model.setFlag("1");
+        reParam.setFlag("1");
 
         // 判断区县是否对应
         if (model.getRoad() != null && model.getDistrict() != null) {
             String districtName = mapper.getDistrictByRoad(model.getRoad());
             if (null == districtName) {
-                model.setFlag("5");
-                return model;
+                reParam.setFlag("5");
+                return reParam;
             }
             if (null != districtName && !districtName.equals(model.getDistrict())) {
-                model.setFlag("2");// 区县不对应
-                return model;
+                reParam.setFlag("2");// 区县不对应
+                return reParam;
             }
         }
 
         // 小区名称
         if (null != model.getResidence() && model.getRoad() == null) {
-            model = mapper.getStdAddr(model.getResidence());
+            reParam = mapper.getStdAddr(model.getResidence());
             if (null == model) {
-                model = new StdModel();
-                model.setFlag("4");
-                System.out.println(model.toString());
+                reParam.setFlag("4");
+                reParam = new ReturnParam();
+            } else {
+                reParam.setFlag("1");
             }
-            return model;
+            if (null == model.getHouseNum()) {
+                reParam.setHouseNo(null);
+            }
+            if (null == model.getBuilding()) {
+                reParam.setBuilding(null);
+            }
+            return reParam;
         }
 
         // 路弄
         if (null != model.getRoad() || model.getLane() != null) {
-            model = mapper.getStdAddr1(model);
-            if (null == model) {
-                model = new StdModel();
-                model.setFlag("4");
-                System.out.println(model);
+            reParam = mapper.getStdAddr1(model);
+            if (null == reParam) {
+                reParam.setFlag("4");
             }
-            return model;
+            if (null == model.getHouseNum()) {
+                reParam.setHouseNo(null);
+            }
+            if (null == model.getBuilding()) {
+                reParam.setBuilding(null);
+            }
+            return reParam;
         }
         return null;
     }

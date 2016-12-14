@@ -1,5 +1,6 @@
 package com.address.mapper;
 
+import com.address.model.ReturnParam;
 import com.address.model.StdModel;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 public interface StdMapper {
     String getDistrictByRoad(@Param("road") String road);
 
-    StdModel getStdAddr(@Param("residence") String residence);
+    ReturnParam getStdAddr(@Param("residence") String residence);
 
-    StdModel getStdAddr1(@Param("model") StdModel model);
+    ReturnParam getStdAddr1(@Param("model") StdModel model);
 }

@@ -19,7 +19,7 @@
         LEFT JOIN ocn_address.of_town town ON std_address.of_town_id = town.town_id
         LEFT JOIN ocn_address.of_road_lane_links road_lane_links ON std_address.std_addr_id = road_lane_links.std_addr_id
         WHERE
-            road_lane_links.road_lane_id = (
+            road_lane_links.road_lane_id in (
                 SELECT
                     road_lane_id
                 FROM

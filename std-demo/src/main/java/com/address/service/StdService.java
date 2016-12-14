@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Cuill on 2016/12/12.
  */
@@ -17,17 +20,18 @@ public class StdService {
     @Autowired
     private StdMapper mapper;
 
-    public ReturnParam analysis(String address) {
+    public List<ReturnParam> analysis(String address) {
+        List<ReturnParam> list = new ArrayList<>();
         ReturnParam reParam = new ReturnParam();
         if (null == address || "".equals(address)) {
             reParam.setFlag("8");
-            return reParam;
+            list.add(reParam);
         }
 
         StdModel model = AddressExtractor.parseAll(new StdModel(address));
         if (model.getResidence() == null && model.getRoad() == null) {
             reParam.setFlag("3");
-            return reParam;// 解析失败
+            list.add(reParam);// 解析失败
         }
         reParam.setFlag("1");
 
@@ -36,17 +40,20 @@ public class StdService {
             String districtName = mapper.getDistrictByRoad(model.getRoad());
             if (null == districtName) {
                 reParam.setFlag("5");
-                return reParam;
+                list.add(reParam);
             }
             if (null != districtName && !districtName.equals(model.getDistrict())) {
                 reParam.setFlag("2");// 区县不对应
-                return reParam;
+                list.add(reParam);
             }
         }
 
         // 小区名称
         if (null != model.getResidence() && model.getRoad() == null) {
-            reParam = mapper.getStdAddr(model.getResidence());
+            list = mapper.getStdAddr(model.getResidence());
+            if (null != list && list.size() == 1) {
+                reParam = list.get(0);
+            }
             if (null == reParam) {
                 // 去标准地址库中查询
                 model.setRoad(model.getResidence());
@@ -55,7 +62,7 @@ public class StdService {
                     reParam = new ReturnParam();
                     reParam.setFlag("4");
                 } else
-                    return stdAddr1;
+                    list.add(stdAddr1);
 
             } else {
                 reParam.setFlag("1");
@@ -66,14 +73,14 @@ public class StdService {
             if (null == model.getBuilding()) {
                 reParam.setBuilding(null);
             }
-            return reParam;
+            list.add(reParam);
         }
 
         // 路弄
         if (null != model.getRoad() || model.getLane() != null) {
-            return this.getStdAddr1(model);
+            list.add(this.getStdAddr1(model));
         }
-        return null;
+        return list;
     }
 
     // model去标准库中查询

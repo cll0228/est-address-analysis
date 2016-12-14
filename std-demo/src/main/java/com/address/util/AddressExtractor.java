@@ -173,7 +173,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll(new StdModel("复兴东路1080号13号")));
+        System.out.println(parseAll(new StdModel("鞍山八村35号")));
     }
 
     private static boolean isMatch(String str, Pattern p) {
@@ -277,7 +277,8 @@ public class AddressExtractor {
         }
 
         // 大康路896弄恒达家园2号702
-        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)(\\d+)号(\\d+)$"));
+        arr = RegexUtil.regexGroup(line,
+                Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)(\\d+)号(\\d+)$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
@@ -287,7 +288,8 @@ public class AddressExtractor {
             return model;
         }
 
-        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)(\\d+)号$"));
+        arr = RegexUtil.regexGroup(line,
+                Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)(\\d+)号$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
@@ -296,7 +298,6 @@ public class AddressExtractor {
             return model;
         }
 
-
         arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
@@ -304,12 +305,12 @@ public class AddressExtractor {
             return model;
         }
 
-        //光新路129弄21号
+        // 光新路129弄21号
         arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄(\\d+)号$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
-            model.setBuilding(arr[2]);
+            model.setBuilding(arr[2] + "号");
             return model;
         }
 
@@ -319,7 +320,8 @@ public class AddressExtractor {
             return model;
         }
 
-        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)$"));
+        arr = RegexUtil.regexGroup(line,
+                Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄([\\u4E00-\\u9FA5]+)$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
@@ -334,7 +336,8 @@ public class AddressExtractor {
             return model;
         }
 
-        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)号([\\u4E00-\\u9FA5]+)$"));
+        arr = RegexUtil.regexGroup(line,
+                Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)号([\\u4E00-\\u9FA5]+)$"));
         if (arr != null) {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "号");
@@ -416,18 +419,14 @@ public class AddressExtractor {
                 building += buildingExt;
             }
 
-            String room = extractRoomNo(line);
-            if (room != null) {
-                room = PreHandle.filterReduplicate2_3(room, 4);
-                if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)
-                        && StringUtils.isNotBlank(room)) {
-                    model.setResidence(residenceName);
-                    model.setBuilding(building);
-                    model.setHouseNum(room);
-                    return model;
-                }
+            if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
+                model.setResidence(residenceName);
+                model.setBuilding(building);
+
+                return model;
             }
         }
+
         arr = RegexUtil.regexGroup(line,
                 Pattern.compile("^([\\u4E00-\\u9FA5]+)([\\d一二三四五六七八九十]+)[组队](\\d+)号$"));
         if (arr != null) {
@@ -447,11 +446,11 @@ public class AddressExtractor {
             Assert.notNull(room);
 
             room = PreHandle.filterReduplicate2_3(room, 4);
-            if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)
-                    && StringUtils.isNotBlank(room)) {
+            if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
                 model.setResidence(residenceName);
                 model.setBuilding(building);
-                model.setHouseNum(room);
+                if (StringUtils.isNotBlank(room))
+                    model.setHouseNum(room);
                 return model;
             }
 
@@ -469,17 +468,11 @@ public class AddressExtractor {
                 building += buildingExt;
             }
 
-            String room = extractRoomNo(line);
-            if (room != null) {
+            if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
+                model.setResidence(model.getRoad() + model.getLane());
+                model.setBuilding(building);
 
-                room = PreHandle.filterReduplicate2_3(room, 4);
-                if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)
-                        && StringUtils.isNotBlank(room)) {
-                    model.setResidence(model.getRoad() + model.getLane());
-                    model.setBuilding(building);
-                    model.setHouseNum(room);
-                    return model;
-                }
+                return model;
             }
         }
 
@@ -495,18 +488,14 @@ public class AddressExtractor {
                 building += buildingExt;
             }
 
-            String room = extractRoomNo(line);
-            if (room != null) {
-                room = PreHandle.filterReduplicate2_3(room, 4);
-                if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)
-                        && StringUtils.isNotBlank(room)) {
-                    model.setResidence(residenceName);
-                    model.setBuilding(building);
-                    model.setHouseNum(room);
-                    return model;
-                }
+            if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
+                model.setResidence(residenceName);
+                model.setBuilding(building);
+
+                return model;
             }
         }
+
         /*
          * arr = regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+?)(\\d+)号(\\d+)室$")); if (arr
          * != null) return new Address2(arr[0], arr[1], arr[2]);

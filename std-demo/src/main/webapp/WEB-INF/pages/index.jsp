@@ -39,10 +39,10 @@
                                                     <tr>
                                                         <th width="14%">区县</th>
                                                         <th width="14%">街道</th>
-                                                        <th width="14%">居委</th>
+                                                        <th width="22%">居委</th>
                                                         <th width="14%">路弄</th>
-                                                        <th width="14%">号</th>
-                                                        <th width="14%">室</th>
+                                                        <th width="10%">号</th>
+                                                        <th width="10%">室</th>
                                                         <th width="14%">标准地址编码</th>
                                                     </tr>
                                                 </thead>
@@ -96,6 +96,14 @@ function analysis(){
             	$("#ts").html("区县不对应").css("color","red");
             } else if(data.f=="3") {
             	$("#ts").html("解析失败").css("color","red");
+            } else if(data.f=="4") {
+            	$("#ts").html("未查到资源").css("color","red");
+            } else if(data.f=="5") {
+            	$("#ts").html("道路不存在").css("color","red");
+            } else if(data.f=="6") {
+            	$("#ts").html("房间号未找到").css("color","red");
+            } else if(data.f=="7") {
+            	$("#ts").html("楼栋未找").css("color","red");
             }
         }
     });

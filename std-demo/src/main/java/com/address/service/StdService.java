@@ -26,12 +26,14 @@ public class StdService {
         if (null == address || "".equals(address)) {
             reParam.setFlag("8");
             list.add(reParam);
+            return list;
         }
 
         StdModel model = AddressExtractor.parseAll(new StdModel(address));
         if (model.getResidence() == null && model.getRoad() == null) {
             reParam.setFlag("3");
             list.add(reParam);// 解析失败
+            return list;
         }
         reParam.setFlag("1");
 
@@ -41,10 +43,12 @@ public class StdService {
             if (null == districtName) {
                 reParam.setFlag("5");
                 list.add(reParam);
+                return list;
             }
             if (null != districtName && !districtName.equals(model.getDistrict())) {
                 reParam.setFlag("2");// 区县不对应
                 list.add(reParam);
+                return list;
             }
         }
 
@@ -53,6 +57,10 @@ public class StdService {
             list = mapper.getStdAddr(model.getResidence());
             if (null != list && list.size() == 1) {
                 reParam = list.get(0);
+            } else {
+                for (ReturnParam param : list) {
+                    param.setFlag("1");
+                }
             }
             if (null == reParam) {
                 // 去标准地址库中查询
@@ -74,13 +82,15 @@ public class StdService {
                 reParam.setBuilding(null);
             }
             list.add(reParam);
+            return list;
         }
 
         // 路弄
         if (null != model.getRoad() || model.getLane() != null) {
             list.add(this.getStdAddr1(model));
+            return list;
         }
-        return list;
+        return null;
     }
 
     // model去标准库中查询
@@ -115,6 +125,6 @@ public class StdService {
                 "classpath:/conf/applicationContext*.xml");
         context.start();
         StdService bean = context.getBean(StdService.class);
-        bean.analysis("田林七村8号602");
+        bean.analysis("武东路198");
     }
 }

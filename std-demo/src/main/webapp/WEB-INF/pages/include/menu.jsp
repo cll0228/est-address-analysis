@@ -2,8 +2,7 @@
 <ul class="nav navbar-nav">
 
     <li class="menu-dropdown classic-menu-dropdown ">
-        <a href="javascript:;"> 地址解析
-            <span class="arrow"></span>
+        <a href="javascript:;"> 地址标准化
         </a>
     </li>
 

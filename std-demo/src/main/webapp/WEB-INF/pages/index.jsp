@@ -3,18 +3,17 @@
 <%-- 需要在head标签中编写代码，请写在此处--%>
 </head>
 <c:set var="pageTitle1" value="主页" />
-<c:set var="pageTitle2" value="地址解析" />
+<c:set var="pageTitle2" value="地址标准化" />
 <%@include file="/WEB-INF/pages/include/header.jsp" %>
 <div style="height: 800px;">
 <div class="form-group">
-    <div class="m-heading-1 border-green m-bordered">
-                        <h3>地址解析规则</h3>
-                        <p> 待定 </p>
-                    </div>
+    <!-- <div class="m-heading-1 border-green m-bordered">
+                        <h3>地址标准化</h3>
+                    </div> -->
     <div class="input-group input-group-lg">
-        <input id="in" type="text" class="form-control" placeholder="请输入要解析的地址">
+        <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址">
         <span class="input-group-btn">
-            <button class="btn green" type="button" onclick="analysis()">开始解析</button>
+            <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>
     </div>
     <!-- /input-group -->
@@ -24,7 +23,7 @@
                                         <div class="panel panel-success">
                                             <!-- Default panel contents -->
                                             <div class="panel-heading">
-                                                <h3 class="panel-title">地址解析结果</h3>
+                                                <h3 class="panel-title">地址标准化结果</h3>
                                             </div>
                                             <div class="panel-body">
                                                 <table height="30px">
@@ -37,24 +36,25 @@
                                             <table class="table" height="80px">
                                                 <thead>
                                                     <tr>
+                                                    	<th width="14%">地址标准化编码</th>
                                                         <th width="14%">区县</th>
                                                         <th width="14%">街道</th>
                                                         <th width="22%">居委</th>
                                                         <th width="14%">路弄</th>
                                                         <th width="10%">号</th>
                                                         <th width="10%">室</th>
-                                                        <th width="14%">标准地址编码</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
+                                                    	<td id="bm"></td>
                                                         <td id="qx"></td>
                                                         <td id="jd"></td>
                                                         <td id="jw"></td>
                                                         <td id="ln"></td>
                                                         <td id="h"></td>
                                                         <td id="s"></td>
-                                                        <td id="bm"></td>
+                                                        
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -91,11 +91,11 @@ function analysis(){
             $("#s").html(data.s);
             $("#bm").html(data.bm);
             if(data.f=="1") {
-            	$("#ts").html("解析成功").css("color","green");
+            	$("#ts").html("地址标准化成功").css("color","green");
             } else if(data.f=="2") {
             	$("#ts").html("区县不对应").css("color","red");
             } else if(data.f=="3") {
-            	$("#ts").html("解析失败").css("color","red");
+            	$("#ts").html("地址不存在").css("color","red");
             } else if(data.f=="4") {
             	$("#ts").html("未查到资源").css("color","red");
             } else if(data.f=="5") {
@@ -103,7 +103,7 @@ function analysis(){
             } else if(data.f=="6") {
             	$("#ts").html("房间号未找到").css("color","red");
             } else if(data.f=="7") {
-            	$("#ts").html("楼栋未找").css("color","red");
+            	$("#ts").html("楼栋未找到").css("color","red");
             }
         }
     });

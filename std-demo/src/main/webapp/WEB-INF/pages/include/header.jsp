@@ -7,10 +7,8 @@
     <div class="page-header-top">
         <div class="container">
             <!-- BEGIN LOGO -->
-            <div class="page-logo" style="padding-top: 15px">
-
-                    <span style="font-size: 30px">地址解析系统</span>
-
+            <div class="page-logo" style="padding-top:15px;width:100%">
+                    <span style="font-size: 30px">东方金融地址标准化系统</span>
             </div>
             <!-- END LOGO -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->

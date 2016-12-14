@@ -43,8 +43,8 @@ public class StdService {
         if (null != model.getResidence() && model.getRoad() == null) {
             reParam = mapper.getStdAddr(model.getResidence());
             if (null == model) {
-                reParam.setFlag("4");
                 reParam = new ReturnParam();
+                reParam.setFlag("4");
             } else {
                 reParam.setFlag("1");
             }
@@ -61,6 +61,7 @@ public class StdService {
         if (null != model.getRoad() || model.getLane() != null) {
             reParam = mapper.getStdAddr1(model);
             if (null == reParam) {
+                reParam = new ReturnParam();
                 reParam.setFlag("4");
             }
             if (null == model.getHouseNum()) {

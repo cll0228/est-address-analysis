@@ -46,6 +46,13 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tb">
+                                                		<td id="bm"></td>
+                                                		<td id="qx"></td>
+                                                        <td id="jd"></td>
+                                                        <td id="jw"></td>
+                                                        <td id="ln"></td>
+                                                        <td id="h"></td>
+                                                        <td id="s"></td>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -73,9 +80,10 @@ function analysis(){
             }
         },
         success: function (data) {
-        	var html = "";
-            for(var i = 0;i < data.size(); i++) {
-				html += "<tr><td id='bm"+i+"'></td><td id='qx"+i+"'></td><td id='jd"+i+"'></td><td id='jw"+i+"'></td><td id='ln"+i+"'></td><td id='h"+i+"'></td><td id='s"+i+"'></td></tr>";
+        	$("#tb").empty();
+            for(var i = 0;i < data.length; i++) {
+				var html = "<tr><td id='bm"+i+"'></td><td id='qx"+i+"'></td><td id='jd"+i+"'></td><td id='jw"+i+"'></td><td id='ln"+i+"'></td><td id='h"+i+"'></td><td id='s"+i+"'></td></tr>";
+				$("#tb").append(html);
 				$("#qx"+i).html(data[i].qx);
             	$("#jd"+i).html(data[i].jd);
             	$("#jw"+i).html(data[i].jw);
@@ -84,8 +92,8 @@ function analysis(){
             	$("#s"+i).html(data[i].s);
             	$("#bm"+i).html(data[i].bm);
 			}
-			$("#tb").html(html);
-            if(data.f=="1") {
+			
+            if(data[0].f=="1") {
             	$("#ts").html("地址标准化成功").css("color","green");
             } else if(data.f=="2") {
             	$("#ts").html("区县不对应").css("color","red");

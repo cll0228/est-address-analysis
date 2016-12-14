@@ -62,11 +62,20 @@ public class StdService {
             reParam = mapper.getStdAddr1(model);
             if (null == reParam) {
                 reParam = new ReturnParam();
-                reParam.setFlag("4");
+                if (null != model.getHouseNum() && null != model.getBuilding()) {
+                    reParam.setFlag("6");
+                }
+
+                if (null != model.getBuilding() && null == model.getHouseNum()) {
+                    reParam.setFlag("7");
+                }
+                return reParam;
             }
+
             if (null == model.getHouseNum()) {
                 reParam.setHouseNo(null);
             }
+
             if (null == model.getBuilding()) {
                 reParam.setBuilding(null);
             }

@@ -173,7 +173,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll(new StdModel("光新路129弄21号")));
+        System.out.println(parseAll(new StdModel("复兴东路1080号13号")));
     }
 
     private static boolean isMatch(String str, Pattern p) {
@@ -379,10 +379,15 @@ public class AddressExtractor {
         //
         arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+路\\d+号)(\\d+)号"));
         if (arr != null) {
-            String room = extractRoomNo(line);
             model.setRoad(arr[0]);
             model.setBuilding(arr[1] + "号");
-            model.setHouseNum(room);
+            return model;
+        }
+
+        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+路\\d+号)(\\d+)"));
+        if (arr != null) {
+            model.setRoad(arr[0]);
+            model.setBuilding(arr[1] + "号");
             return model;
         }
 

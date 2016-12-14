@@ -12,7 +12,7 @@ public class ReturnParam {
     private String building;
     private String houseNo;
     private String addrCode;
-    private String flag; // 状态 1：解析成功 ，2： 区县不对应， 3：解析失败 ,4:未查到资源 ,5:道路不存在
+    private String flag; // 状态 1：解析成功 ，2： 区县不对应， 3：解析失败 ,4:未查到资源 ,5:道路不存在 ,6:房间号未找到，7：楼栋未找到
 
     public String getId() {
         return id;

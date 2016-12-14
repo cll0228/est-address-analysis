@@ -50,7 +50,7 @@
         LEFT JOIN ocn_address.sa_committee COMMIT ON std_address.of_committe_id = COMMIT .committee_id
         LEFT JOIN ocn_address.sa_subdistrict substreet ON std_address.of_block_id = substreet.sub_district_id WHERE road_lane = '${model.road}${model.lane}'
         <if test="null != model.building">
-            AND building_no = '${model.building}号'
+            AND building_no = '${model.building}'
         </if>
         <if test="null != model.houseNum">
             AND house_no = '${model.houseNum}室'

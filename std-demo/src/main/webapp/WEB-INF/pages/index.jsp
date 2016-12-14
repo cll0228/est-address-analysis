@@ -95,17 +95,17 @@ function analysis(){
 			
             if(data[0].f=="1") {
             	$("#ts").html("地址标准化成功").css("color","green");
-            } else if(data.f=="2") {
+            } else if(data[0].f=="2") {
             	$("#ts").html("区县不对应").css("color","red");
-            } else if(data.f=="3") {
+            } else if(data[0].f=="3") {
             	$("#ts").html("地址不存在").css("color","red");
-            } else if(data.f=="4") {
+            } else if(data[0].f=="4") {
             	$("#ts").html("未查到资源").css("color","red");
-            } else if(data.f=="5") {
+            } else if(data[0].f=="5") {
             	$("#ts").html("道路不存在").css("color","red");
-            } else if(data.f=="6") {
+            } else if(data[0].f=="6") {
             	$("#ts").html("房间号未找到").css("color","red");
-            } else if(data.f=="7") {
+            } else if(data[0].f=="7") {
             	$("#ts").html("楼栋未找到").css("color","red");
             }
         }

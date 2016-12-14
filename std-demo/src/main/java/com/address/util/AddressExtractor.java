@@ -173,7 +173,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll(new StdModel("鞍山八村35号")));
+        System.out.println(parseAll(new StdModel("田林七村8号301室")));
     }
 
     private static boolean isMatch(String str, Pattern p) {
@@ -350,7 +350,7 @@ public class AddressExtractor {
             String room = PreHandle.filterReduplicate2_3(arr[3], 4);
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
-            model.setBuilding(arr[2]);
+            model.setBuilding(arr[2] + "号");
             model.setHouseNum(room);
             return model;
         }
@@ -470,7 +470,7 @@ public class AddressExtractor {
 
             if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
                 model.setResidence(model.getRoad() + model.getLane());
-                model.setBuilding(building);
+                model.setBuilding(building + "号");
 
                 return model;
             }
@@ -487,10 +487,13 @@ public class AddressExtractor {
             if (StringUtils.isNotBlank(buildingExt)) {
                 building += buildingExt;
             }
-
+            String roomNo = extractRoomNo(line);
+            if (roomNo != null) {
+                model.setHouseNum(roomNo);
+            }
             if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
                 model.setResidence(residenceName);
-                model.setBuilding(building);
+                model.setBuilding(building + "号");
 
                 return model;
             }

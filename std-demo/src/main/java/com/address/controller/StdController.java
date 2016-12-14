@@ -3,6 +3,8 @@ package com.address.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,8 @@ public class StdController {
     @Autowired
     private StdService stdService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(StdController.class);
+
     @RequestMapping("index")
     public String indexPage() {
         return "index";
@@ -42,6 +46,7 @@ public class StdController {
             result.put("s", param.getHouseNo());
             result.put("bm", param.getAddrCode());
             result.put("f", param.getFlag());
+            LOGGER.info("返回状态码 flag = " + param.getFlag());
         }
         return result;
 

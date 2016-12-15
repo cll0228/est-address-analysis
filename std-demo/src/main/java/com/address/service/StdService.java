@@ -22,6 +22,9 @@ public class StdService {
 
     public List<ReturnParam> analysis(String address) {
     	address = address.replaceAll(" ", "");
+    	if(address.indexOf("下")+1==address.length()) {
+    		address = address.replace("下", "");
+    	}
         List<ReturnParam> list = new ArrayList<>();
         ReturnParam reParam = new ReturnParam();
         if (null == address || "".equals(address)) {

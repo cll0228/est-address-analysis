@@ -80,4 +80,17 @@
             AND house_no = '${model.houseNum}室'
         </if>
     </select>
+
+    <select id="selectNoMappingHouseDeal" resultType="com.address.model.HouseDeal">
+          SELECT * FROM sts.no_mapping_std_addr_deal_demo;
+    </select>
+
+    <update id="updateResult" parameterType="com.address.model.HouseDeal">
+        UPDATE `sts`.`no_mapping_std_addr_deal_demo`
+            SET
+             `analy_addr` = #{deal.analyAddr},
+             `no_mapping_type` = #{deal.noMappingTyp}
+            WHERE
+                (`id` = #{deal.id});
+    </update>
 </mapper>

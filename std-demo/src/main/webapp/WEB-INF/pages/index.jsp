@@ -33,7 +33,9 @@
                                                 </table>
                                             </div>
                                             <!-- Table -->
-                                            <table class="table" height="80px">
+                                             <!-- style="overflow-x: auto; overflow-y: auto; height: 660px; width:100%;" -->
+                                            <div>
+                                            <table  id="sample_1" class="table table-striped table-bordered table-hover order-column" height="80px">
                                                 <thead>
                                                     <tr>
                                                     	<th width="14%">地址标准化编码</th>
@@ -55,6 +57,7 @@
                                                         <td id="s"></td>
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
                                     </div>
 

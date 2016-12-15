@@ -21,6 +21,7 @@ public class StdService {
     private StdMapper mapper;
 
     public List<ReturnParam> analysis(String address) {
+    	address = address.replaceAll(" ", "");
         List<ReturnParam> list = new ArrayList<>();
         ReturnParam reParam = new ReturnParam();
         if (null == address || "".equals(address)) {
@@ -55,7 +56,7 @@ public class StdService {
 
         // 小区名称
         if (null != model.getResidence() && model.getRoad() == null) {
-            list = mapper.getStdAddr(model.getResidence());
+            list = mapper.getStdAddr(model);
             if (null != list && list.size() > 1) {
                 for (ReturnParam param : list) {
                     param.setFlag("1");

@@ -12,7 +12,7 @@ import java.util.List;
 public interface StdMapper {
     String getDistrictByRoad(@Param("road") String road);
 
-    List<ReturnParam> getStdAddr(@Param("residence") String residence);
+    List<ReturnParam> getStdAddr(@Param("model") StdModel model);
 
     ReturnParam getStdAddr1(@Param("model") StdModel model);
 }

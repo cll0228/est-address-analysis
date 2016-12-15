@@ -364,6 +364,16 @@ public class AddressExtractor {
             model.setHouseNum(room);
             return model;
         }
+        //长海路37弄7号楼604室
+        arr = RegexUtil.regexGroup(line, Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄(\\d+)号楼(\\d+)室?$"));
+        if (arr != null) {
+            String room = PreHandle.filterReduplicate2_3(arr[3], 4);
+            model.setRoad(arr[0] + "路");
+            model.setLane(arr[1] + "弄");
+            model.setBuilding(arr[2] + "号");
+            model.setHouseNum(room);
+            return model;
+        }
         arr = RegexUtil.regexGroup(line,
                 Pattern.compile("^(?:五村村|(.+))村([\\d一二三四五六七八九十]+)[组队](\\d+)号([a-zA-Z]?).*$"));
         if (arr != null) {

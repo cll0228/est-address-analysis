@@ -283,7 +283,28 @@ public class AddressExtractor {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
             model.setResidence(arr[2]);
-            model.setBuilding(arr[3]);
+            model.setBuilding(arr[3] + "号");
+            model.setHouseNum(arr[4]);
+            return model;
+        }
+        
+        // 海州路418弄62支弄11号
+        arr = RegexUtil.regexGroup(line,
+                Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄(\\d+)支弄(\\d+)号$"));
+        if (arr != null) {
+            model.setRoad(arr[0] + "路");
+            model.setLane(arr[1] + "弄"+arr[2]+"支弄");
+            model.setBuilding(arr[3] + "号");
+            return model;
+        }
+        
+        // 西营路33弄22支弄4号403室
+        arr = RegexUtil.regexGroup(line,
+        		Pattern.compile("^([\\u4E00-\\u9FA5]+)路(\\d+)弄(\\d+)支弄(\\d+)号(\\d+)室$"));
+        if (arr != null) {
+        	model.setRoad(arr[0] + "路");
+            model.setLane(arr[1] + "弄"+arr[2]+"支弄");
+            model.setBuilding(arr[3] + "号");
             model.setHouseNum(arr[4]);
             return model;
         }
@@ -294,7 +315,7 @@ public class AddressExtractor {
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
             model.setResidence(arr[2]);
-            model.setBuilding(arr[3]);
+            model.setBuilding(arr[3] + "号");
             return model;
         }
 
@@ -360,7 +381,7 @@ public class AddressExtractor {
             String room = PreHandle.filterReduplicate2_3(arr[3], 4);
             model.setRoad(arr[0] + "路");
             model.setLane(arr[1] + "弄");
-            model.setBuilding(arr[2]);
+            model.setBuilding(arr[2] + "号");
             model.setHouseNum(room);
             return model;
         }
@@ -377,7 +398,7 @@ public class AddressExtractor {
         arr = RegexUtil.regexGroup(line,
                 Pattern.compile("^(?:五村村|(.+))村([\\d一二三四五六七八九十]+)[组队](\\d+)号([a-zA-Z]?).*$"));
         if (arr != null) {
-            model.setBuilding(arr[2]);
+            model.setBuilding(arr[2] + "号");
         }
 
         // 七莘路3333号12区17号202
@@ -431,7 +452,7 @@ public class AddressExtractor {
 
             if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
                 model.setResidence(residenceName);
-                model.setBuilding(building);
+                model.setBuilding(building + "号");
 
                 return model;
             }
@@ -440,7 +461,7 @@ public class AddressExtractor {
         arr = RegexUtil.regexGroup(line,
                 Pattern.compile("^([\\u4E00-\\u9FA5]+)([\\d一二三四五六七八九十]+)[组队](\\d+)号$"));
         if (arr != null) {
-            model.setBuilding(arr[2]);
+            model.setBuilding(arr[2] + "号");
         }
         map = RegexUtil.regexGroup(line, residenceBuildingRoom_regex, "rn0", "rn1", "rn2", "b", "r");
         if (map != null && !map.isEmpty()) {
@@ -458,7 +479,7 @@ public class AddressExtractor {
             room = PreHandle.filterReduplicate2_3(room, 4);
             if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
                 model.setResidence(residenceName);
-                model.setBuilding(building);
+                model.setBuilding(building + "号");
                 if (StringUtils.isNotBlank(room))
                     model.setHouseNum(room);
                 return model;

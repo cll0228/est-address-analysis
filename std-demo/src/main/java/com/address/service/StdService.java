@@ -65,9 +65,15 @@ public class StdService {
                     param.setFlag("1");
                     if (null == model.getHouseNum()) {
                         param.setHouseNo(null);
+                        if (null != param.getAddrCode()) {
+                        	param.setAddrCode(param.getAddrCode().replace(param.getAddrCode().substring(19, param.getAddrCode().length()),"0000"));
+                        }
                     }
                     if (null == model.getBuilding()) {
                         param.setBuilding(null);
+                        if (null != param.getAddrCode()) {
+                        	param.setAddrCode(param.getAddrCode().replace(param.getAddrCode().substring(15, param.getAddrCode().length()),"00000000"));
+                        }
                     }
                 }
 
@@ -130,10 +136,16 @@ public class StdService {
         if (null == model.getHouseNum()) {
 
             reParam.setHouseNo(null);
+            if (null != reParam.getAddrCode()) {
+            	reParam.setAddrCode(reParam.getAddrCode().replace(reParam.getAddrCode().substring(19, reParam.getAddrCode().length()),"0000"));
+            }
         }
 
         if (null == model.getBuilding()) {
             reParam.setBuilding(null);
+            if (null != reParam.getAddrCode()) {
+            	reParam.setAddrCode(reParam.getAddrCode().replace(reParam.getAddrCode().substring(15, reParam.getAddrCode().length()),"00000000"));
+            }
         }
         return reParam;
     }

@@ -53,6 +53,8 @@
         <if test="null != model.houseNum">
             AND house_no = '${model.houseNum}室'
         </if>
+
+        GROUP BY road_lane
     </select>
 
     <select id="getStdAddr1" resultType="com.address.model.ReturnParam" parameterType="com.address.model.StdModel">

@@ -61,12 +61,13 @@ public class StdService {
                 for (ReturnParam param : list) {
                     param.setFlag("1");
                     if (null == model.getHouseNum()) {
-                        reParam.setHouseNo(null);
+                        param.setHouseNo(null);
                     }
                     if (null == model.getBuilding()) {
-                        reParam.setBuilding(null);
+                        param.setBuilding(null);
                     }
                 }
+
                 return list;
             } else if (list.size() == 1) {
                 reParam = list.get(0);

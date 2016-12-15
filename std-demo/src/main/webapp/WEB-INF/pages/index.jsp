@@ -38,13 +38,13 @@
                                             <table  id="sample_1" class="table table-striped table-bordered table-hover order-column" height="80px">
                                                 <thead>
                                                     <tr>
-                                                    	<th width="14%">地址标准化编码</th>
-                                                        <th width="14%">区县</th>
-                                                        <th width="14%">街道</th>
-                                                        <th width="22%">居委</th>
-                                                        <th width="14%">路弄</th>
-                                                        <th width="10%">号</th>
-                                                        <th width="10%">室</th>
+                                                    	<th>地址标准化编码</th>
+                                                        <th>区县</th>
+                                                        <th>街道</th>
+                                                        <th>居委</th>
+                                                        <th>路弄</th>
+                                                        <th>号</th>
+                                                        <th>室</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tb">

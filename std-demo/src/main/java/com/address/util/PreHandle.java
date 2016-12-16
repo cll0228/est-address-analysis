@@ -1,14 +1,20 @@
 package com.address.util;
 
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.address.model.StdModel;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by Colin Yan on 2016/7/18.
  */
+@SuppressWarnings("all")
 public class PreHandle {
 
     public static StdModel handle(StdModel model) {
@@ -17,8 +23,50 @@ public class PreHandle {
             return null;
         String temp;
         model = removeDistrict(model);
+        model = removeTowm(model);
         temp = filterReduplicate2_3(model.getAddress());
         model.setAddress(trimFushi(temp));
+        return model;
+    }
+
+    static Set<String> townList = new HashSet<>();
+
+    static {
+
+        String town = "/SH_town_2016_12_16";
+        InputStream is = null;
+        try {
+            is = AddressExtractor.class.getResourceAsStream(town);
+            List<String> lines = IOUtils.readLines(is, "utf-8");
+            for (String s : lines) {
+                townList.add(s);
+            }
+            System.out.println(townList.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+    }
+
+    private static StdModel removeTowm(StdModel model) {
+        if (null == model)
+            return null;
+
+        String line = model.getAddress();
+        for (String jiezhen : townList) {
+            if (line.contains(jiezhen)) {
+                line = line.substring(line.indexOf(jiezhen) + jiezhen.length(), line.length());
+                model.setAddress(line);
+            } else if (line.contains(jiezhen.replace("镇", ""))) {
+                if (!line.contains(jiezhen.replace("镇", "") + "路")
+                        && !line.contains(jiezhen.replace("镇", "") + "街")) {
+                    line = line.replaceFirst(jiezhen.replace("镇", ""), "");
+                    model.setAddress(line);
+                }
+            }
+        }
+        model.setAddress(line);
         return model;
     }
 
@@ -82,6 +130,6 @@ public class PreHandle {
         return model;
     }
 
-    private static String[] districts = new String[]{"杨浦区", "宝山区", "嘉定区", "闸北区", "静安区", "浦东新区", "黄浦区",
-            "青浦区", "闵行区", "奉贤区", "普陀区", "南汇区", "金山区", "松江区", "崇明区", "崇明县"};
+    private static String[] districts = new String[] { "杨浦区", "宝山区", "嘉定区", "闸北区", "静安区", "浦东新区", "黄浦区",
+            "青浦区", "闵行区", "奉贤区", "普陀区", "南汇区", "金山区", "松江区", "崇明区", "崇明县", "虹口区", "长宁区", "徐汇区", "卢湾区" };
 }

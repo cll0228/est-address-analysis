@@ -38,7 +38,8 @@
 		LEFT JOIN ocn_address.of_neighborhood COMMIT ON std_address.of_neighborhood_id = COMMIT.neighborhood_id 
 		LEFT JOIN ocn_address.of_town town ON std_address.of_town_id = town.town_id 
 		WHERE std_address.road_lane in 
-		(SELECT road_lane FROM ocn_address.of_road_lane WHERE id in( SELECT road_lane_id FROM ocn_address.of_road_lane_match 
+		(SELECT road_lane FROM ocn_address.of_road_lane WHERE id in(
+        SELECT road_lane_id FROM ocn_address.of_road_lane_match
 		WHERE
                     lianjia_residence_name = #{model.residence}
                 OR soufang_residence_name = #{model.residence}
@@ -82,14 +83,14 @@
     </select>
 
     <select id="selectNoMappingHouseDeal" resultType="com.address.model.HouseDeal">
-          SELECT * FROM sts.no_mapping_std_addr_deal_demo;
+          SELECT * FROM sts.no_mapping_std_addr_deal_demo WHERE no_mapping_type is null;
     </select>
 
     <update id="updateResult" parameterType="com.address.model.HouseDeal">
         UPDATE `sts`.`no_mapping_std_addr_deal_demo`
             SET
              `analy_addr` = #{deal.analyAddr},
-             `no_mapping_type` = #{deal.noMappingTyp}
+             `no_mapping_type` = #{deal.noMappingType}
             WHERE
                 (`id` = #{deal.id});
     </update>

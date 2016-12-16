@@ -21,10 +21,10 @@ public class StdService {
     private StdMapper mapper;
 
     public List<ReturnParam> analysis(String address) {
-    	address = address.replaceAll(" ", "");
-    	if(address.indexOf("下")+1==address.length()) {
-    		address = address.replace("下", "");
-    	}
+        address = address.replaceAll(" ", "");
+        if (address.indexOf("下") + 1 == address.length()) {
+            address = address.replace("下", "");
+        }
         List<ReturnParam> list = new ArrayList<>();
         ReturnParam reParam = new ReturnParam();
         if (null == address || "".equals(address)) {
@@ -43,20 +43,25 @@ public class StdService {
         reParam.setFlag("1");
 
         // 判断区县是否对应
-        if (model.getRoad() != null && model.getDistrict() != null) {
-            String districtName = mapper.getDistrictByRoad(model.getRoad());
-            if (null == districtName) {
-                reParam.setFlag("5");
-                list.add(reParam);
-                return list;
-            }
-            if (null != districtName && !districtName.equals(model.getDistrict())) {
-                reParam.setFlag("2");// 区县不对应
-                list.add(reParam);
-                return list;
-            }
-        }
+        try {
 
+            if (model.getRoad() != null && model.getDistrict() != null) {
+
+                String districtName = mapper.getDistrictByRoad(model.getRoad());
+                if (null == districtName) {
+                    reParam.setFlag("5");
+                    list.add(reParam);
+                    return list;
+                }
+                if (null != districtName && !districtName.equals(model.getDistrict())) {
+                    reParam.setFlag("2");// 区县不对应
+                    list.add(reParam);
+                    return list;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("区县多个问题，跳过！");
+        }
         // 小区名称
         if (null != model.getResidence() && model.getRoad() == null) {
             list = mapper.getStdAddr(model);
@@ -66,13 +71,16 @@ public class StdService {
                     if (null == model.getHouseNum()) {
                         param.setHouseNo(null);
                         if (null != param.getAddrCode()) {
-                        	param.setAddrCode(param.getAddrCode().replace(param.getAddrCode().substring(19, param.getAddrCode().length()),"0000"));
+                            param.setAddrCode(param.getAddrCode().replace(
+                                    param.getAddrCode().substring(19, param.getAddrCode().length()), "0000"));
                         }
                     }
                     if (null == model.getBuilding()) {
                         param.setBuilding(null);
                         if (null != param.getAddrCode()) {
-                        	param.setAddrCode(param.getAddrCode().replace(param.getAddrCode().substring(15, param.getAddrCode().length()),"00000000"));
+                            param.setAddrCode(param.getAddrCode().replace(
+                                    param.getAddrCode().substring(15, param.getAddrCode().length()),
+                                    "00000000"));
                         }
                     }
                 }
@@ -137,14 +145,16 @@ public class StdService {
 
             reParam.setHouseNo(null);
             if (null != reParam.getAddrCode()) {
-            	reParam.setAddrCode(reParam.getAddrCode().replace(reParam.getAddrCode().substring(19, reParam.getAddrCode().length()),"0000"));
+                reParam.setAddrCode(reParam.getAddrCode().replace(
+                        reParam.getAddrCode().substring(19, reParam.getAddrCode().length()), "0000"));
             }
         }
 
         if (null == model.getBuilding()) {
             reParam.setBuilding(null);
             if (null != reParam.getAddrCode()) {
-            	reParam.setAddrCode(reParam.getAddrCode().replace(reParam.getAddrCode().substring(15, reParam.getAddrCode().length()),"00000000"));
+                reParam.setAddrCode(reParam.getAddrCode().replace(
+                        reParam.getAddrCode().substring(15, reParam.getAddrCode().length()), "00000000"));
             }
         }
         return reParam;

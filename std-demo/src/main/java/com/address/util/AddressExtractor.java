@@ -71,7 +71,7 @@ public class AddressExtractor {
             + ")|(?<rn0>.+弄))" + ".*?" + __buildingRegex.pattern());
 
     private static final Pattern residenceBuilding_lowThanRoad_regex = Pattern
-            .compile("(?<rn1>.+?(?:号|村|坊|道|苑|典|园|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区))" + ".*?"
+            .compile("(?<rn1>.+?(?:号|村|坊|道|苑|典|园|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区)" + ".*?)"
                     + __buildingRegex.pattern());
 
     // 直接解析出室号
@@ -174,7 +174,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll(new StdModel("嘉定区清河路109弄")));
+        System.out.println(parseAll(new StdModel("梅园三村16号303室")));
     }
 
     private static boolean isMatch(String str, Pattern p) {
@@ -404,6 +404,7 @@ public class AddressExtractor {
         arr = RegexUtil.regexGroup(line,
                 Pattern.compile("^(?:五村村|(.+))村([\\d一二三四五六七八九十]+)[组队](\\d+)号([a-zA-Z]?).*$"));
         if (arr != null) {
+            model.setResidence(arr[0]);
             model.setBuilding(arr[2] + "号");
         }
 
@@ -537,7 +538,6 @@ public class AddressExtractor {
             if (StringUtils.isNotBlank(residenceName) && StringUtils.isNotBlank(building)) {
                 model.setResidence(residenceName);
                 model.setBuilding(building + "号");
-
                 return model;
             }
         }

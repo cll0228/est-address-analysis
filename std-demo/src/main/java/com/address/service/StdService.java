@@ -1,15 +1,16 @@
 package com.address.service;
 
-import com.address.mapper.StdMapper;
-import com.address.model.ReturnParam;
-import com.address.model.StdModel;
-import com.address.util.AddressExtractor;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.address.mapper.StdMapper;
+import com.address.model.ReturnParam;
+import com.address.model.StdModel;
+import com.address.util.AddressExtractor;
 
 /**
  * Created by Cuill on 2016/12/12.
@@ -43,11 +44,26 @@ public class StdService {
         reParam.setFlag("1");
 
         // 判断区县是否对应
-        try {
 
-            if (model.getRoad() != null && model.getDistrict() != null) {
-
-                String districtName = mapper.getDistrictByRoad(model.getRoad());
+        if (model.getRoad() != null && model.getDistrict() != null) {
+            String districtName = null;
+            List<String> districtNameList = mapper.getDistrictByRoad(model.getRoad());
+            if (null != districtNameList && districtNameList.size() != 1) {
+                // 路对应多个区
+                boolean flag = false;
+                for (String name : districtNameList) {
+                    if (name.equals(model.getDistrict())) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    reParam.setFlag("2");// 区县不对应
+                    list.add(reParam);
+                    return list;
+                }
+            } else {
+                districtName = districtNameList.get(0);
                 if (null == districtName) {
                     reParam.setFlag("5");
                     list.add(reParam);
@@ -59,9 +75,8 @@ public class StdService {
                     return list;
                 }
             }
-        } catch (Exception e) {
-            System.out.println("区县多个问题，跳过！");
         }
+
         // 小区名称
         if (null != model.getResidence() && model.getRoad() == null) {
             list = mapper.getStdAddr(model);

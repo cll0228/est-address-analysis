@@ -4,12 +4,11 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.address.model.StdModel;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import com.address.model.StdModel;
 
 /**
  * Created by Colin Yan on 2016/7/18.

@@ -8,7 +8,7 @@
         <div class="container">
             <!-- BEGIN LOGO -->
             <div class="page-logo" style="padding-top:15px;width:100%">
-                    <span style="font-size: 30px">东方金融地址标准化系统</span>
+                    <span style="font-size: 30px">海上人家地址通</span>
             </div>
             <!-- END LOGO -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->

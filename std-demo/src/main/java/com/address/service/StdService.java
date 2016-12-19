@@ -1,15 +1,16 @@
 package com.address.service;
 
-import com.address.mapper.StdMapper;
-import com.address.model.ReturnParam;
-import com.address.model.StdModel;
-import com.address.util.AddressExtractor;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.address.mapper.StdMapper;
+import com.address.model.ReturnParam;
+import com.address.model.StdModel;
+import com.address.util.AddressExtractor;
 
 /**
  * Created by Cuill on 2016/12/12.
@@ -21,10 +22,10 @@ public class StdService {
     private StdMapper mapper;
 
     public List<ReturnParam> analysis(String address) {
-    	address = address.replaceAll(" ", "");
-    	if(address.indexOf("下")+1==address.length()) {
-    		address = address.replace("下", "");
-    	}
+        address = address.replaceAll(" ", "");
+        if (address.indexOf("下") + 1 == address.length()) {
+            address = address.replace("下", "");
+        }
         List<ReturnParam> list = new ArrayList<>();
         ReturnParam reParam = new ReturnParam();
         if (null == address || "".equals(address)) {
@@ -43,17 +44,36 @@ public class StdService {
         reParam.setFlag("1");
 
         // 判断区县是否对应
+
         if (model.getRoad() != null && model.getDistrict() != null) {
-            String districtName = mapper.getDistrictByRoad(model.getRoad());
-            if (null == districtName) {
-                reParam.setFlag("5");
-                list.add(reParam);
-                return list;
-            }
-            if (null != districtName && !districtName.equals(model.getDistrict())) {
-                reParam.setFlag("2");// 区县不对应
-                list.add(reParam);
-                return list;
+            String districtName = null;
+            List<String> districtNameList = mapper.getDistrictByRoad(model.getRoad());
+            if (null != districtNameList && districtNameList.size() != 1) {
+                // 路对应多个区
+                boolean flag = false;
+                for (String name : districtNameList) {
+                    if (name.equals(model.getDistrict())) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    reParam.setFlag("2");// 区县不对应
+                    list.add(reParam);
+                    return list;
+                }
+            } else {
+                districtName = districtNameList.get(0);
+                if (null == districtName) {
+                    reParam.setFlag("5");
+                    list.add(reParam);
+                    return list;
+                }
+                if (null != districtName && !districtName.equals(model.getDistrict())) {
+                    reParam.setFlag("2");// 区县不对应
+                    list.add(reParam);
+                    return list;
+                }
             }
         }
 
@@ -66,13 +86,16 @@ public class StdService {
                     if (null == model.getHouseNum()) {
                         param.setHouseNo(null);
                         if (null != param.getAddrCode()) {
-                        	param.setAddrCode(param.getAddrCode().replace(param.getAddrCode().substring(19, param.getAddrCode().length()),"0000"));
+                            param.setAddrCode(param.getAddrCode().replace(
+                                    param.getAddrCode().substring(19, param.getAddrCode().length()), "0000"));
                         }
                     }
                     if (null == model.getBuilding()) {
                         param.setBuilding(null);
                         if (null != param.getAddrCode()) {
-                        	param.setAddrCode(param.getAddrCode().replace(param.getAddrCode().substring(15, param.getAddrCode().length()),"00000000"));
+                            param.setAddrCode(param.getAddrCode().replace(
+                                    param.getAddrCode().substring(15, param.getAddrCode().length()),
+                                    "00000000"));
                         }
                     }
                 }
@@ -143,14 +166,16 @@ public class StdService {
 
             reParam.setHouseNo(null);
             if (null != reParam.getAddrCode()) {
-            	reParam.setAddrCode(reParam.getAddrCode().replace(reParam.getAddrCode().substring(19, reParam.getAddrCode().length()),"0000"));
+                reParam.setAddrCode(reParam.getAddrCode().replace(
+                        reParam.getAddrCode().substring(19, reParam.getAddrCode().length()), "0000"));
             }
         }
 
         if (null == model.getBuilding()) {
             reParam.setBuilding(null);
             if (null != reParam.getAddrCode()) {
-            	reParam.setAddrCode(reParam.getAddrCode().replace(reParam.getAddrCode().substring(15, reParam.getAddrCode().length()),"00000000"));
+                reParam.setAddrCode(reParam.getAddrCode().replace(
+                        reParam.getAddrCode().substring(15, reParam.getAddrCode().length()), "00000000"));
             }
         }
         return reParam;

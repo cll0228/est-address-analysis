@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Cuill on 2016/12/13.
  */
 public interface StdMapper {
-    String getDistrictByRoad(@Param("road") String road);
+    List<String> getDistrictByRoad(@Param("road") String road);
 
     List<ReturnParam> getStdAddr(@Param("model") StdModel model);
 

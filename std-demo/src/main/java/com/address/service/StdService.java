@@ -83,9 +83,15 @@ public class StdService {
                 reParam.setFlag("1");
                 if (null == model.getHouseNum()) {
                     reParam.setHouseNo(null);
+                    if (null != reParam.getAddrCode()) {
+                    	reParam.setAddrCode(reParam.getAddrCode().replace(reParam.getAddrCode().substring(19, reParam.getAddrCode().length()),"0000"));
+                    }
                 }
                 if (null == model.getBuilding()) {
                     reParam.setBuilding(null);
+                    if (null != reParam.getAddrCode()) {
+                    	reParam.setAddrCode(reParam.getAddrCode().replace(reParam.getAddrCode().substring(15, reParam.getAddrCode().length()),"00000000"));
+                    }
                 }
                 list = new ArrayList<>();
                 list.add(reParam);

@@ -90,6 +90,8 @@
         UPDATE `sts`.`no_mapping_std_addr_deal_demo`
             SET
              `analy_addr` = #{deal.analyAddr},
+             `std_addr_id` = #{deal.stdAddrId},
+             `create_date` = now(),
              `no_mapping_type` = #{deal.noMappingType}
             WHERE
                 (`id` = #{deal.id});

@@ -17,6 +17,8 @@ public class HouseDeal {
     private String analyAddr;
 
     private String noMappingType;
+    
+    private String stdAddrId;
 
     public String getAnalyAddr() {
         return analyAddr;
@@ -73,4 +75,12 @@ public class HouseDeal {
     public void setNoMappingType(String noMappingType) {
         this.noMappingType = noMappingType;
     }
+
+	public String getStdAddrId() {
+		return stdAddrId;
+	}
+
+	public void setStdAddrId(String stdAddrId) {
+		this.stdAddrId = stdAddrId;
+	}
 }

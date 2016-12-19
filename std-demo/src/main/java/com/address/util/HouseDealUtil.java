@@ -50,6 +50,7 @@ public class HouseDealUtil {
             result.setNoMappingType(param.getFlag());
 
             result.setId(deal.getId());
+            result.setStdAddrId(param.getId());
 
             stdMapper.updateResult(result);
         }

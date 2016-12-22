@@ -20,6 +20,8 @@ public class OfHouse {
     private Integer planeType;
     
     private Integer propertyType;
+    
+    private Integer stdAddrId;
 
 	public Integer getId() {
 		return id;
@@ -85,12 +87,21 @@ public class OfHouse {
 		this.propertyType = propertyType;
 	}
 
+	public Integer getStdAddrId() {
+		return stdAddrId;
+	}
+
+	public void setStdAddrId(Integer stdAddrId) {
+		this.stdAddrId = stdAddrId;
+	}
+
 	@Override
 	public String toString() {
-		return "WyhList [id=" + id + ", roomNo=" + roomNo + ", placeFloor="
+		return "OfHouse [id=" + id + ", roomNo=" + roomNo + ", placeFloor="
 				+ placeFloor + ", area=" + area + ", roomNum=" + roomNum
 				+ ", hallNum=" + hallNum + ", planeType=" + planeType
-				+ ", propertyType=" + propertyType + "]";
+				+ ", propertyType=" + propertyType + ", stdAddrId=" + stdAddrId
+				+ "]";
 	}
 
 }

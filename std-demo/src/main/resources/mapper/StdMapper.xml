@@ -116,8 +116,8 @@
     
     <insert id="insertOfHouse" parameterType="com.address.model.OfHouse">
         INSERT INTO `ocn_address`.`of_house`
-        (`room_no`,`place_floor`,`area`,`room_num`,`hall_num`,`plane_type`,`property_type`) 
-        VALUES(#{ofHouse.roomNo},#{ofHouse.placeFloor},#{ofHouse.area},#{ofHouse.roomNum},#{ofHouse.hallNum},#{ofHouse.planeType},#{ofHouse.propertyType});
+        (`room_no`,`place_floor`,`area`,`room_num`,`hall_num`,`plane_type`,`property_type`,`std_addr_id`) 
+        VALUES(#{ofHouse.roomNo},#{ofHouse.placeFloor},#{ofHouse.area},#{ofHouse.roomNum},#{ofHouse.hallNum},#{ofHouse.planeType},#{ofHouse.propertyType},#{ofHouse.stdAddrId});
     </insert>
     
     <update id="updateAiHd" parameterType="com.address.model.HouseDeal">

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.address.mapper.StdMapper;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
-import com.address.util.HousesAddressExtractor;
+import com.address.util.AddressExtractor;
 
 /**
  * Created by Cuill on 2016/12/12.
@@ -34,7 +34,7 @@ public class HousesService {
             return list;
         }
 
-        StdModel model = HousesAddressExtractor.parseAll(new StdModel(address));
+        StdModel model = AddressExtractor.parseAll(new StdModel(address));
         System.out.println("地址解析成功=" + model.toString());
         if (model.getResidence() == null && model.getRoad() == null) {
             reParam.setFlag("3");

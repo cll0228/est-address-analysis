@@ -27,7 +27,7 @@ public class HousesUtil {
         for (HouseDeal deal : dealList) {
             HouseDeal result = new HouseDeal();
 
-            StdModel model = HousesAddressExtractor.parseAll(new StdModel(deal.getAddress()));
+            StdModel model = AddressExtractor.parseAll(new StdModel(deal.getAddress()));
             if(model==null) {
             	continue;
             }

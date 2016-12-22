@@ -19,17 +19,20 @@ public class AddressExtractor {
 
     private static final String allResidence;
 
+    private static Set<String> allResidenceNames = new HashSet<>();
 
     static {
         String RESIDENCE_DIC = "/SH_Residence2016-07-14 16-17-21.csv";
 
         Set<String> residenceNameList = new HashSet<>();
+
         InputStream is = null;
         try {
             is = AddressExtractor.class.getResourceAsStream(RESIDENCE_DIC);
             List<String> lines = IOUtils.readLines(is, "utf-8");
             for (String s : lines) {
                 s = StringUtils.substringBetween(s, "\"", "\"");
+                allResidenceNames.add(s);
                 if (!s.matches(".+(?:弄|号|村|坊|道|苑|园|城|庭|大厦|湾|公寓|名邸|墅|小区|小区）|东门|西门|南门|北门|东区|西区|南区|北区)$")) {
                     residenceNameList.add(s);
                 }
@@ -52,6 +55,7 @@ public class AddressExtractor {
         residenceNameList.add("《春申景城(一期)》");
         residenceNameList.add("《金沙雅苑-舒诗康庭》");
         residenceNameList.add("凤城五村");
+        allResidenceNames.addAll(residenceNameList);
         final String residenceNames[] = residenceNameList.toArray(new String[residenceNameList.size()]);
 
         StringBuilder sb = new StringBuilder();
@@ -174,7 +178,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll(new StdModel("青浦区青浦镇五厍浜路168弄16号2层201室")));
+        System.out.println(parseAll(new StdModel("上海市奉贤区奉贤南桥镇环城南路阳光园1065弄77号77幢5层502室")));
     }
 
     private static boolean isMatch(String str, Pattern p) {
@@ -250,6 +254,31 @@ public class AddressExtractor {
             line = line.replaceFirst(matcher.group(1), "");
         }
         model.setAddress(line);
+
+        //奉贤区南桥镇阳光园环城南路1065弄77号77幢5层502室
+
+        //奉贤区南桥镇环城南路阳光园1065弄77号77幢5层502室
+
+        //环城南路阳光园1065弄
+        pattern = Pattern.compile("^[\\u4E00-\\u9FA5]+路([\\u4E00-\\u9FA5]+)\\d+弄");
+        matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            String f = matcher.group(1);
+            if (allResidenceNames.contains(f)) {
+                model.setAddress(line.replace(f, ""));
+            }
+        }
+
+        pattern = Pattern.compile("^[\\u4E00-\\u9FA5]+路\\d+弄");
+        matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            for (String ss : allResidenceNames) {
+                if (line.contains(ss)) {
+                    model.setAddress(line.replace(ss, ""));
+                    break;
+                }
+            }
+        }
         return model;
     }
 
@@ -265,7 +294,23 @@ public class AddressExtractor {
         if (model.getAddress() == null)
             return null;
 
-        return parseAll__(model);
+        StdModel stdModel = parseAll__(model);
+        return filterResult(stdModel);
+    }
+
+    private static StdModel filterResult(StdModel input) {
+        if (input == null)
+            return null;
+
+        if (input.getRoad() != null) {
+            for (String r :allResidenceNames) {
+                if (input.getRoad().startsWith(r) && input.getRoad().endsWith("路")) {
+                    input.setRoad(StringUtils.removeStart(input.getRoad(), r));
+                }
+            }
+        }
+
+        return input;
     }
 
     private static StdModel parseAll__(StdModel model) {

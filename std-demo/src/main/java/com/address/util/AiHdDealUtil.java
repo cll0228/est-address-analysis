@@ -28,7 +28,7 @@ public class AiHdDealUtil {
         for (HouseDeal deal : dealList) {
             HouseDeal result = new HouseDeal();
 
-            StdModel model = AiHdAddressExtractor.parseAll(new StdModel(deal.getAddress()));
+            StdModel model = AddressExtractor.parseAll(new StdModel(deal.getAddress()));
             String analyAddr = "";
             if (null != model.getResidence())
                 analyAddr += model.getResidence() + ",";

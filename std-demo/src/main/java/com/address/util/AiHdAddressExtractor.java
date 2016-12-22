@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 import com.address.model.StdModel;
 
 @SuppressWarnings("all")
-public class AddressExtractor {
+public class AiHdAddressExtractor {
 
     private static final String allResidence;
 
@@ -26,7 +26,7 @@ public class AddressExtractor {
         Set<String> residenceNameList = new HashSet<>();
         InputStream is = null;
         try {
-            is = AddressExtractor.class.getResourceAsStream(RESIDENCE_DIC);
+            is = AiHdAddressExtractor.class.getResourceAsStream(RESIDENCE_DIC);
             List<String> lines = IOUtils.readLines(is, "utf-8");
             for (String s : lines) {
                 s = StringUtils.substringBetween(s, "\"", "\"");
@@ -174,7 +174,7 @@ public class AddressExtractor {
         // 10层全幢室
         // System.out.println(extractRoomNo("石门路39弄89号9层"));
 
-        System.out.println(parseAll(new StdModel("青浦区青浦镇五厍浜路168弄16号2层201室")));
+        System.out.println(parseAll(new StdModel("松江区泗泾镇横港路155弄42号4层401室")));
     }
 
     private static boolean isMatch(String str, Pattern p) {

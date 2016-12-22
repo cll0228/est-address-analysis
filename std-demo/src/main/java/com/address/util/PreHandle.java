@@ -60,8 +60,13 @@ public class PreHandle {
             } else if (line.contains(jiezhen.replace("镇", ""))) {
                 if (!line.contains(jiezhen.replace("镇", "") + "路")
                         && !line.contains(jiezhen.replace("镇", "") + "街")&& jiezhen.replace("镇", "").length()>1) {
-                    line = line.replaceFirst(jiezhen.replace("镇", ""), "");
-                    model.setAddress(line);
+                	if(line.indexOf("路")!=-1) {
+                		String road = line.substring(0, line.indexOf("路")+1);
+                		if(road.length()<4) {
+                			line = line.replaceFirst(jiezhen.replace("镇", ""), "");
+                            model.setAddress(line);
+                		}
+                	}
                 }
             }
         }

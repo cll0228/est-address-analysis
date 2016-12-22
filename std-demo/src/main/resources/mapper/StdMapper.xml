@@ -82,16 +82,62 @@
         </if>
     </select>
 
+	<select id="selectAiHdNoChai" resultType="com.address.model.HouseDeal">
+          SELECT DOOR_NAME as address,id FROM ocn_address.extract_success_1400_aihd WHERE roomnum is null;
+    </select>
+
     <select id="selectNoMappingHouseDeal" resultType="com.address.model.HouseDeal">
           SELECT * FROM sts.no_mapping_std_addr_deal_demo WHERE no_mapping_type is null;
     </select>
+    
+    <select id="selectHouses" resultType="com.address.model.HouseDeal">
+          SELECT address,id FROM mortgage_address.houses_unique;
+    </select>
+    
+    <select id="selectOfHouse" resultType="com.address.model.OfHouse">
+          select hdm.of_std_address_id stdAddrId,hd.room roomNo,hd.floor placeFloor,hd.area,hd.property_room roomNum,hd.property_parlor hallNum,hd.plane_type_id planeType,hd.property_type_id propertyType from sts.house_deal_unique_address hd left JOIN sts.house_deal_std_address_mapping hdm on hd.id = hdm.house_deal_id where hdm.id >1593384;
+    </select>
 
     <update id="updateResult" parameterType="com.address.model.HouseDeal">
-        UPDATE `sts`.`no_mapping_std_addr_deal_demo`
+        UPDATE `ocn_address`.`extract_success_1400_aihd`
             SET
              `analy_addr` = #{deal.analyAddr},
              `std_addr_id` = #{deal.stdAddrId},
              `create_date` = now(),
+             `no_mapping_type` = #{deal.noMappingType}
+            WHERE
+                (`id` = #{deal.id});
+    </update>
+    
+    <insert id="updateMapping" parameterType="com.address.model.HouseDeal">
+        INSERT INTO `sts`.`house_deal_std_address_mapping`
+        (`of_std_address_id`,`house_deal_id`) VALUES(#{deal.stdAddrId},#{deal.id});
+    </insert>
+    
+    <insert id="insertOfHouse" parameterType="com.address.model.OfHouse">
+        INSERT INTO `ocn_address`.`of_house`
+        (`room_no`,`place_floor`,`area`,`room_num`,`hall_num`,`plane_type`,`property_type`) 
+        VALUES(#{ofHouse.roomNo},#{ofHouse.placeFloor},#{ofHouse.area},#{ofHouse.roomNum},#{ofHouse.hallNum},#{ofHouse.planeType},#{ofHouse.propertyType});
+    </insert>
+    
+    <update id="updateAiHd" parameterType="com.address.model.HouseDeal">
+        UPDATE `ocn_address`.`extract_success_1400_aihd`
+            SET
+             `building` = #{deal.building},
+             `roomnum` = #{deal.room},
+             `std_addr_id` = #{deal.stdAddrId},
+             `no_mapping_type` = #{deal.noMappingType}
+            WHERE
+                (`id` = #{deal.id});
+    </update>
+    
+    <update id="updateHouses" parameterType="com.address.model.HouseDeal">
+        UPDATE `mortgage_address`.`houses_unique`
+            SET
+             `building` = #{deal.building},
+             `roomnum` = #{deal.room},
+             `extract_addr` = #{deal.residence},
+             `std_addr_id` = #{deal.stdAddrId},
              `no_mapping_type` = #{deal.noMappingType}
             WHERE
                 (`id` = #{deal.id});

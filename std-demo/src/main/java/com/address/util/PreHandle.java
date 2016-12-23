@@ -57,8 +57,10 @@ public class PreHandle {
         String line = model.getAddress();
         for (String jiezhen : townList) {
             if (line.contains(jiezhen)) {
-                line = line.substring(line.indexOf(jiezhen) + jiezhen.length(), line.length());
-                model.setAddress(line);
+            	if(!line.contains(jiezhen+"路")) {
+            		line = line.substring(line.indexOf(jiezhen) + jiezhen.length(), line.length());
+                    model.setAddress(line);
+            	}
             } else if (line.contains(jiezhen.replace("镇", ""))) {
                 if (!line.contains(jiezhen.replace("镇", "") + "路")
                         && !line.contains(jiezhen.replace("镇", "") + "街")&& jiezhen.replace("镇", "").length()>1) {

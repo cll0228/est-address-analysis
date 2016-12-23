@@ -121,7 +121,7 @@ public class StdService {
                 return list;
             } else {
                 // 去标准地址库中查询
-                model.setRoad(model.getResidence());
+//                model.setRoad(model.getResidence());
                 ReturnParam stdAddr1 = this.getStdAddr1(model);
                 if (null == stdAddr1) {
                     reParam = new ReturnParam();

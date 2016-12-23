@@ -73,8 +73,20 @@
         LEFT JOIN ocn_address.of_district district ON std_address.of_district_id = district.district_id
         LEFT JOIN ocn_address.of_neighborhood COMMIT ON std_address.of_neighborhood_id = COMMIT.neighborhood_id
         LEFT JOIN ocn_address.of_town town ON std_address.of_town_id = town.town_id
-        WHERE road_lane = '${model.road}${model.lane}'
-        <if test="null != model.building">
+        WHERE 1=1
+        <if test="null != model.road and null != model.lane">
+            AND road_lane = '${model.road}${model.lane}'
+        </if>
+        <if test="null == model.road and null == model.lane">
+            AND road_lane = '${model.residence}'
+        </if>
+        <if test="null != model.road and null == model.lane and null != model.building">
+            AND road_lane = '${model.road}${model.building}'
+        </if>
+        <if test="null != model.building and null != model.lane">
+            AND building_no = '${model.building}'
+        </if>
+        <if test="null == model.road and null == model.lane and null != model.building">
             AND building_no = '${model.building}'
         </if>
         <if test="null != model.houseNum">

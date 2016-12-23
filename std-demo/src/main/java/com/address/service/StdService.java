@@ -45,7 +45,7 @@ public class StdService {
 
         // 判断区县是否对应
 
-        if (model.getRoad() != null && model.getDistrict() != null) {
+        /*if (model.getRoad() != null && model.getDistrict() != null) {
             String districtName = null;
             List<String> districtNameList = mapper.getDistrictByRoad(model.getRoad());
             if (null != districtNameList && districtNameList.size() != 1) {
@@ -75,7 +75,7 @@ public class StdService {
                     return list;
                 }
             }
-        }
+        }*/
 
         // 小区名称
         if (null != model.getResidence() && model.getRoad() == null) {

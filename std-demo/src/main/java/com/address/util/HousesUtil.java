@@ -27,7 +27,7 @@ public class HousesUtil {
         for (HouseDeal deal : dealList) {
             HouseDeal result = new HouseDeal();
 
-            StdModel model = AddressExtractor.parseAll(new StdModel(deal.getAddress()));
+            StdModel model = AddressExtractor.parseAll(new StdModel("宝林六村63号102室"));
             if(model==null) {
             	continue;
             }
@@ -61,6 +61,8 @@ public class HousesUtil {
             	roadLane = model.getRoad();
             } else if (model.getRoad()!=null) {
             	roadLane = model.getLane();
+            } else if (model.getResidence()!=null) {
+            	roadLane = model.getResidence();
             }
             result.setResidence(roadLane);
             result.setStdAddrId(param.getId());

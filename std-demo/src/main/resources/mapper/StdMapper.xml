@@ -87,7 +87,7 @@
     </select>
 
     <select id="selectNoMappingHouseDeal" resultType="com.address.model.HouseDeal">
-          SELECT * FROM sts.no_mapping_std_addr_deal_demo WHERE no_mapping_type is null;
+          SELECT * FROM sts.no_mapping_std_addr_deal_demo WHERE no_mapping_type!=1;
     </select>
     
     <select id="selectHouses" resultType="com.address.model.HouseDeal">
@@ -99,7 +99,7 @@
     </select>
 
     <update id="updateResult" parameterType="com.address.model.HouseDeal">
-        UPDATE `ocn_address`.`extract_success_1400_aihd`
+        UPDATE `sts`.`no_mapping_std_addr_deal_demo`
             SET
              `analy_addr` = #{deal.analyAddr},
              `std_addr_id` = #{deal.stdAddrId},

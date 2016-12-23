@@ -35,6 +35,10 @@ public class HousesService {
         }
 
         StdModel model = AddressExtractor.parseAll(new StdModel(address));
+        if(model==null) {
+        	System.out.println("地址解析失败="+address);
+        	return null;
+        }
         System.out.println("地址解析成功=" + model.toString());
         if (model.getResidence() == null && model.getRoad() == null) {
             reParam.setFlag("3");

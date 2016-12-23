@@ -177,7 +177,7 @@ public class AddressExtractor {
     public static void main(String[] args) {
         // 10层全幢室
         // System.out.println(extractRoomNo("上海市浦东长清路773弄31号401室"));
-        System.out.println(parseAll(new StdModel("菊园")));
+        System.out.println(parseAll(new StdModel("嘉定新城25号101室")));
     }
 
     private static boolean isMatch(String str, Pattern p) {

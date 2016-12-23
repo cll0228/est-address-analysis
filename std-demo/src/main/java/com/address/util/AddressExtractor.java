@@ -176,9 +176,8 @@ public class AddressExtractor {
 
     public static void main(String[] args) {
         // 10层全幢室
-        // System.out.println(extractRoomNo("石门路39弄89号9层"));
-
-        System.out.println(parseAll(new StdModel("上海市奉贤区奉贤南桥镇环城南路阳光园1065弄77号77幢5层502室")));
+        // System.out.println(extractRoomNo("上海市浦东长清路773弄31号401室"));
+        System.out.println(parseAll(new StdModel("菊园")));
     }
 
     private static boolean isMatch(String str, Pattern p) {
@@ -291,6 +290,9 @@ public class AddressExtractor {
             return null;
 
         model = preProcess(model);
+        if(model==null) {
+        	return null;
+        }
         if (model.getAddress() == null)
             return null;
 

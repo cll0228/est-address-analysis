@@ -92,14 +92,17 @@
         <if test="null != model.houseNum">
             AND house_no = '${model.houseNum}室'
         </if>
+        <if test="null != model.road and null == model.houseNum and null == model.lane and null == model.building">
+            AND road_lane = '${model.road}'
+        </if>
     </select>
 
 	<select id="selectAiHdNoChai" resultType="com.address.model.HouseDeal">
-          SELECT DOOR_NAME as address,id FROM ocn_address.extract_success_1400_aihd WHERE roomnum is null;
+          SELECT DOOR_NAME as address,id FROM ocn_address.extract_success_1400_aihd;
     </select>
 
     <select id="selectNoMappingHouseDeal" resultType="com.address.model.HouseDeal">
-          SELECT * FROM sts.no_mapping_std_addr_deal_demo WHERE no_mapping_type!=1;
+          SELECT * FROM sts.no_mapping_std_addr_deal_demo;
     </select>
     
     <select id="selectHouses" resultType="com.address.model.HouseDeal">
@@ -124,6 +127,11 @@
     <insert id="updateMapping" parameterType="com.address.model.HouseDeal">
         INSERT INTO `sts`.`house_deal_std_address_mapping`
         (`of_std_address_id`,`house_deal_id`) VALUES(#{deal.stdAddrId},#{deal.id});
+    </insert>
+    
+    <insert id="insertOuterAddress" parameterType="com.address.model.HouseDeal">
+        INSERT INTO `ocn_address`.`of_outer_address_links`
+        (`src_table`,`std_addr_id`,`src_table_id`) VALUES(#{deal.analyAddr},#{deal.stdAddrId},#{deal.id});
     </insert>
     
     <insert id="insertOfHouse" parameterType="com.address.model.OfHouse">

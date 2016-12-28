@@ -272,10 +272,12 @@ public class AddressExtractor {
         matcher = pattern.matcher(line);
         if (matcher.find()) {
             for (String ss : allResidenceNames) {
-                if (line.contains(ss)) {
-                    model.setAddress(line.replace(ss, ""));
-                    break;
-                }
+            	if(!PreHandle.hasDigit(ss)&&(!ss.contains("弄")||!ss.contains("路")||!ss.contains("支弄"))) {
+            		if (line.contains(ss)) {
+                        model.setAddress(line.replace(ss, ""));
+                        break;
+                    }
+            	}
             }
         }
         return model;

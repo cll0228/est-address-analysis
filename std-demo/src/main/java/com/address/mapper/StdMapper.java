@@ -31,6 +31,8 @@ public interface StdMapper {
     
     void updateMapping(@Param("deal") HouseDeal deal);
     
+    void insertOuterAddress(@Param("deal") HouseDeal deal);
+    
     void updateAiHd(@Param("deal") HouseDeal deal);
     
     void updateHouses(@Param("deal") HouseDeal deal);

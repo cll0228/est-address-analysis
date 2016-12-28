@@ -1,14 +1,14 @@
 package com.address.util;
 
+import java.util.List;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.address.mapper.StdMapper;
 import com.address.model.HouseDeal;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
-import com.address.service.HousesService;
-
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.util.List;
+import com.address.service.StdService;
 
 /**
  * Created by Cuill on 2016/12/15. 未能匹配标准地址的交易案例 匹配标准地址解析程序
@@ -19,7 +19,7 @@ public class HousesUtil {
                 "classpath:/conf/applicationContext*.xml");
         context.start();
         StdMapper stdMapper = context.getBean(StdMapper.class);
-        HousesService housesService = context.getBean(HousesService.class);
+        StdService stdService = context.getBean(StdService.class);
         List<HouseDeal> dealList = stdMapper.selectHouses();
         if (null == dealList)
             return;
@@ -49,7 +49,7 @@ public class HousesUtil {
 
             result.setAnalyAddr(analyAddr);
 
-            List<ReturnParam> analysis = housesService.analysis(deal.getAddress());
+            List<ReturnParam> analysis = stdService.analysis(deal.getAddress());
             ReturnParam param = analysis.get(0);
             result.setNoMappingType(param.getFlag());
             result.setBuilding(model.getBuilding());
@@ -69,7 +69,11 @@ public class HousesUtil {
             result.setStdAddrId(param.getId());
             result.setId(deal.getId());
             stdMapper.updateHouses(result);
-            
+            result.setAnalyAddr("mortgage_address");
+            //添加入库
+            if(deal.getId()!=null&&param.getId()!=null) {
+            	stdMapper.insertOuterAddress(result);
+            }
             /*//添加入库
             if(deal.getId()!=null&&param.getId()!=null) {
             	stdMapper.updateMapping(result);

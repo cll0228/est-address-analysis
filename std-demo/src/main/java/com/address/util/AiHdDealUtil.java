@@ -20,7 +20,7 @@ public class AiHdDealUtil {
                 "classpath:/conf/applicationContext*.xml");
         context.start();
         StdMapper stdMapper = context.getBean(StdMapper.class);
-        AiHdService aiHdService = context.getBean(AiHdService.class);
+        StdService stdService = context.getBean(StdService.class);
         List<HouseDeal> dealList = stdMapper.selectAiHdNoChai();
         if (null == dealList)
             return;
@@ -47,7 +47,7 @@ public class AiHdDealUtil {
 
             result.setAnalyAddr(analyAddr);
 
-            List<ReturnParam> analysis = aiHdService.analysis(deal.getAddress());
+            List<ReturnParam> analysis = stdService.analysis(deal.getAddress());
             ReturnParam param = analysis.get(0);
             result.setNoMappingType(param.getFlag());
             result.setBuilding(model.getBuilding());
@@ -55,7 +55,11 @@ public class AiHdDealUtil {
             result.setStdAddrId(param.getId());
             result.setId(deal.getId());
             stdMapper.updateAiHd(result);
-            
+            result.setAnalyAddr("aihd_1400");
+            //添加入库
+            if(deal.getId()!=null&&param.getId()!=null) {
+            	stdMapper.insertOuterAddress(result);
+            }
             /*//添加入库
             if(deal.getId()!=null&&param.getId()!=null) {
             	stdMapper.updateMapping(result);

@@ -150,14 +150,48 @@ public class StdService {
     private ReturnParam getStdAddr1(StdModel model) {
         ReturnParam reParam = mapper.getStdAddr1(model);
         if (null == reParam) {
-            reParam = new ReturnParam();
-            reParam.setFlag("4");
-            if (null != model.getHouseNum() && null != model.getBuilding()) {
-                reParam.setFlag("6");
+            if (null == model.getBuilding() && null == model.getHouseNum()) {
+            	reParam = new ReturnParam();
+                reParam.setFlag("4");
+            	return reParam;
             }
-
-            if (null != model.getBuilding() && null == model.getHouseNum()) {
-                reParam.setFlag("7");
+            if (null != model.getHouseNum() && null != model.getBuilding()) {
+            	model.setHouseNum(null);
+            	reParam = mapper.getStdAddr1(model);
+            	if (null != reParam) {
+            		reParam = new ReturnParam();
+                    reParam.setFlag("6");
+            	} else {
+            		model.setBuilding(null);
+            		reParam = mapper.getStdAddr1(model);
+            		if(null != reParam) {
+            			reParam = new ReturnParam();
+                        reParam.setFlag("7");
+            		} else {
+            			reParam = new ReturnParam();
+                        reParam.setFlag("4");
+            		}
+            	}
+            } else if(null == model.getHouseNum() && null != model.getBuilding()) {
+            	model.setBuilding(null);
+        		reParam = mapper.getStdAddr1(model);
+        		if(null != reParam) {
+        			reParam = new ReturnParam();
+                    reParam.setFlag("7");
+        		} else {
+        			reParam = new ReturnParam();
+                    reParam.setFlag("4");
+        		}
+            } else if(null != model.getHouseNum() && null == model.getBuilding()) {
+            	model.setHouseNum(null);
+        		reParam = mapper.getStdAddr1(model);
+        		if(null != reParam) {
+        			reParam = new ReturnParam();
+                    reParam.setFlag("6");
+        		} else {
+        			reParam = new ReturnParam();
+                    reParam.setFlag("4");
+        		}
             }
             return reParam;
         }

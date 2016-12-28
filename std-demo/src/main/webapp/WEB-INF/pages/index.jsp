@@ -103,7 +103,7 @@ function analysis(){
             } else if(data[0].f=="3") {
             	$("#ts").html("地址不存在").css("color","red");
             } else if(data[0].f=="4") {
-            	$("#ts").html("未查到资源").css("color","red");
+            	$("#ts").html("路弄未找到").css("color","red");
             } else if(data[0].f=="5") {
             	$("#ts").html("道路不存在").css("color","red");
             } else if(data[0].f=="6") {

@@ -53,11 +53,12 @@ public class HouseDealUtil {
             result.setStdAddrId(param.getId());
 
             stdMapper.updateResult(result);
-            
-            /*//添加入库
+            result.setAnalyAddr("house_deal");
+            //添加入库
             if(deal.getId()!=null&&param.getId()!=null) {
             	stdMapper.updateMapping(result);
-            }*/
+            	stdMapper.insertOuterAddress(result);
+            }
         }
     }
 }

@@ -28,6 +28,8 @@ public interface StdMapper {
     List<HouseDeal> selectHouses();
     
     List<OfHouse> selectOfHouse();
+    
+    List<HouseDeal> selectHouseDeal();
 
     void updateResult(@Param("deal") HouseDeal deal);
     

@@ -102,7 +102,7 @@
     </select>
     
     <select id="selectExtract" resultType="com.address.model.HouseDeal">
-          SELECT DOOR_NAME as address,id FROM extract_success_1400 limit 0,1500000;
+          SELECT DOOR_NAME as address,id FROM extract_success_1400_2 limit 0,1500000;
     </select>
 
     <select id="selectNoMappingHouseDeal" resultType="com.address.model.HouseDeal">
@@ -115,6 +115,15 @@
     
     <select id="selectOfHouse" resultType="com.address.model.OfHouse">
           select hdm.of_std_address_id stdAddrId,hd.room roomNo,hd.floor placeFloor,hd.area,hd.property_room roomNum,hd.property_parlor hallNum,hd.plane_type_id planeType,hd.property_type_id propertyType from sts.house_deal_unique_address hd left JOIN sts.house_deal_std_address_mapping hdm on hd.id = hdm.house_deal_id where hdm.id >1593384;
+    </select>
+
+	<select id="selectHouseDeal" resultType="com.address.model.HouseDeal">
+          SELECT
+			a.std_addr_id stdAddrId,b.house_deal_id id
+		FROM
+			ocn_address.of_house a left join sts.house_deal_std_address_mapping b on a.std_addr_id = b.of_std_address_id
+		WHERE
+			a.id &lt; 1778573
     </select>
 
     <update id="updateResult" parameterType="com.address.model.HouseDeal">
@@ -156,7 +165,7 @@
     </update>
     
     <update id="updateExtract" parameterType="com.address.model.HouseDeal">
-        UPDATE `ocn_address`.`extract_success_1400`
+        UPDATE `ocn_address`.`extract_success_1400_2`
             SET
              `building` = #{deal.building},
              `roomnum` = #{deal.room},

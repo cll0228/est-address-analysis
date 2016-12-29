@@ -23,6 +23,8 @@ public interface StdMapper {
     
     List<HouseDeal> selectAiHdNoChai();
     
+    List<HouseDeal> selectExtract();
+    
     List<HouseDeal> selectHouses();
     
     List<OfHouse> selectOfHouse();
@@ -34,6 +36,8 @@ public interface StdMapper {
     void insertOuterAddress(@Param("deal") HouseDeal deal);
     
     void updateAiHd(@Param("deal") HouseDeal deal);
+    
+    void updateExtract(@Param("deal") HouseDeal deal);
     
     void updateHouses(@Param("deal") HouseDeal deal);
     

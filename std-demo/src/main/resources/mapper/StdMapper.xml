@@ -177,4 +177,18 @@
             WHERE
                 (`id` = #{deal.id});
     </update>
+
+
+    <!-- 天地图 -->
+    <select id="selectTdtAddress" resultType="com.address.model.HouseDeal">
+        SELECT id,address FROM dazhongdianping.tdt_building_clearv1_201612 WHERE address IS NOT NULL AND residence_part is NULL ORDER BY id;
+    </select>
+    <update id="updateTdtResult" parameterType="com.address.model.HouseDeal">
+        UPDATE `dazhongdianping`.`tdt_building_clearv1_201612`
+        SET
+        `residence_part` = #{deal.residence},
+        `building_part` = #{deal.building}
+        WHERE
+        (`id` = #{deal.id});
+    </update>
 </mapper>

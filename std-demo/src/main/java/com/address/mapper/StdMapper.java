@@ -38,4 +38,8 @@ public interface StdMapper {
     void updateHouses(@Param("deal") HouseDeal deal);
     
     void insertOfHouse(@Param("ofHouse") OfHouse ofHouse);
+
+    List<HouseDeal> selectTdtAddress();
+
+    void updateTdtResult(@Param("deal")HouseDeal deal);
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.address.mapper.TaskMapper">
+    <select id="getLianjiaResidenceList" resultType="com.address.model.LianjiaResidenceInfo">
+         SELECT residence_id residenceId,residence_name residenceName, address FROM sts.lianjia_residence_info;
+    </select>
+    <select id="selcetResidenceByAddr" resultType="com.address.model.LianjiaResidenceInfo">
+         SELECT * FROM sts.lianjia_residence_info WHERE address like '%${addr}%';
+    </select>
+</mapper>

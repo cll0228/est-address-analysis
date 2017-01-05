@@ -21,7 +21,7 @@ public class Extract1400Util {
         context.start();
         StdMapper stdMapper = context.getBean(StdMapper.class);
         StdService stdService = context.getBean(StdService.class);
-        List<HouseDeal> dealList = stdMapper.selectAiHdNoChai();
+        List<HouseDeal> dealList = stdMapper.selectExtract();
         if (null == dealList)
             return;
 
@@ -29,6 +29,9 @@ public class Extract1400Util {
             HouseDeal result = new HouseDeal();
 
             StdModel model = AddressExtractor.parseAll(new StdModel(deal.getAddress()));
+            if(null == model)
+                continue;
+
             String analyAddr = "";
             if (null != model.getResidence())
                 analyAddr += model.getResidence() + ",";
@@ -57,9 +60,15 @@ public class Extract1400Util {
             stdMapper.updateExtract(result);
             result.setAnalyAddr("extract_1400");
             //添加入库
-            if(deal.getId()!=null&&param.getId()!=null) {
-            	stdMapper.insertOuterAddress(result);
+            try {
+                if(deal.getId()!=null&&param.getId()!=null) {
+                    stdMapper.insertOuterAddress(result);
+                }
+            }catch (Exception e){
+                System.out.println(deal.getId()+","+param.getId());
+                System.out.println(e);
             }
+
             /*//添加入库
             if(deal.getId()!=null&&param.getId()!=null) {
             	stdMapper.updateMapping(result);

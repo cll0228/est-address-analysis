@@ -2,6 +2,7 @@ package com.address.mapper;
 
 import java.util.List;
 
+import com.address.model.*;
 import org.apache.ibatis.annotations.Param;
 
 import com.address.model.HouseDeal;
@@ -59,4 +60,6 @@ public interface StdMapper {
     
     List<PriceTrend> getResidenceTradeAvgPriceList(@Param("residenceId")Integer residenceId,
             @Param("startMonth")String startMonth, @Param("endMonth")String endMonth);
+
+    List<ResidenceBoundary> selectResiBoundaryById(@Param("id")String id);
 }

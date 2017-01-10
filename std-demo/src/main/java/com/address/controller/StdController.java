@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.address.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +62,8 @@ public class StdController {
                 result.put("s", returnParam.getHouseNo());
                 result.put("bm", returnParam.getAddrCode());
                 result.put("f", returnParam.getFlag());
+                result.put("id",returnParam.getId());
                 LOGGER.info("返回状态码 flag = " + returnParam.getFlag());
-                
                 
                 if(flag==0&&returnParam.getFlag().equals("1")) {
                 	flag++;

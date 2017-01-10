@@ -239,4 +239,7 @@
         WHERE
         (`id` = #{deal.id});
     </update>
+    <select id="selectResiBoundaryById" resultType="com.address.model.ResidenceBoundary">
+        SELECT id,baidu_lat baiduLat,baidu_lon baiduLon ,of_residence_id ofResidenceId FROM `iwjw_residence_bound` WHERE of_residence_id = #{id};
+    </select>
 </mapper>

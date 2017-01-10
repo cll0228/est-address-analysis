@@ -29,9 +29,11 @@ public class Extract1400Util {
             HouseDeal result = new HouseDeal();
 
             StdModel model = AddressExtractor.parseAll(new StdModel(deal.getAddress()));
-            if(null == model)
-                continue;
-
+            
+            if(null == model) {
+            	continue;
+            }
+            
             String analyAddr = "";
             if (null != model.getResidence())
                 analyAddr += model.getResidence() + ",";
@@ -61,14 +63,13 @@ public class Extract1400Util {
             result.setAnalyAddr("extract_1400");
             //添加入库
             try {
-                if(deal.getId()!=null&&param.getId()!=null) {
-                    stdMapper.insertOuterAddress(result);
-                }
-            }catch (Exception e){
-                System.out.println(deal.getId()+","+param.getId());
-                System.out.println(e);
-            }
-
+				if(deal.getId()!=null&&param.getId()!=null) {
+					stdMapper.insertOuterAddress(result);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             /*//添加入库
             if(deal.getId()!=null&&param.getId()!=null) {
             	stdMapper.updateMapping(result);

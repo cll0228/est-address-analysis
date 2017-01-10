@@ -5,6 +5,7 @@ import com.address.model.HouseDeal;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
 import com.address.service.StdService;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
@@ -27,6 +28,11 @@ public class HouseDealUtil {
             HouseDeal result = new HouseDeal();
 
             StdModel model = AddressExtractor.parseAll(new StdModel(deal.getAddress()));
+            
+            if(null == model) {
+            	continue;
+            }
+            
             String analyAddr = "";
             if (null != model.getResidence())
                 analyAddr += model.getResidence() + ",";
@@ -55,10 +61,15 @@ public class HouseDealUtil {
             stdMapper.updateResult(result);
             result.setAnalyAddr("house_deal");
             //添加入库
-            if(deal.getId()!=null&&param.getId()!=null) {
-            	stdMapper.updateMapping(result);
-            	stdMapper.insertOuterAddress(result);
-            }
+            try {
+				if(deal.getId()!=null&&param.getId()!=null) {
+					stdMapper.updateMapping(result);
+					stdMapper.insertOuterAddress(result);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
 }

@@ -1,0 +1,170 @@
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    /*  background-color: #f5f5f5;*/
+}
+
+a.backtop {
+    background: url("/static/images/gototop.png")  no-repeat;
+    background-position: -68px 2px;
+    bottom: 20px;
+    cursor: pointer;
+    display: none;
+    height: 60px;
+    position: fixed;
+    right: 20px;
+    text-indent: -9999px;
+    width: 70px;
+    z-index: 100;
+  /*  border: solid 1px #002a80;*/
+}
+a.backtop:hover {
+    background: url("/static/images/gototop.png")  no-repeat;
+    background-position: 0 0;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+    font-size: 16px;
+    height: auto;
+    margin-bottom: 15px;
+    padding: 7px 9px;
+}
+
+div.building-map {
+    text-align: center;
+    padding-top: 6px;;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #000;
+    border-left: 0 solid #000;
+    border-top: 0 solid #000;
+    float: left
+}
+
+.simpleTitle {
+    background-color: #2f96b4;
+    color: white
+}
+
+.table1 {
+    float: left;
+    margin: 5px;
+}
+
+.table1 thead td {
+    background-color: #d59392;
+    min-width: 220px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+.table1 tbody td {
+    background-color: white;
+    padding: 0;
+    min-width: 60px;
+    min-height: 50px
+}
+.table1 tbody td.unreal {
+    height: 40px;
+    text-align: left;
+    text-indent: 6px;
+}
+.table1 tbody td.suggestion {
+    background-color: #f2f2f2
+}
+
+
+
+div.block10 {
+    width: 1px;
+    height: 10px;
+}
+
+h1 {
+    font-size: 14px;
+}
+
+div.residenceList {
+    border: 1px solid #1f6377;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    background-color: #e3e3e3
+}
+
+.tips1 {
+    width: 100%;
+    clear: both;
+    border: 1px solid #000000;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.myhr {
+    clear: both;
+    width: 100%;
+    height: 6px;
+    background-color: #57a957;
+}
+
+div.cell {
+    width: 98%;
+    height: 100%;
+    border: 0 solid green;
+    margin: 1px;
+    padding: 0;
+}
+
+div.cellLeft {
+    margin: 0;
+    float: left;
+}
+
+div.cellRight {
+    margin: 0;
+    float: right;
+}
+div.cellTop {
+    margin: 0;
+    clear: both;
+    float: left;
+}
+
+div.cellBottom {
+    margin: 0;
+    clear: both;
+    text-align: right;    clear: both;    float: left;
+}
+
+a.addbuilding {
+    color: red;
+    text-decoration: none;
+}
+
+a.addbuilding:hover {
+    color: red;
+    text-decoration: none;
+}
+
+a.addbuilding:active {
+    color: red;
+    text-decoration: none;
+}
+a.plus {
+    color: #000;
+    text-decoration: none;
+}
+
+a.plus:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+a.plus:active {
+    color: #000;
+    text-decoration: none;
+}

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed Jun 01 10:54:56 CST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lezhi.app.mapper.RoomDicMapper">
+
+    <resultMap id="RMap" type="com.lezhi.app.model.RoomDic">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="building_id" property="buildingId"/>
+        <result column="area" property="area"/>
+        <result column="place_floor" property="placeFloor"/>
+        
+    </resultMap>
+
+    <resultMap id="RoomExMap" type="com.lezhi.app.model.RoomEx">
+
+        <id column="id" property="houseId"/>
+        <result column="building_id" property="buildingId"/>
+        <result column="area" property="propertyArea"/>
+        <result column="property_type_id" property="propertyTypeId"/>
+        <result column="place_floor" property="placeFloor"/>
+        <result column="total_floor" property="totalFloor"/>
+        <result column="room_no" property="roomNo"/>
+        <result column="residence_id" property="residenceId"/>
+        <result column="block_id" property="blockId"/>
+        <result column="district_id" property="districtId"/>
+        <result column="accomplish_date" property="accomplishDate"/>
+    </resultMap>
+
+	<select id="findAll" resultMap="RMap">
+        select t.id, t.room_no, t.place_floor from of_house t
+    </select>
+
+    <update id="batchUpdateArea" parameterType="com.lezhi.app.model.RoomDic">
+        <foreach collection="rooms" item="r" index="index" separator=";">
+            update of_house set area = #{r.area} where id = #{r.id}
+        </foreach>
+    </update>
+
+    <insert id="insert" parameterType="com.lezhi.app.model.RoomDic">
+        insert into of_house(`room_no`, `building_id`, `area`) VALUES (
+        #{name}, #{buildingId}, #{area}
+        )
+    </insert>
+
+    <insert id="insertNewRoom" parameterType="com.lezhi.app.model.RoomDic">
+        insert into of_house(`room_no`,`area`,`status`, `building_id`,`del_status`) VALUES (
+        #{name},#{area},#{status}, #{buildingId}, #{delStatus}
+        )
+    </insert>
+
+    <insert id="updateNewRoomStatus" parameterType="com.lezhi.app.model.RoomDic">
+        update of_house set del_status = #{delStatus},area = #{area} where room_no = #{name} and building_id = #{buildingId}
+    </insert>
+
+    <select id="getNewRoomId" parameterType="com.lezhi.app.model.RoomDic" resultType="java.lang.Integer">
+      select id from of_house where room_no = #{name} and building_id = #{buildingId}
+    </select>
+
+    <select id="countOldRoom" parameterType="com.lezhi.app.model.RoomDic" resultType="java.lang.Integer">
+        select count(0) from of_house where room_no = #{name} and building_id = #{buildingId}
+    </select>
+
+    <insert id="deleteRoom" parameterType="com.lezhi.app.model.RoomDic">
+        update of_house set del_status = #{delStatus} where id = #{id}
+    </insert>
+
+	<insert id="update" parameterType="com.lezhi.app.model.RoomDic">
+		update of_house set area = #{area} where id = #{id}
+    </insert>
+
+    <select id="find" resultMap="RMap">
+        select t.id, t.room_no, t.building_id from of_house t
+        <where>
+            <if test="name != null">
+                and t.room_no = #{name}
+            </if>
+            <if test="buildingId != null">
+                and t.building_id = #{buildingId}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="RoomExMap">
+        select
+        t.id, t.building_id, t.area ,r.property_type_id as property_type_id, t.place_floor as place_floor, b.total_floor, t.room_no as room_no,
+        t.residence_id, r.of_block_id as block_id, r.of_district_id as district_id, r.accomplish_date as accomplish_date,t.plane_type as planeType
+        from of_house t
+        left join of_building b on b.id = t.building_id
+        left join of_residence r on r.id = t.residence_id
+        <where>
+            t.id = #{id}
+        </where>
+    </select>
+
+    <select id="findByNames" resultMap="RoomExMap">
+        select
+        t.id, t.building_id, t.area ,r.property_type_id as property_type_id, t.place_floor as place_floor, b.total_floor, t.room_no as room_no,
+        t.residence_id, r.of_block_id as block_id, r.of_district_id as district_id, r.accomplish_date as accomplish_date,t.plane_type as planeType
+        from of_house t
+        left join of_building b on b.id = t.building_id
+        left join of_residence r on r.id = t.residence_id
+        where r.id  = #{residenceId} and b.name = #{buildingNo} and t.room_no = #{roomNo}
+    </select>
+
+
+    <select id="findByBuildingId" resultMap="RoomExMap">
+        select
+        t.id, t.building_id, t.area ,r.property_type_id as property_type_id, t.place_floor as place_floor, b.total_floor, t.room_no as room_no,
+        t.residence_id, r.of_block_id as block_id, r.of_district_id as district_id, r.accomplish_date as accomplish_date,t.plane_type as planeType
+        from of_house t
+        left join of_building b on b.id = t.building_id
+        left join of_residence r on r.id = t.residence_id
+        <where>
+            t.building_id = #{buildingId}
+        </where>
+    </select>
+
+    <select id="findRoomExists" resultType="com.lezhi.app.model.map.StdAddr">
+        SELECT a.room_no as room, b.building_no as building, b.total_floor as totalFloor, c.residence_name as residence, a.area as area, c.id as residenceId,b.id as buildingId,
+        a.id as roomId,a.status as status,os.address as oriAddress,IFNULL(a.src,"东方有线") as src
+        FROM of_building b
+       LEFT JOIN of_house a ON a.building_id = b.id
+       LEFT JOIN of_residence c ON c.id = b.residence_id
+       LEFT JOIN of_std_address os ON os.std_addr_id = a.std_addr_id
+        WHERE c.id  IN (
+        <foreach collection="rids" item="rid" separator=",">
+            #{rid}
+        </foreach>
+        ) and b.del_status=0
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from of_house
+    </select>
+
+    <update id="updateStatus">
+        update of_house set status = #{status} where id = #{id}
+    </update>
+    
+    <update id="updateRoomStatus">
+        update of_house set del_status = #{delStatus} where id in (${id})
+    </update>
+
+	<select id="queryRoomId" resultMap="RMap">
+        SELECT id FROM of_house where building_id=#{buildingId}
+    </select>
+
+    <select id="findTopRooms" resultMap="RMap">
+        SELECT `name` + 0 AS `name`, id, building_id, area
+          FROM of_house
+         WHERE     name NOT LIKE '-%'
+               AND LENGTH(name) BETWEEN 3 AND 4
+               AND building_id = #{buildingId}
+        ORDER BY `name` DESC
+    </select>
+
+    <insert id="batchInsert" parameterType="com.lezhi.app.model.RoomDic">
+        insert into of_house(`room_no`, `building_id`, `status`, `area`, `residence_id`) VALUES
+        <foreach collection="rooms" item="r" index="index" separator=",">
+            (#{r.name}, #{r.buildingId} #{r.status}, #{r.area}, #{r.residenceId})
+        </foreach>
+    </insert>
+</mapper>

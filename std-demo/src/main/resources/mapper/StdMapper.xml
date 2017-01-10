@@ -98,11 +98,15 @@
     </select>
 
 	<select id="selectAiHdNoChai" resultType="com.address.model.HouseDeal">
-          SELECT DOOR_NAME as address,id FROM ocn_address.extract_success_1400_aihd;
+          SELECT DOOR_NAME as address,id FROM ocn_address.extract_success_1400_aihd limit 0,40000;
+    </select>
+    
+    <select id="selectBillPlan" resultType="com.address.model.HouseDeal">
+          select id,post_addr as address from ocn_address.bill_plan_distinct limit 4000001,4000000;
     </select>
     
     <select id="selectExtract" resultType="com.address.model.HouseDeal">
-          SELECT DOOR_NAME as address,id FROM extract_success_1400_2 limit 0,1500000;
+          SELECT DOOR_NAME as address,id FROM extract_success_1400_2 limit 3000001,4000000;
     </select>
 
     <select id="selectNoMappingHouseDeal" resultType="com.address.model.HouseDeal">
@@ -166,6 +170,17 @@
     
     <update id="updateExtract" parameterType="com.address.model.HouseDeal">
         UPDATE `ocn_address`.`extract_success_1400_2`
+            SET
+             `building` = #{deal.building},
+             `roomnum` = #{deal.room},
+             `std_addr_id` = #{deal.stdAddrId},
+             `no_mapping_type` = #{deal.noMappingType}
+            WHERE
+                (`id` = #{deal.id});
+    </update>
+    
+    <update id="updateBillPlan" parameterType="com.address.model.HouseDeal">
+        UPDATE `ocn_address`.`bill_plan_distinct`
             SET
              `building` = #{deal.building},
              `roomnum` = #{deal.room},

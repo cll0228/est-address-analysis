@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.address.model.PoiDetail;
+import com.address.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.address.mapper.StdMapper;
 import com.address.model.HouseDeal;
+import com.address.model.PriceTrend;
+import com.address.model.ResidenceDetail;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
 import com.address.service.StdService;
@@ -48,6 +51,7 @@ public class StdController {
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         List<ReturnParam> paramList = stdService.analysis(address);
         LOGGER.info("返回resultList条数=" + paramList.size());
+        int flag = 0;
         if (paramList != null) {
             for (ReturnParam returnParam : paramList) {
                 Map<String, Object> result = new HashMap<>();
@@ -63,6 +67,21 @@ public class StdController {
                 // 小区配套查询（默认交通，0.5km）
                 List<PoiDetail> poiList = stdService.getResidencePoiDetailList(returnParam.getRoadLane(), "0.5", "交通");
                 result.put("poiList",poiList);
+                
+                if(flag==0&&returnParam.getFlag().equals("1")) {
+                	flag++;
+                	ResidenceDetail detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
+                	result.put("detail", detail);
+                	List<PriceTrend> list = stdService.getResidenceTradeAvgPriceList(55);//detail.getId()
+                	int[] price = new int[list.size()];
+                	String[] month = new String[list.size()];
+                	for (int i = 0; i < list.size(); i++) {
+                		price[i] = list.get(i).getDealAvgPrice2nd();
+                		month[i] = list.get(i).getMonth();
+					}
+                	result.put("a", price);
+                	result.put("b", month);
+                }
                 resultList.add(result);
             }
         }

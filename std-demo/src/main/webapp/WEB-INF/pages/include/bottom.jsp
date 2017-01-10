@@ -42,8 +42,11 @@
 
 <!-- BEGIN THEME GLOBAL SCRIPTS -->
 <script src="${ctx}/static/assets/global/scripts/app.min.js" type="text/javascript"></script>
-<!-- END THEME GLOBAL SCRIPTS -->
 
+<script src="${ctx}/static/assets/global/scripts/echarts.js" type="text/javascript"></script>
+
+<!-- END THEME GLOBAL SCRIPTS -->
+<script src="${ctx}/static/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <!-- BEGIN THEME LAYOUT SCRIPTS -->
 <script src="${ctx}/static/assets/layouts/layout3/scripts/layout.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/assets/layouts/layout3/scripts/demo.min.js" type="text/javascript"></script>

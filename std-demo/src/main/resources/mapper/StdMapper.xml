@@ -129,6 +129,13 @@
 		WHERE
 			a.id &lt; 1778573
     </select>
+    
+    <select id="selectResidenceDetail" resultType="com.address.model.ResidenceDetail">
+		SELECT res.id id,res.residence_name residenceName,res.aliases aliases,res.residence_addr residenceAddr,pt.PropertyType propertyType,res.accomplish_date accomplishDate,res.vp vp,res.gp gp,
+		res.building_count buildingCount,res.house_count houseCount,GROUP_CONCAT(ht.type_name) houseType FROM ocn_address.of_residence res
+		left join ocn_address.sh_property_type pt on res.property_type_id = pt.PropertyTypeID 
+		left join ocn_address.house_type ht on ht.residence_id = res.id where res.residence_addr=#{roadLane} group by res.residence_name;
+    </select>
 
     <update id="updateResult" parameterType="com.address.model.HouseDeal">
         UPDATE `sts`.`no_mapping_std_addr_deal_demo`
@@ -241,6 +248,23 @@
 
 
 
+	<select id="getResidenceTradeAvgPriceList"
+			resultType="com.address.model.PriceTrend">
+		SELECT
+		month as month,
+		deal_avg_price_1st as dealAvgPrice1st,
+		deal_count_1st as dealCount1st,
+		deal_avg_price_2nd as dealAvgPrice2nd,
+		deal_count_2nd as dealCount2nd
+		FROM
+		`df_estate_db_v2`.`sh_deal_trend_residence`
+		WHERE
+		month BETWEEN #{startMonth} AND #{endMonth}
+		<if test="residenceId != null">
+			AND residence_id = #{residenceId}
+		</if>
+	</select>
+
     <!-- 天地图 -->
     <select id="selectTdtAddress" resultType="com.address.model.HouseDeal">
         SELECT id,address FROM dazhongdianping.tdt_building_clearv1_201612 WHERE address IS NOT NULL AND residence_part is NULL ORDER BY id;
@@ -253,4 +277,33 @@
         WHERE
         (`id` = #{deal.id});
     </update>
+    <select id="selectResiBoundaryById" resultType="com.address.model.ResidenceBoundary">
+        SELECT
+            b.id,
+            b.baidu_lat baiduLat,
+            b.baidu_lon baiduLon,
+            b.of_residence_id ofResidenceId
+        FROM
+            `iwjw_residence_bound` b
+        LEFT JOIN of_residence_road_lane_links l ON b.of_residence_id = l.residence_id
+        LEFT JOIN of_road_lane r ON l.road_lane_id = r.id
+        WHERE
+            r.road_lane = #{roadLan}
+    </select>
+    <select id="selectBuilding" resultType="com.address.model.OfBuilding">
+        SELECT
+            b.id,
+            b.building_no buildingNo,
+            b.house_count houseCount,
+            b.lat,
+            b.lon,
+            b.total_floor totalFloor
+        FROM
+            of_building b
+        LEFT JOIN of_residence_road_lane_links l ON b.residence_id = l.residence_id
+        LEFT JOIN of_road_lane r ON l.road_lane_id = r.id
+        WHERE
+            r.road_lane = #{roadLan}
+        AND building_no = #{buildingNo}
+    </select>
 </mapper>

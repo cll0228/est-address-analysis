@@ -24,7 +24,6 @@
     </servlet-mapping>
 
 
-
     <!--CharacterEncodingFilter -->
     <filter>
         <filter-name>Set Character Encoding</filter-name>
@@ -42,25 +41,27 @@
         <filter-name>Set Character Encoding</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <servlet-mapping>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
 
-	<!-- <filter>
-	     <filter-name>IndexFilter</filter-name>
-	     <filter-class>com.lezhi.basicservice.filter.IndexFilter</filter-class>
+    <!-- <filter>
+         <filter-name>IndexFilter</filter-name>
+         <filter-class>com.lezhi.basicservice.filter.IndexFilter</filter-class>
         <init-param>
             <param-name>exclude</param-name>
             <param-value>/assessPage.jsp</param-value>
         </init-param>
-	 </filter>
-	 <filter-mapping>
-	     <filter-name>IndexFilter</filter-name>
-	     <url-pattern>/*</url-pattern>
-	     <dispatcher>REQUEST</dispatcher> 没有配置dispatcher就是默认request方式的
-	     <dispatcher>FORWARD</dispatcher>
-	     <dispatcher>ERROR</dispatcher>
-	     <dispatcher>INCLUDE</dispatcher>
-	 </filter-mapping> -->
-
-
+     </filter>
+     <filter-mapping>
+         <filter-name>IndexFilter</filter-name>
+         <url-pattern>/*</url-pattern>
+         <dispatcher>REQUEST</dispatcher> 没有配置dispatcher就是默认request方式的
+         <dispatcher>FORWARD</dispatcher>
+         <dispatcher>ERROR</dispatcher>
+         <dispatcher>INCLUDE</dispatcher>
+     </filter-mapping> -->
 
 
 </web-app>

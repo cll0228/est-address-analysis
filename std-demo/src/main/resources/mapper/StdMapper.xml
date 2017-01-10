@@ -210,6 +210,23 @@
     </update>
 
 
+	<select id="getResidenceTradeAvgPriceList"
+			resultType="com.address.model.PriceTrend">
+		SELECT
+		month as month,
+		deal_avg_price_1st as dealAvgPrice1st,
+		deal_count_1st as dealCount1st,
+		deal_avg_price_2nd as dealAvgPrice2nd,
+		deal_count_2nd as dealCount2nd
+		FROM
+		`df_estate_db_v2`.`sh_deal_trend_residence`
+		WHERE
+		month BETWEEN #{startMonth} AND #{endMonth}
+		<if test="residenceId != null">
+			AND residence_id = #{residenceId}
+		</if>
+	</select>
+
     <!-- 天地图 -->
     <select id="selectTdtAddress" resultType="com.address.model.HouseDeal">
         SELECT id,address FROM dazhongdianping.tdt_building_clearv1_201612 WHERE address IS NOT NULL AND residence_part is NULL ORDER BY id;

@@ -5,6 +5,13 @@ import java.util.List;
 import com.address.model.*;
 import org.apache.ibatis.annotations.Param;
 
+import com.address.model.HouseDeal;
+import com.address.model.OfHouse;
+import com.address.model.PriceTrend;
+import com.address.model.ResidenceDetail;
+import com.address.model.ReturnParam;
+import com.address.model.StdModel;
+
 /**
  * Created by Cuill on 2016/12/13.
  */
@@ -50,6 +57,9 @@ public interface StdMapper {
     void updateTdtResult(@Param("deal")HouseDeal deal);
     
     ResidenceDetail selectResidenceDetail(@Param("roadLane")String roadLane);
+    
+    List<PriceTrend> getResidenceTradeAvgPriceList(@Param("residenceId")Integer residenceId,
+            @Param("startMonth")String startMonth, @Param("endMonth")String endMonth);
 
     List<ResidenceBoundary> selectResiBoundaryById(@Param("roadLan")String roadLan);
 

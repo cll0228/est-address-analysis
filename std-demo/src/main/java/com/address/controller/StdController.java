@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.address.mapper.StdMapper;
+import com.address.model.HouseDeal;
+import com.address.model.PriceTrend;
+import com.address.model.ResidenceDetail;
+import com.address.model.ReturnParam;
+import com.address.model.StdModel;
 import com.address.service.StdService;
 import com.address.util.AddressExtractor;
 
@@ -63,10 +68,15 @@ public class StdController {
                 	flag++;
                 	ResidenceDetail detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
                 	result.put("detail", detail);
-
-                    //小区边界信息
-                    List<ResidenceBoundary> boundaries = stdMapper.selectResiBoundaryById(returnParam.getId());
-                    result.put("boundaries", boundaries);
+                	List<PriceTrend> list = stdService.getResidenceTradeAvgPriceList(55);//detail.getId()
+                	int[] price = new int[list.size()];
+                	String[] month = new String[list.size()];
+                	for (int i = 0; i < list.size(); i++) {
+                		price[i] = list.get(i).getDealAvgPrice2nd();
+                		month[i] = list.get(i).getMonth();
+					}
+                	result.put("a", price);
+                	result.put("b", month);
                 }
                 resultList.add(result);
             }

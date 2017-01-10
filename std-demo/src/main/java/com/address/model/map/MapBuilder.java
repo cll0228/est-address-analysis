@@ -1,6 +1,7 @@
-package com.address.model;
+package com.address.model.map;
 
-import com.address.model.map.Building;
+
+import com.address.model.StdAddr;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -58,6 +58,7 @@ public class StdController {
                 result.put("s", returnParam.getHouseNo());
                 result.put("bm", returnParam.getAddrCode());
                 result.put("f", returnParam.getFlag());
+                result.put("id",returnParam.getId());
                 LOGGER.info("返回状态码 flag = " + returnParam.getFlag());
                 resultList.add(result);
             }

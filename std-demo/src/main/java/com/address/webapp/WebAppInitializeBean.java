@@ -1,5 +1,6 @@
-package com.address.util;
+package com.address.webapp;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
 import javax.servlet.ServletContext;
@@ -8,6 +9,7 @@ import java.io.File;
 /**
  * Created by Cuill on 2017/1/5.
  */
+@Component
 public class WebAppInitializeBean implements ServletContextAware {
     private File cacheFile;
 

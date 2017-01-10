@@ -5,6 +5,21 @@
          SELECT residence_id residenceId,residence_name residenceName, address FROM sts.lianjia_residence_info;
     </select>
     <select id="selcetResidenceByAddr" resultType="com.address.model.LianjiaResidenceInfo">
-         SELECT * FROM sts.lianjia_residence_info WHERE address like '%${addr}%';
+         SELECT residence_id residenceId,residence_name residenceName, address FROM sts.lianjia_residence_info WHERE address like '%${addr}%';
     </select>
+    <select id="selcetOfResidence" resultType="com.address.model.OfResidence">
+        SELECT id ,building_count buildingCount,house_count houseCount FROM ocn_address.of_residence
+    </select>
+    <select id="selectBuildingCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM ocn_address.of_building WHERE  residence_id = #{id}
+    </select>
+    <select id="selectHouseCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM ocn_address.of_house WHERE  residence_id = #{id}
+    </select>
+    <update id="updateOfResidenceBuildingCount">
+        UPDATE ocn_address.of_residence SET building_count = #{buildingCount} WHERE id = #{id}
+    </update>
+    <update id="updateOfResidenceHouseCount">
+        UPDATE ocn_address.of_residence set house_count = #{houseCount} WHERE id = #{id}
+    </update>
 </mapper>

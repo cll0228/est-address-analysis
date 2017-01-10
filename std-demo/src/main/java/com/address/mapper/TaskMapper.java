@@ -1,6 +1,7 @@
 package com.address.mapper;
 
 import com.address.model.LianjiaResidenceInfo;
+import com.address.model.OfResidence;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,4 +14,13 @@ public interface TaskMapper {
 
     List<LianjiaResidenceInfo> selcetResidenceByAddr(@Param("addr") String addr);
 
+    List<OfResidence> selcetOfResidence();
+
+    Integer selectBuildingCount(@Param("id") Integer id);
+
+    Integer selectHouseCount(@Param("id") Integer id);
+
+    void updateOfResidenceBuildingCount(@Param("buildingCount") Integer buildingCount, @Param("id") Integer id);
+
+    void updateOfResidenceHouseCount(@Param("houseCount") Integer houseCount, @Param("id") Integer id);
 }

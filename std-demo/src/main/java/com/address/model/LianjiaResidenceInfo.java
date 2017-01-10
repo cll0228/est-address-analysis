@@ -64,34 +64,6 @@ public class LianjiaResidenceInfo {
 
     private Date modifyTime;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        LianjiaResidenceInfo that = (LianjiaResidenceInfo) o;
-
-        return new EqualsBuilder().append(residenceId, that.residenceId)
-                .append(residenceName, that.residenceName).append(address, that.address)
-                .append(district, that.district).append(block, that.block).append(avagePrice, that.avagePrice)
-                .append(accomplishDate, that.accomplishDate).append(buildingNum, that.buildingNum)
-                .append(totalHouse, that.totalHouse).append(volumeRate, that.volumeRate)
-                .append(greeningRate, that.greeningRate).append(longitude, that.longitude)
-                .append(latitude, that.latitude).append(residenceUrl, that.residenceUrl)
-                .append(subWayDesc, that.subWayDesc).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(residenceId).append(residenceName).append(address)
-                .append(district).append(block).append(avagePrice).append(accomplishDate).append(buildingNum)
-                .append(totalHouse).append(volumeRate).append(greeningRate).append(longitude).append(latitude)
-                .append(residenceUrl).append(subWayDesc).toHashCode();
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -237,5 +209,26 @@ public class LianjiaResidenceInfo {
                 .append("totalHouse", totalHouse).append("volumeRate", volumeRate)
                 .append("greeningRate", greeningRate).append("longitude", longitude)
                 .append("latitude", latitude).append("residenceUrl", residenceUrl).toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LianjiaResidenceInfo info = (LianjiaResidenceInfo) o;
+
+        if (!residenceId.equals(info.residenceId)) return false;
+        if (!residenceName.equals(info.residenceName)) return false;
+        return address.equals(info.address);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = residenceId.hashCode();
+        result = 31 * result + residenceName.hashCode();
+        result = 31 * result + address.hashCode();
+        return result;
     }
 }

@@ -81,8 +81,61 @@
                                             <h4>打分</h4>
                                             这里显示打分</div>
                                         <div class="col-md-3">
-                                            <h4>小区信息</h4>
-                                            这里显示小区详情，嵌套表格</div>
+                                            <div class="table-scrollable">
+                                        <table class="table table-bordered table-hover">
+                                            <tbody>
+                                                <tr>
+                                                    <th width="30%"> 小区名称 </th>
+                                                    <td id="residenceName"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 小区别名 </th>
+                                                    <td id="aliases"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 小区地址 </th>
+                                                    <td id="residenceAddr"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 小区物业类型 </th>
+                                                    <td id="propertyType"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 小区四至 </th>
+                                                    <td id="fourTo"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 竣工日期 </th>
+                                                    <td id="accomplishDate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 容积率 </th>
+                                                    <td id="vp"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 绿化率 </th>
+                                                    <td id="gp"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 总建筑面积 </th>
+                                                    <td id="totalArea"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 总楼栋数 </th>
+                                                    <td id="buildingCount"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 总房屋数 </th>
+                                                    <td id="houseCount"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th> 小区房型 </th>
+                                                    <td id="houseType"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div></div>
                                     </div>
                                     <div class="row">
                                     	<div class="col-md-12">
@@ -134,8 +187,22 @@ function analysis(){
             	$("#bm"+i).html(data[i].bm);
 			}
 			
+			
+			
             if(data[0].f=="1") {
             	$("#ts").html("地址标准化成功").css("color","green");
+            	$("#residenceName").html(data[0].detail.residenceName);
+				$("#aliases").html(data[0].detail.aliases);
+				$("#residenceAddr").html(data[0].detail.residenceAddr);
+				$("#propertyType").html(data[0].detail.propertyType);
+				$("#fourTo").html(data[0].detail.fourTo);
+				$("#accomplishDate").html(data[0].detail.accomplishDate);
+				$("#vp").html(data[0].detail.vp);
+				$("#gp").html(data[0].detail.gp);
+				$("#totalArea").html(data[0].detail.totalArea);
+				$("#buildingCount").html(data[0].detail.buildingCount);
+				$("#houseCount").html(data[0].detail.houseCount);
+				$("#houseType").html(data[0].detail.houseType);
             	$("#homeDetail").css('display','block');
             } else if(data[0].f=="2") {
             	$("#ts").html("区县不对应").css("color","red");

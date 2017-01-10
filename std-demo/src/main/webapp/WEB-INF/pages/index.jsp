@@ -11,7 +11,7 @@
                             <h3>地址标准化</h3>
                         </div> -->
         <div class="input-group input-group-lg">
-            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="长峰馨园">
+            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="长峰馨园2号">
             <span class="input-group-btn">
             <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>
@@ -163,7 +163,7 @@
 
 
     var map;
-    var residenceId;
+    var roadLan;
     function analysis() {
         initMap();//加載地圖
         var address = $("#in").val();
@@ -194,7 +194,6 @@
                         $("#h" + i).html(data[i].h);
                         $("#s" + i).html(data[i].s);
                         $("#bm" + i).html(data[i].bm);
-                        residenceId = data[i].id
                     }
 
 
@@ -215,7 +214,10 @@
                         $("#homeDetail").css('display', 'block');
 
                         //加載小區邊界
-                        initResidenceBoundary(residenceId);//加載小區邊界
+                        initResidenceBoundary($("#ln0").html());//加載小區邊界
+                        if($("#h0").html()!=''){
+                           initBuilding($("#ln0").html(),$("#h0").html());
+                        }
                     } else if (data[0].f == "2") {
                         $("#ts").html("区县不对应").css("color", "red");
                         $("#homeDetail").css('display', 'none');
@@ -245,9 +247,9 @@
     };
     function initMap() {
         //加载地图
-        var map_center_lon = 121.505583;
-        var map_center_lan = 31.218542;
-        var point = new BMap.Point(map_center_lon, map_center_lan);
+         map_center_lon = 121.495008;
+         map_center_lan = 31.215454;
+         point = new BMap.Point(map_center_lon, map_center_lan);
         map = new BMap.Map("map");
         map.setMapStyle({style: 'light'});
         map.centerAndZoom(point, config_map.scale);
@@ -258,9 +260,9 @@
     }
 
     var array = new Array;
-    function initResidenceBoundary(residenceId) {
+    function initResidenceBoundary(roadLan) {
         $.ajax({
-            url: '${ctx}/boundary?residenceId=' + residenceId,
+            url: '${ctx}/boundary?roadLan=' + roadLan,
             type: "GET",
             success: function (data) {
                 $.each(data, function (i, item) {
@@ -277,5 +279,76 @@
             }
         })
     }
+    
+    //加载楼栋信息
+    function initBuilding(roadLan,buildingNo) {
+        $.ajax({
+            url: '${ctx}/building',
+            type: "POST",
+            data:{"roadLan":roadLan,"buildingNo":buildingNo},
+            success: function (data) {
+                //中心点
+//                map_center_lon = data.lon;
+//                map_center_lan = data.lat;
+                map_center_lon="121.495008";
+                map_center_lan = "31.215454";
+                point = new BMap.Point(map_center_lon, map_center_lan);
+                map.centerAndZoom(point, config_map.scale);
+                //文本标注
+                function ComplexCustomOverlay(point, text, mouseoverText){
+                    this._point = point;
+                    this._text = text;
+                    this._overText = mouseoverText;
+                }
+                ComplexCustomOverlay.prototype = new BMap.Overlay();
+                ComplexCustomOverlay.prototype.initialize = function(map){
+                    this._map = map;
+                    var div = this._div = document.createElement("div");
+                    div.style.position = "absolute";
+                    div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+                    div.style.backgroundColor = "#EE5D5B";
+                    div.style.border = "1px solid #BC3B3A";
+                    div.style.color = "white";
+                    div.style.height = "24px";
+                    div.style.padding = "2px";
+                    div.style.lineHeight = "18px";
+                    div.style.whiteSpace = "nowrap";
+                    div.style.MozUserSelect = "none";
+                    div.style.fontSize = "12px"
+                    var span = this._span = document.createElement("span");
+                    div.appendChild(span);
+                    span.appendChild(document.createTextNode(this._text));
+                    var that = this;
+
+                    var arrow = this._arrow = document.createElement("div");
+                    arrow.style.background = "url(http://map.baidu.com/fwmap/upload/r/map/fwmap/static/house/images/label.png) no-repeat";
+                    arrow.style.position = "absolute";
+                    arrow.style.width = "11px";
+                    arrow.style.height = "10px";
+                    arrow.style.top = "22px";
+                    arrow.style.left = "10px";
+                    arrow.style.overflow = "hidden";
+                    div.appendChild(arrow);
+                    map.getPanes().labelPane.appendChild(div);
+
+                    return div;
+                }
+                ComplexCustomOverlay.prototype.draw = function(){
+                    var map = this._map;
+                    var pixel = map.pointToOverlayPixel(this._point);
+                    this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
+                    this._div.style.top  = pixel.y - 30 + "px";
+                }
+                var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount;
+
+                var myCompOverlay = new ComplexCustomOverlay(point, txt);
+
+                map.addOverlay(myCompOverlay);
+            }
+        })
+    }
+    var map_center_lon = 121.505583;
+    var map_center_lan = 31.218542;
+    var point;
 </script>
 </html>

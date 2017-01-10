@@ -51,5 +51,7 @@ public interface StdMapper {
     
     ResidenceDetail selectResidenceDetail(@Param("roadLane")String roadLane);
 
-    List<ResidenceBoundary> selectResiBoundaryById(@Param("id")String id);
+    List<ResidenceBoundary> selectResiBoundaryById(@Param("roadLan")String roadLan);
+
+    OfBuilding selectBuilding(@Param("roadLan")String roadLan, @Param("buildingNo")String buildingNo);
 }

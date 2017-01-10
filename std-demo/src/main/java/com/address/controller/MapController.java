@@ -1,6 +1,7 @@
 package com.address.controller;
 
 import com.address.mapper.StdMapper;
+import com.address.model.OfBuilding;
 import com.address.model.ResidenceBoundary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,12 +24,26 @@ public class MapController {
 
     @RequestMapping(value = "/boundary", method = RequestMethod.GET)
     @ResponseBody
-    public List<ResidenceBoundary> boundary(@RequestParam(value = "residenceId",required = false) String residenceId) {
+    public List<ResidenceBoundary> boundary(
+            @RequestParam(value = "roadLan", required = false) String roadLan) {
         // 小区边界信息
-        List<ResidenceBoundary> boundaries = stdMapper.selectResiBoundaryById(residenceId);
+        List<ResidenceBoundary> boundaries = stdMapper.selectResiBoundaryById(roadLan);
         if (null == boundaries) {
             return null;
         }
         return boundaries;
+    }
+
+    @RequestMapping(value = "/building", method = RequestMethod.POST)
+    @ResponseBody
+    public OfBuilding building(
+            @RequestParam(value = "roadLan", required = false) String roadLan,
+            @RequestParam(value = "buildingNo", required = false) String buildingNo) {
+        // 小区边界信息
+        OfBuilding ofBuilding = stdMapper.selectBuilding(roadLan,buildingNo);
+        if (null == ofBuilding) {
+            return null;
+        }
+        return ofBuilding;
     }
 }

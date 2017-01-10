@@ -21,6 +21,8 @@ public interface StdMapper {
 
     List<HouseDeal> selectNoMappingHouseDeal();
     
+    List<HouseDeal> selectBillPlan();
+    
     List<HouseDeal> selectAiHdNoChai();
     
     List<HouseDeal> selectExtract();
@@ -40,6 +42,8 @@ public interface StdMapper {
     void updateAiHd(@Param("deal") HouseDeal deal);
     
     void updateExtract(@Param("deal") HouseDeal deal);
+    
+    void updateBillPlan(@Param("deal") HouseDeal deal);
     
     void updateHouses(@Param("deal") HouseDeal deal);
     

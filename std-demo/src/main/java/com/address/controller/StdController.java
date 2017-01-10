@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.address.mapper.StdMapper;
 import com.address.model.HouseDeal;
+import com.address.model.ResidenceDetail;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
 import com.address.service.StdService;
@@ -47,6 +48,7 @@ public class StdController {
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         List<ReturnParam> paramList = stdService.analysis(address);
         LOGGER.info("返回resultList条数=" + paramList.size());
+        int flag = 0;
         if (paramList != null) {
             for (ReturnParam returnParam : paramList) {
                 Map<String, Object> result = new HashMap<>();
@@ -60,6 +62,12 @@ public class StdController {
                 result.put("f", returnParam.getFlag());
                 result.put("id",returnParam.getId());
                 LOGGER.info("返回状态码 flag = " + returnParam.getFlag());
+                
+                if(flag==0&&returnParam.getFlag().equals("1")) {
+                	flag++;
+                	ResidenceDetail detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
+                	result.put("detail", detail);
+                }
                 resultList.add(result);
             }
         }

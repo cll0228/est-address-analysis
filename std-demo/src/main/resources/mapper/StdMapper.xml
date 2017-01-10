@@ -129,6 +129,13 @@
 		WHERE
 			a.id &lt; 1778573
     </select>
+    
+    <select id="selectResidenceDetail" resultType="com.address.model.ResidenceDetail">
+		SELECT res.id id,res.residence_name residenceName,res.aliases aliases,res.residence_addr residenceAddr,pt.PropertyType propertyType,res.accomplish_date accomplishDate,res.vp vp,res.gp gp,
+		res.building_count buildingCount,res.house_count houseCount,GROUP_CONCAT(ht.type_name) houseType FROM ocn_address.of_residence res
+		left join ocn_address.sh_property_type pt on res.property_type_id = pt.PropertyTypeID 
+		left join ocn_address.house_type ht on ht.residence_id = res.id where res.residence_addr=#{roadLane} group by res.residence_name;
+    </select>
 
     <update id="updateResult" parameterType="com.address.model.HouseDeal">
         UPDATE `sts`.`no_mapping_std_addr_deal_demo`

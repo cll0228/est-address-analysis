@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.address.model.HouseDeal;
 import com.address.model.OfHouse;
+import com.address.model.ResidenceDetail;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
 
@@ -52,4 +53,6 @@ public interface StdMapper {
     List<HouseDeal> selectTdtAddress();
 
     void updateTdtResult(@Param("deal")HouseDeal deal);
+    
+    ResidenceDetail selectResidenceDetail(@Param("roadLane")String roadLane);
 }

@@ -60,8 +60,46 @@
                                             </div>
                                         </div>
                                     </div>
-
-</div>
+					<div class="row" id="homeDetail" style="display:none">
+                        <div class="col-md-12">
+                            <!-- BEGIN PORTLET-->
+                            <div class="portlet light bordered">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="icon-home font-dark"></i>
+                                        <span class="caption-subject font-dark sbold uppercase">小区详情</span>
+                                    </div>
+                      
+                                </div>
+                                <div class="portlet-body">
+                                  
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>地图</h4>
+                                            这里显示地图</div>
+                                        <div class="col-md-3">
+                                            <h4>打分</h4>
+                                            这里显示打分</div>
+                                        <div class="col-md-3">
+                                            <h4>小区信息</h4>
+                                            这里显示小区详情，嵌套表格</div>
+                                    </div>
+                                    <div class="row">
+                                    	<div class="col-md-12">
+                        					<h4>小区价格走势</h4>
+                        					这里显示小区价格走势
+                        				</div>
+                                 	</div>
+                                </div>
+                            </div>
+                            <!-- END PORTLET-->
+                        </div>
+                    </div>
+                
+                    
+				</div>
+							
+					
 <%@include file="/WEB-INF/pages/include/bottom.jsp" %>
 </body>
 <script type="text/javascript">
@@ -98,18 +136,25 @@ function analysis(){
 			
             if(data[0].f=="1") {
             	$("#ts").html("地址标准化成功").css("color","green");
+            	$("#homeDetail").css('display','block');
             } else if(data[0].f=="2") {
             	$("#ts").html("区县不对应").css("color","red");
+            	$("#homeDetail").css('display','none');
             } else if(data[0].f=="3") {
             	$("#ts").html("地址不存在").css("color","red");
+            	$("#homeDetail").css('display','none');
             } else if(data[0].f=="4") {
             	$("#ts").html("路弄未找到").css("color","red");
+            	$("#homeDetail").css('display','none');
             } else if(data[0].f=="5") {
             	$("#ts").html("道路不存在").css("color","red");
+            	$("#homeDetail").css('display','none');
             } else if(data[0].f=="6") {
             	$("#ts").html("房间号未找到").css("color","red");
+            	$("#homeDetail").css('display','none');
             } else if(data[0].f=="7") {
             	$("#ts").html("楼栋未找到").css("color","red");
+            	$("#homeDetail").css('display','none');
             }
         }
     });

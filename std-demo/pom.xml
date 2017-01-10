@@ -298,6 +298,7 @@
                 <configuration>
                     <port>8957</port>
                     <path>/</path>
+                    <uriEncoding>utf-8</uriEncoding>
                 </configuration>
             </plugin>
             <plugin>

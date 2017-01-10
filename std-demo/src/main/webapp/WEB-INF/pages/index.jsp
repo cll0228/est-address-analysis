@@ -77,9 +77,47 @@
                                         <div class="col-md-6">
                                             <h4>地图</h4>
                                             这里显示地图</div>
-                                        <div class="col-md-3">
-                                            <h4>打分</h4>
-                                            这里显示打分</div>
+                                        <div class="col-md-4">
+                                            <ul class="nav nav-tabs" id="map-keyword">
+                                                <li class="active">
+                                                    <a href="#tab_1" data-keyword="地铁|公交" data-toggle="tab">交通</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab_2" data-toggle="tab">教育</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab_3" data-toggle="tab">医疗</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab_4" data-toggle="tab">购物</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab_5" data-toggle="tab">生活</a>
+                                                </li>
+                                            </ul>
+                                            <div style="dispaly:block">星级</div>
+                                            <div class="clearfix">
+                                                <a href="javascript:;" class="btn default active"> 0.5km </a>
+                                                <a href="javascript:;" class="btn default"> 1km </a>
+                                                <a href="javascript:;" class="btn default"> 1.5km </a>
+                                                <a href="javascript:;" class="btn default"> 2km </a>
+                                                <a href="javascript:;" class="btn default"> 2.5km </a>
+                                            </div>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="tab_1">
+                                                    <div class="row" style="display:block">
+                                                        <div class="col-md-4">
+                                                            <h5 align="center" id="poiKind"></h5>
+                                                    </div>
+                                                    <div class="row">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <h5 align="center">其他</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-3">
                                             <h4>小区信息</h4>
                                             这里显示小区详情，嵌套表格</div>
@@ -133,6 +171,7 @@ function analysis(){
             	$("#s"+i).html(data[i].s);
             	$("#bm"+i).html(data[i].bm);
 			}
+            $("#poiKind").html(data[0].poiList[0].poiKind);
 			
             if(data[0].f=="1") {
             	$("#ts").html("地址标准化成功").css("color","green");

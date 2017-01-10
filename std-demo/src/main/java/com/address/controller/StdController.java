@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.address.mapper.StdMapper;
 import com.address.model.HouseDeal;
+import com.address.model.PriceTrend;
 import com.address.model.ResidenceDetail;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
@@ -62,10 +63,20 @@ public class StdController {
                 result.put("f", returnParam.getFlag());
                 LOGGER.info("返回状态码 flag = " + returnParam.getFlag());
                 
+                
                 if(flag==0&&returnParam.getFlag().equals("1")) {
                 	flag++;
                 	ResidenceDetail detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
                 	result.put("detail", detail);
+                	List<PriceTrend> list = stdService.getResidenceTradeAvgPriceList(55);//detail.getId()
+                	int[] price = new int[list.size()];
+                	String[] month = new String[list.size()];
+                	for (int i = 0; i < list.size(); i++) {
+                		price[i] = list.get(i).getDealAvgPrice2nd();
+                		month[i] = list.get(i).getMonth();
+					}
+                	result.put("a", price);
+                	result.put("b", month);
                 }
                 resultList.add(result);
             }

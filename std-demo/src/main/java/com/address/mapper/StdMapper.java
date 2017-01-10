@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.address.model.HouseDeal;
 import com.address.model.OfHouse;
+import com.address.model.PriceTrend;
 import com.address.model.ResidenceDetail;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
@@ -55,4 +56,7 @@ public interface StdMapper {
     void updateTdtResult(@Param("deal")HouseDeal deal);
     
     ResidenceDetail selectResidenceDetail(@Param("roadLane")String roadLane);
+    
+    List<PriceTrend> getResidenceTradeAvgPriceList(@Param("residenceId")Integer residenceId,
+            @Param("startMonth")String startMonth, @Param("endMonth")String endMonth);
 }

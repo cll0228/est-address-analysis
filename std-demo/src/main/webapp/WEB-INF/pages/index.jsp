@@ -138,9 +138,7 @@
                                 </div></div>
                                     </div>
                                     <div class="row">
-                                    	<div class="col-md-12">
-                        					<h4>小区价格走势</h4>
-                        					这里显示小区价格走势
+                                    	<div class="col-md-12" id="main" style="height:400px;">
                         				</div>
                                  	</div>
                                 </div>
@@ -204,6 +202,30 @@ function analysis(){
 				$("#houseCount").html(data[0].detail.houseCount);
 				$("#houseType").html(data[0].detail.houseType);
             	$("#homeDetail").css('display','block');
+            	
+            	
+            	// 初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '小区价格走势'
+            },
+            tooltip: {},
+            xAxis: {
+                data: data[0].b
+            },
+            yAxis: {},
+            series: [{
+                name: '单价',
+                type: 'bar',
+                data: data[0].a
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option)
             } else if(data[0].f=="2") {
             	$("#ts").html("区县不对应").css("color","red");
             	$("#homeDetail").css('display','none');
@@ -227,5 +249,8 @@ function analysis(){
     });
 	}
 }
+
+
+		
 </script>
 </html>

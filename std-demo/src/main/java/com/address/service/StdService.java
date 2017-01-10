@@ -1,6 +1,8 @@
 package com.address.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +10,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.address.mapper.StdMapper;
+import com.address.model.PriceTrend;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
 import com.address.util.AddressExtractor;
+import com.address.util.CommUitl;
 
 /**
  * Created by Cuill on 2016/12/12.
@@ -21,6 +25,8 @@ public class StdService {
     @Autowired
     private StdMapper mapper;
 
+    static SimpleDateFormat SD = new SimpleDateFormat("yyyyMM");
+    
     public List<ReturnParam> analysis(String address) {
         address = address.replaceAll(" ", "");
         if (address.indexOf("下") + 1 == address.length()) {
@@ -221,5 +227,17 @@ public class StdService {
         context.start();
         StdService bean = context.getBean(StdService.class);
         bean.analysis("武东路198");
+    }
+    
+    public List<PriceTrend> getResidenceTradeAvgPriceList(Integer residenceId) {
+        // month为null 返回一年的数据, 为null返回month月份的数据
+        String startMonth = CommUitl.getLastYearMonth(CommUitl.getLastMonth(SD.format(new Date())));
+        String endMonth = CommUitl.getLastMonth(SD.format(new Date()));
+        List<PriceTrend> priceTrends = mapper.getResidenceTradeAvgPriceList(residenceId,
+                startMonth, endMonth);
+        if (null == priceTrends || priceTrends.size() == 0) {
+            return null;
+        }
+        return priceTrends;
     }
 }

@@ -147,11 +147,11 @@
                                 </ul>
                             </div>
                             <div class="clearfix">
-                                <a href="javascript:;" class="btn default"> 0.5km </a>
-                                <a href="javascript:;" class="btn default"> 1km </a>
-                                <a href="javascript:;" class="btn default"> 1.5km </a>
-                                <a href="javascript:;" class="btn default"> 2km </a>
-                                <a href="javascript:;" class="btn default"> 2.5km </a>
+                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 0.5km </a>
+                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 1.0km </a>
+                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 1.5km </a>
+                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 2.0km </a>
+                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 2.5km </a>
                             </div>
                             <div class="tab-content">
                                 <%--<div class="portlet">
@@ -622,5 +622,25 @@
         })
     }
 
+    function updateMapZoom(distance){
+        distance = distance.trim();
+        var center = map.getCenter();
+        if(distance == "0.5km"){
+            map.centerAndZoom(center,18);
+        }
+        if(distance == "1.0km"){
+            map.centerAndZoom(center,17);
+        }
+        if(distance == "1.5km"){
+            map.centerAndZoom(center,16);
+        }
+        if(distance == "2.0km"){
+            map.centerAndZoom(center,15);
+        }
+        if(distance == "2.5km"){
+            map.centerAndZoom(center,14);
+        }
+
+    }
 </script>
 </html>

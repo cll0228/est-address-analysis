@@ -270,18 +270,17 @@
     };
     function initMap() {
         //加载地图
-
         map = new BMap.Map("map");
         map.setMapStyle({style: "normal"});
-
         var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
         var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
         map.addControl(top_left_control);
         map.addControl(top_left_navigation);
     }
 
-    var array = new Array;
+    var array ;
     function initResidenceBoundary(roadLan) {
+        array = new Array;
         $.ajax({
             url: '${ctx}/boundary?roadLan=' + roadLan,
             type: "GET",
@@ -313,17 +312,14 @@
             data:{"roadLan":roadLan,"buildingNo":buildingNo},
             success: function (data) {
                 //中心点
-//                map_center_lon = data.lon;
-//                map_center_lan = data.lat;
-                map_center_lon="121.495008";
-                map_center_lan = "31.215454";
+                map_center_lon = data.lon;
+                map_center_lan = data.lat;
                 point = new BMap.Point(map_center_lon, map_center_lan);
                 map.centerAndZoom(point, config_map.scale);
                 //文本标注
                 function ComplexCustomOverlay(point, text, mouseoverText){
                     this._point = point;
                     this._text = text;
-                    this._overText = mouseoverText;
                 }
                 ComplexCustomOverlay.prototype = new BMap.Overlay();
                 ComplexCustomOverlay.prototype.initialize = function(map){
@@ -372,8 +368,8 @@
             }
         })
     }
-    var map_center_lon = 121.505583;
-    var map_center_lan = 31.218542;
     var point;
+    var map_center_lon ;
+    var map_center_lan ;
 </script>
 </html>

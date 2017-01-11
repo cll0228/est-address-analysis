@@ -163,8 +163,14 @@
 <script type="text/javascript">
 
 
-    var map;
-    var roadLan;
+    var map = null ;
+    var roadLan = "";
+    var point = "";
+    var map_center_lon = "";
+    var map_center_lan = "";
+    var config_map = {
+        scale: 18   //比例尺，默认20m
+    };
     function analysis() {
         initMap();//加載地圖
         var address = $("#in").val();
@@ -265,9 +271,7 @@
         }
 
     }
-    var config_map = {
-        scale: 19    //比例尺，默认5km
-    };
+
     function initMap() {
         //加载地图
         map = new BMap.Map("map");
@@ -315,7 +319,7 @@
                 map_center_lon = data.lon;
                 map_center_lan = data.lat;
                 point = new BMap.Point(map_center_lon, map_center_lan);
-                map.centerAndZoom(point, config_map.scale);
+
                 //文本标注
                 function ComplexCustomOverlay(point, text, mouseoverText){
                     this._point = point;
@@ -327,9 +331,9 @@
                     var div = this._div = document.createElement("div");
                     div.style.position = "absolute";
                     div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
-                    div.style.backgroundColor = "#EE5D5B";
+                    div.style.backgroundColor = "white";
                     div.style.border = "1px solid #BC3B3A";
-                    div.style.color = "white";
+                    div.style.color = "#000000";
                     div.style.height = "24px";
                     div.style.padding = "2px";
                     div.style.lineHeight = "18px";
@@ -363,13 +367,11 @@
                 var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount;
 
                 var myCompOverlay = new ComplexCustomOverlay(point, txt);
-
+                map.centerAndZoom(point, config_map.scale);
                 map.addOverlay(myCompOverlay);
             }
         })
     }
-    var point;
-    var map_center_lon ;
-    var map_center_lan ;
+
 </script>
 </html>

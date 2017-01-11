@@ -271,10 +271,21 @@ public class StdService {
                 poiDetail.setBaiduLon(31.378998);
                 poiDetail.setBaiduLat(121.544417);
                 poiDetail.setPoiKind("交通");
+                poiDetail.setCategoryName("高速服务区");
                 poiDetail.setPoiName("服务区");
                 poiDetail.setPoiAddress("江东路861弄1号");
-                poiDetail.setDistance(Double.valueOf(200));
+                poiDetail.setDistance(Double.valueOf(300));
+
+                PoiDetail poiDetail1 = new PoiDetail();
+                poiDetail1.setBaiduLon(31.122117);
+                poiDetail1.setBaiduLat(121.265604);
+                poiDetail1.setPoiKind("交通");
+                poiDetail1.setCategoryName("车站");
+                poiDetail1.setPoiName("泗泾汽车站");
+                poiDetail1.setPoiAddress("泗宝路");
+                poiDetail1.setDistance(Double.valueOf(200));
                 poiList.add(poiDetail);
+                poiList.add(poiDetail1);
             }
 //            if (categoryName.equals("教育")) {
 //                List<PoiDetail> educationList = mapper.getResidenceEduPoi(lon, lat, r);

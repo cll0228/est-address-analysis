@@ -8,6 +8,8 @@ public class PoiDetail {
 
     private String poiName;
 
+    private String categoryName;
+
     private Double distance;
 
     private String poiAddr;
@@ -62,5 +64,13 @@ public class PoiDetail {
 
     public void setBaiduLat(Double baiduLat) {
         this.baiduLat = baiduLat;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

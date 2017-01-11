@@ -1,6 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/pages/include/top.jsp" %>
 <%-- 需要在head标签中编写代码，请写在此处--%>
+    <style type="text/css">
+        /* star */
+        #star {
+            position: relative;
+            width: 600px;
+            margin: 20px auto;
+            height: 24px;
+        }
+
+        #star ul {
+            margin: 0 10px;
+        }
+
+        #star li {
+            float: left;
+            width: 24px;
+            cursor: pointer;
+            text-indent: -9999px;
+            background: url(/static/img/star.png) no-repeat;
+        }
+
+        #star strong {
+            color: #f60;
+            padding-left: 10px;
+        }
+
+        #star li.on {
+            background-position: 0 -28px;
+        }
+    </style>
 </head>
 <c:set var="pageTitle1" value="主页"/>
 <c:set var="pageTitle2" value="地址标准化"/>
@@ -11,7 +41,7 @@
                             <h3>地址标准化</h3>
                         </div> -->
         <div class="input-group input-group-lg">
-            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="长峰馨园2号">
+            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="仙霞路1001弄8号">
             <span class="input-group-btn">
             <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>
@@ -80,8 +110,67 @@
                             这里显示地图
                         </div>
                         <div class="col-md-4">
-                            <h4>打分</h4>
-                            这里显示打分
+                            <ul class="nav nav-tabs" id="map-keyword">
+                                <li class="active">
+                                    <a href="#tab_1" onclick="setTab('one',1)" data-toggle="tab">交通</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_2" onclick="setTab('one',2)" data-toggle="tab">教育</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_3" onclick="setTab('one',3)" data-toggle="tab">医疗</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_4" onclick="setTab('one',4)" data-toggle="tab">购物</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_5" onclick="setTab('one',5)" data-toggle="tab">生活</a>
+                                </li>
+                            </ul>
+                            <div id="star">
+                                <ul>
+                                    <li>
+                                        <a href="javascript:;">1</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">2</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">3</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">4</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">5</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix">
+                                <a href="javascript:;" class="btn default"> 0.5km </a>
+                                <a href="javascript:;" class="btn default"> 1km </a>
+                                <a href="javascript:;" class="btn default"> 1.5km </a>
+                                <a href="javascript:;" class="btn default"> 2km </a>
+                                <a href="javascript:;" class="btn default"> 2.5km </a>
+                            </div>
+                            <div class="tab-content">
+                                <%--<div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption" id="tab_1">
+                                            <h5 align="center" id="poiKind1"></h5>
+                                        </div>
+                                    </div>
+                                </div>--%>
+                                <table id="table1" class="table table-bordered table-hover">
+                                    <thead>
+                                        <th id="poiKind" style="font-size:20px;"></th>
+                                    </thead>
+                                    <tbody id="tb1" align="center">
+                                        <td id="poiName"></td>
+                                        <td id="distance"></td>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="table-scrollable">
@@ -225,7 +314,9 @@
         src="http://api.map.baidu.com/api?v=2.0&ak=5ibDwRtW0ic8CacALvMkxt8tMtBEYyvc"></script>
 <script type="text/javascript">
 
-
+    $(function(){
+        initMap();//加載地圖
+    })
     var map = null ;
     var roadLan = "";
     var point = "";
@@ -234,9 +325,23 @@
     var config_map = {
         scale: 18   //比例尺，默认20m
     };
+
+
+    function setTab(name,cursel){
+        alert("11111");
+    }
+
     function analysis() {
-        initMap();//加載地圖
+        map.clearOverlays();
         var address = $("#in").val();
+        var oStar = document.getElementById("star");
+        var aLi = oStar.getElementsByTagName("li");
+        var i = iScore = iStar = 0;
+        // poi距离
+//        var poiD = document.getElementsByClassName("")
+//        var poiD = document.getElementById("tab_1");
+//        var distance = poiD.getElementsByTagName("div");
+//        distance.append("111111");
         if (address == "") {
             bootbox.alert("地址不能为空，请重新输入");
         } else {
@@ -265,9 +370,24 @@
                         $("#s" + i).html(data[i].s);
                         $("#bm" + i).html(data[i].bm);
                     }
-
+                    roadLan = data[0].ln;
+                    // 评分
+                    iScore = 3;
+                    for (i = 0; i < aLi.length; i++)
+                        aLi[i].className = i < iScore ? "on" : "";
+                    // poi距离
+                    $("#tb1").empty();
+                    for(var i = 0; i<data[0].poiList.length; i++){
+                        $("#poiKind").html(data[0].poiList[i].poiKind);
+                        var poiHtml = "<tr><td id='poiName"+i+"'></td><td id='distance"+i+"'></td></tr>"
+//                        $("div#tab_1 div.row").append(poiHtml);
+                        $("#tb1").append(poiHtml);
+                        $("#poiName" + i).html(data[0].poiList[i].poiName+"米");
+                        $("#distance" + i).html(data[0].poiList[i].distance+"");
+                    }
 
                     if (data[0].f == "1") {
+
                         $("#ts").html("地址标准化成功").css("color", "green");
                         $("#residenceName").html(data[0].detail.residenceName);
                         $("#aliases").html(data[0].detail.aliases);
@@ -282,12 +402,8 @@
                         $("#houseCount").html(data[0].detail.houseCount);
                         $("#houseType").html(data[0].detail.houseType);
                         $("#homeDetail").css('display', 'block');
-                        //加載小區邊界
                         initResidenceBoundary($("#ln0").html());//加載小區邊界
-                        if($("#h0").html()!=''){
-                            initBuilding($("#ln0").html(),$("#h0").html());
-                        }//加載小區邊界
-						// 初始化echarts实例
+                        // 初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
 
         // 指定图表的配置项和数据
@@ -330,7 +446,7 @@
 		           { name: '医疗（Medical）', max: 100},
 		           { name: '购物（Shopping）', max: 100},
 		           { name: '教育（Education）', max: 100},
-		           { name: '生活（Life）', max: 10}
+		           { name: '生活（Life）', max: 100}
 		        ]
 		    },
 		    series: [{
@@ -377,13 +493,25 @@
                 }
             });
         }
-
     }
 
     function initMap() {
         //加载地图
         map = new BMap.Map("map");
-        map.setMapStyle({style: "normal"});
+        map.setMapStyle({
+            styleJson:[
+                {
+                    "featureType": "poi",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#000000",
+                        "hue": "#ffffff",
+                        "lightness": 71,
+                        "saturation": 93
+                    }
+                }
+            ]
+        });
         var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
         var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
         map.addControl(top_left_control);
@@ -391,6 +519,9 @@
     }
 
     var array ;
+
+
+
     function initResidenceBoundary(roadLan) {
         array = new Array;
         $.ajax({
@@ -410,11 +541,22 @@
                     fillColor: "none"
                 });
                 point = new BMap.Point(map_center_lon, map_center_lan);
-                map.centerAndZoom(point, config_map.scale);
                 map.addOverlay(polygon);
+                if($("#h0").html()==''){
+                    map.centerAndZoom(point, config_map.scale);
+                }
+
+                //加載樓棟
+                if($("#h0").html() != '' ){
+                    initBuilding(roadLan,$("#h0").html());
+                }
             }
         })
     }
+
+    var buildingPoint = "";
+    var buildingLat = "";
+    var buildingLon = "";
 
     //加载楼栋信息
     function initBuilding(roadLan,buildingNo) {
@@ -424,12 +566,12 @@
             data:{"roadLan":roadLan,"buildingNo":buildingNo},
             success: function (data) {
                 //中心点
-                map_center_lon = data.lon;
-                map_center_lan = data.lat;
-                point = new BMap.Point(map_center_lon, map_center_lan);
-
+                buildingLon = data.baiduLon;
+                buildingLat = data.baiduLat;
+                buildingPoint = new BMap.Point(buildingLon, buildingLat);
+                map.centerAndZoom(buildingPoint,config_map.scale);
                 //文本标注
-                function ComplexCustomOverlay(point, text, mouseoverText){
+                function ComplexCustomOverlay(point, text){
                     this._point = point;
                     this._text = text;
                 }
@@ -473,10 +615,9 @@
                     this._div.style.top  = pixel.y - 30 + "px";
                 }
                 var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount;
-
-                var myCompOverlay = new ComplexCustomOverlay(point, txt);
-                map.centerAndZoom(point, config_map.scale);
+                var myCompOverlay = new ComplexCustomOverlay(buildingPoint, txt);
                 map.addOverlay(myCompOverlay);
+
             }
         })
     }

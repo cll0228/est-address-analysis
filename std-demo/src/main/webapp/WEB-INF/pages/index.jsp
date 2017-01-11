@@ -258,8 +258,6 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <h4>打分</h4>
-                            这里显示面积等信息
                             <div class="table-scrollable">
                                 <table class="table table-bordered table-hover">
                                     <tbody>

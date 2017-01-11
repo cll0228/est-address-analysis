@@ -238,8 +238,6 @@
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
 
-                        //加載小區邊界
-                        initResidenceBoundary(residenceId);//加載小區邊界
                     } else if (data[0].f == "2") {
                         $("#ts").html("区县不对应").css("color", "red");
                         $("#homeDetail").css('display', 'none');
@@ -269,12 +267,10 @@
     };
     function initMap() {
         //加载地图
-         map_center_lon = 121.495008;
-         map_center_lan = 31.215454;
-         point = new BMap.Point(map_center_lon, map_center_lan);
+
         map = new BMap.Map("map");
-        map.setMapStyle({style: 'light'});
-        map.centerAndZoom(point, config_map.scale);
+        map.setMapStyle({style: "normal"});
+
         var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
         var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
         map.addControl(top_left_control);
@@ -288,6 +284,8 @@
             type: "GET",
             success: function (data) {
                 $.each(data, function (i, item) {
+                    map_center_lon = item.baiduLon;
+                    map_center_lan = item.baiduLat;
                     array[i] = new BMap.Point(item.baiduLon, item.baiduLat);
                 });
                 //添加边界
@@ -297,6 +295,8 @@
                     strokeOpacity: 0.5,
                     fillColor: "none"
                 });
+                point = new BMap.Point(map_center_lon, map_center_lan);
+                map.centerAndZoom(point, config_map.scale);
                 map.addOverlay(polygon);
             }
         })

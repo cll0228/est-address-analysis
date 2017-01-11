@@ -1,6 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/pages/include/top.jsp" %>
 <%-- 需要在head标签中编写代码，请写在此处--%>
+    <style type="text/css">
+        /* star */
+        #star {
+            position: relative;
+            width: 600px;
+            margin: 20px auto;
+            height: 24px;
+        }
+
+        #star ul {
+            margin: 0 10px;
+        }
+
+        #star li {
+            float: left;
+            width: 24px;
+            cursor: pointer;
+            text-indent: -9999px;
+            background: url(/static/img/star.png) no-repeat;
+        }
+
+        #star strong {
+            color: #f60;
+            padding-left: 10px;
+        }
+
+        #star li.on {
+            background-position: 0 -28px;
+        }
+    </style>
 </head>
 <c:set var="pageTitle1" value="主页"/>
 <c:set var="pageTitle2" value="地址标准化"/>
@@ -76,12 +106,71 @@
                 <div class="portlet-body">
 
                     <div class="row">
-                        <div class="col-md-6" id="map" style="height: 300px;size: 350px">
+                        <div class="col-md-5" id="map" style="height: 300px;size: 350px">
                             这里显示地图
                         </div>
-                        <div class="col-md-3">
-                            <h4>打分</h4>
-                            这里显示打分
+                        <div class="col-md-4">
+                            <ul class="nav nav-tabs" id="map-keyword">
+                                <li class="active">
+                                    <a href="#tab_1" onclick="setTab('one',1)" data-toggle="tab">交通</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_2" onclick="setTab('one',2)" data-toggle="tab">教育</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_3" onclick="setTab('one',3)" data-toggle="tab">医疗</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_4" onclick="setTab('one',4)" data-toggle="tab">购物</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_5" onclick="setTab('one',5)" data-toggle="tab">生活</a>
+                                </li>
+                            </ul>
+                            <div id="star">
+                                <ul>
+                                    <li>
+                                        <a href="javascript:;">1</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">2</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">3</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">4</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">5</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix">
+                                <a href="javascript:;" class="btn default"> 0.5km </a>
+                                <a href="javascript:;" class="btn default"> 1km </a>
+                                <a href="javascript:;" class="btn default"> 1.5km </a>
+                                <a href="javascript:;" class="btn default"> 2km </a>
+                                <a href="javascript:;" class="btn default"> 2.5km </a>
+                            </div>
+                            <div class="tab-content">
+                                <%--<div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption" id="tab_1">
+                                            <h5 align="center" id="poiKind1"></h5>
+                                        </div>
+                                    </div>
+                                </div>--%>
+                                <table id="table1" class="table table-bordered table-hover">
+                                    <thead>
+                                        <th id="poiKind" style="font-size:20px;"></th>
+                                    </thead>
+                                    <tbody id="tb1" align="center">
+                                        <td id="poiName"></td>
+                                        <td id="distance"></td>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="table-scrollable">
@@ -165,7 +254,6 @@
     $(function(){
         initMap();//加載地圖
     })
-
     var map = null ;
     var roadLan = "";
     var point = "";
@@ -174,9 +262,23 @@
     var config_map = {
         scale: 18   //比例尺，默认20m
     };
+
+
+    function setTab(name,cursel){
+        alert("11111");
+    }
+
     function analysis() {
         map.clearOverlays();
         var address = $("#in").val();
+        var oStar = document.getElementById("star");
+        var aLi = oStar.getElementsByTagName("li");
+        var i = iScore = iStar = 0;
+        // poi距离
+//        var poiD = document.getElementsByClassName("")
+//        var poiD = document.getElementById("tab_1");
+//        var distance = poiD.getElementsByTagName("div");
+//        distance.append("111111");
         if (address == "") {
             bootbox.alert("地址不能为空，请重新输入");
         } else {
@@ -205,7 +307,21 @@
                         $("#s" + i).html(data[i].s);
                         $("#bm" + i).html(data[i].bm);
                     }
-
+                    roadLan = data[0].ln;
+                    // 评分
+                    iScore = 3;
+                    for (i = 0; i < aLi.length; i++)
+                        aLi[i].className = i < iScore ? "on" : "";
+                    // poi距离
+                    $("#tb1").empty();
+                    for(var i = 0; i<data[0].poiList.length; i++){
+                        $("#poiKind").html(data[0].poiList[i].poiKind);
+                        var poiHtml = "<tr><td id='poiName"+i+"'></td><td id='distance"+i+"'></td></tr>"
+//                        $("div#tab_1 div.row").append(poiHtml);
+                        $("#tb1").append(poiHtml);
+                        $("#poiName" + i).html(data[0].poiList[i].poiName+"米");
+                        $("#distance" + i).html(data[0].poiList[i].distance+"");
+                    }
 
                     if (data[0].f == "1") {
 

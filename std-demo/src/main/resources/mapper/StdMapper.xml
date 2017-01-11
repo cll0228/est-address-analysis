@@ -216,6 +216,7 @@
     <select id="getTrafficList" resultType="com.address.model.PoiDetail">
         SELECT
         "交通" poiKind,
+        pd.sub_category_name categoryName,
         poi_name poiName,
         poi_addr poiAddr,
         calcDistance (
@@ -227,17 +228,12 @@
         baidu_lon baiduLon,
         baidu_lat baiduLat
         FROM
-        df_estate_db_v2.sh_poi_2015 p
-        WHERE
-        poi_kind in (
-        SELECT
-        poi_kind
-        FROM
+        df_estate_db_v2.sh_poi_2015 p,
         df_estate_db_v2.sh_poi_division pd
-        WHERE
-        pd.category_name = "交通"
+        WHERE p.poi_kind = pd.poi_kind
+        and pd.category_name = "交通"
         AND pd.is_available = 1
-        ) and p.is_available = 1
+        and p.is_available = 1
         AND calcDistance (
         #{lon},
         #{lat},

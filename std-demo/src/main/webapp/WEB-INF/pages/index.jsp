@@ -76,10 +76,10 @@
                 <div class="portlet-body">
 
                     <div class="row">
-                        <div class="col-md-6" id="map" style="height: 300px;size: 350px">
+                        <div class="col-md-5" id="map" style="height: 300px;size: 350px">
                             这里显示地图
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <h4>打分</h4>
                             这里显示打分
                         </div>
@@ -88,51 +88,51 @@
                                 <table class="table table-bordered table-hover">
                                     <tbody>
                                     <tr>
-                                        <th width="30%"> 小区名称</th>
+                                        <th width="30%"> 小区名称 </th>
                                         <td id="residenceName"></td>
                                     </tr>
                                     <tr>
-                                        <th> 小区别名</th>
+                                        <th> 小区别名 </th>
                                         <td id="aliases"></td>
                                     </tr>
                                     <tr>
-                                        <th> 小区地址</th>
+                                        <th> 小区地址 </th>
                                         <td id="residenceAddr"></td>
                                     </tr>
                                     <tr>
-                                        <th> 小区物业类型</th>
+                                        <th> 小区物业类型 </th>
                                         <td id="propertyType"></td>
                                     </tr>
                                     <tr>
-                                        <th> 小区四至</th>
+                                        <th> 小区四至 </th>
                                         <td id="fourTo"></td>
                                     </tr>
                                     <tr>
-                                        <th> 竣工日期</th>
+                                        <th> 竣工日期 </th>
                                         <td id="accomplishDate"></td>
                                     </tr>
                                     <tr>
-                                        <th> 容积率</th>
+                                        <th> 容积率 </th>
                                         <td id="vp"></td>
                                     </tr>
                                     <tr>
-                                        <th> 绿化率</th>
+                                        <th> 绿化率 </th>
                                         <td id="gp"></td>
                                     </tr>
                                     <tr>
-                                        <th> 总建筑面积</th>
+                                        <th> 总建筑面积 </th>
                                         <td id="totalArea"></td>
                                     </tr>
                                     <tr>
-                                        <th> 总楼栋数</th>
+                                        <th> 总楼栋数 </th>
                                         <td id="buildingCount"></td>
                                     </tr>
                                     <tr>
-                                        <th> 总房屋数</th>
+                                        <th> 总房屋数 </th>
                                         <td id="houseCount"></td>
                                     </tr>
                                     <tr>
-                                        <th> 小区房型</th>
+                                        <th> 小区房型 </th>
                                         <td id="houseType"></td>
                                     </tr>
                                     </tbody>
@@ -150,9 +150,72 @@
         </div>
         <!-- END PORTLET-->
     </div>
-</div>
+    
+    
+    
+    
+    <div class="row" id="radarPrice" style="display:none">
+        <div class="col-md-12">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-home font-dark"></i>
+                        <span class="caption-subject font-dark sbold uppercase">房屋信息</span>
+                    </div>
 
-</div>
+                </div>
+                <div class="portlet-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>打分</h4>
+                            这里显示面积等信息
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <th width="50%"> 面积 </th>
+                                        <td id="area"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 朝向 </th>
+                                        <td id="towards"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 房型 </th>
+                                        <td id="roomType"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 此套房屋市场单价 </th>
+                                        <td id="unitPrice"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 此套房屋总价值 </th>
+                                        <td id="totalPrice"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 竣工日期</th>
+                                        <td id="accomplishDate"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="mainRadar" style="height:400px;">
+                        				</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+    
+    
+    
+    
 </div>
 
 
@@ -246,25 +309,70 @@
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
-
+        
+        if(data[0].d=="true") {
+        	$("#radarPrice").css('display', 'block');
+        } else {
+        	$("#radarPrice").css('display', 'none');
+        }
+        
+        var radar = echarts.init(document.getElementById('mainRadar'));
+        
+        option2 = {
+		    title: {
+		        text: '周边配套雷达图'
+		    },
+		    tooltip: {},
+		    radar: {
+		        // shape: 'circle',
+		        indicator: [
+		           { name: '交通（Traffic）', max: 100},
+		           { name: '医疗（Medical）', max: 100},
+		           { name: '购物（Shopping）', max: 100},
+		           { name: '教育（Education）', max: 100},
+		           { name: '生活（Life）', max: 10}
+		        ]
+		    },
+		    series: [{
+		        //name: '预算 vs 开销（Budget vs spending）',
+		        type: 'radar',
+		        // areaStyle: {normal: {}},
+		        data : [
+		            {
+		                value : data[0].c,
+		                name : '配套评分（Supporting Score）'
+		            }
+		        ]
+		    }]
+		};
+        
+        // 使用刚指定的配置项和数据显示图表。
+        radar.setOption(option2);
+        
                     } else if (data[0].f == "2") {
                         $("#ts").html("区县不对应").css("color", "red");
                         $("#homeDetail").css('display', 'none');
+                        $("#radarPrice").css('display', 'none');
                     } else if (data[0].f == "3") {
                         $("#ts").html("地址不存在").css("color", "red");
                         $("#homeDetail").css('display', 'none');
+                        $("#radarPrice").css('display', 'none');
                     } else if (data[0].f == "4") {
                         $("#ts").html("路弄未找到").css("color", "red");
                         $("#homeDetail").css('display', 'none');
+                        $("#radarPrice").css('display', 'none');
                     } else if (data[0].f == "5") {
                         $("#ts").html("道路不存在").css("color", "red");
                         $("#homeDetail").css('display', 'none');
+                        $("#radarPrice").css('display', 'none');
                     } else if (data[0].f == "6") {
                         $("#ts").html("房间号未找到").css("color", "red");
                         $("#homeDetail").css('display', 'none');
+                        $("#radarPrice").css('display', 'none');
                     } else if (data[0].f == "7") {
                         $("#ts").html("楼栋未找到").css("color", "red");
                         $("#homeDetail").css('display', 'none');
+                        $("#radarPrice").css('display', 'none');
                     }
                 }
             });

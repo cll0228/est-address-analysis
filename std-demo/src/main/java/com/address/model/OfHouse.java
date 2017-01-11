@@ -3,8 +3,8 @@ package com.address.model;
 /**
  * Created by Cuill on 2016/12/15.
  */
-public class OfHouse {
 	
+public class OfHouse {
     private Integer id;
 
     private String roomNo;
@@ -22,6 +22,10 @@ public class OfHouse {
     private Integer propertyType;
     
     private Integer stdAddrId;
+    
+    private String towards;
+    
+    private Integer residenceId;
 
 	public Integer getId() {
 		return id;
@@ -95,13 +99,28 @@ public class OfHouse {
 		this.stdAddrId = stdAddrId;
 	}
 
+	public String getTowards() {
+		return towards;
+	}
+
+	public void setTowards(String towards) {
+		this.towards = towards;
+	}
+
+	public Integer getResidenceId() {
+		return residenceId;
+	}
+
+	public void setResidenceId(Integer residenceId) {
+		this.residenceId = residenceId;
+	}
+
 	@Override
 	public String toString() {
 		return "OfHouse [id=" + id + ", roomNo=" + roomNo + ", placeFloor="
 				+ placeFloor + ", area=" + area + ", roomNum=" + roomNum
 				+ ", hallNum=" + hallNum + ", planeType=" + planeType
 				+ ", propertyType=" + propertyType + ", stdAddrId=" + stdAddrId
-				+ "]";
+				+ ", towards=" + towards + ", residenceId=" + residenceId + "]";
 	}
-
 }

@@ -63,6 +63,11 @@ public interface StdMapper {
     
     ResidenceDetail selectResidenceDetail(@Param("roadLane")String roadLane);
     
+    OfHouse selectHouseByStdAddrId(@Param("stdAddrId")String stdAddrId, @Param("roomNo")String roomNo,
+    							   @Param("buildingNo")String buildingNo);
+    
+    FacilityScore getResidenceFacilityScore(@Param("residenceId")Integer residenceId);
+    
     List<PriceTrend> getResidenceTradeAvgPriceList(@Param("residenceId")Integer residenceId,
             @Param("startMonth")String startMonth, @Param("endMonth")String endMonth);
 

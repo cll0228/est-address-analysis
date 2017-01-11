@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.address.model.PoiDetail;
 import com.address.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,9 @@ public class StdController {
                 result.put("bm", returnParam.getAddrCode());
                 result.put("f", returnParam.getFlag());
                 LOGGER.info("返回状态码 flag = " + returnParam.getFlag());
+                // 小区配套查询（默认交通，0.5km）
+                List<PoiDetail> poiList = stdService.getResidencePoiDetailList(returnParam.getRoadLane(), "0.5", "交通");
+                result.put("poiList",poiList);
                 
                 if(flag==0&&returnParam.getFlag().equals("1")) {
                 	flag++;

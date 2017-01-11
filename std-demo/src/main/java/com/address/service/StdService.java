@@ -2,9 +2,13 @@ package com.address.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import com.address.model.PoiDetail;
+import com.address.model.ResidenceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
@@ -227,6 +231,71 @@ public class StdService {
         context.start();
         StdService bean = context.getBean(StdService.class);
         bean.analysis("武东路198");
+    }
+
+    public List<PoiDetail> getResidencePoiDetailList(String residenceAddr, String r, String categoryName) {
+        // 小区经纬度
+        ResidenceInfo residenceDetail = mapper.getResidenceLonAndLat(residenceAddr);
+        if (null == residenceDetail) {
+            return null;
+        }
+        Double lon = residenceDetail.getLon();
+        Double lat = residenceDetail.getLat();
+        if (null == lon && null == lat) {
+            lon = 121.4751453;
+            lat = 31.26517581;
+        }
+        List<PoiDetail> poiList = new ArrayList<>();
+        if (null == categoryName || "".equals(categoryName)) {
+//            // 教育配套集合
+//            List<PoiDetail> educationList = mapper.getResidenceEduPoi(lon, lat, r);
+//            map.put("educationList", educationList);
+//            // 交通配套集合
+//            List<PoiDetail> trafficList = mapper.getTrafficList(lon, lat, r);
+//            map.put("trafficList", trafficList);
+//            // 医疗配套集合
+//            List<PoiDetail> medicalList = mapper.getMedicalList(lon, lat, r);
+//            map.put("medicalList", medicalList);
+//            // 商业设施配套集合
+//            List<PoiDetail> shoppingList = mapper.getShoppingList(lon, lat, r);
+//            map.put("shoppingList", shoppingList);
+//            // 生活服务配套集合
+//            List<PoiDetail> lifeServiceList = mapper.getLivingList(lon, lat, r);
+//            map.put("lifeServiceList", lifeServiceList);
+        } else {
+            // 查指定类目
+            if (categoryName.equals("交通")) {
+                // 交通配套集合
+//                List<PoiDetail> trafficList = mapper.getTrafficList(lon, lat, r);
+                PoiDetail poiDetail = new PoiDetail();
+                poiDetail.setBaiduLon(31.378998);
+                poiDetail.setBaiduLat(121.544417);
+                poiDetail.setPoiKind("交通");
+                poiDetail.setPoiName("服务区");
+                poiDetail.setPoiAddress("江东路861弄1号");
+                poiDetail.setDistance(Double.valueOf(200));
+                poiList.add(poiDetail);
+            }
+//            if (categoryName.equals("教育")) {
+//                List<PoiDetail> educationList = mapper.getResidenceEduPoi(lon, lat, r);
+//                map.put("educationList", educationList);
+//            }
+//            if (categoryName.equals("医疗")) {
+//                List<PoiDetail> medicalList = mapper.getMedicalList(lon, lat, r);
+//                map.put("medicalList", medicalList);
+//            }
+//            if (categoryName.equals("商场")) {
+//                // 商业设施配套集合
+//                List<PoiDetail> shoppingList = mapper.getShoppingList(lon, lat, r);
+//                map.put("shoppingList", shoppingList);
+//            }
+//            if (categoryName.equals("生活")) {
+//                List<PoiDetail> lifeServiceList = mapper.getLivingList(lon, lat, r);
+//                map.put("lifeServiceList", lifeServiceList);
+//            }
+        }
+        return poiList;
+
     }
     
     public List<PriceTrend> getResidenceTradeAvgPriceList(Integer residenceId) {

@@ -55,6 +55,11 @@ public interface StdMapper {
     List<HouseDeal> selectTdtAddress();
 
     void updateTdtResult(@Param("deal")HouseDeal deal);
+
+    ResidenceInfo getResidenceLonAndLat(@Param("residenceAddr")String residenceAddr);
+
+    List<PoiDetail> getTrafficList(@Param("lon") Double baidulon, @Param("lat") Double baidulat,
+                                   @Param("r") String r);
     
     ResidenceDetail selectResidenceDetail(@Param("roadLane")String roadLane);
     

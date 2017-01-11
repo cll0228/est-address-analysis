@@ -18,6 +18,8 @@
         </div>
         <!-- /input-group -->
     </div>
+    <!-- /input-group -->
+</div>
 
     <div class="clearfix">
         <div class="panel panel-success">
@@ -136,6 +138,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <!-- END PORTLET-->
                         </div>
                     </div>
                 </div>

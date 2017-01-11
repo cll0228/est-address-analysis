@@ -209,6 +209,44 @@
                 (`id` = #{deal.id});
     </update>
 
+    <select id="getResidenceLonAndLat" resultType="com.address.model.ResidenceInfo">
+        SELECT id as residenceId,residence_name, lon, lat FROM `ocn_address`.`of_residence` WHERE residence_addr = #{residenceAddr};
+    </select>
+
+    <select id="getTrafficList" resultType="com.address.model.PoiDetail">
+        SELECT
+        "交通" poiKind,
+        poi_name poiName,
+        poi_addr poiAddr,
+        calcDistance (
+        #{lon},
+        #{lat},
+        p.baidu_lon,
+        p.baidu_lat
+        ) distance,
+        baidu_lon baiduLon,
+        baidu_lat baiduLat
+        FROM
+        df_estate_db_v2.sh_poi_2015 p
+        WHERE
+        poi_kind in (
+        SELECT
+        poi_kind
+        FROM
+        df_estate_db_v2.sh_poi_division pd
+        WHERE
+        pd.category_name = "交通"
+        AND pd.is_available = 1
+        ) and p.is_available = 1
+        AND calcDistance (
+        #{lon},
+        #{lat},
+        p.baidu_lon,
+        p.baidu_lat
+        )  &lt;  #{r}
+    </select>
+
+
 
 	<select id="getResidenceTradeAvgPriceList"
 			resultType="com.address.model.PriceTrend">

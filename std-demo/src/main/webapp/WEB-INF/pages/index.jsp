@@ -11,7 +11,7 @@
                             <h3>地址标准化</h3>
                         </div> -->
         <div class="input-group input-group-lg">
-            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="长峰馨园2号">
+            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="仙霞路1001弄8号">
             <span class="input-group-btn">
             <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>
@@ -162,6 +162,9 @@
         src="http://api.map.baidu.com/api?v=2.0&ak=5ibDwRtW0ic8CacALvMkxt8tMtBEYyvc"></script>
 <script type="text/javascript">
 
+    $(function(){
+        initMap();//加載地圖
+    })
 
     var map = null ;
     var roadLan = "";
@@ -172,7 +175,7 @@
         scale: 18   //比例尺，默认20m
     };
     function analysis() {
-        initMap();//加載地圖
+        map.clearOverlays();
         var address = $("#in").val();
         if (address == "") {
             bootbox.alert("地址不能为空，请重新输入");
@@ -205,6 +208,7 @@
 
 
                     if (data[0].f == "1") {
+
                         $("#ts").html("地址标准化成功").css("color", "green");
                         $("#residenceName").html(data[0].detail.residenceName);
                         $("#aliases").html(data[0].detail.aliases);
@@ -219,12 +223,8 @@
                         $("#houseCount").html(data[0].detail.houseCount);
                         $("#houseType").html(data[0].detail.houseType);
                         $("#homeDetail").css('display', 'block');
-                        //加載小區邊界
                         initResidenceBoundary($("#ln0").html());//加載小區邊界
-                        if($("#h0").html()!=''){
-                            initBuilding($("#ln0").html(),$("#h0").html());
-                        }//加載小區邊界
-						// 初始化echarts实例
+                        // 初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
 
         // 指定图表的配置项和数据
@@ -269,13 +269,25 @@
                 }
             });
         }
-
     }
 
     function initMap() {
         //加载地图
         map = new BMap.Map("map");
-        map.setMapStyle({style: "normal"});
+        map.setMapStyle({
+            styleJson:[
+                {
+                    "featureType": "poi",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#000000",
+                        "hue": "#ffffff",
+                        "lightness": 71,
+                        "saturation": 93
+                    }
+                }
+            ]
+        });
         var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
         var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
         map.addControl(top_left_control);
@@ -283,6 +295,9 @@
     }
 
     var array ;
+
+
+
     function initResidenceBoundary(roadLan) {
         array = new Array;
         $.ajax({
@@ -302,11 +317,22 @@
                     fillColor: "none"
                 });
                 point = new BMap.Point(map_center_lon, map_center_lan);
-                map.centerAndZoom(point, config_map.scale);
                 map.addOverlay(polygon);
+                if($("#h0").html()==''){
+                    map.centerAndZoom(point, config_map.scale);
+                }
+
+                //加載樓棟
+                if($("#h0").html() != '' ){
+                    initBuilding(roadLan,$("#h0").html());
+                }
             }
         })
     }
+
+    var buildingPoint = "";
+    var buildingLat = "";
+    var buildingLon = "";
 
     //加载楼栋信息
     function initBuilding(roadLan,buildingNo) {
@@ -316,12 +342,12 @@
             data:{"roadLan":roadLan,"buildingNo":buildingNo},
             success: function (data) {
                 //中心点
-                map_center_lon = data.lon;
-                map_center_lan = data.lat;
-                point = new BMap.Point(map_center_lon, map_center_lan);
-
+                buildingLon = data.baiduLon;
+                buildingLat = data.baiduLat;
+                buildingPoint = new BMap.Point(buildingLon, buildingLat);
+                map.centerAndZoom(buildingPoint,config_map.scale);
                 //文本标注
-                function ComplexCustomOverlay(point, text, mouseoverText){
+                function ComplexCustomOverlay(point, text){
                     this._point = point;
                     this._text = text;
                 }
@@ -365,10 +391,9 @@
                     this._div.style.top  = pixel.y - 30 + "px";
                 }
                 var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount;
-
-                var myCompOverlay = new ComplexCustomOverlay(point, txt);
-                map.centerAndZoom(point, config_map.scale);
+                var myCompOverlay = new ComplexCustomOverlay(buildingPoint, txt);
                 map.addOverlay(myCompOverlay);
+
             }
         })
     }

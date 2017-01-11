@@ -16,9 +16,9 @@ public class OfBuilding {
 
     private Integer totalFloor;
 
-    private String lat;
+    private String baiduLat;
 
-    private String lon;
+    private String baiduLon;
 
     public Integer getId() {
         return id;
@@ -68,19 +68,19 @@ public class OfBuilding {
         this.totalFloor = totalFloor;
     }
 
-    public String getLat() {
-        return lat;
+    public String getBaiduLat() {
+        return baiduLat;
     }
 
-    public void setLat(String lat) {
-        this.lat = lat;
+    public void setBaiduLat(String baiduLat) {
+        this.baiduLat = baiduLat;
     }
 
-    public String getLon() {
-        return lon;
+    public String getBaiduLon() {
+        return baiduLon;
     }
 
-    public void setLon(String lon) {
-        this.lon = lon;
+    public void setBaiduLon(String baiduLon) {
+        this.baiduLon = baiduLon;
     }
 }

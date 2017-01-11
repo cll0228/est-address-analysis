@@ -295,8 +295,8 @@
             b.id,
             b.building_no buildingNo,
             b.house_count houseCount,
-            b.lat,
-            b.lon,
+            b.baidu_lat baiduLat,
+            b.baidu_lon baiduLon,
             b.total_floor totalFloor
         FROM
             of_building b

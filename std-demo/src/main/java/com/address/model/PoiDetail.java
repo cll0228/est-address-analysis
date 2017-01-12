@@ -12,7 +12,7 @@ public class PoiDetail {
 
     private Double distance;
 
-    private String poiAddr;
+    private String poiAddress;
 
     private Double baiduLon;
 
@@ -43,11 +43,11 @@ public class PoiDetail {
     }
 
     public String getPoiAddress() {
-        return poiAddr;
+        return poiAddress;
     }
 
     public void setPoiAddress(String poiAddress) {
-        this.poiAddr = poiAddress;
+        this.poiAddress = poiAddress;
     }
 
     public Double getBaiduLon() {

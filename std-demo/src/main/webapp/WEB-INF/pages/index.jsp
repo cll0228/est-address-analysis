@@ -6,19 +6,19 @@
         #star {
             position: relative;
             width: 600px;
-            margin: 20px auto;
-            height: 24px;
+            margin: 10px auto;
+            height: 1px;
         }
 
         #star ul {
-            margin: 0 10px;
+            margin: 0 65px;
         }
 
         #star li {
             float: left;
             width: 24px;
             cursor: pointer;
-            text-indent: -9999px;
+            text-indent: -99999px;
             background: url(${ctx}/static/img/star.png) no-repeat;
         }
 
@@ -29,6 +29,20 @@
 
         #star li.on {
             background-position: 0 -28px;
+        }
+        #table1 tbody td {
+            font-size:12px;
+            padding-left:30px;
+        }
+        #table1 tbody th {
+            font-size:12px;
+            font-weight:normal;
+            width: 80px;
+        }
+        hr {
+            border: 0;
+            border-top: 0px solid #eee;
+            border-bottom:0;
         }
     </style>
 </head>
@@ -159,10 +173,7 @@
         </div>
         <!-- END PORTLET-->
     </div>
-    
-    
-    
-    
+
     <div class="row" id="homeDetail" style="display:none">
         <div class="col-md-12">
             <!-- BEGIN PORTLET-->
@@ -183,16 +194,16 @@
                         <div class="col-md-4">
                             <ul class="nav nav-tabs" id="map-keyword">
                                 <li id="one1" class="active">
-                                    <a href="#tab_1" onclick="setTab('one',1)" data-toggle="tab">交通</a>
+                                    <a href="#tab_1" onclick="setTab('one',1,'')" data-toggle="tab">交通</a>
                                 </li>
                                 <li id="one2">
-                                    <a href="#tab_2" onclick="setTab('one',2)" data-toggle="tab">教育</a>
+                                    <a href="#tab_2" onclick="setTab('one',2,'')" data-toggle="tab">教育</a>
                                 </li>
                                 <li id="one3">
-                                    <a href="#tab_3" onclick="setTab('one',3)" data-toggle="tab">医疗</a>
+                                    <a href="#tab_3" onclick="setTab('one',3,'')" data-toggle="tab">医疗</a>
                                 </li>
                                 <li id="one4">
-                                    <a href="#tab_4" onclick="setTab('one',4)" data-toggle="tab">购物</a>
+                                    <a href="#tab_4" onclick="setTab('one',4,'')" data-toggle="tab">购物</a>
                                 </li>
                                 <li id="one5">
                                     <a href="#tab_5" onclick="setTab('one',5)" data-toggle="tab">生活</a>
@@ -217,14 +228,16 @@
                                     </li>
                                 </ul>
                             </div>
+                            </br>
                             <div class="clearfix" id="radius">
-                                <a href="javascript:;" class="btn green-meadow" onclick="setTab('two',1)" class="btn default" id="two1" value="0.5km"> 0.5km </a>
-                                <a href="javascript:;" id="two2" onclick="setTab('two',2)" class="btn default" value="1.0km"> 1.0km </a>
-                                <a href="javascript:;" id="two3" onclick="setTab('two',3)" class="btn default" value="1.5km"> 1.5km </a>
-                                <a href="javascript:;" id="two4" onclick="setTab('two',4)" class="btn default" value="2.0km"> 2.0km </a>
-                                <a href="javascript:;" id="two5" onclick="setTab('two',5)" class="btn default" value="2.5km"> 2.5km </a>
+                                <a href="javascript:;" class="btn green-meadow" onclick="setTab('two',1, 500)" class="btn default" id="two1" value="500"> 0.5km </a>
+                                <a href="javascript:;" id="two2" onclick="setTab('two',2, 1000)" class="btn default" value="1000"> 1.0km </a>
+                                <a href="javascript:;" id="two3" onclick="setTab('two',3, 1500)" class="btn default" value="1500"> 1.5km </a>
+                                <a href="javascript:;" id="two4" onclick="setTab('two',4, 2000)" class="btn default" value="2000"> 2.0km </a>
+                                <a href="javascript:;" id="two5" onclick="setTab('two',5, 2500)" class="btn default" value="2500"> 2.5km </a>
                             </div>
-                            <div class="tab-content">
+                            <HR align="center" width="300px;" color="#987cb9SIZE=1">
+                            <div class="tab-content" style="width:350px; height:310px; overflow:scroll;">
                                 <%--<div class="portlet">
                                     <div class="portlet-title">
                                         <div class="caption" id="tab_1">
@@ -233,12 +246,11 @@
                                     </div>
                                 </div>--%>
                                 <table id="table1" class="table table-bordered table-hover">
-                                    <thead>
-                                        <th id="poiKind" style="font-size:20px;"></th>
-                                    </thead>
-                                    <tbody id="tb1" align="center">
-                                        <td id="poiName"></td>
-                                        <td id="distance"></td>
+                                   <%-- <thead>
+                                        <th id="poiKind" style="font-size:15px;"></th>
+                                    </thead>--%>
+                                    <th id="poiKind" style="font-size:15px;"></th>
+                                    <tbody id="tb1">
                                     </tbody>
                                 </table>
                             </div>
@@ -475,28 +487,60 @@
         }
     }
 
-
     function poiInfo(data){
         var oStar = document.getElementById("star");
         var aLi = oStar.getElementsByTagName("li");
         var i = iScore = iStar = 0;
         // 评分
-        iScore = 3;
+        iScore = data[0].score;
         for (i = 0; i < aLi.length; i++)
             aLi[i].className = i < iScore ? "on" : "";
         // poi距离
-        $("#tb1").empty();
-        for(var i = 0; i<data[0].poiList.length; i++){
-            $("#poiKind").html(data[0].poiList[i].poiKind);
-            var poiHtml = "<tr><td id='poiName"+i+"'></td><td id='distance"+i+"'></td></tr>"
+        $("#table1").empty();
+        var category;
+        var sameNum;
+        for(var i = 0; i<data[0].poiList.length; i++) {
+            var poiCategoryName = data[0].poiList[i].categoryName
+            if (i == 0) {
+                var kindHtml = "<th id='poiKind" + i + "' style='font-size:15px;'></th>";
+                $("#table1").append(kindHtml);
+                $("#poiKind" + i).html(poiCategoryName);
+                var tbodyHtml = "<tbody id='tb" + i + "'></tbody>";
+                $("#table1").append(tbodyHtml);
+                var poiHtml = "<tr><td id='poiName" + i + "'></td><th id='distance" + i + "'></th></tr>"
 //                        $("div#tab_1 div.row").append(poiHtml);
-            $("#tb1").append(poiHtml);
-            $("#poiName" + i).html(data[0].poiList[i].poiName+"米");
-            $("#distance" + i).html(data[0].poiList[i].distance+"");
+                $("#tb" + i).append(poiHtml);
+                $("#poiName" + i).html(data[0].poiList[i].poiName);
+                $("#distance" + i).html(data[0].poiList[i].distance + "米");
+                category = poiCategoryName;
+                sameNum = i;
+            } else {
+                if (poiCategoryName == category) {
+                    var poiHtml = "<tr><td id='poiName" + i + "'></td><th id='distance" + i + "'></th></tr>"
+//                        $("div#tab_1 div.row").append(poiHtml);
+                    $("#tb" + sameNum).append(poiHtml);
+                    $("#poiName" + i).html(data[0].poiList[i].poiName);
+                    $("#distance" + i).html(data[0].poiList[i].distance + "米");
+                } else {
+                    var notSameKindHtml = "<th id='poiKind" + i + "' style='font-size:15px;'></th>";
+                    $("#table1").append(notSameKindHtml);
+                    $("#poiKind" + i).html(poiCategoryName);
+                    var notSameTbodyHtml = "<tbody id='tb" + i + "'></tbody>";
+                    $("#table1").append(notSameTbodyHtml);
+                    var notSamePoiHtml = "<tr><td id='poiName" + i + "'></td><th id='distance" + i + "'></th></tr>"
+//                        $("div#tab_1 div.row").append(poiHtml);
+                    $("#tb" + i).append(notSamePoiHtml);
+                    $("#poiName" + i).html(data[0].poiList[i].poiName);
+                    $("#distance" + i).html(data[0].poiList[i].distance + "米");
+                    category = poiCategoryName;
+                    sameNum = i;
+                }
+            }
         }
     }
 
-    function setTab(name,cursel){
+    function setTab(name,cursel,r){
+        var categoryName;
         if(name == 'two'){
             for(var i=1; i<=5; i++){
                 var value = document.getElementById("two"+i).className;
@@ -505,47 +549,40 @@
                 }
             }
             document.getElementById("two"+cursel).className="btn green-meadow";
-            var banjing = $("#two"+cursel).attr("value");
-
-            getPois(roadLan,poikind,banjing);
+//            banjing = $("#two"+cursel).attr("value");
+            for(var i=1; i<=5; i++) {
+                var tabName = document.getElementById("one" + i).className;
+                if (tabName == 'active') {
+                    categoryName = $("#one" + i + " a").html();
+                    break;
+                }
+            }
+            getPois(roadLan,categoryName,r);
         } else if(name == 'one'){
-
+            categoryName = $("#one" + cursel + " a").html();
+            for(var i=1; i<=5; i++){
+                var tabName = document.getElementById("two"+i).className;
+                if(tabName=='btn green-meadow'){
+                    r = $("#two"+i).attr("value");
+                    break;
+                }
+            }
+            getPois(roadLan,categoryName,r);
         }
-
-
-        var r;
-        getPois(roadLan, r);
     }
 
-    function getPois(roadLan, r) {
-        array = new Array;
+    function getPois(roadLan, categoryName, r) {
         $.ajax({
             url: '${ctx}/poiDetail',
             type: "POST",
-            data:{"roadLan":roadLan,"r":r},
+            data:{"roadLane":roadLan,"r":r,"categoryName":categoryName},
             success: function (data) {
-                $.each(data, function (i, item) {
-                    map_center_lon = item.baiduLon;
-                    map_center_lan = item.baiduLat;
-                    array[i] = new BMap.Point(item.baiduLon, item.baiduLat);
-                });
-                //添加边界
-                var  polygon = new BMap.Polygon(array, {
-                    strokeColor: "red",
-                    strokeWeight: 2,
-                    strokeOpacity: 0.5,
-                    fillColor: "none"
-                });
-                point = new BMap.Point(map_center_lon, map_center_lan);
-                map.addOverlay(polygon);
-                if($("#h0").html()==''){
-                    map.centerAndZoom(point, config_map.scale);
-                }
-
-                //加載樓棟
-                if($("#h0").html() != '' ){
-                    initBuilding(roadLan,$("#h0").html());
-                }
+                poiInfo(data);
+//                $.each(data, function (i, item) {
+////                    map_center_lon = item.baiduLon;
+////                    map_center_lan = item.baiduLat;
+////                    array[i] = new BMap.Point(item.baiduLon, item.baiduLat);
+//                });
             }
         })
     }

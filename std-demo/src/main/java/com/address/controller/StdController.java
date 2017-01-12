@@ -65,9 +65,11 @@ public class StdController {
                 result.put("f", returnParam.getFlag());
                 LOGGER.info("返回状态码 flag = " + returnParam.getFlag());
                 // 小区配套查询（默认交通，0.5km）
-                List<PoiDetail> poiList = stdService.getResidencePoiDetailList(returnParam.getRoadLane(), "0.5", "交通");
+                List<PoiDetail> poiList = stdService.getResidencePoiDetailList(returnParam.getRoadLane(), "500", "交通");
                 result.put("poiList",poiList);
-                
+                // 配套打分
+                Integer score = stdService.getScore(returnParam.getRoadLane(), "交通");
+                result.put("score",score);
                 if(flag==0&&returnParam.getFlag().equals("1")) {
                 	flag++;
                 	ResidenceDetail detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
@@ -106,6 +108,23 @@ public class StdController {
         }
         return resultList;
 
+    }
+
+    @RequestMapping(value = "/poiDetail", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Map<String, Object>> getPoiInfo(@RequestParam("roadLane") String roadLane,@RequestParam("r")String radius,
+                           @RequestParam("categoryName")String categoryName) {
+        LOGGER.info("正在查询POI数据roadlane:" + roadLane + ",radius:" + radius + ",categoryName:" + categoryName);
+        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+        // 小区配套查询
+        List<PoiDetail> poiList = stdService.getResidencePoiDetailList(roadLane, radius, categoryName);
+        Map<String, Object> result = new HashMap<>();
+        result.put("poiList",poiList);
+        resultList.add(result);
+        // 配套打分
+        Integer score = stdService.getScore(roadLane, categoryName);
+        result.put("score", score);
+        return resultList;
     }
     
     @RequestMapping(value = "/insert", method = RequestMethod.POST)

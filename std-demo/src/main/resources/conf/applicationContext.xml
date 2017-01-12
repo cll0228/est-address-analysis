@@ -22,6 +22,8 @@
     </context:component-scan>
 
     <import resource="applicationContext-mybatis.xml"/>
+    
+    <import resource="applicationContext-dubbo-consumer.xml" />
     <!-- 扫描service包下所有使用注解的类型 -->
     <context:component-scan base-package="com.address.service"/>
 

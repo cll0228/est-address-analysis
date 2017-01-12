@@ -254,7 +254,7 @@
         #{categoryName} poiKind,
         pd.sub_category_name categoryName,
         poi_name poiName,
-        poi_addr poiAddr,
+        poi_addr poiAddress,
         df_estate_db_v2.calcDistance (
         #{lon},
         #{lat},

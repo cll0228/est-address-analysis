@@ -268,8 +268,8 @@ public class StdService {
                 // 交通配套集合
 //                List<PoiDetail> trafficList = mapper.getTrafficList(lon, lat, r);
                 PoiDetail poiDetail = new PoiDetail();
-                poiDetail.setBaiduLon(31.378998);
-                poiDetail.setBaiduLat(121.544417);
+                poiDetail.setBaiduLon(121.499379);
+                poiDetail.setBaiduLat(31.315274);
                 poiDetail.setPoiKind("交通");
                 poiDetail.setCategoryName("高速服务区");
                 poiDetail.setPoiName("服务区");
@@ -277,8 +277,8 @@ public class StdService {
                 poiDetail.setDistance(Double.valueOf(300));
 
                 PoiDetail poiDetail1 = new PoiDetail();
-                poiDetail1.setBaiduLon(31.122117);
-                poiDetail1.setBaiduLat(121.265604);
+                poiDetail1.setBaiduLon(121.50109);
+                poiDetail1.setBaiduLat(31.314869);
                 poiDetail1.setPoiKind("交通");
                 poiDetail1.setCategoryName("车站");
                 poiDetail1.setPoiName("泗泾汽车站");

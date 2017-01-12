@@ -7,7 +7,7 @@
             position: relative;
             width: 600px;
             margin: 10px auto;
-            height: 1px;
+            height: 20px;
         }
 
         #star ul {
@@ -215,19 +215,19 @@
                             <div id="star">
                                 <ul>
                                     <li>
-                                        <a href="javascript:;">1</a>
+                                        <a href="javascript:;"></a>
                                     </li>
                                     <li>
-                                        <a href="javascript:;">2</a>
+                                        <a href="javascript:;"></a>
                                     </li>
                                     <li>
-                                        <a href="javascript:;">3</a>
+                                        <a href="javascript:;"></a>
                                     </li>
                                     <li>
-                                        <a href="javascript:;">4</a>
+                                        <a href="javascript:;"></a>
                                     </li>
                                     <li>
-                                        <a href="javascript:;">5</a>
+                                        <a href="javascript:;"></a>
                                     </li>
                                 </ul>
                             </div>

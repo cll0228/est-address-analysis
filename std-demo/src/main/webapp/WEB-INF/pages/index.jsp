@@ -19,7 +19,7 @@
             width: 24px;
             cursor: pointer;
             text-indent: -9999px;
-            background: url(/static/img/star.png) no-repeat;
+            background: url(${ctx}/static/img/star.png) no-repeat;
         }
 
         #star strong {
@@ -92,6 +92,77 @@
             </div>
         </div>
     </div>
+    
+    
+    
+    
+    
+    <div class="row" id="radarPrice" style="display:none">
+        <div class="col-md-12">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-home font-dark"></i>
+                        <span class="caption-subject font-dark sbold uppercase">房屋信息</span>
+                    </div>
+
+                </div>
+                <div class="portlet-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <th width="50%"> 面积 </th>
+                                        <td id="area"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 朝向 </th>
+                                        <td id="towards"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 房型 </th>
+                                        <td id="roomType"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="metro" colspan="2"><img src="${ctx}/static/img/sh_metro.jpg" height="22px" width="22px"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="school" colspan="2"><img src="${ctx}/static/img/graduation.png" height="22px" width="22px"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 此套房屋市场单价 </th>
+                                        <td id="unitPrice"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 此套房屋总价值 </th>
+                                        <td id="totalPrice"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 竣工日期</th>
+                                        <td id="accomplishDate"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="mainRadar" style="height:400px;">
+                        				</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+    
+    
+    
+    
     <div class="row" id="homeDetail" style="display:none">
         <div class="col-md-12">
             <!-- BEGIN PORTLET-->
@@ -239,69 +310,6 @@
         </div>
         <!-- END PORTLET-->
     </div>
-    
-    
-    
-    
-    <div class="row" id="radarPrice" style="display:none">
-        <div class="col-md-12">
-            <!-- BEGIN PORTLET-->
-            <div class="portlet light bordered">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="icon-home font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">房屋信息</span>
-                    </div>
-
-                </div>
-                <div class="portlet-body">
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="table-scrollable">
-                                <table class="table table-bordered table-hover">
-                                    <tbody>
-                                    <tr>
-                                        <th width="50%"> 面积 </th>
-                                        <td id="area"></td>
-                                    </tr>
-                                    <tr>
-                                        <th> 朝向 </th>
-                                        <td id="towards"></td>
-                                    </tr>
-                                    <tr>
-                                        <th> 房型 </th>
-                                        <td id="roomType"></td>
-                                    </tr>
-                                    <tr>
-                                        <th> 此套房屋市场单价 </th>
-                                        <td id="unitPrice"></td>
-                                    </tr>
-                                    <tr>
-                                        <th> 此套房屋总价值 </th>
-                                        <td id="totalPrice"></td>
-                                    </tr>
-                                    <tr>
-                                        <th> 竣工日期</th>
-                                        <td id="accomplishDate"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="mainRadar" style="height:400px;">
-                        				</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END PORTLET-->
-    </div>
-    
-    
-    
     
 </div>
 

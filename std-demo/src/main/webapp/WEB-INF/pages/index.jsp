@@ -545,8 +545,7 @@
 
     function setTab(name,cursel,r){
         var categoryName;
-    function setTab(name,cursel){
-     var center = map.getCenter();
+        var center = map.getCenter();
         if(cursel == 1){
             map.centerAndZoom(center,18);
         }

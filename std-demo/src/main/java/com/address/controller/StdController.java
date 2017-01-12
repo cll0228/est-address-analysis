@@ -118,7 +118,7 @@ public class StdController {
                 	} else {
                 		result.put("d", "false");
                 	}
-                	FacilityScore facilityScore = stdMapper.getResidenceFacilityScore(1042);//ofHouse.getResidenceId()
+                	FacilityScore facilityScore = stdMapper.getResidenceFacilityScore(ofHouse.getResidenceId());
                 	if (facilityScore != null) {
                 		int[] facility = new int[5];
                 		facility[0] = facilityScore.getTransportScore().intValue();

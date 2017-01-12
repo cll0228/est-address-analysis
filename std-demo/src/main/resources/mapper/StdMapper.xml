@@ -145,8 +145,8 @@
 			health_score as healthScore,
 			park_score as parkScore,
 			restaurant_score as restaurantScore
-		from df_estate_db_v2.sh_residence_score
-		where residence_id = ${residenceId}
+		from ocn_address.of_residence_score
+		where of_residence_id = ${residenceId}
 	</select>
     
     <select id="selectHouses" resultType="com.address.model.HouseDeal">

@@ -13,7 +13,7 @@
     <dubbo:registry id="assId" protocol="zookeeper" address="192.168.201.33:2181,192.168.201.41:2181,192.168.201.49:2181"/>
 
     <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
-    <dubbo:reference check="false" lazy="true" retries="30" timeout="120000" id="assService" interface="com.address.service.IAssService" registry="assId"/>
+    <dubbo:reference check="false" lazy="true" retries="30" timeout="120000" id="assService" interface="com.lezhi.sh.ass.house.service.IAssService" registry="assId"/>
 
 
 </beans>

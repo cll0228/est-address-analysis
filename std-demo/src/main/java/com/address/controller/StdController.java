@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.address.mapper.StdMapper;
-import com.address.model.AssessParam;
-import com.address.model.AssessResult;
 import com.address.model.FacilityScore;
 import com.address.model.HouseDeal;
 import com.address.model.OfHouse;
@@ -28,7 +26,9 @@ import com.address.model.PriceTrend;
 import com.address.model.ResidenceDetail;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
-import com.address.service.IAssService;
+import com.lezhi.sh.ass.house.model.AssessParam;
+import com.lezhi.sh.ass.house.model.AssessResult;
+import com.lezhi.sh.ass.house.service.IAssService;
 import com.address.service.StdService;
 import com.address.util.AddressExtractor;
 

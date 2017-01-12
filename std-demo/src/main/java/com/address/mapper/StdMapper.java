@@ -58,8 +58,8 @@ public interface StdMapper {
 
     ResidenceInfo getResidenceLonAndLat(@Param("residenceAddr")String residenceAddr);
 
-    List<PoiDetail> getTrafficList(@Param("lon") Double baidulon, @Param("lat") Double baidulat,
-                                   @Param("r") String r);
+    List<PoiDetail> gePoiDetailList(@Param("lon") Double baidulon, @Param("lat") Double baidulat,
+                                   @Param("r") String r,@Param("categoryName")String categoryName);
     
     ResidenceDetail selectResidenceDetail(@Param("roadLane")String roadLane);
     
@@ -74,4 +74,6 @@ public interface StdMapper {
     List<ResidenceBoundary> selectResiBoundaryById(@Param("roadLan")String roadLan);
 
     OfBuilding selectBuilding(@Param("roadLan")String roadLan, @Param("buildingNo")String buildingNo);
+
+    String getFacilityScore(@Param("residenceId")Integer residenceId, @Param("categoryName")String categoryName);
 }

@@ -245,68 +245,29 @@ public class StdService {
             lon = 121.4751453;
             lat = 31.26517581;
         }
-        List<PoiDetail> poiList = new ArrayList<>();
-        if (null == categoryName || "".equals(categoryName)) {
-//            // 教育配套集合
-//            List<PoiDetail> educationList = mapper.getResidenceEduPoi(lon, lat, r);
-//            map.put("educationList", educationList);
-//            // 交通配套集合
-//            List<PoiDetail> trafficList = mapper.getTrafficList(lon, lat, r);
-//            map.put("trafficList", trafficList);
-//            // 医疗配套集合
-//            List<PoiDetail> medicalList = mapper.getMedicalList(lon, lat, r);
-//            map.put("medicalList", medicalList);
-//            // 商业设施配套集合
-//            List<PoiDetail> shoppingList = mapper.getShoppingList(lon, lat, r);
-//            map.put("shoppingList", shoppingList);
-//            // 生活服务配套集合
-//            List<PoiDetail> lifeServiceList = mapper.getLivingList(lon, lat, r);
-//            map.put("lifeServiceList", lifeServiceList);
-        } else {
-            // 查指定类目
-            if (categoryName.equals("交通")) {
-                // 交通配套集合
-//                List<PoiDetail> trafficList = mapper.getTrafficList(lon, lat, r);
-                PoiDetail poiDetail = new PoiDetail();
-                poiDetail.setBaiduLon(121.499379);
-                poiDetail.setBaiduLat(31.315274);
-                poiDetail.setPoiKind("交通");
-                poiDetail.setCategoryName("高速服务区");
-                poiDetail.setPoiName("服务区");
-                poiDetail.setPoiAddress("江东路861弄1号");
-                poiDetail.setDistance(Double.valueOf(300));
+        List<PoiDetail> poiList = mapper.gePoiDetailList(lon, lat, r,categoryName);
+        if(poiList == null){
+            PoiDetail poiDetail = new PoiDetail();
+            poiDetail.setBaiduLat(31.378998);
+            poiDetail.setBaiduLon(121.544417);
+            poiDetail.setPoiKind("交通");
+            poiDetail.setCategoryName("高速服务区");
+            poiDetail.setPoiName("服务区");
+            poiDetail.setPoiAddress("江东路861弄1号");
+            poiDetail.setDistance(Double.valueOf(300));
 
-                PoiDetail poiDetail1 = new PoiDetail();
-                poiDetail1.setBaiduLon(121.50109);
-                poiDetail1.setBaiduLat(31.314869);
-                poiDetail1.setPoiKind("交通");
-                poiDetail1.setCategoryName("车站");
-                poiDetail1.setPoiName("泗泾汽车站");
-                poiDetail1.setPoiAddress("泗宝路");
-                poiDetail1.setDistance(Double.valueOf(200));
-                poiList.add(poiDetail);
-                poiList.add(poiDetail1);
-            }
-//            if (categoryName.equals("教育")) {
-//                List<PoiDetail> educationList = mapper.getResidenceEduPoi(lon, lat, r);
-//                map.put("educationList", educationList);
-//            }
-//            if (categoryName.equals("医疗")) {
-//                List<PoiDetail> medicalList = mapper.getMedicalList(lon, lat, r);
-//                map.put("medicalList", medicalList);
-//            }
-//            if (categoryName.equals("商场")) {
-//                // 商业设施配套集合
-//                List<PoiDetail> shoppingList = mapper.getShoppingList(lon, lat, r);
-//                map.put("shoppingList", shoppingList);
-//            }
-//            if (categoryName.equals("生活")) {
-//                List<PoiDetail> lifeServiceList = mapper.getLivingList(lon, lat, r);
-//                map.put("lifeServiceList", lifeServiceList);
-//            }
+            PoiDetail poiDetail1 = new PoiDetail();
+            poiDetail1.setBaiduLat(31.122117);
+            poiDetail1.setBaiduLon(121.265604);
+            poiDetail1.setPoiKind("交通");
+            poiDetail1.setCategoryName("车站");
+            poiDetail1.setPoiName("泗泾汽车站");
+            poiDetail1.setPoiAddress("泗宝路");
+            poiDetail1.setDistance(Double.valueOf(200));
+            poiList.add(poiDetail);
+            poiList.add(poiDetail1);
         }
         return poiList;
-
     }
     
     public List<PriceTrend> getResidenceTradeAvgPriceList(Integer residenceId) {
@@ -319,5 +280,27 @@ public class StdService {
             return null;
         }
         return priceTrends;
+    }
+
+    public Integer getScore(String roadLane, String categoryName) {
+        ResidenceInfo residenceDetail = mapper.getResidenceLonAndLat(roadLane);
+        Integer residenceId = residenceDetail.getResidenceId();
+        String facilityScore = mapper.getFacilityScore(residenceId, categoryName);
+        if (facilityScore == null){
+            if("交通".equals(categoryName)){
+                return 3;
+            } else if("教育".equals(categoryName)){
+                return 2;
+            } else if("购物".equals(categoryName)){
+                return 4;
+            } else if("医疗".equals(categoryName)) {
+                return 1;
+            } else {
+                return 5;
+            }
+        }
+        double result = (double)Integer.valueOf(facilityScore)/20;
+        Integer score = (int)Math.rint(result);
+        return score;
     }
 }

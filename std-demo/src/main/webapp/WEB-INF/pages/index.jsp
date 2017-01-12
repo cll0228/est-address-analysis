@@ -715,39 +715,39 @@
     //加載交通信息
     function initBus(data) {
         $.each(data, function (i, item) {
-           shouBusInfo(i,item);
+            var bus_lat = item.baiduLat;
+            var bus_lon = item.baiduLon;
+            var bus_point_i = new BMap.Point(bus_lon, bus_lat);
+            var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
+            var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
+
+            //点击事件，显示文本内容
+            var opts_i = {
+                position: bus_point_i,    // 指定文本标注所在的地理位置
+                title: item.poiName,
+                offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
+            }
+            var infoWindow_i = new BMap.InfoWindow("地址：" + item.poiAddress, opts_i);  // 创建信息窗口对象
+            //标签
+            var label_i = new BMap.Label(i+1,{offset:new BMap.Size(7,3)});
+            label_i.setStyle({
+                color: "white",
+                fontSize: "10px",
+                backgroundColor: "0.05",
+                border: "0",
+                fontFamily: "微软雅黑"
+            });
+            marker2_i.setLabel(label_i);
+            //圖標點擊事件
+            marker2_i.addEventListener("click", function () {
+                map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
+            });
+            map.addOverlay(marker2_i);
         })
     }
 
-    function shouBusInfo(i,item){
-        var bus_lat = item.baiduLat;
-        var bus_lon = item.baiduLon;
-        var bus_point_i = new BMap.Point(bus_lon, bus_lat);
-        var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
-        var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
-
-        //点击事件，显示文本内容
-        var opts_i = {
-            position: bus_point_i,    // 指定文本标注所在的地理位置
-            title: item.poiName,
-            offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
-        }
-        var infoWindow_i = new BMap.InfoWindow("地址：" + item.poiAddress, opts_i);  // 创建信息窗口对象
-        //标签
-        var label_i = new BMap.Label(i+1,{offset:new BMap.Size(7,3)});
-        label_i.setStyle({
-            color: "white",
-            fontSize: "10px",
-            backgroundColor: "0.05",
-            border: "0",
-            fontFamily: "微软雅黑"
-        });
-        marker2_i.setLabel(label_i);
-        //圖標點擊事件
-        marker2_i.addEventListener("click", function () {
-            map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
-        });
-        map.addOverlay(marker2_i);
-    }
+       function poi_map(item){
+           alert(item);
+       }
 </script>
 </html>

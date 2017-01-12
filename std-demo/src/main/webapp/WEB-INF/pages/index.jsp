@@ -41,7 +41,7 @@
                             <h3>地址标准化</h3>
                         </div> -->
         <div class="input-group input-group-lg">
-            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="仙霞路1001弄8号">
+            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="三门路358弄12号201室">
             <span class="input-group-btn">
             <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>
@@ -111,19 +111,19 @@
                         </div>
                         <div class="col-md-4">
                             <ul class="nav nav-tabs" id="map-keyword">
-                                <li class="active">
+                                <li id="one1" class="active">
                                     <a href="#tab_1" onclick="setTab('one',1)" data-toggle="tab">交通</a>
                                 </li>
-                                <li>
+                                <li id="one2">
                                     <a href="#tab_2" onclick="setTab('one',2)" data-toggle="tab">教育</a>
                                 </li>
-                                <li>
+                                <li id="one3">
                                     <a href="#tab_3" onclick="setTab('one',3)" data-toggle="tab">医疗</a>
                                 </li>
-                                <li>
+                                <li id="one4">
                                     <a href="#tab_4" onclick="setTab('one',4)" data-toggle="tab">购物</a>
                                 </li>
-                                <li>
+                                <li id="one5">
                                     <a href="#tab_5" onclick="setTab('one',5)" data-toggle="tab">生活</a>
                                 </li>
                             </ul>
@@ -146,12 +146,12 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="clearfix">
-                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 0.5km </a>
-                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 1.0km </a>
-                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 1.5km </a>
-                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 2.0km </a>
-                                <a href="javascript:void(0);" onclick="updateMapZoom($(this).html())" class="btn default"> 2.5km </a>
+                            <div class="clearfix" id="radius">
+                                <a href="javascript:;" class="btn green-meadow" onclick="setTab('two',1)" class="btn default" id="two1" value="0.5km"> 0.5km </a>
+                                <a href="javascript:;" id="two2" onclick="setTab('two',2)" class="btn default" value="1.0km"> 1.0km </a>
+                                <a href="javascript:;" id="two3" onclick="setTab('two',3)" class="btn default" value="1.5km"> 1.5km </a>
+                                <a href="javascript:;" id="two4" onclick="setTab('two',4)" class="btn default" value="2.0km"> 2.0km </a>
+                                <a href="javascript:;" id="two5" onclick="setTab('two',5)" class="btn default" value="2.5km"> 2.5km </a>
                             </div>
                             <div class="tab-content">
                                 <%--<div class="portlet">
@@ -324,22 +324,9 @@
         scale: 18   //比例尺，默认20m
     };
 
-
-    function setTab(name,cursel){
-        alert("11111");
-    }
-
     function analysis() {
         map.clearOverlays();
         var address = $("#in").val();
-        var oStar = document.getElementById("star");
-        var aLi = oStar.getElementsByTagName("li");
-        var i = iScore = iStar = 0;
-        // poi距离
-//        var poiD = document.getElementsByClassName("")
-//        var poiD = document.getElementById("tab_1");
-//        var distance = poiD.getElementsByTagName("div");
-//        distance.append("111111");
         if (address == "") {
             bootbox.alert("地址不能为空，请重新输入");
         } else {
@@ -369,21 +356,6 @@
                         $("#bm" + i).html(data[i].bm);
                     }
                     roadLan = data[0].ln;
-                    // 评分
-                    iScore = 3;
-                    for (i = 0; i < aLi.length; i++)
-                        aLi[i].className = i < iScore ? "on" : "";
-                    // poi距离
-                    $("#tb1").empty();
-                    for(var i = 0; i<data[0].poiList.length; i++){
-                        $("#poiKind").html(data[0].poiList[i].poiKind);
-                        var poiHtml = "<tr><td id='poiName"+i+"'></td><td id='distance"+i+"'></td></tr>"
-//                        $("div#tab_1 div.row").append(poiHtml);
-                        $("#tb1").append(poiHtml);
-                        $("#poiName" + i).html(data[0].poiList[i].poiName+"米");
-                        $("#distance" + i).html(data[0].poiList[i].distance+"");
-                    }
-
                     if (data[0].f == "1") {
 
                         $("#ts").html("地址标准化成功").css("color", "green");
@@ -462,6 +434,8 @@
         
         // 使用刚指定的配置项和数据显示图表。
         radar.setOption(option2);
+                        // poi展示
+                        poiInfo(data);
         
                     } else if (data[0].f == "2") {
                         $("#ts").html("区县不对应").css("color", "red");
@@ -491,6 +465,81 @@
                 }
             });
         }
+    }
+
+
+    function poiInfo(data){
+        var oStar = document.getElementById("star");
+        var aLi = oStar.getElementsByTagName("li");
+        var i = iScore = iStar = 0;
+        // 评分
+        iScore = 3;
+        for (i = 0; i < aLi.length; i++)
+            aLi[i].className = i < iScore ? "on" : "";
+        // poi距离
+        $("#tb1").empty();
+        for(var i = 0; i<data[0].poiList.length; i++){
+            $("#poiKind").html(data[0].poiList[i].poiKind);
+            var poiHtml = "<tr><td id='poiName"+i+"'></td><td id='distance"+i+"'></td></tr>"
+//                        $("div#tab_1 div.row").append(poiHtml);
+            $("#tb1").append(poiHtml);
+            $("#poiName" + i).html(data[0].poiList[i].poiName+"米");
+            $("#distance" + i).html(data[0].poiList[i].distance+"");
+        }
+    }
+
+    function setTab(name,cursel){
+        if(name == 'two'){
+            for(var i=1; i<=5; i++){
+                var value = document.getElementById("two"+i).className;
+                if(value=='btn green-meadow'){
+                    document.getElementById("two"+i).className = "btn default";
+                }
+            }
+            document.getElementById("two"+cursel).className="btn green-meadow";
+            var banjing = $("#two"+cursel).attr("value");
+
+            getPois(roadLan,poikind,banjing);
+        } else if(name == 'one'){
+
+        }
+
+
+        var r;
+        getPois(roadLan, r);
+    }
+
+    function getPois(roadLan, r) {
+        array = new Array;
+        $.ajax({
+            url: '${ctx}/poiDetail',
+            type: "POST",
+            data:{"roadLan":roadLan,"r":r},
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    map_center_lon = item.baiduLon;
+                    map_center_lan = item.baiduLat;
+                    array[i] = new BMap.Point(item.baiduLon, item.baiduLat);
+                });
+                //添加边界
+                var  polygon = new BMap.Polygon(array, {
+                    strokeColor: "red",
+                    strokeWeight: 2,
+                    strokeOpacity: 0.5,
+                    fillColor: "none"
+                });
+                point = new BMap.Point(map_center_lon, map_center_lan);
+                map.addOverlay(polygon);
+                if($("#h0").html()==''){
+                    map.centerAndZoom(point, config_map.scale);
+                }
+
+                //加載樓棟
+                if($("#h0").html() != '' ){
+                    initBuilding(roadLan,$("#h0").html());
+                }
+            }
+        })
     }
 
     function initMap() {

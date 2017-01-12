@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.address.mapper.StdMapper;
+import com.address.model.AssessParam;
+import com.address.model.AssessResult;
 import com.address.model.FacilityScore;
 import com.address.model.HouseDeal;
 import com.address.model.OfHouse;
@@ -26,6 +28,7 @@ import com.address.model.PriceTrend;
 import com.address.model.ResidenceDetail;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
+import com.address.service.IAssService;
 import com.address.service.StdService;
 import com.address.util.AddressExtractor;
 
@@ -40,6 +43,8 @@ public class StdController {
     private StdService stdService;
     @Autowired
     private StdMapper stdMapper;
+    @Autowired
+	private IAssService assService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StdController.class);
 
@@ -131,6 +136,46 @@ public class StdController {
                 		facility[4] = facilityScore.getLivingScore().intValue();
                 		result.put("c", facility);
                     }
+                	
+                	//估价
+                	Integer residenceId = 123;
+            		Integer roomNum = 123;
+            		Integer hallNum = 123;
+            		Integer toiletNum = 123;
+            		String buildingNo = "123";
+            		String roomNo = "123";
+            		Double propertyArea = 123D;
+            		Integer placeFloor = 123;
+            		Integer totalFloor = 123;
+            		Integer toward = 123;
+            		Integer landScape = 123;
+            		Integer nearStreet = 123;
+            		Integer planeType = 123;
+            		Integer propertyTypeId = 123;
+            		
+            		AssessParam assessParam = new AssessParam();
+            		assessParam.setResidenceId(residenceId);
+            		assessParam.setRoomNum(roomNum);
+            		assessParam.setHallNum(hallNum);
+            		assessParam.setToiletNum(toiletNum);
+            		assessParam.setBuildingNo(buildingNo);
+            		assessParam.setRoom(roomNo);
+            		assessParam.setPropertyArea(propertyArea);
+            		assessParam.setPropertyStorey(totalFloor);
+            		assessParam.setPropertyType(propertyTypeId);
+            		assessParam.setFloor(placeFloor);
+            		assessParam.setToward(toward);
+            		assessParam.setLandScape(landScape);
+            		assessParam.setNearStreet(nearStreet);
+            		assessParam.setPlaneType(planeType);
+
+            		AssessResult dto = assService.assHouse(assessParam);
+            		Double assTotalPrice = dto.getTotalPrice();
+            		Integer assUnitPrice = dto.getUnitPrice();
+            		if(assTotalPrice != null && assUnitPrice != null){
+            			result.put("assTotalPrice",assTotalPrice);
+            			result.put("assUnitPrice",assUnitPrice);
+            		}
                 }
                 resultList.add(result);
             }

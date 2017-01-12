@@ -18,7 +18,7 @@
             float: left;
             width: 24px;
             cursor: pointer;
-            text-indent: -99999px;
+            text-indent: -9999px;
             background: url(${ctx}/static/img/star.png) no-repeat;
         }
 
@@ -55,7 +55,7 @@
                             <h3>地址标准化</h3>
                         </div> -->
         <div class="input-group input-group-lg">
-            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="三门路358弄12号201室">
+            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="三门路358弄18号">
             <span class="input-group-btn">
             <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>
@@ -173,7 +173,10 @@
         </div>
         <!-- END PORTLET-->
     </div>
-
+    
+    
+    
+    
     <div class="row" id="homeDetail" style="display:none">
         <div class="col-md-12">
             <!-- BEGIN PORTLET-->
@@ -228,7 +231,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            </br>
                             <div class="clearfix" id="radius">
                                 <a href="javascript:;" class="btn green-meadow" onclick="setTab('two',1, 500)" class="btn default" id="two1" value="500"> 0.5km </a>
                                 <a href="javascript:;" id="two2" onclick="setTab('two',2, 1000)" class="btn default" value="1000"> 1.0km </a>
@@ -281,7 +283,7 @@
                                     </tr>
                                     <tr>
                                         <th> 竣工日期 </th>
-                                        <td id="accomplishDate"></td>
+                                        <td id="accomplishDate2"></td>
                                     </tr>
                                     <tr>
                                         <th> 容积率 </th>
@@ -384,7 +386,7 @@
                         $("#residenceAddr").html(data[0].detail.residenceAddr);
                         $("#propertyType").html(data[0].detail.propertyType);
                         $("#fourTo").html(data[0].detail.fourTo);
-                        $("#accomplishDate").html(data[0].detail.accomplishDate);
+                        $("#accomplishDate").html(data[0].accomplishDate);
                         $("#vp").html(data[0].detail.vp);
                         $("#gp").html(data[0].detail.gp);
                         $("#totalArea").html(data[0].detail.totalArea);
@@ -393,6 +395,7 @@
                         $("#houseType").html(data[0].detail.houseType);
                         $("#homeDetail").css('display', 'block');
                         initResidenceBoundary($("#ln0").html());//加載小區邊界
+                        initBus(data[0].poiList);
                         // 初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
 
@@ -487,6 +490,7 @@
         }
     }
 
+
     function poiInfo(data){
         var oStar = document.getElementById("star");
         var aLi = oStar.getElementsByTagName("li");
@@ -541,6 +545,23 @@
 
     function setTab(name,cursel,r){
         var categoryName;
+    function setTab(name,cursel){
+     var center = map.getCenter();
+        if(cursel == 1){
+            map.centerAndZoom(center,18);
+        }
+        if(cursel == 2){
+            map.centerAndZoom(center,17);
+        }
+        if(cursel == 3){
+            map.centerAndZoom(center,16);
+        }
+        if(cursel == 4){
+            map.centerAndZoom(center,15);
+        }
+        if(cursel == 5){
+            map.centerAndZoom(center,14);
+        }
         if(name == 'two'){
             for(var i=1; i<=5; i++){
                 var value = document.getElementById("two"+i).className;
@@ -608,6 +629,7 @@
         var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
         map.addControl(top_left_control);
         map.addControl(top_left_navigation);
+//        map.enableScrollWheelZoom(true);
     }
 
     var array ;
@@ -662,7 +684,24 @@
                 buildingLat = data.baiduLat;
                 buildingPoint = new BMap.Point(buildingLon, buildingLat);
                 map.centerAndZoom(buildingPoint,config_map.scale);
+                //圖標
+                var myIcon = new BMap.Icon("${ctx}/static/img/point-building.png", new BMap.Size(30,70));
+                var marker2 = new BMap.Marker(buildingPoint,{icon:myIcon});  // 创建标注
+                map.addOverlay(marker2);
                 //文本标注
+                var opts = {
+                    position: buildingPoint,    // 指定文本标注所在的地理位置
+                    title:$("#ln0").html(),
+                    offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
+                }
+                var infoWindow = new BMap.InfoWindow(data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount, opts);  // 创建信息窗口对象
+//                map.openInfoWindow(infoWindow,buildingPoint); //开启信息窗口
+                //圖標點擊事件
+                marker2.addEventListener("click",function(){
+                    map.openInfoWindow(infoWindow,buildingPoint); //开启信息窗口
+
+                });
+                /*
                 function ComplexCustomOverlay(point, text){
                     this._point = point;
                     this._text = text;
@@ -708,31 +747,48 @@
                 }
                 var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount;
                 var myCompOverlay = new ComplexCustomOverlay(buildingPoint, txt);
-                map.addOverlay(myCompOverlay);
+                map.addOverlay(myCompOverlay);*/
 
             }
         })
     }
 
-    function updateMapZoom(distance){
-        distance = distance.trim();
-        var center = map.getCenter();
-        if(distance == "0.5km"){
-            map.centerAndZoom(center,18);
-        }
-        if(distance == "1.0km"){
-            map.centerAndZoom(center,17);
-        }
-        if(distance == "1.5km"){
-            map.centerAndZoom(center,16);
-        }
-        if(distance == "2.0km"){
-            map.centerAndZoom(center,15);
-        }
-        if(distance == "2.5km"){
-            map.centerAndZoom(center,14);
-        }
+    //加載交通信息
+    function initBus(data) {
+        $.each(data, function (i, item) {
+            var bus_lat = item.baiduLat;
+            var bus_lon = item.baiduLon;
+            var bus_point_i = new BMap.Point(bus_lon, bus_lat);
+            var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
+            var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
 
+            //点击事件，显示文本内容
+            var opts_i = {
+                position: bus_point_i,    // 指定文本标注所在的地理位置
+                title: item.poiName,
+                offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
+            }
+            var infoWindow_i = new BMap.InfoWindow("地址：" + item.poiAddress, opts_i);  // 创建信息窗口对象
+            //标签
+            var label_i = new BMap.Label(i+1,{offset:new BMap.Size(7,3)});
+            label_i.setStyle({
+                color: "white",
+                fontSize: "10px",
+                backgroundColor: "0.05",
+                border: "0",
+                fontFamily: "微软雅黑"
+            });
+            marker2_i.setLabel(label_i);
+            //圖標點擊事件
+            marker2_i.addEventListener("click", function () {
+                map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
+            });
+            map.addOverlay(marker2_i);
+        })
     }
+
+       function poi_map(item){
+           alert(item);
+       }
 </script>
 </html>

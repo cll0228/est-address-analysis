@@ -267,9 +267,7 @@ public class StdService {
             poiList.add(poiDetail);
             poiList.add(poiDetail1);
         }
-
         return poiList;
-
     }
     
     public List<PriceTrend> getResidenceTradeAvgPriceList(Integer residenceId) {

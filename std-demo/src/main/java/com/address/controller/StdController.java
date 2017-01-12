@@ -1,12 +1,13 @@
 package com.address.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.address.model.PoiDetail;
-import com.address.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.address.mapper.StdMapper;
+import com.address.model.FacilityScore;
 import com.address.model.HouseDeal;
+import com.address.model.OfHouse;
+import com.address.model.PoiDetail;
 import com.address.model.PriceTrend;
 import com.address.model.ResidenceDetail;
 import com.address.model.ReturnParam;
@@ -70,9 +74,10 @@ public class StdController {
                 // 配套打分
                 Integer score = stdService.getScore(returnParam.getRoadLane(), "交通");
                 result.put("score",score);
+                ResidenceDetail detail = null;
                 if(flag==0&&returnParam.getFlag().equals("1")) {
                 	flag++;
-                	ResidenceDetail detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
+                	detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
                 	result.put("detail", detail);
                 	List<PriceTrend> list = stdService.getResidenceTradeAvgPriceList(55);//detail.getId()
                 	int[] price = new int[list.size()];
@@ -89,10 +94,34 @@ public class StdController {
                 if(ofHouse!=null) {
                 	if(null!=ofHouse.getArea()) {
                 		result.put("d", "true");
+                		result.put("area", ofHouse.getArea());
+                		result.put("towards", ofHouse.getTowards());
+                		if(detail!=null) {
+                			if(null!=detail.getAccomplishDate()) {
+                				SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
+                				String d = format.format(detail.getAccomplishDate());
+                				result.put("accomplishDate", d);
+                			}
+                			
+                		}
+                		
+                		if(ofHouse.getArea() < 60){
+                			result.put("roomType", "一室");
+                        }
+                        if(ofHouse.getArea() >= 60 && ofHouse.getArea() <90){
+                            result.put("roomType", "二室");
+                        }
+                        if(ofHouse.getArea() >= 90 && ofHouse.getArea() <140){
+                        	result.put("roomType", "三室");
+                        }
+                        if(ofHouse.getArea() >= 140){
+                        	result.put("roomType", "多室");
+                        }
+                		
                 	} else {
                 		result.put("d", "false");
                 	}
-                	FacilityScore facilityScore = stdMapper.getResidenceFacilityScore(1042);//ofHouse.getResidenceId()
+                	FacilityScore facilityScore = stdMapper.getResidenceFacilityScore(ofHouse.getResidenceId());
                 	if (facilityScore != null) {
                 		int[] facility = new int[5];
                 		facility[0] = facilityScore.getTransportScore().intValue();

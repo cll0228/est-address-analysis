@@ -113,6 +113,41 @@
           SELECT * FROM sts.no_mapping_std_addr_deal_demo;
     </select>
     
+    <select id="selectHouseByStdAddrId" resultType="com.address.model.OfHouse">
+          SELECT
+				a.id,
+				a.room_no roomNo,
+				a.place_floor placeFloor,
+				a.area,
+				a.room_num roomNum,
+				a.hall_num hallNum,
+				a.plane_type planeType,
+				a.property_type propertyType,
+				a.towards,
+				a.residence_id residenceId
+			FROM
+				ocn_address.of_house a
+			LEFT JOIN
+				ocn_address.of_building b on a.building_id = b.id
+			WHERE
+				a.std_addr_id = #{stdAddrId} AND a.room_no = #{roomNo} and b.building_no = #{buildingNo}
+    </select>
+    
+    <select id="getResidenceFacilityScore" resultType="com.address.model.FacilityScore">
+		select
+			transport_score as transportScore,
+			education_score as educationScore,
+			medical_score as medicalScore,
+			shopping_score as shoppingScore,
+			living_score as livingScore,
+			leisure_score as leisureScore,
+			health_score as healthScore,
+			park_score as parkScore,
+			restaurant_score as restaurantScore
+		from df_estate_db_v2.sh_residence_score
+		where residence_id = ${residenceId}
+	</select>
+    
     <select id="selectHouses" resultType="com.address.model.HouseDeal">
           SELECT address,id FROM mortgage_address.houses_unique;
     </select>

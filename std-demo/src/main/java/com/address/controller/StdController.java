@@ -82,6 +82,25 @@ public class StdController {
                 	result.put("a", price);
                 	result.put("b", month);
                 }
+                
+                OfHouse ofHouse = stdMapper.selectHouseByStdAddrId(returnParam.getId(),returnParam.getHouseNo()==null?returnParam.getHouseNo():returnParam.getHouseNo().replace("室", ""),returnParam.getBuilding());
+                if(ofHouse!=null) {
+                	if(null!=ofHouse.getArea()) {
+                		result.put("d", "true");
+                	} else {
+                		result.put("d", "false");
+                	}
+                	FacilityScore facilityScore = stdMapper.getResidenceFacilityScore(1042);//ofHouse.getResidenceId()
+                	if (facilityScore != null) {
+                		int[] facility = new int[5];
+                		facility[0] = facilityScore.getTransportScore().intValue();
+                		facility[1] = facilityScore.getMedicalScore().intValue();
+                		facility[2] = facilityScore.getShoppingScore().intValue();
+                		facility[3] = facilityScore.getEducationScore().intValue();
+                		facility[4] = facilityScore.getLivingScore().intValue();
+                		result.put("c", facility);
+                    }
+                }
                 resultList.add(result);
             }
         }

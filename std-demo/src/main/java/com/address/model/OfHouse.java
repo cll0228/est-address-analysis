@@ -26,6 +26,8 @@ public class OfHouse {
     private String towards;
     
     private Integer residenceId;
+    
+    private Integer totalFloor;
 
 	public Integer getId() {
 		return id;
@@ -115,12 +117,21 @@ public class OfHouse {
 		this.residenceId = residenceId;
 	}
 
+	public Integer getTotalFloor() {
+		return totalFloor;
+	}
+
+	public void setTotalFloor(Integer totalFloor) {
+		this.totalFloor = totalFloor;
+	}
+
 	@Override
 	public String toString() {
 		return "OfHouse [id=" + id + ", roomNo=" + roomNo + ", placeFloor="
 				+ placeFloor + ", area=" + area + ", roomNum=" + roomNum
 				+ ", hallNum=" + hallNum + ", planeType=" + planeType
 				+ ", propertyType=" + propertyType + ", stdAddrId=" + stdAddrId
-				+ ", towards=" + towards + ", residenceId=" + residenceId + "]";
+				+ ", towards=" + towards + ", residenceId=" + residenceId
+				+ ", totalFloor=" + totalFloor + "]";
 	}
 }

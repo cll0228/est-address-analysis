@@ -269,7 +269,7 @@
                                     </tr>
                                     <tr>
                                         <th> 竣工日期 </th>
-                                        <td id="accomplishDate"></td>
+                                        <td id="accomplishDate2"></td>
                                     </tr>
                                     <tr>
                                         <th> 容积率 </th>
@@ -372,7 +372,7 @@
                         $("#residenceAddr").html(data[0].detail.residenceAddr);
                         $("#propertyType").html(data[0].detail.propertyType);
                         $("#fourTo").html(data[0].detail.fourTo);
-                        $("#accomplishDate").html(data[0].detail.accomplishDate);
+                        $("#accomplishDate").html(data[0].accomplishDate);
                         $("#vp").html(data[0].detail.vp);
                         $("#gp").html(data[0].detail.gp);
                         $("#totalArea").html(data[0].detail.totalArea);
@@ -407,6 +407,10 @@
         
         if(data[0].d=="true") {
         	$("#radarPrice").css('display', 'block');
+        	$("#area").html(data[0].area);
+        	$("#towards").html(data[0].towards);
+        	$("#accomplishDate2").html(data[0].accomplishDate);
+        	$("#roomType").html(data[0].roomType);
         } else {
         	$("#radarPrice").css('display', 'none');
         }

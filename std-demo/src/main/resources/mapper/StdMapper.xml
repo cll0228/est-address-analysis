@@ -124,7 +124,8 @@
 				a.plane_type planeType,
 				a.property_type propertyType,
 				a.towards,
-				a.residence_id residenceId
+				a.residence_id residenceId,
+				b.total_floor totalFloor
 			FROM
 				ocn_address.of_house a
 			LEFT JOIN

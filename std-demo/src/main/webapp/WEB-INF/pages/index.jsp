@@ -191,7 +191,7 @@
                 <div class="portlet-body">
 
                     <div class="row">
-                        <div class="col-md-5" id="map" style="height: 300px;size: 350px">
+                        <div class="col-md-5" id="map" style="height: 450px;size: 350px;border: 10px;" >
                             这里显示地图
                         </div>
                         <div class="col-md-4">
@@ -544,6 +544,7 @@
     }
 
     function setTab(name,cursel,r){
+        if(r == null || r == '') return;
         var categoryName;
         var center = map.getCenter();
         if(cursel == 1){
@@ -598,11 +599,10 @@
             data:{"roadLane":roadLan,"r":r,"categoryName":categoryName},
             success: function (data) {
                 poiInfo(data);
-//                $.each(data, function (i, item) {
-////                    map_center_lon = item.baiduLon;
-////                    map_center_lan = item.baiduLat;
-////                    array[i] = new BMap.Point(item.baiduLon, item.baiduLat);
-//                });
+                $.each(data, function (i, item) {
+                    var poiList = item.poiList;
+                        initBus(poiList);
+                });
             }
         })
     }

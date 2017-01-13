@@ -178,7 +178,7 @@
     
     <select id="selectResidenceMetro" resultType="com.address.model.ResidenceMetro">
 		select id,of_residence_id ofResidenceId,metro_station_name metroStationName,metro_line_name metroLineName,metro_distance metroDistance
-from of_residence_metro where of_residence_id = =#{ofResidenceId};
+from of_residence_metro where of_residence_id=#{ofResidenceId};
     </select>
 
     <update id="updateResult" parameterType="com.address.model.HouseDeal">

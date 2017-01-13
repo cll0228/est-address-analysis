@@ -68,6 +68,8 @@ public interface StdMapper {
     
     FacilityScore getResidenceFacilityScore(@Param("residenceId")Integer residenceId);
     
+    ResidenceMetro selectResidenceMetro(@Param("ofResidenceId")Integer ofResidenceId);
+    
     List<PriceTrend> getResidenceTradeAvgPriceList(@Param("residenceId")Integer residenceId,
             @Param("startMonth")String startMonth, @Param("endMonth")String endMonth);
 

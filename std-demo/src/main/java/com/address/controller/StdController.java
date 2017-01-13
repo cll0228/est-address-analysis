@@ -24,6 +24,7 @@ import com.address.model.OfHouse;
 import com.address.model.PoiDetail;
 import com.address.model.PriceTrend;
 import com.address.model.ResidenceDetail;
+import com.address.model.ResidenceMetro;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
 import com.lezhi.sh.ass.house.model.AssessParam;
@@ -137,37 +138,31 @@ public class StdController {
                 		result.put("c", facility);
                     }
                 	
+                	//地铁
+                	ResidenceMetro metro = stdMapper.selectResidenceMetro(ofHouse.getResidenceId());
+                	if (metro != null) {
+                		String metroDistance = "距离"+metro.getMetroLineName()+metro.getMetroStationName()+metro.getMetroDistance()+"米";
+                		result.put("metroDistance", metroDistance);
+                    }
+                	
                 	//估价
-                	Integer residenceId = 123;
-            		Integer roomNum = 123;
-            		Integer hallNum = 123;
-            		Integer toiletNum = 123;
-            		String buildingNo = "123";
-            		String roomNo = "123";
-            		Double propertyArea = 123D;
-            		Integer placeFloor = 123;
-            		Integer totalFloor = 123;
-            		Integer toward = 123;
-            		Integer landScape = 123;
-            		Integer nearStreet = 123;
-            		Integer planeType = 123;
-            		Integer propertyTypeId = 123;
-            		
             		AssessParam assessParam = new AssessParam();
-            		assessParam.setResidenceId(residenceId);
-            		assessParam.setRoomNum(roomNum);
-            		assessParam.setHallNum(hallNum);
-            		assessParam.setToiletNum(toiletNum);
-            		assessParam.setBuildingNo(buildingNo);
-            		assessParam.setRoom(roomNo);
-            		assessParam.setPropertyArea(propertyArea);
-            		assessParam.setPropertyStorey(totalFloor);
-            		assessParam.setPropertyType(propertyTypeId);
-            		assessParam.setFloor(placeFloor);
-            		assessParam.setToward(toward);
-            		assessParam.setLandScape(landScape);
-            		assessParam.setNearStreet(nearStreet);
-            		assessParam.setPlaneType(planeType);
+            		assessParam.setResidenceId(ofHouse.getDelResId());
+            		assessParam.setRoomNum(ofHouse.getRoomNum());
+            		assessParam.setHallNum(ofHouse.getHallNum());
+            		//assessParam.setToiletNum(toiletNum);
+            		assessParam.setBuildingNo(returnParam.getBuilding().replace("号", ""));
+            		assessParam.setRoom(ofHouse.getRoomNo());
+            		assessParam.setPropertyArea(ofHouse.getArea());
+            		//assessParam.setPropertyStorey(totalFloor);
+            		assessParam.setPropertyType(ofHouse.getPropertyType());
+            		assessParam.setFloor(ofHouse.getPlaceFloor());
+            		if(null!=ofHouse.getTowards()) {
+            			assessParam.setToward(Integer.parseInt(ofHouse.getTowards()));
+            		}
+            		//assessParam.setLandScape(landScape);
+            		//assessParam.setNearStreet(nearStreet);
+            		assessParam.setPlaneType(ofHouse.getPlaneType());
 
             		AssessResult dto = assService.assHouse(assessParam);
             		Double assTotalPrice = dto.getTotalPrice();

@@ -125,11 +125,14 @@
 				a.property_type propertyType,
 				a.towards,
 				a.residence_id residenceId,
-				b.total_floor totalFloor
+				b.total_floor totalFloor,
+				c.delete_lezhi_residence_id delResId
 			FROM
 				ocn_address.of_house a
 			LEFT JOIN
 				ocn_address.of_building b on a.building_id = b.id
+			LEFT JOIN
+				ocn_address.of_residence c on a.residence_id = c.id
 			WHERE
 				a.std_addr_id = #{stdAddrId} AND a.room_no = #{roomNo} and b.building_no = #{buildingNo}
     </select>
@@ -146,7 +149,7 @@
 			park_score as parkScore,
 			restaurant_score as restaurantScore
 		from ocn_address.of_residence_score
-		where of_residence_id = ${residenceId}
+		where of_residence_id = ${residenceId} and is_available = 1
 	</select>
     
     <select id="selectHouses" resultType="com.address.model.HouseDeal">
@@ -171,6 +174,11 @@
 		res.building_count buildingCount,res.house_count houseCount,GROUP_CONCAT(ht.type_name) houseType FROM ocn_address.of_residence res
 		left join ocn_address.sh_property_type pt on res.property_type_id = pt.PropertyTypeID 
 		left join ocn_address.house_type ht on ht.residence_id = res.id where res.residence_addr=#{roadLane} group by res.residence_name;
+    </select>
+    
+    <select id="selectResidenceMetro" resultType="com.address.model.ResidenceMetro">
+		select id,of_residence_id ofResidenceId,metro_station_name metroStationName,metro_line_name metroLineName,metro_distance metroDistance
+from of_residence_metro where of_residence_id=#{ofResidenceId};
     </select>
 
     <update id="updateResult" parameterType="com.address.model.HouseDeal">

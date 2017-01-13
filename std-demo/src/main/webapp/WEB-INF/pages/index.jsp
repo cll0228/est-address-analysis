@@ -149,11 +149,11 @@
                                     </tr>
                                     <tr>
                                         <th> 此套房屋市场单价 </th>
-                                        <td id="unitPrice"></td>
+                                        <td id="assUnitPrice"></td>
                                     </tr>
                                     <tr>
                                         <th> 此套房屋总价值 </th>
-                                        <td id="totalPrice"></td>
+                                        <td id="assTotalPrice"></td>
                                     </tr>
                                     <tr>
                                         <th> 竣工日期</th>
@@ -421,6 +421,13 @@
         
         if(data[0].d=="true") {
         	$("#radarPrice").css('display', 'block');
+        	$("#area").html(data[0].area+"m²");
+        	$("#towards").html(data[0].towards);
+        	$("#accomplishDate2").html(data[0].accomplishDate);
+        	$("#assTotalPrice").html(data[0].assTotalPrice+"万元");
+        	$("#assUnitPrice").html(data[0].assUnitPrice+"元/平");
+        	$("#metro").html(data[0].metroDistance);
+        	
         } else {
         	$("#radarPrice").css('display', 'none');
         }

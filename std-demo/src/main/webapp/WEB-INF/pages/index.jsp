@@ -55,7 +55,7 @@
                             <h3>地址标准化</h3>
                         </div> -->
         <div class="input-group input-group-lg">
-            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="三门路358弄18号">
+            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="惠民路1018弄9号801室">
             <span class="input-group-btn">
             <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>
@@ -399,7 +399,7 @@
                         // 初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
 
-        // 指定图表的配置项和数据
+        /* // 指定图表的配置项和数据
         var option = {
             title: {
                 text: '小区价格走势'
@@ -414,7 +414,50 @@
                 type: 'bar',
                 data: data[0].a
             }]
-        };
+        }; */
+
+		option = {
+		    title: {
+		        text: '二手房价格走势图',
+		        left: 'center'
+		    },
+		    tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b} : {c}'
+		    },
+		    legend: {
+		        left: 'left',
+		        data: ['二手房挂牌均价', '二手房交易均价']
+		    },
+		    xAxis: {
+		        type: 'category',
+		        name: 'x',
+		        splitLine: {show: false},
+		        data: data[0].b
+		    },
+		    grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '3%',
+		        containLabel: true
+		    },
+		    yAxis: {
+		        type: 'log',
+		        name: 'y'
+		    },
+		    series: [
+		        {
+		            name: '二手房挂牌均价',
+		            type: 'line',
+		            data: data[0].g
+		        },
+		        {
+		            name: '二手房交易均价',
+		            type: 'line',
+		            data: data[0].a
+		        }
+		    ]
+		};
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);

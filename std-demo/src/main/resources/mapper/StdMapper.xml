@@ -316,16 +316,29 @@
 			resultType="com.address.model.PriceTrend">
 		SELECT
 		month as month,
-		deal_avg_price_1st as dealAvgPrice1st,
-		deal_count_1st as dealCount1st,
-		deal_avg_price_2nd as dealAvgPrice2nd,
-		deal_count_2nd as dealCount2nd
+		deal_avg_price_2nd as dealAvgPrice2nd
 		FROM
-		`df_estate_db_v2`.`sh_deal_trend_residence`
+		`ocn_address`.`of_residence_deal_trend`
 		WHERE
 		month BETWEEN #{startMonth} AND #{endMonth}
 		<if test="residenceId != null">
-			AND residence_id = #{residenceId}
+			AND of_residence_id = #{residenceId}
+		</if>
+	</select>
+	
+	<select id="getHangTradeAvgPriceList"
+			resultType="com.address.model.HangTrend">
+		SELECT
+		month as month,
+		id,
+		hang_avg_price as hangAvgPrice,
+		of_residence_id as ofResidenceId
+		FROM
+		`ocn_address`.`of_residence_hang_trend`
+		WHERE
+		month BETWEEN #{startMonth} AND #{endMonth}
+		<if test="residenceId != null">
+			AND of_residence_id = #{residenceId}
 		</if>
 	</select>
 

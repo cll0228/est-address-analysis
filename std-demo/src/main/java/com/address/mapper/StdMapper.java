@@ -74,7 +74,10 @@ public interface StdMapper {
     
     List<PriceTrend> getResidenceTradeAvgPriceList(@Param("residenceId")Integer residenceId,
             @Param("startMonth")String startMonth, @Param("endMonth")String endMonth);
-
+    
+    List<HangTrend> getHangTradeAvgPriceList(@Param("residenceId")Integer residenceId,
+            @Param("startMonth")String startMonth, @Param("endMonth")String endMonth);
+    
     List<ResidenceBoundary> selectResiBoundaryById(@Param("roadLan")String roadLan);
 
     OfBuilding selectBuilding(@Param("roadLan")String roadLan, @Param("buildingNo")String buildingNo);

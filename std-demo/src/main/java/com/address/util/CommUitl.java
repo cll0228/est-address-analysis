@@ -10,8 +10,10 @@ import java.util.List;
  * Created by Cuill on 2016/8/18.
  */
 public class CommUitl {
-    static SimpleDateFormat SD = new SimpleDateFormat("yyyyMM");
+//    static SimpleDateFormat SD = new SimpleDateFormat("yyyyMM");
     
+	static SimpleDateFormat SD = new SimpleDateFormat("yyyy-MM-dd");
+	
     static SimpleDateFormat SD2 = new SimpleDateFormat("yyyy-MM");
 
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

@@ -9,11 +9,13 @@ import java.util.Map;
 
 import com.address.model.PoiDetail;
 import com.address.model.ResidenceInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.address.mapper.StdMapper;
+import com.address.model.HangTrend;
 import com.address.model.PriceTrend;
 import com.address.model.ReturnParam;
 import com.address.model.StdModel;
@@ -29,7 +31,7 @@ public class StdService {
     @Autowired
     private StdMapper mapper;
 
-    static SimpleDateFormat SD = new SimpleDateFormat("yyyyMM");
+    static SimpleDateFormat SD = new SimpleDateFormat("yyyy-MM-dd");
     
     public List<ReturnParam> analysis(String address) {
         address = address.replaceAll(" ", "");
@@ -280,6 +282,18 @@ public class StdService {
             return null;
         }
         return priceTrends;
+    }
+    
+    public List<HangTrend> getHangTradeAvgPriceList(Integer residenceId) {
+        // month为null 返回一年的数据, 为null返回month月份的数据
+        String startMonth = CommUitl.getLastYearMonth(CommUitl.getLastMonth(SD.format(new Date())));
+        String endMonth = CommUitl.getLastMonth(SD.format(new Date()));
+        List<HangTrend> hangTrends = mapper.getHangTradeAvgPriceList(residenceId,
+                startMonth, endMonth);
+        if (null == hangTrends || hangTrends.size() == 0) {
+            return null;
+        }
+        return hangTrends;
     }
 
     public Integer getScore(String roadLane, String categoryName) {

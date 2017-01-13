@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.address.mapper.StdMapper;
 import com.address.model.FacilityScore;
+import com.address.model.HangTrend;
 import com.address.model.HouseDeal;
 import com.address.model.OfHouse;
 import com.address.model.PoiDetail;
@@ -86,15 +87,26 @@ public class StdController {
                 	flag++;
                 	detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
                 	result.put("detail", detail);
-                	List<PriceTrend> list = stdService.getResidenceTradeAvgPriceList(55);//detail.getId()
-                	int[] price = new int[list.size()];
-                	String[] month = new String[list.size()];
-                	for (int i = 0; i < list.size(); i++) {
-                		price[i] = list.get(i).getDealAvgPrice2nd();
-                		month[i] = list.get(i).getMonth();
-					}
-                	result.put("a", price);
-                	result.put("b", month);
+                	List<PriceTrend> list = stdService.getResidenceTradeAvgPriceList(detail.getId());
+                	if(list!=null) {
+                		int[] price = new int[list.size()];
+                    	String[] month = new String[list.size()];
+                    	for (int i = 0; i < list.size(); i++) {
+                    		price[i] = list.get(i).getDealAvgPrice2nd();
+                    		month[i] = list.get(i).getMonth();
+    					}
+                    	result.put("a", price);
+                    	result.put("b", month);
+                	}
+                	
+                	List<HangTrend> hangList = stdService.getHangTradeAvgPriceList(detail.getId());
+                	if(hangList!=null) {
+                		int[] hangPrice = new int[list.size()];
+                    	for (int i = 0; i < hangList.size(); i++) {
+                    		hangPrice[i] = hangList.get(i).getHangAvgPrice();
+    					}
+                    	result.put("g", hangPrice);
+                	}
                 }
                 
                 OfHouse ofHouse = stdMapper.selectHouseByStdAddrId(returnParam.getId(),returnParam.getHouseNo()==null?returnParam.getHouseNo():returnParam.getHouseNo().replace("室", ""),returnParam.getBuilding());

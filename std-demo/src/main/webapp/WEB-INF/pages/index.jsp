@@ -440,9 +440,12 @@
 		        containLabel: true
 		    },
 		    yAxis: {
-		        type: 'log',
-		        name: 'y'
-		    },
+        		type : 'value',
+        		axisLabel : {
+            		formatter: '{value}元'
+        		},
+        		splitNumber:10
+    		},
 		    series: [
 		        {
 		            name: '二手房挂牌均价',

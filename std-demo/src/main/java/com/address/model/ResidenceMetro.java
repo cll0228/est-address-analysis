@@ -4,7 +4,7 @@ package com.address.model;
  * Created by Wangyh on 2017/1/13.
  */
 public class ResidenceMetro {
-    private Integer id;
+	private Integer id;
 
     private Integer ofResidenceId;
 

@@ -142,10 +142,10 @@
                                         <td id="roomType"></td>
                                     </tr>
                                     <tr>
-                                        <td id="metro" colspan="2"><img src="${ctx}/static/img/sh_metro.jpg" height="22px" width="22px"/></td>
+                                        <td colspan="2"><img src="${ctx}/static/img/sh_metro.jpg" height="22px" width="22px"/><span id="metro"></span></td>
                                     </tr>
                                     <tr>
-                                        <td id="school" colspan="2"><img src="${ctx}/static/img/graduation.png" height="22px" width="22px"/></td>
+                                        <td colspan="2"><img src="${ctx}/static/img/graduation.png" height="22px" width="22px"/><span id="school"></span></td>
                                     </tr>
                                     <tr>
                                         <th> 此套房屋市场单价 </th>
@@ -423,10 +423,12 @@
         	$("#radarPrice").css('display', 'block');
         	$("#area").html(data[0].area+"m²");
         	$("#towards").html(data[0].towards);
+        	$("#roomType").html(data[0].roomType);
         	$("#accomplishDate2").html(data[0].accomplishDate);
         	$("#assTotalPrice").html(data[0].assTotalPrice+"万元");
         	$("#assUnitPrice").html(data[0].assUnitPrice+"元/平");
         	$("#metro").html(data[0].metroDistance);
+        	$("#school").html(data[0].school);
         	
         } else {
         	$("#radarPrice").css('display', 'none');

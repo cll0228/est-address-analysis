@@ -70,6 +70,8 @@ public interface StdMapper {
     
     ResidenceMetro selectResidenceMetro(@Param("ofResidenceId")Integer ofResidenceId);
     
+    PrimarySchool selectPrimarySchool(@Param("ofResidenceId")Integer ofResidenceId);
+    
     List<PriceTrend> getResidenceTradeAvgPriceList(@Param("residenceId")Integer residenceId,
             @Param("startMonth")String startMonth, @Param("endMonth")String endMonth);
 

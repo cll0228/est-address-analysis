@@ -23,6 +23,7 @@ import com.address.model.HouseDeal;
 import com.address.model.OfHouse;
 import com.address.model.PoiDetail;
 import com.address.model.PriceTrend;
+import com.address.model.PrimarySchool;
 import com.address.model.ResidenceDetail;
 import com.address.model.ResidenceMetro;
 import com.address.model.ReturnParam;
@@ -143,6 +144,12 @@ public class StdController {
                 	if (metro != null) {
                 		String metroDistance = "距离"+metro.getMetroLineName()+metro.getMetroStationName()+metro.getMetroDistance()+"米";
                 		result.put("metroDistance", metroDistance);
+                    }
+                	
+                	//学校
+                	PrimarySchool primarySchool = stdMapper.selectPrimarySchool(ofHouse.getResidenceId());
+                	if (primarySchool != null) {
+                		result.put("school", primarySchool.getPrimarySchool());
                     }
                 	
                 	//估价

@@ -490,6 +490,7 @@
         }
     }
 
+    var poi_list = null;
 
     function poiInfo(data){
         var oStar = document.getElementById("star");
@@ -504,6 +505,7 @@
         var category;
         var sameNum;
         for(var i = 0; i<data[0].poiList.length; i++) {
+            poi_list = data[0].poiList;
             var poiCategoryName = data[0].poiList[i].categoryName
             if (i == 0) {
                 var kindHtml = "<th id='poiKind" + i + "' style='font-size:15px;'></th>";
@@ -511,7 +513,7 @@
                 $("#poiKind" + i).html(poiCategoryName);
                 var tbodyHtml = "<tbody id='tb" + i + "'></tbody>";
                 $("#table1").append(tbodyHtml);
-                var poiHtml = "<tr><td id='poiName" + i + "'></td><th id='distance" + i + "'></th></tr>"
+                var poiHtml = "<tr><td id='poiName" + i + "' onclick='poi_map($(this).html());'></td><th id='distance" + i + "'></th></tr>"
 //                        $("div#tab_1 div.row").append(poiHtml);
                 $("#tb" + i).append(poiHtml);
                 $("#poiName" + i).html(data[0].poiList[i].poiName);
@@ -520,7 +522,7 @@
                 sameNum = i;
             } else {
                 if (poiCategoryName == category) {
-                    var poiHtml = "<tr><td id='poiName" + i + "'></td><th id='distance" + i + "'></th></tr>"
+                    var poiHtml = "<tr><td id='poiName" + i + "' onclick='poi_map($(this).html());'></td><th id='distance" + i + "'></th></tr>"
 //                        $("div#tab_1 div.row").append(poiHtml);
                     $("#tb" + sameNum).append(poiHtml);
                     $("#poiName" + i).html(data[0].poiList[i].poiName);
@@ -531,7 +533,7 @@
                     $("#poiKind" + i).html(poiCategoryName);
                     var notSameTbodyHtml = "<tbody id='tb" + i + "'></tbody>";
                     $("#table1").append(notSameTbodyHtml);
-                    var notSamePoiHtml = "<tr><td id='poiName" + i + "'></td><th id='distance" + i + "'></th></tr>"
+                    var notSamePoiHtml = "<tr><td id='poiName" + i + "' onclick='poi_map($(this).html());'></td><th id='distance" + i + "'></th></tr>"
 //                        $("div#tab_1 div.row").append(poiHtml);
                     $("#tb" + i).append(notSamePoiHtml);
                     $("#poiName" + i).html(data[0].poiList[i].poiName);
@@ -544,23 +546,24 @@
     }
 
     function setTab(name,cursel,r){
-        if(r == null || r == '') return;
-        var categoryName;
-        var center = map.getCenter();
-        if(cursel == 1){
-            map.centerAndZoom(center,18);
-        }
-        if(cursel == 2){
-            map.centerAndZoom(center,17);
-        }
-        if(cursel == 3){
-            map.centerAndZoom(center,16);
-        }
-        if(cursel == 4){
-            map.centerAndZoom(center,15);
-        }
-        if(cursel == 5){
-            map.centerAndZoom(center,14);
+        if(r != null || r != ''){
+            var categoryName;
+            var center = map.getCenter();
+            if(r == 500){
+                map.centerAndZoom(center,18);
+            }
+            if(r == 1000){
+                map.centerAndZoom(center,17);
+            }
+            if(r == 1500){
+                map.centerAndZoom(center,16);
+            }
+            if(r == 2000){
+                map.centerAndZoom(center,15);
+            }
+            if(r == 2500){
+                map.centerAndZoom(center,14);
+            }
         }
         if(name == 'two'){
             for(var i=1; i<=5; i++){
@@ -593,6 +596,8 @@
     }
 
     function getPois(roadLan, categoryName, r) {
+        map.clearOverlays();
+        initResidenceBoundary(roadLan,1);
         $.ajax({
             url: '${ctx}/poiDetail',
             type: "POST",
@@ -635,7 +640,7 @@
 
 
 
-    function initResidenceBoundary(roadLan) {
+    function initResidenceBoundary(roadLan,num) {
         array = new Array;
         $.ajax({
             url: '${ctx}/boundary?roadLan=' + roadLan,
@@ -655,14 +660,21 @@
                 });
                 point = new BMap.Point(map_center_lon, map_center_lan);
                 map.addOverlay(polygon);
-                if($("#h0").html()==''){
-                    map.centerAndZoom(point, config_map.scale);
+                if($("#h0").html()=='' ){
+                    if(null == num){
+                        map.centerAndZoom(point,config_map.scale );
+                    }else{
+                        map.centerAndZoom(buildingPoint,map.getZoom());
+                    }
+                }else{
+                    //加載樓棟
+                    if(null == num){
+                        initBuilding(roadLan,$("#h0").html());
+                    }else {
+                        initBuilding(roadLan,$("#h0").html(),1);
+                    }
                 }
 
-                //加載樓棟
-                if($("#h0").html() != '' ){
-                    initBuilding(roadLan,$("#h0").html());
-                }
             }
         })
     }
@@ -672,7 +684,7 @@
     var buildingLon = "";
 
     //加载楼栋信息
-    function initBuilding(roadLan,buildingNo) {
+    function initBuilding(roadLan,buildingNo,num) {
         $.ajax({
             url: '${ctx}/building',
             type: "POST",
@@ -682,7 +694,11 @@
                 buildingLon = data.baiduLon;
                 buildingLat = data.baiduLat;
                 buildingPoint = new BMap.Point(buildingLon, buildingLat);
-                map.centerAndZoom(buildingPoint,config_map.scale);
+                if(null == num){
+                    map.centerAndZoom(buildingPoint,config_map.scale);
+                }else{
+                    map.centerAndZoom(buildingPoint,map.getZoom());
+                }
                 //圖標
                 var myIcon = new BMap.Icon("${ctx}/static/img/point-building.png", new BMap.Size(30,70));
                 var marker2 = new BMap.Marker(buildingPoint,{icon:myIcon});  // 创建标注
@@ -786,8 +802,38 @@
         })
     }
 
-       function poi_map(item){
-           alert(item);
+       function poi_map(name){
+           for(var i = 0; i< poi_list.length; i++){
+             var item = poi_list[i];
+               if(name == item.poiName){
+                   var bus_lat = item.baiduLat;
+                   var bus_lon = item.baiduLon;
+                   var bus_point_i = new BMap.Point(bus_lon, bus_lat);
+                   var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
+                   var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
+
+                   //点击事件，显示文本内容
+                   var opts_i = {
+                       position: bus_point_i,    // 指定文本标注所在的地理位置
+                       title: item.poiName,
+                       offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
+                   }
+                   var infoWindow_i = new BMap.InfoWindow("地址：" + item.poiAddress, opts_i);  // 创建信息窗口对象
+                   //标签
+                   var label_i = new BMap.Label(i+1,{offset:new BMap.Size(7,3)});
+                   label_i.setStyle({
+                       color: "white",
+                       fontSize: "10px",
+                       backgroundColor: "0.05",
+                       border: "0",
+                       fontFamily: "微软雅黑"
+                   });
+                   marker2_i.setLabel(label_i);
+                   //圖標點擊事件
+                   map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
+//                   map.centerAndZoom(bus_point_i,map.getZoom());
+               }
+           }
        }
 </script>
 </html>

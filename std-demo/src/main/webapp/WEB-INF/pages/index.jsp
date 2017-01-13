@@ -639,7 +639,8 @@
     var array ;
 
 
-
+    var residence_lat = "";
+    var residence_lon = "";
     function initResidenceBoundary(roadLan,num) {
         array = new Array;
         $.ajax({
@@ -647,6 +648,8 @@
             type: "GET",
             success: function (data) {
                 $.each(data, function (i, item) {
+                     residence_lat = item.resiLat;
+                     residence_lon = item.resiLon;
                     map_center_lon = item.baiduLon;
                     map_center_lan = item.baiduLat;
                     array[i] = new BMap.Point(item.baiduLon, item.baiduLat);
@@ -662,9 +665,9 @@
                 map.addOverlay(polygon);
                 if($("#h0").html()=='' ){
                     if(null == num){
-                        map.centerAndZoom(point,config_map.scale );
+                        map.centerAndZoom(new BMap.Point(residence_lon, residence_lat),config_map.scale);
                     }else{
-                        map.centerAndZoom(buildingPoint,map.getZoom());
+                        map.centerAndZoom(new BMap.Point(residence_lon, residence_lat),map.getZoom());
                     }
                 }else{
                     //加載樓棟
@@ -685,6 +688,9 @@
 
     //加载楼栋信息
     function initBuilding(roadLan,buildingNo,num) {
+        if(buildingNo == ""){
+            return;
+        }
         $.ajax({
             url: '${ctx}/building',
             type: "POST",

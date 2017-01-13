@@ -330,15 +330,17 @@
         (`id` = #{deal.id});
     </update>
     <select id="selectResiBoundaryById" resultType="com.address.model.ResidenceBoundary">
-        SELECT
+      SELECT
             b.id,
             b.baidu_lat baiduLat,
             b.baidu_lon baiduLon,
-            b.of_residence_id ofResidenceId
+            b.of_residence_id ofResidenceId,
+						re.lon resiLon,
+						re.lat resiLat
         FROM
             `iwjw_residence_bound` b
         LEFT JOIN of_residence_road_lane_links l ON b.of_residence_id = l.residence_id
-        LEFT JOIN of_road_lane r ON l.road_lane_id = r.id
+        LEFT JOIN of_road_lane r ON l.road_lane_id = r.id LEFT JOIN of_residence re ON b.of_residence_id = re.id
         WHERE
             r.road_lane = #{roadLan}
     </select>

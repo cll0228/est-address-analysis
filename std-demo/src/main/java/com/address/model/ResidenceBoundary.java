@@ -10,6 +10,25 @@ public class ResidenceBoundary {
     private Integer orderId;
     private Integer iwjwResidenceId;
     private Integer ofResidenceId;
+    private String resiLon;
+
+    private String resiLat;
+
+    public String getResiLon() {
+        return resiLon;
+    }
+
+    public void setResiLon(String resiLon) {
+        this.resiLon = resiLon;
+    }
+
+    public String getResiLat() {
+        return resiLat;
+    }
+
+    public void setResiLat(String resiLat) {
+        this.resiLat = resiLat;
+    }
 
     public Integer getId() {
         return id;

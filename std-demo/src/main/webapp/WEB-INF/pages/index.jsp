@@ -194,7 +194,7 @@
                         <div class="col-md-5" id="map" style="height: 450px;size: 350px;border: 10px;" >
                             这里显示地图
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" id="poi-area">
                             <ul class="nav nav-tabs" id="map-keyword">
                                 <li id="one1" class="active">
                                     <a href="#tab_1" onclick="setTab('one',1,'')" data-toggle="tab">交通</a>
@@ -213,21 +213,21 @@
                                 </li>
                             </ul>
                             <div id="star">
-                                <ul>
+                                <ul style="list-style:none">
                                     <li>
-                                        <a href="javascript:;"></a>
+                                        <a href="javascript:;">1</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:;"></a>
+                                        <a href="javascript:;">2</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:;"></a>
+                                        <a href="javascript:;">3</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:;"></a>
+                                        <a href="javascript:;">4</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:;"></a>
+                                        <a href="javascript:;">5</a>
                                     </li>
                                 </ul>
                             </div>
@@ -240,17 +240,7 @@
                             </div>
                             <HR align="center" width="300px;" color="#987cb9SIZE=1">
                             <div class="tab-content" style="width:350px; height:310px; overflow:scroll;">
-                                <%--<div class="portlet">
-                                    <div class="portlet-title">
-                                        <div class="caption" id="tab_1">
-                                            <h5 align="center" id="poiKind1"></h5>
-                                        </div>
-                                    </div>
-                                </div>--%>
                                 <table id="table1" class="table table-bordered table-hover">
-                                   <%-- <thead>
-                                        <th id="poiKind" style="font-size:15px;"></th>
-                                    </thead>--%>
                                     <th id="poiKind" style="font-size:15px;"></th>
                                     <tbody id="tb1">
                                     </tbody>
@@ -333,7 +323,15 @@
 <script type="text/javascript"
         src="http://api.map.baidu.com/api?v=2.0&ak=5ibDwRtW0ic8CacALvMkxt8tMtBEYyvc"></script>
 <script type="text/javascript">
-
+/*    $(document).ready(function(){
+        $('body').append("<div style='display:block;width:100%; margin:0 auto;position:fixed;left:0;top:0;bottom: 0;z-index: 111;opacity: 0.5;' id='loading'><a class='mui-active' style='left: 50%;position: absolute;top:50%'><span class='mui-spinner'></span><p style='margin-left: -10px;'>发送中...</p></a></div>")
+    })
+    $(document).ajaxStart(function(){
+        $("#loading").show();
+    })
+    $(document).ajaxComplete(function(){
+        $("#loading").hide();
+    })*/
     $(function(){
         initMap();//加載地圖
     })

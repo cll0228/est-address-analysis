@@ -298,6 +298,9 @@ public class StdService {
 
     public Integer getScore(String roadLane, String categoryName) {
         ResidenceInfo residenceDetail = mapper.getResidenceLonAndLat(roadLane);
+        if(residenceDetail == null){
+            return null;
+        }
         Integer residenceId = residenceDetail.getResidenceId();
         String facilityScore = mapper.getFacilityScore(residenceId, categoryName);
         if (facilityScore == null){

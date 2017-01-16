@@ -11,7 +11,7 @@
         }
 
         #star ul {
-            margin: 0 65px;
+            margin: -28px 85px;
         }
 
         #star li {
@@ -255,28 +255,50 @@
                                     <a href="#tab_4" onclick="setTab('one',4,'')" data-toggle="tab">购物</a>
                                 </li>
                                 <li id="one5">
-                                    <a href="#tab_5" onclick="setTab('one',5)" data-toggle="tab">生活</a>
+                                    <a href="#tab_5" onclick="setTab('one',5,'')" data-toggle="tab">生活</a>
+                                </li>
+                                <li id="one6">
+                                    <a href="#tab_6" onclick="setTab('one',6,'')" data-toggle="tab">休闲</a>
+                                </li>
+                                <li id="one7">
+                                    <a href="#tab_7" onclick="setTab('one',7,'')" data-toggle="tab">健身</a>
+                                </li>
+                                <li id="one8">
+                                    <a href="#tab_8" onclick="setTab('one',8,'')" data-toggle="tab">公园</a>
+                                </li>
+                                <li id="one9">
+                                    <a href="#tab_9" onclick="setTab('one',9,'')" data-toggle="tab">餐饮</a>
                                 </li>
                             </ul>
-                            <div id="star">
-                                <ul style="list-style:none">
-                                    <li>
-                                        <a href="javascript:;">1</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">5</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <%--<div>
+                                <table>
+                                    <tr>
+                                        <td><h3 id="tab_star_info"></h3></td>
+                                        <td>--%>
+                                            <div id="star">
+                                                <h5 id="tab_star_info"></h5>
+                                                <ul style="list-style:none">
+                                                    <li id="star1">
+                                                        <a href="javascript:;">1</a>
+                                                    </li>
+                                                    <li id="star2">
+                                                        <a href="javascript:;">2</a>
+                                                    </li>
+                                                    <li id="star3">
+                                                        <a href="javascript:;">3</a>
+                                                    </li>
+                                                    <li id="star4">
+                                                        <a href="javascript:;">4</a>
+                                                    </li>
+                                                    <li id="star5">
+                                                        <a href="javascript:;">5</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        <%--</td>
+                                    </tr>
+                                </table>
+                            </div>--%>
                             <div class="clearfix" id="radius">
                                 <a href="javascript:;" class="btn green-meadow" onclick="setTab('two',1, 500)" class="btn default" id="two1" value="500"> 0.5km </a>
                                 <a href="javascript:;" id="two2" onclick="setTab('two',2, 1000)" class="btn default" value="1000"> 1.0km </a>
@@ -576,6 +598,8 @@
         
         // 使用刚指定的配置项和数据显示图表。
         radar.setOption(option2);
+                        // poi初始化
+                        initPoiInfo();
                         // poi展示
                         poiInfo(data);
         
@@ -616,6 +640,22 @@
     }
 
     var poi_list = null;
+    function initPoiInfo(){
+        for(var i=1; i<=5; i++){
+            var value1 = document.getElementById("two"+i).className;
+            if(value1=='btn green-meadow'){
+                document.getElementById("two"+i).className = "btn default";
+            }
+        }
+        for(var i=1; i<=9; i++){
+            var tabName2 = document.getElementById("one"+i).className;
+            if(tabName2=='active'){
+                document.getElementById("one"+i).className = "";
+            }
+        }
+        document.getElementById("two1").className="btn green-meadow";
+        document.getElementById("one1").className="active";
+    }
 
     function poiInfo(data){
         var oStar = document.getElementById("star");
@@ -623,6 +663,39 @@
         var i = iScore = iStar = 0;
         // 评分
         iScore = data[0].score;
+        for(var i=1; i<=9; i++){
+            var tabName = document.getElementById("one"+i).className
+            if(tabName=='active'){
+                if(i == 1){
+                    $("#tab_star_info").html("交通配套星级评分:");
+                }
+                if(i==2){
+                    $("#tab_star_info").html("教育配套星级评分:");
+                }
+                if(i==3){
+                    $("#tab_star_info").html("医疗配套星级评分:");
+                }
+                if(i==4){
+                    $("#tab_star_info").html("购物配套星级评分:");
+                }
+                if(i==5){
+                    $("#tab_star_info").html("生活配套星级评分:");
+                }
+                if(i==6){
+                    $("#tab_star_info").html("休闲配套星级评分:");
+                }
+                if(i==7){
+                    $("#tab_star_info").html("健身配套星级评分:");
+                }
+                if(i==8){
+                    $("#tab_star_info").html("公园配套星级评分:");
+                }
+                if(i==9){
+                    $("#tab_star_info").html("餐饮配套星级评分:");
+                }
+                break;
+            }
+        }
         for (i = 0; i < aLi.length; i++)
             aLi[i].className = i < iScore ? "on" : "";
         // poi距离
@@ -639,7 +712,6 @@
                 var tbodyHtml = "<tbody id='tb" + i + "'></tbody>";
                 $("#table1").append(tbodyHtml);
                 var poiHtml = "<tr><td id='poiName" + i + "' onclick='poi_map($(this).html());'></td><th id='distance" + i + "'></th></tr>"
-//                        $("div#tab_1 div.row").append(poiHtml);
                 $("#tb" + i).append(poiHtml);
                 $("#poiName" + i).html(data[0].poiList[i].poiName);
                 $("#distance" + i).html(data[0].poiList[i].distance + "米");
@@ -648,7 +720,6 @@
             } else {
                 if (poiCategoryName == category) {
                     var poiHtml = "<tr><td id='poiName" + i + "' onclick='poi_map($(this).html());'></td><th id='distance" + i + "'></th></tr>"
-//                        $("div#tab_1 div.row").append(poiHtml);
                     $("#tb" + sameNum).append(poiHtml);
                     $("#poiName" + i).html(data[0].poiList[i].poiName);
                     $("#distance" + i).html(data[0].poiList[i].distance + "米");
@@ -659,7 +730,6 @@
                     var notSameTbodyHtml = "<tbody id='tb" + i + "'></tbody>";
                     $("#table1").append(notSameTbodyHtml);
                     var notSamePoiHtml = "<tr><td id='poiName" + i + "' onclick='poi_map($(this).html());'></td><th id='distance" + i + "'></th></tr>"
-//                        $("div#tab_1 div.row").append(poiHtml);
                     $("#tb" + i).append(notSamePoiHtml);
                     $("#poiName" + i).html(data[0].poiList[i].poiName);
                     $("#distance" + i).html(data[0].poiList[i].distance + "米");
@@ -699,7 +769,7 @@
             }
             document.getElementById("two"+cursel).className="btn green-meadow";
 //            banjing = $("#two"+cursel).attr("value");
-            for(var i=1; i<=5; i++) {
+            for(var i=1; i<=9; i++) {
                 var tabName = document.getElementById("one" + i).className;
                 if (tabName == 'active') {
                     categoryName = $("#one" + i + " a").html();
@@ -709,7 +779,7 @@
             getPois(roadLan,categoryName,r);
         } else if(name == 'one'){
             categoryName = $("#one" + cursel + " a").html();
-            for(var i=1; i<=5; i++){
+            for(var i=1; i<=9; i++){
                 var tabName = document.getElementById("two"+i).className;
                 if(tabName=='btn green-meadow'){
                     r = $("#two"+i).attr("value");

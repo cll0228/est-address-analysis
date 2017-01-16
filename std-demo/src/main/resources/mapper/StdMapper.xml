@@ -277,7 +277,7 @@
         baidu_lat baiduLat
         FROM
         df_estate_db_v2.sh_poi_2015 p,
-        df_estate_db_v2.sh_poi_division pd
+        df_estate_db_v2.sh_poi_division_demo pd
         WHERE p.poi_kind = pd.poi_kind
         and pd.category_name = #{categoryName}
         AND pd.is_available = 1
@@ -307,6 +307,18 @@
         </if>
         <if test="categoryName == '生活'">
             living_score
+        </if>
+        <if test="categoryName == '休闲'">
+            leisure_score
+        </if>
+        <if test="categoryName == '健身'">
+            health_score
+        </if>
+        <if test="categoryName == '公园'">
+            park_score
+        </if>
+        <if test="categoryName == '餐饮'">
+            restaurant_score
         </if>
         from ocn_address.of_residence_score
         where of_residence_id = ${residenceId}

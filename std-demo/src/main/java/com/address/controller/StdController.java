@@ -143,12 +143,16 @@ public class StdController {
                 	}
                 	FacilityScore facilityScore = stdMapper.getResidenceFacilityScore(ofHouse.getResidenceId());
                 	if (facilityScore != null) {
-                		int[] facility = new int[5];
+                		int[] facility = new int[9];
                 		facility[0] = facilityScore.getTransportScore().intValue();
                 		facility[1] = facilityScore.getMedicalScore().intValue();
                 		facility[2] = facilityScore.getShoppingScore().intValue();
                 		facility[3] = facilityScore.getEducationScore().intValue();
                 		facility[4] = facilityScore.getLivingScore().intValue();
+                		facility[5] = facilityScore.getLeisureScore().intValue();
+                		facility[6] = facilityScore.getParkScore().intValue();
+                		facility[7] = facilityScore.getRestaurantScore().intValue();
+                		facility[8] = facilityScore.getHealthScore().intValue();
                 		result.put("c", facility);
                     }
                 	

@@ -576,11 +576,15 @@
 		    radar: {
 		        // shape: 'circle',
 		        indicator: [
-		           { name: '交通（Traffic）', max: 100},
-		           { name: '医疗（Medical）', max: 100},
-		           { name: '购物（Shopping）', max: 100},
-		           { name: '教育（Education）', max: 100},
-		           { name: '生活（Life）', max: 100}
+		           { name: '交通', max: 100},
+		           { name: '医疗', max: 100},
+		           { name: '购物', max: 100},
+		           { name: '教育', max: 100},
+		           { name: '生活', max: 100},
+		           { name: '娱乐', max: 100},
+		           { name: '公园', max: 100},
+		           { name: '餐饮', max: 100},
+		           { name: '健身', max: 100}
 		        ]
 		    },
 		    series: [{

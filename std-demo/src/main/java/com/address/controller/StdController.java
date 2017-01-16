@@ -1,5 +1,6 @@
 package com.address.controller;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -190,6 +191,17 @@ public class StdController {
             			result.put("assTotalPrice",assTotalPrice);
             			result.put("assUnitPrice",assUnitPrice);
             		}
+
+            		//统计二手房交易量
+                   List<Double> list = stdMapper.countHouseDealInfo(detail.getId());
+                    Double totalPrice = 0.0;
+                    if(null != list && list.size() != 0){
+                        for(Double price : list){
+                            totalPrice += price;
+                        }
+                        result.put("assHouseDealNum",list.size());
+                        result.put("assHouseDealPirce",df.format(totalPrice/list.size()));
+                    }
                 }
                 resultList.add(result);
             }
@@ -197,6 +209,8 @@ public class StdController {
         return resultList;
 
     }
+
+    DecimalFormat df   = new DecimalFormat("######0.00");
 
     @RequestMapping(value = "/poiDetail", method = RequestMethod.POST)
     @ResponseBody

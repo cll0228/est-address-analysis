@@ -331,6 +331,14 @@
                                         <th> 此套房屋总价值 </th>
                                         <td id="assTotalPrice"></td>
                                     </tr>
+                                    <tr>
+                                        <th> 近一年二手房交易量 </th>
+                                        <td id="assHouseDealNum"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 近一年二手房交易均价 </th>
+                                        <td id="assHouseDealPirce"></td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -426,6 +434,8 @@
         				$("#accomplishDate2").html("");
         				$("#assTotalPrice").html("");
         				$("#assUnitPrice").html("");
+        				$("#assHouseDealNum").html("");
+        				$("#assHouseDealPirce").html("");
         				$("#metro").html("");
         				$("#school").html("");
                     
@@ -525,6 +535,8 @@
         	$("#accomplishDate2").html(data[0].accomplishDate);
         	$("#assTotalPrice").html(data[0].assTotalPrice+"万元");
         	$("#assUnitPrice").html(data[0].assUnitPrice+"元/平");
+        	$("#assHouseDealNum").html(data[0].assHouseDealNum+"套");
+        	$("#assHouseDealPirce").html(data[0].assHouseDealPirce+"元/平");
         	$("#metro").html(data[0].metroDistance);
         	$("#school").html(data[0].school);
         	

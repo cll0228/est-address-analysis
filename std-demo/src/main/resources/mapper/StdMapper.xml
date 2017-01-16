@@ -385,4 +385,15 @@
             r.road_lane = #{roadLan}
         AND building_no = #{buildingNo}
     </select>
+    <select id="countHouseDealInfo" resultType="java.lang.Double">
+        SELECT
+            d.PropertyUnitPrice
+        FROM
+            ocn_address.of_residence r
+        LEFT JOIN ofin.house_deal_assess d ON r.delete_lezhi_residence_id = d.ResidenceID
+        WHERE
+            r.id = #{id}
+        AND d.PropertyDealDate BETWEEN DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+        AND CURDATE();
+    </select>
 </mapper>

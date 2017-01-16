@@ -83,4 +83,6 @@ public interface StdMapper {
     OfBuilding selectBuilding(@Param("roadLan")String roadLan, @Param("buildingNo")String buildingNo);
 
     String getFacilityScore(@Param("residenceId")Integer residenceId, @Param("categoryName")String categoryName);
+
+    List<Double> countHouseDealInfo(@Param("id") Integer id);
 }

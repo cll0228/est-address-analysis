@@ -134,15 +134,11 @@
                                         <td id="residenceName"></td>
                                     </tr>
                                     <tr>
-                                        <th> 小区别名 </th>
-                                        <td id="aliases"></td>
-                                    </tr>
-                                    <tr>
                                         <th> 小区地址 </th>
                                         <td id="residenceAddr"></td>
                                     </tr>
                                     <tr>
-                                        <th> 小区物业类型 </th>
+                                        <th> 小区类型 </th>
                                         <td id="propertyType"></td>
                                     </tr>
                                     <tr>
@@ -154,7 +150,7 @@
                                         <td id="houseCount"></td>
                                     </tr>
                                     <tr>
-                                        <th> 竣工日期 </th>
+                                        <th> 竣工年份 </th>
                                         <td id="accomplishDate2"></td>
                                     </tr>
                                     <tr>
@@ -168,6 +164,10 @@
                                     <tr>
                                         <th> 总建筑面积 </th>
                                         <td id="totalArea"></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 小区别名 </th>
+                                        <td id="aliases"></td>
                                     </tr>
                                     <tr>
                                         <th> 小区房型 </th>
@@ -187,14 +187,16 @@
                             <div class="table-scrollable">
                                 <table class="table table-bordered table-hover">
                                     <tbody>
-                                    <tr>
-                                        <td colspan="2"><img src="${ctx}/static/img/sh_metro.jpg" height="22px" width="22px"/><span id="metro"></span></td>
+                                    <tr id="jinditie">
+                                        <th width="30%"> 近地铁 <img src="${ctx}/static/img/sh_metro.jpg" height="22px" width="22px"/></th>
+                                        <td id="metro"></td>
+                                    </tr>
+                                    <tr id="jinxuequ">
+                                        <th> 近学区 <img src="${ctx}/static/img/graduation.png" height="22px" width="22px"/></th>
+                                        <td id="school"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><img src="${ctx}/static/img/graduation.png" height="22px" width="22px"/><span id="school"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th width="50%"> 面积 </th>
+                                        <th> 面积 </th>
                                         <td id="area"></td>
                                     </tr>
                                     <tr>
@@ -206,7 +208,7 @@
                                         <td id="roomType"></td>
                                     </tr>
                                     <tr>
-                                        <th> 竣工日期</th>
+                                        <th> 竣工年份</th>
                                         <td id="accomplishDate"></td>
                                     </tr>
                                     </tbody>
@@ -342,15 +344,18 @@
                                  	</div>
                 <div class="row" id="radarPic" style="display:none">
                 	<div class="col-md-6">
+                	<div>
+                        <span><font size="4" color="#333" style="font-weight:bold" face="微软雅黑">房屋价格信息</font></span>
+                    </div>
                             <div class="table-scrollable">
                                 <table class="table table-bordered table-hover">
                                     <tbody>
                                     <tr>
-                                        <th> 此套房屋市场单价 </th>
+                                        <th> 此套房屋评估单价 </th>
                                         <td id="assUnitPrice"></td>
                                     </tr>
                                     <tr>
-                                        <th> 此套房屋总价值 </th>
+                                        <th> 此套房屋评估总价 </th>
                                         <td id="assTotalPrice"></td>
                                     </tr>
                                     <tr>
@@ -472,7 +477,7 @@
                         $("#accomplishDate").html(data[0].accomplishDate);
                         $("#vp").html(data[0].detail.vp);
                         $("#gp").html(data[0].detail.gp);
-                        $("#totalArea").html(data[0].detail.totalArea);
+                        $("#totalArea").html(data[0].detail.totalArea+"m²");
                         $("#buildingCount").html(data[0].detail.buildingCount);
                         $("#houseCount").html(data[0].detail.houseCount);
                         $("#houseType").html(data[0].detail.houseType);
@@ -482,7 +487,20 @@
                         initResidenceBoundary($("#ln0").html());//加載小區邊界
                         initBus(data[0].poiList);
                         // 初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
+        				var myChart = echarts.init(document.getElementById('main'));
+        				
+        				
+        				if(data[0].metroDistance!=null) {
+        		$("#jinditie").show(); 
+        	} else {
+        		$("#jinditie").hide(); 
+        	}
+        	if(data[0].school!=null) {
+        		$("#jinxuequ").show(); 
+        	} else {
+        		$("#jinxuequ").hide(); 
+        	}
+        				
 
         /* // 指定图表的配置项和数据
         var option = {
@@ -501,7 +519,7 @@
             }]
         }; */
 
-		option = {
+		/*option = {
 		    title: {
 		        text: '二手房价格走势图',
 		        left: 'center'
@@ -537,14 +555,46 @@
 		            name: '二手房挂牌均价',
 		            type: 'line',
 		            data: data[0].g
-		        }/*,
+		        },
 		        {
 		            name: '二手房交易均价',
 		            type: 'line',
 		            data: data[0].a
-		        }*/
+		        }
 		    ]
-		};
+		};*/
+		
+		
+		option = {
+    title: {
+        text: '二手房价格走势图'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['二手房挂牌均价']
+    },
+    xAxis:  {
+        type: 'category',
+        boundaryGap: false,
+        data: data[0].b
+    },
+    yAxis: {
+        type : 'value',
+        axisLabel : {
+            formatter: '{value}元'
+        	},
+        splitNumber:10
+    },
+    series: [
+        {
+		    name: '二手房挂牌均价',
+		    type: 'line',
+		    data: data[0].g
+		}
+    ]
+};
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
@@ -561,7 +611,6 @@
         	$("#assHouseDealPirce").html(data[0].assHouseDealPirce+"元/平");
         	$("#metro").html(data[0].metroDistance);
         	$("#school").html(data[0].school);
-        	
         } else {
         	$("#radarPic").css('display', 'none');
         }
@@ -581,7 +630,7 @@
 		           { name: '购物', max: 100},
 		           { name: '教育', max: 100},
 		           { name: '生活', max: 100},
-		           { name: '娱乐', max: 100},
+		           { name: '休闲', max: 100},
 		           { name: '公园', max: 100},
 		           { name: '餐饮', max: 100},
 		           { name: '健身', max: 100}

@@ -91,22 +91,27 @@ public class StdController {
                 	List<PriceTrend> list = stdService.getResidenceTradeAvgPriceList(detail.getId());
                 	if(list!=null) {
                 		int[] price = new int[list.size()];
-                    	String[] month = new String[list.size()];
+//                    	String[] month = new String[list.size()];
                     	for (int i = 0; i < list.size(); i++) {
                     		price[i] = list.get(i).getDealAvgPrice2nd();
-                    		month[i] = list.get(i).getMonth();
+//                    		month[i] = list.get(i).getMonth();
     					}
                     	result.put("a", price);
-                    	result.put("b", month);
+//                    	result.put("b", month);
                 	}
                 	
                 	List<HangTrend> hangList = stdService.getHangTradeAvgPriceList(detail.getId());
                 	if(hangList!=null) {
                 		int[] hangPrice = new int[hangList.size()];
+                		String[] month = new String[hangList.size()];
                     	for (int i = 0; i < hangList.size(); i++) {
                     		hangPrice[i] = hangList.get(i).getHangAvgPrice();
+                    		SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM");
+            				String sdf = format.format(hangList.get(i).getMonth());
+                    		month[i] = sdf;
     					}
                     	result.put("g", hangPrice);
+                    	result.put("b", month);
                 	}
                 }
                 
@@ -118,7 +123,7 @@ public class StdController {
                 		result.put("towards", ofHouse.getTowards());
                 		if(detail!=null) {
                 			if(null!=detail.getAccomplishDate()) {
-                				SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
+                				SimpleDateFormat format =  new SimpleDateFormat("yyyy");
                 				String d = format.format(detail.getAccomplishDate());
                 				result.put("accomplishDate", d);
                 			}
@@ -161,12 +166,16 @@ public class StdController {
                 	if (metro != null) {
                 		String metroDistance = "距离"+metro.getMetroLineName()+metro.getMetroStationName()+metro.getMetroDistance()+"米";
                 		result.put("metroDistance", metroDistance);
+                    } else {
+                    	result.put("metroDistance", null);
                     }
                 	
                 	//学校
                 	PrimarySchool primarySchool = stdMapper.selectPrimarySchool(ofHouse.getResidenceId());
                 	if (primarySchool != null) {
                 		result.put("school", primarySchool.getPrimarySchool());
+                    } else {
+                    	result.put("school", null);
                     }
                 	
                 	//估价

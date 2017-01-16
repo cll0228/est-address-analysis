@@ -32,7 +32,7 @@ public class StdModel {
     private String road;// /路
 
     private String lane;// 弄
-
+    
     public String getLane() {
         return lane;
     }
@@ -145,7 +145,7 @@ public class StdModel {
         this.code = code;
     }
 
-    @Override
+	@Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("StdModel{");
         sb.append("id='").append(id).append('\'');

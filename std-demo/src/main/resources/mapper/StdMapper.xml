@@ -157,7 +157,7 @@
     </select>
     
     <select id="selectOfHouse" resultType="com.address.model.OfHouse">
-          select hdm.of_std_address_id stdAddrId,hd.room roomNo,hd.floor placeFloor,hd.area,hd.property_room roomNum,hd.property_parlor hallNum,hd.plane_type_id planeType,hd.property_type_id propertyType from sts.house_deal_unique_address hd left JOIN sts.house_deal_std_address_mapping hdm on hd.id = hdm.house_deal_id where hdm.id >1593384;
+          select hdm.of_std_address_id stdAddrId,hd.room roomNo,hd.floor placeFloor,hd.area,hd.property_room roomNum,hd.property_parlor hallNum,hd.plane_type_id planeType,hd.residence_type_id propertyType from sts.house_deal_unique_address hd left JOIN sts.house_deal_std_address_mapping hdm on hd.id = hdm.house_deal_id where hdm.id >1593384;
     </select>
 
 	<select id="selectHouseDeal" resultType="com.address.model.HouseDeal">
@@ -170,9 +170,9 @@
     </select>
     
     <select id="selectResidenceDetail" resultType="com.address.model.ResidenceDetail">
-		SELECT res.id id,res.residence_name residenceName,res.aliases aliases,res.residence_addr residenceAddr,pt.PropertyType propertyType,res.accomplish_date accomplishDate,res.vp vp,res.gp gp,
+		SELECT res.area totalArea,res.id id,res.residence_name residenceName,res.aliases aliases,res.residence_addr residenceAddr,pt.residence_type propertyType,res.accomplish_date accomplishDate,res.vp vp,res.gp gp,
 		res.building_count buildingCount,res.house_count houseCount,GROUP_CONCAT(ht.type_name) houseType FROM ocn_address.of_residence res
-		left join ocn_address.sh_property_type pt on res.property_type_id = pt.PropertyTypeID 
+		left join ocn_address.sh_residence_type pt on res.residence_type_id = pt.residence_type_id
 		left join ocn_address.house_type ht on ht.residence_id = res.id where res.residence_addr=#{roadLane} group by res.residence_name;
     </select>
     

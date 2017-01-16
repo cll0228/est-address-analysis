@@ -27,6 +27,8 @@ public class ResidenceDetail {
     private String houseType;
     
     private Date accomplishDate;
+    
+    private Double totalArea;
 
 	public Integer getId() {
 		return id;
@@ -116,6 +118,14 @@ public class ResidenceDetail {
 		this.accomplishDate = accomplishDate;
 	}
 
+	public Double getTotalArea() {
+		return totalArea;
+	}
+
+	public void setTotalArea(Double totalArea) {
+		this.totalArea = totalArea;
+	}
+
 	@Override
 	public String toString() {
 		return "ResidenceDetail [id=" + id + ", residenceName=" + residenceName
@@ -123,7 +133,7 @@ public class ResidenceDetail {
 				+ ", propertyType=" + propertyType + ", vp=" + vp + ", gp="
 				+ gp + ", buildingCount=" + buildingCount + ", houseCount="
 				+ houseCount + ", houseType=" + houseType + ", accomplishDate="
-				+ accomplishDate + "]";
+				+ accomplishDate + ", totalArea=" + totalArea + "]";
 	}
 
 }

@@ -85,4 +85,5 @@ public class ReturnParam {
     public void setFlag(String flag) {
         this.flag = flag;
     }
+
 }

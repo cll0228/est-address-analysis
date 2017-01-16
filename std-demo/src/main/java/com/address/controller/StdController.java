@@ -102,7 +102,7 @@ public class StdController {
                 	
                 	List<HangTrend> hangList = stdService.getHangTradeAvgPriceList(detail.getId());
                 	if(hangList!=null) {
-                		int[] hangPrice = new int[list.size()];
+                		int[] hangPrice = new int[hangList.size()];
                     	for (int i = 0; i < hangList.size(); i++) {
                     		hangPrice[i] = hangList.get(i).getHangAvgPrice();
     					}

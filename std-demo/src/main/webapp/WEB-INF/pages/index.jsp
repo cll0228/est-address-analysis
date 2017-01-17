@@ -73,7 +73,7 @@
                             <h3>地址标准化</h3>
                         </div> -->
         <div class="input-group input-group-lg">
-            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="惠民路1018弄9号801室">
+            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址">
             <span class="input-group-btn">
             <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>

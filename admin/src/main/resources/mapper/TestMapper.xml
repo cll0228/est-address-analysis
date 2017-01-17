@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed Jun 01 10:54:56 CST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lezhi.address.admin.mapper.TestMapper">
+
+    <select id="testa" resultType="java.lang.Integer">
+        SELECT count(1) from sh_property_type
+    </select>
+</mapper>

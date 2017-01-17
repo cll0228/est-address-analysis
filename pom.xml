@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.lezhi.est-address-analysis</groupId>
+    <artifactId>est-address-analysis</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>admin</module>
+    </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>deploy-release</id>
+            <name>deploy-release</name>
+            <url>http://maven.oriental-finance.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>deploy-snapshots</id>
+            <name>deploy-snapshots</name>
+            <url>http://maven.oriental-finance.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

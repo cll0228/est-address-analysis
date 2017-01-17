@@ -215,6 +215,18 @@ public class StdController {
                         result.put("assHouseDealNum",list.size());
                         result.put("assHouseDealPirce",df.format(totalPrice/list.size()));
                     }
+                } else {
+                	int[] facility = new int[9];
+            		facility[0] = 0;
+            		facility[1] = 0;
+            		facility[2] = 0;
+            		facility[3] = 0;
+            		facility[4] = 0;
+            		facility[5] = 0;
+            		facility[6] = 0;
+            		facility[7] = 0;
+            		facility[8] = 0;
+            		result.put("c", facility);
                 }
                 resultList.add(result);
             }

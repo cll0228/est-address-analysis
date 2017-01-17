@@ -67,7 +67,7 @@
 <c:set var="pageTitle1" value="主页"/>
 <c:set var="pageTitle2" value="地址标准化"/>
 <%@include file="/WEB-INF/pages/include/header.jsp" %>
-<div style="height:100%;">
+<div style="100%;">
     <div class="form-group">
         <!-- <div class="m-heading-1 border-green m-bordered">
                             <h3>地址标准化</h3>

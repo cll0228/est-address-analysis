@@ -245,7 +245,11 @@
     
     
     <div id="static" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-                                        <div id="loading" class="loading">Loading...</div>
+                                        <div id="loading" class="loading">检索中...</div>
+                                    </div>
+                                    
+    <div id="initPage" class="modal fade" tabindex="-1" data-backdrop="initPage" data-keyboard="false">
+                                        <div id="loading" class="loading">初始化...</div>
                                     </div>
     
     
@@ -424,7 +428,9 @@
         $("#loading").hide();
     })*/
     $(function(){
+    	$("#initPage").modal("show");
         initMap();//加載地圖
+        setTimeout("$('#initPage').modal('hide')",2000);
     })
     var map = null ;
     var roadLan = "";

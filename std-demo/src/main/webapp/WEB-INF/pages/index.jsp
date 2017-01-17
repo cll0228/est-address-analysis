@@ -245,7 +245,7 @@
     
     
     <div id="static" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-                                        <div id="loading" class="loading">检索中...</div>
+                                        <div id="loading" class="loading">处理中...</div>
                                     </div>
                                     
     <div id="initPage" class="modal fade" tabindex="-1" data-backdrop="initPage" data-keyboard="false">

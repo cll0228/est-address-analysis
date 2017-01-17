@@ -44,6 +44,24 @@
             border-top: 0px solid #eee;
             border-bottom:0;
         }
+        .loading{
+			width:160px;
+			height:56px;
+			position: absolute;
+			top:50%;
+			left:44.5%;
+			line-height:56px;
+			color:#fff;
+			padding-left:60px;
+			font-size:15px;
+			background: #000 url(${ctx}/static/img/loader.gif) no-repeat 10px 50%;
+			opacity: 0.7;
+			z-index:9999;
+			-moz-border-radius:20px;
+			-webkit-border-radius:20px;
+			border-radius:20px;
+			filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);
+		}
     </style>
 </head>
 <c:set var="pageTitle1" value="主页"/>
@@ -84,7 +102,7 @@
                 <table id="sample_1" class="table table-striped table-bordered table-hover order-column" height="80px">
                     <thead>
                     <tr>
-                        <th>地址标准化编码</th>
+                        <th>统一标准地址编号</th>
                         <th>区县</th>
                         <th>街道</th>
                         <th>居委</th>
@@ -226,6 +244,13 @@
     
     
     
+    <div id="static" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+                                        <div id="loading" class="loading">Loading...</div>
+                                    </div>
+    
+    
+    
+    
     <div class="row" id="homeDetail" style="display:none">
         <div class="col-md-12">
             <!-- BEGIN PORTLET-->
@@ -343,7 +368,7 @@
                         				</div>
                                  	</div>
                 <div class="row" id="radarPic" style="display:none">
-                	<div class="col-md-6">
+                	<div class="col-md-5">
                 	<div>
                         <span><font size="4" color="#333" style="font-weight:bold" face="微软雅黑">房屋价格信息</font></span>
                     </div>
@@ -370,7 +395,7 @@
                                 </table>
                             </div>
                         </div>
-                	<div class="col-md-6">
+                	<div class="col-md-7">
                             <div id="mainRadar" style="height:400px;">
                         				</div>
                         </div>
@@ -416,6 +441,7 @@
         if (address == "") {
             bootbox.alert("地址不能为空，请重新输入");
         } else {
+        $("#static").modal("show");
             $.ajax({
                 url: '${ctx}/analysis?address=' + address,
                 type: "GET",
@@ -429,6 +455,7 @@
                     }
                 },
                 success: function (data) {
+                	$("#static").modal("hide");
                     $("#tb").empty();
                     for (var i = 0; i < data.length; i++) {
                         var html = "<tr><td id='bm" + i + "'></td><td id='qx" + i + "'></td><td id='jd" + i + "'></td><td id='jw" + i + "'></td><td id='ln" + i + "'></td><td id='h" + i + "'></td><td id='s" + i + "'></td></tr>";
@@ -617,7 +644,7 @@
         
         var radar = echarts.init(document.getElementById('mainRadar'));
         
-        option2 = {
+        /*option2 = {
 		    title: {
 		        text: '周边配套评分'
 		    },
@@ -647,7 +674,58 @@
 		            }
 		        ]
 		    }]
-		};
+		};*/
+        
+        option2 = {
+    title : {
+        text: '周边配套评分',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        x : 'center',
+        y : 'bottom',
+        data:['交通','医疗','购物','教育','生活','休闲','公园','餐饮','健身']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            saveAsImage : {show: true},
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            
+            magicType : {
+                show: true,
+                type: ['pie', 'funnel']
+            },
+            restore : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'配套评分',
+            type:'pie',
+            radius : [30, 110],
+            center : ['50%', '50%'],
+            roseType : 'area',
+            data:[
+                {value:data[0].c[0], name:'交通'},
+                {value:data[0].c[1], name:'医疗'},
+                {value:data[0].c[2], name:'购物'},
+                {value:data[0].c[3], name:'教育'},
+                {value:data[0].c[4], name:'生活'},
+                {value:data[0].c[5], name:'休闲'},
+                {value:data[0].c[6], name:'公园'},
+                {value:data[0].c[7], name:'餐饮'},
+                {value:data[0].c[8], name:'健身'}
+            ]
+        }
+    ]
+};
         
         // 使用刚指定的配置项和数据显示图表。
         radar.setOption(option2);

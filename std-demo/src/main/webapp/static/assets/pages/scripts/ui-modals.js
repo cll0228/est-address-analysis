@@ -1,9 +1,9 @@
 var UIModals = function () {
 
     var handleModals = function () {
-        $("#draggable").draggable({
-            handle: ".modal-header"
-        });
+//        $("#draggable").draggable({
+//            handle: ".modal-header"
+//        });
     }
 
     return {

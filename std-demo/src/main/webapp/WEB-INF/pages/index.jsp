@@ -247,14 +247,14 @@
     <div id="static" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
                                         <div id="loading" class="loading">处理中...</div>
                                     </div>
-                                    
+
     <div id="initPage" class="modal fade" tabindex="-1" data-backdrop="initPage" data-keyboard="false">
                                         <div id="loading" class="loading">初始化...</div>
                                     </div>
-    
-    
-    
-    
+
+
+
+
     <div class="row" id="homeDetail" style="display:none">
         <div class="col-md-12">
             <!-- BEGIN PORTLET-->
@@ -617,10 +617,10 @@
         type : 'value',
         min: 10000,
         axisLabel : {
-        	formatter: function(value) 
-				{ 
-					return value/1000+'k'; 
-				} 
+        	formatter: function(value)
+				{
+					return value/1000+'k';
+				}
         	},
         splitNumber:10
     },
@@ -685,7 +685,7 @@
 		        ]
 		    }]
 		};*/
-        
+
         option2 = {
     title : {
         text: '周边配套评分',
@@ -706,7 +706,7 @@
             saveAsImage : {show: true},
             mark : {show: true},
             dataView : {show: true, readOnly: false},
-            
+
             magicType : {
                 show: true,
                 type: ['pie', 'funnel']

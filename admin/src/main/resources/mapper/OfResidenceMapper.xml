@@ -94,10 +94,30 @@
   </select>
   
   <select id="selectResidenceDetailByResidenceId" resultType="com.lezhi.address.admin.pojo.OfResidence">
-      SELECT a.id,group_concat(c.road_lane separator ';') residenceAddr,a.residence_name residenceName,a.aliases FROM ocn_address.of_residence a 
-	  LEFT JOIN ocn_address.of_residence_road_lane_links b on a.id = b.residence_id
-	  LEFT JOIN ocn_address.of_road_lane c on b.road_lane_id = c.id where a.id = #{residenceId}
-	  GROUP BY a.id
+    SELECT
+	a.id,
+	group_concat(c.road_lane SEPARATOR ';') residenceAddr,
+	a.residence_addr describeAddr,
+	a.residence_name residenceName,
+	a.aliases,
+	a.of_district_id ofDistrictId,
+	d.district_name districtNname,
+	a.of_town_id ofTownId,
+	e.town_name townName,
+	a.building_count buildingCount,
+	a.house_count houseCount,
+	a.gp,
+	a.vp,
+	a.lon,
+	a.lat,
+	a.accomplish_date accomplishDate
+	FROM
+		ocn_address.of_residence a
+	LEFT JOIN ocn_address.of_residence_road_lane_links b ON a.id = b.residence_id
+	LEFT JOIN ocn_address.of_road_lane c ON b.road_lane_id = c.id
+	LEFT JOIN ocn_address.of_district d ON a.of_district_id = d.district_id
+	LEFT JOIN ocn_address.of_town e on a.of_town_id = e.town_id where a.id = #{residenceId}
+	GROUP BY a.id
   </select>
 
 </mapper>

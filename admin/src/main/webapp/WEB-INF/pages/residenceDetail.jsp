@@ -35,6 +35,16 @@
                                         <td id="id">${ofResidences.id}</td>
                                         <td></td>
                                     </tr>
+                                    <tr style="display:none">
+                                        <th> 经度 </th>
+                                        <td id="lon">${ofResidences.lon}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr style="display:none">
+                                        <th> 纬度 </th>
+                                        <td id="lat">${ofResidences.lat}</td>
+                                        <td></td>
+                                    </tr>
                                     <tr>
                                         <th width="30%"> 小区名称 </th>
                                         <td id="residenceName">${ofResidences.residenceName}</td>
@@ -95,7 +105,7 @@
                         	<button class="btn btn-success" type="button" onclick="window.history.back()"><i class="fa fa-arrow-left"></i> 返回上一页</button>
                         </div>
                         <div class="col-md-4">
-                    		<button class="btn btn-success" type="button"><i class="fa fa-file-o"></i> 修改小区信息</button>
+                    		<button class="btn btn-success" type="button" data-toggle="modal" href="#modifyDetail"><i class="fa fa-file-o"></i> 修改小区信息</button>
                         </div>
                         <div class="col-md-4">
                         	<button class="btn btn-success" type="button"><i class="fa fa-plus"></i> 添加子小区</button>
@@ -116,6 +126,46 @@
     </div>
     
 </div>
+
+
+									<div id="modifyDetail" class="modal fade" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <h4 class="modal-title">Responsive & Scrollable</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                                                        <div class="row">
+                                                            <table class="table table-bordered table-hover">
+                                    							<tbody>
+                                    								<tr>
+                                        								<th width="50%"> 小区名 </th>
+                                        								<td><input type="text"></td>
+                                        								<th> 小区地址 </th>
+                                        								<td id=""></td>
+                                    								</tr>
+                                    								<tr>
+                                        								<th> 子小区别名 </th>
+                                        								<td id="childAliases2"></td>
+                                    								</tr>
+                                    								<tr>
+                                        								<th> 子小区地址 </th>
+                                        								<td id="chlidResidenceAddr2"></td>
+                                    								</tr>
+                                    							</tbody>
+                                							</table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
+                                                    <button type="button" class="btn green">Save changes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 </body>
 <%@include file="/WEB-INF/pages/include/bottom.jsp" %>
 </body>
@@ -147,6 +197,8 @@
         var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
         map.addControl(top_left_control);
         map.addControl(top_left_navigation);
+        var center = new BMap.Point($("#lon").text(), $("#lat").text());
+        map.centerAndZoom(center,18);
 //        map.enableScrollWheelZoom(true);
     }
     

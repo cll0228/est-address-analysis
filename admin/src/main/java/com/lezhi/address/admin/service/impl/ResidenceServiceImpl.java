@@ -3,6 +3,7 @@ package com.lezhi.address.admin.service.impl;
 import com.lezhi.address.admin.mapper.OfResidenceMapper;
 import com.lezhi.address.admin.pojo.OfResidence;
 import com.lezhi.address.admin.service.ResidenceService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,4 +22,9 @@ public class ResidenceServiceImpl implements ResidenceService {
     public List<OfResidence> selectResidenceByName(String keyword) {
        return ofResidenceMapper.selectResidenceByName(keyword);
     }
+
+	@Override
+	public OfResidence selectResidenceDetailByResidenceId(Integer residenceId) {
+		return ofResidenceMapper.selectResidenceDetailByResidenceId(residenceId);
+	}
 }

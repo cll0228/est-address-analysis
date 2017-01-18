@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface ResidenceService {
     List<OfResidence> selectResidenceByName(String keyword);
+    
+    OfResidence selectResidenceDetailByResidenceId(Integer residenceId);
 }

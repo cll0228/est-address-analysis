@@ -76,7 +76,7 @@
                                 "<td id='gp" + i + "'></td>" +
                                 "<td id='residenceType" + i + "'></td>" +
                                 "<td id='aliases" + i + "'></td>" +
-                                "<td id='do" + i + "'><a href='#'>小区详情</a>  <a href='#'>楼栋详情</a></td></tr>";
+                                "<td id='do" + i + "'><a href='${ctx}/residenceDetail.do?residenceId="+data[i].id+"'>小区详情</a>  <a href='#'>楼栋详情</a></td></tr>";
                         $("#tb").append(html);
                         $("#id" + i).html(data[i].id);
                         $("#name" + i).html(data[i].residenceName);

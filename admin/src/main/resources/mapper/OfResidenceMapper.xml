@@ -92,5 +92,12 @@
   <select id="selectResidenceByName" resultMap="BaseResultMap">
       SELECT  <include refid="Base_Column_List"></include>   FROM `of_residence` WHERE 	residence_name like '%${keyword}%';
   </select>
+  
+  <select id="selectResidenceDetailByResidenceId" resultType="com.lezhi.address.admin.pojo.OfResidence">
+      SELECT a.id,group_concat(c.road_lane separator ';') residenceAddr,a.residence_name residenceName,a.aliases FROM ocn_address.of_residence a 
+	  LEFT JOIN ocn_address.of_residence_road_lane_links b on a.id = b.residence_id
+	  LEFT JOIN ocn_address.of_road_lane c on b.road_lane_id = c.id where a.id = #{residenceId}
+	  GROUP BY a.id
+  </select>
 
 </mapper>

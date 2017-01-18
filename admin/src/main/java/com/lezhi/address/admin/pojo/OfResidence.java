@@ -1,6 +1,5 @@
 package com.lezhi.address.admin.pojo;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class OfResidence {

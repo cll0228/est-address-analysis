@@ -17,7 +17,7 @@
             <button class="btn green" type="button" onclick="query($('#in').val())">开始查找</button>
         </span>
     </div>
-    <div style="display: none">
+    <div style="display: none" id="table1">
         <table id="residence" class="table table-striped table-bordered table-hover order-column" height="80px">
             <thead>
             <tr>
@@ -47,7 +47,7 @@
             </tbody>
         </table>
     </div>
-    <div style="text-align: center;position: relative;top: 220px;"><img src="${ctx}/static/img/viewmag-256.png" ></div>
+    <div style="text-align: center;position: relative;top: 220px;"><img src="${ctx}/static/img/viewmag-256.png" id="img"></div>
 
 </div>
 </body>
@@ -58,21 +58,35 @@
         if (keyword == "") {
             bootbox.alert("關鍵字不能爲空，請重新輸入！！");
         } else {
+            $("#table1").show();
+            $("#img").hide();
             $.ajax({
-                url: '${ctx}/analysis?address=' + address,
-                type: "GET",
+                url: '${ctx}/query.do?',
+                type: "Post",
+                data:{"keyword":keyword},
                 success: function (data) {
                     $("#tb").empty();
                     for (var i = 0; i < data.length; i++) {
-                        var html = "<tr><td id='bm" + i + "'></td><td id='qx" + i + "'></td><td id='jd" + i + "'></td><td id='jw" + i + "'></td><td id='ln" + i + "'></td><td id='h" + i + "'></td><td id='s" + i + "'></td></tr>";
+                        var html = "<tr><td id='id" + i + "'></td>" +
+                                "<td id='name" + i + "'></td>" +
+                                "<td id='addr" + i + "'></td>" +
+                                "<td id='buildingCount" + i + "'></td>" +
+                                "<td id='houseCount" + i + "'></td>" +
+                                "<td id='vp" + i + "'></td>" +
+                                "<td id='gp" + i + "'></td>" +
+                                "<td id='residenceType" + i + "'></td>" +
+                                "<td id='aliases" + i + "'></td>" +
+                                "<td id='do" + i + "'><a href='#'>小区详情</a>  <a href='#'>楼栋详情</a></td></tr>";
                         $("#tb").append(html);
-                        $("#qx" + i).html(data[i].qx);
-                        $("#jd" + i).html(data[i].jd);
-                        $("#jw" + i).html(data[i].jw);
-                        $("#ln" + i).html(data[i].ln);
-                        $("#h" + i).html(data[i].h);
-                        $("#s" + i).html(data[i].s);
-                        $("#bm" + i).html(data[i].bm);
+                        $("#id" + i).html(data[i].id);
+                        $("#name" + i).html(data[i].residenceName);
+                        $("#addr" + i).html(data[i].residenceAddr);
+                        $("#buildingCount" + i).html(data[i].buildingCount);
+                        $("#houseCount" + i).html(data[i].houseCount);
+                        $("#vp" + i).html(data[i].vp);
+                        $("#gp" + i).html(data[i].gp);
+                        $("#residenceType" + i).html(data[i].residenceTypeId);
+                        $("#aliases" + i).html(data[i].aliases);
                     }
                     }
             })

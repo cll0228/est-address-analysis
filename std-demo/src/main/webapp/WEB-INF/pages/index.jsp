@@ -164,7 +164,7 @@
                                         <td id="buildingCount"></td>
                                     </tr>
                                     <tr>
-                                        <th> 总房屋数 </th>
+                                        <th> 总户数 </th>
                                         <td id="houseCount"></td>
                                     </tr>
                                     <tr>
@@ -615,8 +615,12 @@
     },
     yAxis: {
         type : 'value',
+        min: 10000,
         axisLabel : {
-            formatter: '{value}元'
+        	formatter: function(value) 
+				{ 
+					return value/1000+'k'; 
+				} 
         	},
         splitNumber:10
     },
@@ -1047,7 +1051,7 @@
                     title:$("#ln0").html(),
                     offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
                 }
-                var infoWindow = new BMap.InfoWindow(data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount, opts);  // 创建信息窗口对象
+                var infoWindow = new BMap.InfoWindow(data.buildingNo +",总楼层："+data.totalFloor+"，总户数："+data.houseCount, opts);  // 创建信息窗口对象
 //                map.openInfoWindow(infoWindow,buildingPoint); //开启信息窗口
                 //圖標點擊事件
                 marker2.addEventListener("click",function(){
@@ -1098,7 +1102,7 @@
                     this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
                     this._div.style.top  = pixel.y - 30 + "px";
                 }
-                var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount;
+                var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总户数："+data.houseCount;
                 var myCompOverlay = new ComplexCustomOverlay(buildingPoint, txt);
                 map.addOverlay(myCompOverlay);*/
 

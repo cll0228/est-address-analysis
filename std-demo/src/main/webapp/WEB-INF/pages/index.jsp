@@ -99,7 +99,7 @@
             <!-- Table -->
             <!-- style="overflow-x: auto; overflow-y: auto; height: 660px; width:100%;" -->
             <div>
-                <table id="sample_1" class="table table-striped table-bordered table-hover order-column" height="80px">
+                <table id="sample_1" class="table table-striped table-bordered table-hover order-column" height="80px" style="word-break:break-all; word-wrap:break-all;">
                     <thead>
                     <tr>
                         <th>统一标准地址编号</th>

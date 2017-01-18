@@ -281,14 +281,14 @@
         WHERE p.poi_kind = pd.poi_kind
         and pd.category_name = #{categoryName}
         AND pd.is_available = 1
-        and p.is_avalible = 1
+        and p.is_available = 1
         AND df_estate_db_v2.calcDistance (
         #{lon},
         #{lat},
         p.baidu_lon,
         p.baidu_lat
         )  &lt;  #{r}
-        ORDER BY pd.sub_category_name
+        ORDER BY pd.sub_category_code
     </select>
 
     <select id="getFacilityScore" parameterType="java.lang.String" resultType="java.lang.String">

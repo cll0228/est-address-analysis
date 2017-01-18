@@ -288,7 +288,7 @@
         p.baidu_lon,
         p.baidu_lat
         )  &lt;  #{r}
-        ORDER BY pd.sub_category_name
+        ORDER BY pd.sub_category_code
     </select>
 
     <select id="getFacilityScore" parameterType="java.lang.String" resultType="java.lang.String">

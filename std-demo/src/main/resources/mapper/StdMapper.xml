@@ -408,4 +408,13 @@
         AND d.PropertyDealDate BETWEEN DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
         AND CURDATE();
     </select>
+    <select id="selectOfResidenceCenter" resultType="com.address.model.ResidenceBoundary">
+            SELECT
+						lon resiLon,
+						lat resiLat
+        FROM
+             of_residence
+        WHERE
+            residence_addr = #{roadLan}
+    </select>
 </mapper>

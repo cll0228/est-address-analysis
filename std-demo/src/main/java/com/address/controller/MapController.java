@@ -28,8 +28,9 @@ public class MapController {
             @RequestParam(value = "roadLan", required = false) String roadLan) {
         // 小区边界信息
         List<ResidenceBoundary> boundaries = stdMapper.selectResiBoundaryById(roadLan);
-        if (null == boundaries) {
-            return null;
+        if (null == boundaries || boundaries.size() == 0) {
+           //没有边界查询小区中心点
+            boundaries = stdMapper.selectOfResidenceCenter(roadLan);
         }
         return boundaries;
     }

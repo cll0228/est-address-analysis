@@ -246,9 +246,6 @@ public class StdService {
         }
         Double lon = residenceDetail.getLon();
         Double lat = residenceDetail.getLat();
-        if("购物".equals(categoryName)){
-            categoryName = "商场";
-        }
         List<PoiDetail> poiList = mapper.gePoiDetailList(lon, lat, r,categoryName);
         return poiList;
     }

@@ -44,18 +44,36 @@
             border-top: 0px solid #eee;
             border-bottom:0;
         }
+        .loading{
+			width:160px;
+			height:56px;
+			position: absolute;
+			top:50%;
+			left:44.5%;
+			line-height:56px;
+			color:#fff;
+			padding-left:60px;
+			font-size:15px;
+			background: #000 url(${ctx}/static/img/loader.gif) no-repeat 10px 50%;
+			opacity: 0.7;
+			z-index:9999;
+			-moz-border-radius:20px;
+			-webkit-border-radius:20px;
+			border-radius:20px;
+			filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);
+		}
     </style>
 </head>
 <c:set var="pageTitle1" value="主页"/>
 <c:set var="pageTitle2" value="地址标准化"/>
 <%@include file="/WEB-INF/pages/include/header.jsp" %>
-<div style="height:100%;">
+<div style="100%;">
     <div class="form-group">
         <!-- <div class="m-heading-1 border-green m-bordered">
                             <h3>地址标准化</h3>
                         </div> -->
         <div class="input-group input-group-lg">
-            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址" value="愚园路805弄">
+            <input id="in" type="text" class="form-control" placeholder="请输入要标准化的地址">
             <span class="input-group-btn">
             <button class="btn green" type="button" onclick="analysis()">开始标准化地址</button>
         </span>
@@ -81,10 +99,10 @@
             <!-- Table -->
             <!-- style="overflow-x: auto; overflow-y: auto; height: 660px; width:100%;" -->
             <div>
-                <table id="sample_1" class="table table-striped table-bordered table-hover order-column" height="80px">
+                <table id="sample_1" class="table table-striped table-bordered table-hover order-column" height="80px" style="word-break:break-all; word-wrap:break-all;">
                     <thead>
                     <tr>
-                        <th>地址标准化编码</th>
+                        <th>统一标准地址编号</th>
                         <th>区县</th>
                         <th>街道</th>
                         <th>居委</th>
@@ -146,7 +164,7 @@
                                         <td id="buildingCount"></td>
                                     </tr>
                                     <tr>
-                                        <th> 总房屋数 </th>
+                                        <th> 总户数 </th>
                                         <td id="houseCount"></td>
                                     </tr>
                                     <tr>
@@ -226,6 +244,17 @@
     
     
     
+    <div id="static" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+                                        <div id="loading" class="loading">处理中...</div>
+                                    </div>
+
+    <div id="initPage" class="modal fade" tabindex="-1" data-backdrop="initPage" data-keyboard="false">
+                                        <div id="loading" class="loading">初始化...</div>
+                                    </div>
+
+
+
+
     <div class="row" id="homeDetail" style="display:none">
         <div class="col-md-12">
             <!-- BEGIN PORTLET-->
@@ -343,7 +372,7 @@
                         				</div>
                                  	</div>
                 <div class="row" id="radarPic" style="display:none">
-                	<div class="col-md-6">
+                	<div class="col-md-5">
                 	<div>
                         <span><font size="4" color="#333" style="font-weight:bold" face="微软雅黑">房屋价格信息</font></span>
                     </div>
@@ -370,7 +399,7 @@
                                 </table>
                             </div>
                         </div>
-                	<div class="col-md-6">
+                	<div class="col-md-7">
                             <div id="mainRadar" style="height:400px;">
                         				</div>
                         </div>
@@ -399,7 +428,9 @@
         $("#loading").hide();
     })*/
     $(function(){
+    	$("#initPage").modal("show");
         initMap();//加載地圖
+        setTimeout("$('#initPage').modal('hide')",2000);
     })
     var map = null ;
     var roadLan = "";
@@ -416,6 +447,7 @@
         if (address == "") {
             bootbox.alert("地址不能为空，请重新输入");
         } else {
+        $("#static").modal("show");
             $.ajax({
                 url: '${ctx}/analysis?address=' + address,
                 type: "GET",
@@ -429,6 +461,7 @@
                     }
                 },
                 success: function (data) {
+                	$("#static").modal("hide");
                     $("#tb").empty();
                     for (var i = 0; i < data.length; i++) {
                         var html = "<tr><td id='bm" + i + "'></td><td id='qx" + i + "'></td><td id='jd" + i + "'></td><td id='jw" + i + "'></td><td id='ln" + i + "'></td><td id='h" + i + "'></td><td id='s" + i + "'></td></tr>";
@@ -582,8 +615,12 @@
     },
     yAxis: {
         type : 'value',
+        min: 10000,
         axisLabel : {
-            formatter: '{value}元'
+        	formatter: function(value)
+				{
+					return value/1000+'k';
+				}
         	},
         splitNumber:10
     },
@@ -617,7 +654,7 @@
         
         var radar = echarts.init(document.getElementById('mainRadar'));
         
-        option2 = {
+        /*option2 = {
 		    title: {
 		        text: '周边配套评分'
 		    },
@@ -647,7 +684,58 @@
 		            }
 		        ]
 		    }]
-		};
+		};*/
+
+        option2 = {
+    title : {
+        text: '周边配套评分',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        x : 'center',
+        y : 'bottom',
+        data:['交通','医疗','购物','教育','生活','休闲','公园','餐饮','健身']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            saveAsImage : {show: true},
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+
+            magicType : {
+                show: true,
+                type: ['pie', 'funnel']
+            },
+            restore : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'配套评分',
+            type:'pie',
+            radius : [30, 110],
+            center : ['50%', '50%'],
+            roseType : 'area',
+            data:[
+                {value:data[0].c[0], name:'交通'},
+                {value:data[0].c[1], name:'医疗'},
+                {value:data[0].c[2], name:'购物'},
+                {value:data[0].c[3], name:'教育'},
+                {value:data[0].c[4], name:'生活'},
+                {value:data[0].c[5], name:'休闲'},
+                {value:data[0].c[6], name:'公园'},
+                {value:data[0].c[7], name:'餐饮'},
+                {value:data[0].c[8], name:'健身'}
+            ]
+        }
+    ]
+};
         
         // 使用刚指定的配置项和数据显示图表。
         radar.setOption(option2);
@@ -963,7 +1051,7 @@
                     title:$("#ln0").html(),
                     offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
                 }
-                var infoWindow = new BMap.InfoWindow(data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount, opts);  // 创建信息窗口对象
+                var infoWindow = new BMap.InfoWindow(data.buildingNo +",总楼层："+data.totalFloor+"，总户数："+data.houseCount, opts);  // 创建信息窗口对象
 //                map.openInfoWindow(infoWindow,buildingPoint); //开启信息窗口
                 //圖標點擊事件
                 marker2.addEventListener("click",function(){
@@ -1014,7 +1102,7 @@
                     this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
                     this._div.style.top  = pixel.y - 30 + "px";
                 }
-                var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总房屋数："+data.houseCount;
+                var txt =data.buildingNo +",总楼层："+data.totalFloor+"，总户数："+data.houseCount;
                 var myCompOverlay = new ComplexCustomOverlay(buildingPoint, txt);
                 map.addOverlay(myCompOverlay);*/
 

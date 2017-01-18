@@ -509,10 +509,17 @@
                         //$("#fourTo").html(data[0].detail.fourTo);
                         $("#accomplishDate").html(data[0].accomplishDate);
                         $("#vp").html(data[0].detail.vp);
-                        $("#gp").html(data[0].detail.gp);
+                        if(data[0].detail.houseCount!=null) {
+                        	$("#gp").html(data[0].detail.gp*100+"%");
+                        }
                         $("#totalArea").html(data[0].detail.totalArea+"m²");
                         $("#buildingCount").html(data[0].detail.buildingCount);
-                        $("#houseCount").html(data[0].detail.houseCount);
+                        if(data[0].detail.houseCount==0) {
+                        	$("#houseCount").html("暂无数据");
+                        } else {
+                        	$("#houseCount").html(data[0].detail.houseCount);
+                        }
+                        
                         $("#houseType").html(data[0].detail.houseType);
                         $("#assDetail").css('display', 'block');
                         $("#homeDetail").css('display', 'block');

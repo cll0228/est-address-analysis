@@ -20,6 +20,11 @@ public class ResidenceController {
     public String toPage(HttpServletRequest request, HttpServletResponse response) {
         return "search";
     }
+    
+    @RequestMapping(value = "residenceDetail", method = RequestMethod.GET)
+    public String residenceDetail(HttpServletRequest request, HttpServletResponse response) {
+        return "residenceDetail";
+    }
 
     @RequestMapping("query")
     public List<OfResidence> queryResidence(@RequestParam(value = "keyword")String keyword){

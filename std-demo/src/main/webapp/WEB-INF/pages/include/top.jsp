@@ -44,3 +44,5 @@
     <link href="${ctx}/static/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/static/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css"
           rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/static/assets/global/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"
+          type="text/css"/>

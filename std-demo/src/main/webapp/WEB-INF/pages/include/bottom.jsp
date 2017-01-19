@@ -56,3 +56,4 @@
 <script src="${ctx}/static/assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/assets/pages/scripts/table-datatables-scroller.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/assets/pages/scripts/ui-modals.js" type="text/javascript"></script>
+<script src="${ctx}/static/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>

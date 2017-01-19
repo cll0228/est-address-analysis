@@ -514,10 +514,11 @@
                 gdata = data;
                 //alert(gdata);
                 for (var i = 0; i < data.length; i++) {
+                
                     if (data[i].addr != "NULL" && data[i].addr != "null" && data[i].addr != null) {
-                        availableTags[i] = data[i].name + "(" + data[i].addr + ")";
+                        availableTags[i] = data[i].addr;
                     } else {
-                        availableTags[i] = data[i].name;
+                        availableTags[i] = data[i].addr;
                     }
 
                 }

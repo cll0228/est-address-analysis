@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface OfResidenceMapper {
     List<OfResidence> selectResidenceByName(@Param("keyword") String keyword);
+    
+    OfResidence selectResidenceDetailByResidenceId(@Param("residenceId") Integer residenceId);
 }

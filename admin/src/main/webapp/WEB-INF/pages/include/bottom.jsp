@@ -15,7 +15,7 @@
 
 <!-- BEGIN INNER FOOTER -->
 <div class="page-footer">
-    <div class="container"> 2016 &copy; Oriental Finance.
+    <div class="container"> 2017 &copy; Oriental Finance.
     </div>
 </div>
 <div class="scroll-to-top">

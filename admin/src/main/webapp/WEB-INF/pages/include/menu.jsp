@@ -2,7 +2,7 @@
 <ul class="nav navbar-nav">
 
     <li class="menu-dropdown classic-menu-dropdown ">
-        <a href="javascript:;"> 小区搜索
+        <a href="${ctx}/search.do"> 小区搜索
         </a>
     </li>
 

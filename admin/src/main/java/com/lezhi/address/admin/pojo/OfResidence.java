@@ -46,6 +46,12 @@ public class OfResidence {
     private Integer deleteOfStdAddrId;
 
     private Double area;
+    
+    private String describeAddr;
+    
+    private String districtNname;
+    
+    private String townName;
 
     public Integer getId() {
         return id;
@@ -222,4 +228,28 @@ public class OfResidence {
     public void setArea(Double area) {
         this.area = area;
     }
+
+	public String getDescribeAddr() {
+		return describeAddr;
+	}
+
+	public void setDescribeAddr(String describeAddr) {
+		this.describeAddr = describeAddr;
+	}
+
+	public String getDistrictNname() {
+		return districtNname;
+	}
+
+	public void setDistrictNname(String districtNname) {
+		this.districtNname = districtNname;
+	}
+
+	public String getTownName() {
+		return townName;
+	}
+
+	public void setTownName(String townName) {
+		this.townName = townName;
+	}
 }

@@ -13,4 +13,6 @@ public interface ResidenceService {
     List<OfResidence> selectResidenceByName(String keyword);
 
     Map<String, Object> selectBuildById(String id, Integer page);
+
+    OfResidence selectResidenceDetailByResidenceId(Integer residenceId);
 }

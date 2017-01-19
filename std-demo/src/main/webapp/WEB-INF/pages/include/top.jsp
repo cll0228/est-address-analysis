@@ -41,3 +41,6 @@
           id="style_color"/>
     <link href="${ctx}/static/assets/layouts/layout3/css/custom.min.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME LAYOUT STYLES -->
+    <link href="${ctx}/static/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/static/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css"
+          rel="stylesheet" type="text/css"/>

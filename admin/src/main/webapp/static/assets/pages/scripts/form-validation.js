@@ -103,7 +103,7 @@ var FormValidation = function () {
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "",  // validate all fields including form hidden input
                 rules: {
-                    name: {
+                    xqm: {
                         minlength: 2,
                         required: true
                     },

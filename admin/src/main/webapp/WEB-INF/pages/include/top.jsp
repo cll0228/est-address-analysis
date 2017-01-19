@@ -41,3 +41,8 @@
           id="style_color"/>
     <link href="${ctx}/static/assets/layouts/layout3/css/custom.min.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME LAYOUT STYLES -->
+		<link href="${ctx}/static/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+        <link href="${ctx}/static/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="${ctx}/static/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
+        <link href="${ctx}/static/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css" rel="stylesheet" type="text/css" />
+        <link href="${ctx}/static/assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css" rel="stylesheet" type="text/css" />

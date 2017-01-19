@@ -551,6 +551,11 @@
                     }
                 },
                 success: function (data) {
+                if(data[0].error!=null) {
+                	$("#ts").html("暂无数据").css("color", "red");
+                	$("#static").modal("hide");
+                	return;
+                }
                 	$("#static").modal("hide");
                     $("#tb").empty();
                     for (var i = 0; i < data.length; i++) {
@@ -599,10 +604,12 @@
                         //$("#fourTo").html(data[0].detail.fourTo);
                         $("#accomplishDate").html(data[0].accomplishDate);
                         $("#vp").html(data[0].detail.vp);
-                        if(data[0].detail.houseCount!=null) {
+                        if(data[0].detail.gp!=null) {
                         	$("#gp").html(data[0].detail.gp*100+"%");
                         }
-                        $("#totalArea").html(data[0].detail.totalArea+"m²");
+                        if(data[0].detail.totalArea!=null) {
+                        	$("#totalArea").html(data[0].detail.totalArea+"m²");
+                        }
                         $("#buildingCount").html(data[0].detail.buildingCount);
                         if(data[0].detail.houseCount==0) {
                         	$("#houseCount").html("暂无数据");

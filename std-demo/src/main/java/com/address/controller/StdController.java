@@ -87,6 +87,11 @@ public class StdController {
                 if(flag==0&&returnParam.getFlag().equals("1")) {
                 	flag++;
                 	detail = stdMapper.selectResidenceDetail(returnParam.getRoadLane());
+                	if(detail==null) {
+                		result.put("error", "error");
+                		resultList.add(result);
+                		return resultList;
+                	}
                 	result.put("detail", detail);
                 	List<PriceTrend> list = stdService.getResidenceTradeAvgPriceList(detail.getId());
                 	if(list!=null) {

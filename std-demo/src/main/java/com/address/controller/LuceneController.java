@@ -43,7 +43,7 @@ public class LuceneController {
         System.out.println(houseAddressIndexDirPath);
         IndexReader reader = null;
         try {
-            String[] houseAddressIndexFields = {"name", "addr"};
+            String[] houseAddressIndexFields = {"residence_addr"};
             reader = DirectoryReader.open(FSDirectory.open(new File(houseAddressIndexDirPath)));
             IndexSearcher searcher = new IndexSearcher(reader);
             MultiFieldQueryParser parser = new MultiFieldQueryParser(houseAddressIndexFields, analyzer);
@@ -55,29 +55,7 @@ public class LuceneController {
             for (ScoreDoc sd : hits.scoreDocs) {
                 Document document = searcher.doc(sd.doc);
                 LuceneSearchDto info = new LuceneSearchDto();
-                if (null != document.get("type")) info.setType(Integer.valueOf(document.get("type")));
-                if (null != document.get("district_id"))
-                    info.setDistrict_id(Integer.valueOf(document.get("district_id")));
-                if (null != document.get("district")) info.setDistrict(String.valueOf(document.get("district")));
-                if (null != document.get("block_id")) info.setBlock_id(Integer.valueOf(document.get("block_id")));
-                if (null != document.get("block_name")) info.setBlock_name(String.valueOf(document.get("block_name")));
-                if (null != document.get("id")) info.setId(Integer.valueOf(document.get("id")));
-                if (null != document.get("name")) info.setName(String.valueOf(document.get("name")));
-                if (null != document.get("addr")) info.setAddr(String.valueOf(document.get("addr")));
-                if (null != document.get("longitude")) info.setLongitude(Double.valueOf(document.get("longitude")));
-                if (null != document.get("latitude")) info.setLatitude(Double.valueOf(document.get("latitude")));
-                if (null != document.get("max_longitude"))
-                    info.setMax_longitude(Double.valueOf(document.get("max_longitude")));
-                if (null != document.get("max_latitude"))
-                    info.setMax_latitude(Double.valueOf(document.get("max_latitude")));
-                if (null != document.get("min_longitude"))
-                    info.setMin_longitude(Double.valueOf(document.get("min_longitude")));
-                if (null != document.get("min_latitude"))
-                    info.setMin_latitude(Double.valueOf(document.get("min_latitude")));
-                if (null != document.get("center_longitude"))
-                    info.setCenter_longitude(Double.valueOf(document.get("center_longitude")));
-                if (null != document.get("center_latitude"))
-                    info.setCenter_latitude(Double.valueOf(document.get("center_latitude")));
+                if (null != document.get("residence_addr")) info.setAddr(String.valueOf(document.get("residence_addr")));
                 list.add(info);
             }
             return list;

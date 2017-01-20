@@ -138,7 +138,7 @@
                                 "<td id='residenceType" + i + "'></td>" +
                                 "<td id='area" + i + "'></td>" +
                                 "<td id='aliases" + i + "'></td>" +
-                                "<td id= " + i + "><a href='javascript:void(0)' onclick='show()'>小区详情</a>  <a href='javascript:void(0)' onclick='build(" + data[i].id + ")'>楼栋列表</a> </td></tr>";
+                                "<td id= " + i + "><a href='${ctx}/residenceDetail.do?residenceId="+data[i].id+"'>小区详情</a>  <a href='javascript:void(0)' onclick='build(" + data[i].id + ")'>楼栋列表</a> </td></tr>";
                         $("#tb").append(html);
                         $("#id" + i).html(data[i].id);
                         $("#name" + i).html(data[i].residenceName);

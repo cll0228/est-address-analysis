@@ -138,17 +138,96 @@
                                                 <form action="#" id="form_sample_2" class="form-horizontal">
                                                 <div class="modal-body">
                                                     <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
-                                                        <div class="row">
+                                                    	<div class="form-group  margin-top-20">
+                                                <label class="control-label col-md-4">小区名
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" class="form-control" name="xqm" /> </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4">小区地址 
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" class="form-control" name="xqdz" /> </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4">所属区县 
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" class="form-control" name="ssqx" /> </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4">所属板块
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" class="form-control" name="ssbk" /> </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4">总楼栋数
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" class="form-control" name="zlds" /> </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4">总房屋数
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" class="form-control" name="zfws" /> </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4">绿化率
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" class="form-control" name="lhl" /> </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4">容积率
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa"></i>
+                                                        <input type="text" class="form-control" name="rjl" /> </div>
+                                                </div>
+                                            </div>
+                                                    
+                                                    
+                                                    
+                                                        <!-- <div class="row">
                                                             <table class="table table-bordered table-hover" style="width:95%;margin-left:20px">
                                     							<tbody>
                                     								<tr>
-                                        								<th width="13%"> 小区名 </th>
+                                        								<th width="13%"> 小区名 <span class="required"> * </span></th>
                                         								<td width="30%">
                                         									<div class="input-icon right">
                                                         					<i class="fa"></i>
                                                         					<input type="text" class="form-control" name="xqm" /></div>
                                         								</td>
-                                        								<th width="13%"> 小区地址 </th>
+                                        								<th width="13%"> 小区地址 <span class="required"> * </span></th>
                                         								<td width="30%">
                                         									<div class="input-icon right">
                                                         					<i class="fa"></i>
@@ -156,13 +235,13 @@
                                         								</td>
                                     								</tr>
                                     								<tr>
-                                        								<th> 所属区县 </th>
+                                        								<th> 所属区县 <span class="required"> * </span></th>
                                         								<td>
                                         									<div class="input-icon right">
                                                         					<i class="fa"></i>
                                                         					<input type="text" class="form-control" name="ssqx" /></div>
                                         								</td>
-                                        								<th> 所属板块 </th>
+                                        								<th> 所属板块 <span class="required"> * </span></th>
                                         								<td>
                                         									<div class="input-icon right">
                                                         					<i class="fa"></i>
@@ -199,7 +278,7 @@
                                     								</tr>
                                     							</tbody>
                                 							</table>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

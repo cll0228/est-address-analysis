@@ -441,6 +441,96 @@
         scale: 18   //比例尺，默认20m
     };
 
+
+	var availableTags = new Array();
+	var gdata = null;
+
+	$("#in").autocomplete({
+        source: availableTags
+        ,
+        select: function (event, u1) {
+            var v;
+            if ($("#in").val().indexOf("(") != -1) {
+                v = $("#in").val().substr(0, $("#in").val().indexOf("("));
+            } else {
+                v = $("#in").val();
+            }
+
+            $.ajax({
+                type: "post",
+                url: "${ctx}/show/lucene/" + v,
+                //  data: "para="+para,  此处data可以为 a=1&b=2类型的字符串 或 json数据。
+                data: {"keyWord": $("#in").val()},
+                cache: false,
+                async: true,
+                dataType: "json",
+                success: function (data, textStatus) {
+                    var data = eval(JSON.stringify(data));
+                    gdata = data;
+                    var type;
+                    if (data != null && data != "") {
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].addr != "NULL" && data[i].addr != "null" && data[i].addr != null) {
+                                if (data[i].name == u1.item.label.substr(0, u1.item.label.indexOf('('))) {
+                                    type = data[i].type;
+                                    idType = data[i].type;
+                                    longitude = data[i].longitude;
+                                    latitude = data[i].latitude;
+                                    id = data[i].id;
+                                }
+                            } else {
+                                if (data[i].name == u1.item.label) {
+                                    type = data[i].type;
+                                    idType = data[i].type;
+                                    longitude = data[i].longitude;
+                                    latitude = data[i].latitude;
+                                    id = data[i].id;
+                                }
+                            }
+                        }
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("请求失败！");
+                }
+            });
+        }
+    });
+
+	$("#in").keyup(function () {
+        if ($("#in").val() == null || $("#in").val().trim() == "") {
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "${ctx}/show/lucene/" + $("#in").val(),
+            //  data: "para="+para,  此处data可以为 a=1&b=2类型的字符串 或 json数据。
+            data: {"keyWord": $("#in").val()},
+            cache: false,
+            async: true,
+            dataType: "json",
+            success: function (data, textStatus) {
+                var data = eval(JSON.stringify(data));
+                gdata = data;
+                //alert(gdata);
+                for (var i = 0; i < data.length; i++) {
+                
+                    if (data[i].addr != "NULL" && data[i].addr != "null" && data[i].addr != null) {
+                        availableTags[i] = data[i].addr;
+                    } else {
+                        availableTags[i] = data[i].addr;
+                    }
+
+                }
+                //alert(JSON.stringify(data));
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("请求失败！");
+            }
+        });
+    });
+
     function analysis() {
         map.clearOverlays();
         var address = $("#in").val();
@@ -461,6 +551,11 @@
                     }
                 },
                 success: function (data) {
+                if(data[0].error!=null) {
+                	$("#ts").html("暂无数据").css("color", "red");
+                	$("#static").modal("hide");
+                	return;
+                }
                 	$("#static").modal("hide");
                     $("#tb").empty();
                     for (var i = 0; i < data.length; i++) {
@@ -509,10 +604,12 @@
                         //$("#fourTo").html(data[0].detail.fourTo);
                         $("#accomplishDate").html(data[0].accomplishDate);
                         $("#vp").html(data[0].detail.vp);
-                        if(data[0].detail.houseCount!=null) {
+                        if(data[0].detail.gp!=null) {
                         	$("#gp").html(data[0].detail.gp*100+"%");
                         }
-                        $("#totalArea").html(data[0].detail.totalArea+"m²");
+                        if(data[0].detail.totalArea!=null) {
+                        	$("#totalArea").html(data[0].detail.totalArea+"m²");
+                        }
                         $("#buildingCount").html(data[0].detail.buildingCount);
                         if(data[0].detail.houseCount==0) {
                         	$("#houseCount").html("暂无数据");

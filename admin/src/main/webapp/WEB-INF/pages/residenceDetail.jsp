@@ -133,26 +133,69 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                    <h4 class="modal-title">Responsive & Scrollable</h4>
+                                                    <h4 class="modal-title">小区信息修改</h4>
                                                 </div>
+                                                <form action="#" id="form_sample_2" class="form-horizontal">
                                                 <div class="modal-body">
                                                     <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
                                                         <div class="row">
-                                                            <table class="table table-bordered table-hover">
+                                                            <table class="table table-bordered table-hover" style="width:95%;margin-left:20px">
                                     							<tbody>
                                     								<tr>
-                                        								<th width="50%"> 小区名 </th>
-                                        								<td><input type="text"></td>
-                                        								<th> 小区地址 </th>
-                                        								<td id=""></td>
+                                        								<th width="13%"> 小区名 </th>
+                                        								<td width="30%">
+                                        									<div class="input-icon right">
+                                                        					<i class="fa"></i>
+                                                        					<input type="text" class="form-control" name="xqm" /></div>
+                                        								</td>
+                                        								<th width="13%"> 小区地址 </th>
+                                        								<td width="30%">
+                                        									<div class="input-icon right">
+                                                        					<i class="fa"></i>
+                                                        					<input type="text" class="form-control" name="xqdz" /></div>
+                                        								</td>
                                     								</tr>
                                     								<tr>
-                                        								<th> 子小区别名 </th>
-                                        								<td id="childAliases2"></td>
+                                        								<th> 所属区县 </th>
+                                        								<td>
+                                        									<div class="input-icon right">
+                                                        					<i class="fa"></i>
+                                                        					<input type="text" class="form-control" name="ssqx" /></div>
+                                        								</td>
+                                        								<th> 所属板块 </th>
+                                        								<td>
+                                        									<div class="input-icon right">
+                                                        					<i class="fa"></i>
+                                                        					<input type="text" class="form-control" name="ssbk" /></div>
+                                        								</td>
                                     								</tr>
                                     								<tr>
-                                        								<th> 子小区地址 </th>
-                                        								<td id="chlidResidenceAddr2"></td>
+                                        								<th> 总楼栋数 </th>
+                                        								<td>
+                                        									<div class="input-icon right">
+                                                        					<i class="fa"></i>
+                                                        					<input type="text" class="form-control" name="zlds" /></div>
+                                        								</td>
+                                        								<th> 总房屋数 </th>
+                                        								<td>
+                                        									<div class="input-icon right">
+                                                        					<i class="fa"></i>
+                                                        					<input type="text" class="form-control" name="zfws" /></div>
+                                        								</td>
+                                    								</tr>
+                                    								<tr>
+                                        								<th> 绿化率 </th>
+                                        								<td>
+                                        									<div class="input-icon right">
+                                                        					<i class="fa"></i>
+                                                        					<input type="text" class="form-control" name="lhl" /></div>
+                                        								</td>
+                                        								<th> 容积率 </th>
+                                        								<td>
+                                        									<div class="input-icon right">
+                                                        					<i class="fa"></i>
+                                                        					<input type="text" class="form-control" name="rjl" /></div>
+                                        								</td>
                                     								</tr>
                                     							</tbody>
                                 							</table>
@@ -160,9 +203,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
-                                                    <button type="button" class="btn green">Save changes</button>
+                                                    <button type="submit" class="btn green">Submit</button>
+                                                    <button type="button" class="btn default">Cancel</button>
                                                 </div>
+												</form>                                                
                                             </div>
                                         </div>
                                     </div>
@@ -202,29 +246,5 @@
 //        map.enableScrollWheelZoom(true);
     }
     
-    function query(keyword) {
-        if (keyword == "") {
-            bootbox.alert("關鍵字不能爲空，請重新輸入！！");
-        } else {
-            $.ajax({
-                url: '${ctx}/analysis?address=' + address,
-                type: "GET",
-                success: function (data) {
-                    $("#tb").empty();
-                    for (var i = 0; i < data.length; i++) {
-                        var html = "<tr><td id='bm" + i + "'></td><td id='qx" + i + "'></td><td id='jd" + i + "'></td><td id='jw" + i + "'></td><td id='ln" + i + "'></td><td id='h" + i + "'></td><td id='s" + i + "'></td></tr>";
-                        $("#tb").append(html);
-                        $("#qx" + i).html(data[i].qx);
-                        $("#jd" + i).html(data[i].jd);
-                        $("#jw" + i).html(data[i].jw);
-                        $("#ln" + i).html(data[i].ln);
-                        $("#h" + i).html(data[i].h);
-                        $("#s" + i).html(data[i].s);
-                        $("#bm" + i).html(data[i].bm);
-                    }
-                    }
-            })
-        }
-    }
 </script>
 </html>

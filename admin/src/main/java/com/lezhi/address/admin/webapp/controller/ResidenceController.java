@@ -2,6 +2,7 @@ package com.lezhi.address.admin.webapp.controller;
 
 import com.lezhi.address.admin.pojo.OfBuilding;
 import com.lezhi.address.admin.pojo.OfResidence;
+import com.lezhi.address.admin.pojo.OfResidenceModify;
 import com.lezhi.address.admin.service.ResidenceService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,22 @@ public class ResidenceController {
         return mv;
     }
 
+    @RequestMapping(value = "detailModify", method = RequestMethod.POST)
+    @ResponseBody
+    public String detailModify(HttpServletRequest request, HttpServletResponse response) {
+    	OfResidenceModify ofm = new OfResidenceModify();
+    	ofm.setXqm(request.getParameter("xqm"));
+    	ofm.setXqdz(request.getParameter("xqdz"));
+    	ofm.setXqid(Integer.parseInt(request.getParameter("xqid")));
+    	ofm.setZfws(Integer.parseInt(request.getParameter("zfws")));
+    	ofm.setZlds(Integer.parseInt(request.getParameter("zlds")));
+    	ofm.setGp(Double.parseDouble(request.getParameter("gp")));
+    	ofm.setVp(Double.parseDouble(request.getParameter("vp")));
+//    	ofm.setSsqx(request.getParameter("ssqx"));
+//    	ofm.setSsbk(request.getParameter("ssbk"));
+    	return null;
+    }
+    
     @RequestMapping(value = "query", method = RequestMethod.POST)
     @ResponseBody
     public List<OfResidence> queryResidence(@RequestParam(value = "keyword", required = false) String keyword) {

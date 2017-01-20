@@ -324,14 +324,14 @@ $.extend( $.validator, {
 	},
 
 	messages: {
-		required: "This field is required.",
+		required: "这是一项必填参数，请填写",
 		remote: "Please fix this field.",
 		email: "Please enter a valid email address.",
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
 		dateISO: "Please enter a valid date ( ISO ).",
-		number: "Please enter a valid number.",
-		digits: "Please enter only digits.",
+		number: "这项只能填写数字",
+		digits: "这项只能填写数字",
 		creditcard: "Please enter a valid credit card number.",
 		equalTo: "Please enter the same value again.",
 		maxlength: $.validator.format( "Please enter no more than {0} characters." ),

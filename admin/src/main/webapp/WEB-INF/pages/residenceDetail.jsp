@@ -137,15 +137,24 @@
                                                 </div>
                                                 <form action="#" id="form_sample_2" class="form-horizontal">
                                                 <div class="modal-body">
-                                                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
-                                                    	<div class="form-group  margin-top-20">
+                                            <div class="form-group" style="display:none">
+                                                <label class="control-label col-md-4">小区id
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="xqid" value="${ofResidences.id}"/></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label class="control-label col-md-4">小区名
                                                     <span class="required"> * </span>
                                                 </label>
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="xqm" /> </div>
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="xqm" value="${ofResidences.residenceName}"/></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -154,8 +163,8 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="xqdz" /> </div>
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="xqdz" value="${ofResidences.residenceAddr}"/> </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -164,8 +173,8 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="ssqx" /> </div>
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="ssqx" value="${ofResidences.districtNname}"/> </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -174,8 +183,8 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="ssbk" /> </div>
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="ssbk" value="${ofResidences.townName}"/> </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -183,8 +192,8 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="zlds" /> </div>
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="zlds" value="${ofResidences.buildingCount}"/> </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -192,8 +201,8 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="zfws" /> </div>
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="zfws" value="${ofResidences.houseCount}"/> </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -201,8 +210,8 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="lhl" /> </div>
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="lhl" value="${ofResidences.gp}"/> </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -210,8 +219,8 @@
                                                 </label>
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
-                                                        <i class="fa"></i>
-                                                        <input type="text" class="form-control" name="rjl" /> </div>
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="rjl" value="${ofResidences.vp}"/> </div>
                                                 </div>
                                             </div>
                                                     
@@ -280,13 +289,13 @@
                                 							</table>
                                                         </div> -->
                                                     </div>
-                                                </div>
+                                                
                                                 <div class="modal-footer">
-                                                    <button type="submit" class="btn green">Submit</button>
-                                                    <button type="button" class="btn default">Cancel</button>
+                                                	<button type="button" class="btn green" onClick="detailModify()">提交</button>
+                                                	<button type="button" data-dismiss="modal" class="btn dark btn-outline">取消</button>
                                                 </div>
 												</form>                                                
-                                            </div>
+                                        </div>
                                         </div>
                                     </div>
 </body>
@@ -298,6 +307,17 @@
 	$(function(){
         initMap();//加載地圖
     })
+    
+    function detailModify() {
+            $.ajax({
+                url: '${ctx}/detailModify.do?',
+                type: "Post",
+                data: $('#form_sample_2').serialize(),
+                success: function (data) {
+                    alert("aaa");
+                }
+            })
+    }
     
     function initMap() {
         //加载地图

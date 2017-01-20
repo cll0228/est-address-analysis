@@ -26,7 +26,10 @@ public class BuildingServiceImpl implements BuildingService {
        return ofBuildingMapper.getBuilidngInfoById(buildingId);
     }
 
-    public int updateOfBuildingInfo(String buildingId, String buildingNo, String houseCount, String totalFloor){
+    public Integer updateOfBuildingInfo(String buildingId, String buildingNo, String houseCount, String totalFloor){
         return ofBuildingMapper.updateOfBuildingInfo(buildingId, buildingNo, houseCount, totalFloor);
+    }
+    public Integer updateOfBuildingCoordinate(String buildingId, String newLon, String newLat) {
+        return ofBuildingMapper.updateOfBuildingCoordinate(buildingId, newLon, newLat);
     }
 }

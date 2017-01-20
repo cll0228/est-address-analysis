@@ -78,7 +78,7 @@
                                 </table>
                             </div>
                             <div >
-                                <button type="button" class="btn btn-primary" onclick="javascript :window.history.back();">返回楼栋列表</button>
+                                <button type="button" class="btn btn-primary" id="building_bk" onclick="javascript :window.history.back();">返回楼栋列表</button>
                             </div>
                             <!-- END PORTLET-->
                         </div>
@@ -94,7 +94,7 @@
                                         <td id="lon_lat"></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="button" value="编辑经纬度" id="editLo"/></td>
+                                        <td><input type="button" id="editCoordinate" value="编辑经纬度"/></td>
                                         <th>&nbsp;&nbsp; <input type="button" value="重置" id="reset"/></th>
                                     </tr>
                                 </table>
@@ -137,6 +137,42 @@
             </div>
         </div>
     </div>
+
+
+
+    <!-- 编辑经纬度弹出框 -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">编辑经纬度</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="old_lon">原经度</label>
+                        <input type="text" name="old_lon" class="form-control" id="old_lon">
+                    </div>
+                    <div class="form-group">
+                        <label for="old_lat">原维度</label>
+                        <input type="text" name="old_lat" class="form-control" id="old_lat">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_lon">实时经度</label>
+                        <input type="text" name="new_lon" class="form-control" id="new_lon" placeholder="保留小数点后六位">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_lat">实时维度</label>
+                        <input type="text" name="new_lat" class="form-control" id="new_lat" placeholder="保留小数点后六位">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+                    <button type="button" id="btn_submit1" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <%@include file="/WEB-INF/pages/include/bottom.jsp" %>
 </body>
 
@@ -150,10 +186,11 @@
         initMap();//加載地圖
 //        var aa=request.getAttribute("buildingInfo");
 
-        $("#editLo").click(function () {
+       /* $("#editCoordinate").click(function () {
             bootbox.alert("请拖动楼栋图标编辑楼栋");
             building_marker.enableDragging();
-        });
+        });*/
+
 
 
 
@@ -194,13 +231,14 @@
         map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
         //        map.enableScrollWheelZoom(true);
         if(baiduLon != null && baiduLat != null){
-            var point = new BMap.Point(<%=baiduLon%>,<%=baiduLat%>);
+            point = new BMap.Point(<%=baiduLon%>,<%=baiduLat%>);
             var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
              building_marker = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
             building_marker.addEventListener("dragging",function () {
                 var position = building_marker.getPosition();
                 $("#lon_lat").html(position.lng+","+position.lat);
-            })
+            });
+            building_marker.enableDragging();
         }
 
         map.addOverlay(building_marker);
@@ -210,20 +248,21 @@
         map.addEventListener("click",function(e){
             alert(e.point.lng + "," + e.point.lat);
         });
+        $("#lon_lat").html(point.lng+","+point.lat);
         initResidenceBoundary(residenceId);
-
-        $("#reset").click(function () {
-            map.removeOverlay(building_marker);
-            building_marker = new BMap.Marker(point, {icon: myIcon_i});
-            building_marker.addEventListener("dragging",function () {
-                var position = building_marker.getPosition();
-                $("#lon_lat").html(point.lng+","+point.lat);
-            });
-            $("#lon_lat").html(point.lng+","+point.lat);
-            map.addOverlay(building_marker);
-            map.centerAndZoom(point,config_map.scale);
-        });
     }
+
+    $("#reset").click(function () {
+        map.removeOverlay(building_marker);
+        building_marker = new BMap.Marker(point, {icon: myIcon_i});
+        building_marker.addEventListener("dragging",function () {
+            var position = building_marker.getPosition();
+            $("#lon_lat").html(point.lng+","+point.lat);
+        });
+        $("#lon_lat").html(point.lng+","+point.lat);
+        map.addOverlay(building_marker);
+        map.centerAndZoom(point,config_map.scale);
+    });
 
     var array ;
     var residence_lat = "";
@@ -256,28 +295,107 @@
             }
         })
     }
+    var buildingId = <%=buildingId%>;
+
+    $("#building_bk").click(function (){
+        location.href ='toSearch.do?buildingId='+buildingId;
+    });
 
     $("#editBuilding").click(function () {
         $("#txt_buildingNo").val(document.getElementById("buildingNo").innerText.replace("号",""));
+        document.getElementById("txt_buildingNo").disabled= "disabled";
         $("#txt_houseCount").val(document.getElementById("houseCount").innerText);
         $("#txt_totalFloor").val(document.getElementById("totalFloor").innerText);
         $("#myModalLabel").text("编辑楼栋");
-        $('#myModal').modal();
+//        $('#myModal').modal('show');
+/*        $("#myModal").modal().css({
+            "margin-top": function () {
+                return - ($(this).height() / 2);
+            }
+        });*/
+        $('#myModal').modal({
+            backdrop: false,
+            show: true
+        })
+    });
+
+    $("#editCoordinate").click(function () {
+        var newCoordinate = $("#lon_lat").html();
+        var strs= new Array(); //定义一数组
+        strs=newCoordinate.split(","); //字符分割
+        $("#old_lon").val(document.getElementById("baiduLon").innerText.replace(",",""));
+        $("#old_lat").val(document.getElementById("baiduLat").innerText);
+        document.getElementById("old_lon").disabled= "disabled";
+        document.getElementById("old_lat").disabled= "disabled";
+        $("#new_lon").val(strs[0]);
+        $("#new_lat").val(strs[1]);
+        $("#myModalLabel1").text("编辑楼栋坐标");
+//        $('#myModal1').modal('show');
+        $('#myModal1').modal({
+            backdrop: false
+        })
+    });
+    $("#btn_submit1").click(function(){
+        var new_lon = $("#new_lon").val();
+        var new_lat = $("#new_lat").val();
+        if(!isLon(new_lon)){
+            toastr.warning("经度不符合规范！");
+            return;
+        }if(!isLat(new_lat)){
+            toastr.warning("维度不符合规范！");
+            return;
+        }if(new_lat == $("#old_lat").val() && new_lon == $("#old_lon").val()){
+            toastr.warning("经纬度未改变！");
+            return;
+        }
+
+        Ewin.confirm({ message: "确认要更新楼栋经纬度坐标吗？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            $.ajax({
+                url: '${ctx}/changeBuildingCoordinate.do?',
+                type: "POST",
+                data: {"buildingId":buildingId,"newLon":new_lon,"newLat":new_lat},
+                success: function (data) {
+                    if (data.status == "success") {
+                        toastr.success('提交数据成功');
+                        $("#residenceName").html(data.buildingInfo.residenceName);
+                        $("#buildingId").html(data.buildingInfo.id);
+                        $("#buildingNo").html(data.buildingInfo.buildingNo);
+                        $("#houseCount").html(data.buildingInfo.houseCount);
+                        $("#totalFloor").html(data.buildingInfo.totalFloor);
+                        $("#baiduLon").html(data.buildingInfo.baiduLon+",");
+                        $("#baiduLat").html(data.buildingInfo.baiduLat);
+                        initMap();//加載地圖
+                    }
+                },
+                error: function () {
+                    toastr.error('Error');
+                },
+                complete: function () {
+
+                }
+
+            });
+        });
     });
     toastr.options.positionClass = 'toast-bottom-center';
     $("#btn_submit").click(function(){
-        var buildingId = <%=buildingId%>;
         var buildingNo = $("#txt_buildingNo").val();
         var houseCount = $("#txt_houseCount").val();
         var totalFloor = $("#txt_totalFloor").val();
         if(!isPInt(buildingNo)){
             toastr.warning("楼栋号请输入正整数！");
+            return;
         }if(!isPInt(houseCount)){
             toastr.warning("房屋数量请输入正整数！");
+            return;
         }if(!isPInt(totalFloor)){
             toastr.warning("总楼层请输入正整数！");
+            return;
         }
-        Ewin.confirm({ message: "确认要删除选择的数据吗？" }).on(function (e) {
+        Ewin.confirm({ message: "确认要更新楼栋数据吗？" }).on(function (e) {
             if (!e) {
                 return;
             }
@@ -310,6 +428,16 @@
     //正整数校验
     function isPInt(str) {
         var g = /^[1-9]*[1-9][0-9]*$/;
+        return g.test(str);
+    }
+    //经度校验
+    function isLon(str) {
+        var g = /^-?(?:(?:180(?:\.0{1,6})?)|(?:(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d{1,6})?))$/;
+        return g.test(str);
+    }
+    //维度校验
+    function isLat(str) {
+        var g = /^-?(?:90(?:\.0{1,6})?|(?:[1-8]?\d(?:\.\d{1,6})?))$/;
         return g.test(str);
     }
 

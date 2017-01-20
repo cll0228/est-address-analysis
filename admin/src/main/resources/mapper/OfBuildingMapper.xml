@@ -34,13 +34,14 @@
     </select>
 
     <update id="updateOfBuildingInfo">
-        UPDATE ocn_address.of_building(building_no, house_count, total_floor, update_time)
-        VALUES (
-          #{buildingNo},
-          #{houseCount},
-          #{totalFloor},
-          NOW()
-        )
+        UPDATE dazhongdianping.of_building
+         set building_no=#{buildingNo}, house_count=#{houseCount}, total_floor=#{totalFloor}, update_time=NOW()
+        WHERE id = #{buildingId}
+    </update>
+
+    <update id="updateOfBuildingCoordinate">
+        UPDATE dazhongdianping.of_building
+         set baidu_lon=#{newLon}, baidu_lat=#{newLat}, update_time=NOW()
         WHERE id = #{buildingId}
     </update>
 </mapper>

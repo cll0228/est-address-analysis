@@ -40,4 +40,5 @@
     <link href="${ctx}/static/assets/layouts/layout3/css/themes/default.min.css" rel="stylesheet" type="text/css"
           id="style_color"/>
     <link href="${ctx}/static/assets/layouts/layout3/css/custom.min.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/static/assets/global/plugins/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME LAYOUT STYLES -->

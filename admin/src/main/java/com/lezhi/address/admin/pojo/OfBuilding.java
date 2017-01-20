@@ -9,6 +9,8 @@ public class OfBuilding {
 
     private Integer residenceId;
 
+    private String residenceName;
+
     private Integer stdAddrId;
 
     private Integer houseCount;
@@ -131,5 +133,13 @@ public class OfBuilding {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getResidenceName() {
+        return residenceName;
+    }
+
+    public void setResidenceName(String residenceName) {
+        this.residenceName = residenceName;
     }
 }

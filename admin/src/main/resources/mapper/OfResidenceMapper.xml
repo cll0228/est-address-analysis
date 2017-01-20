@@ -120,4 +120,29 @@
 	GROUP BY a.id
   </select>
 
+  <select id="selectResiBoundaryById" resultType="com.lezhi.address.admin.pojo.ResidenceBoundary">
+    SELECT
+    b.id,
+    b.baidu_lat baiduLat,
+    b.baidu_lon baiduLon,
+    b.of_residence_id ofResidenceId,
+    re.lon resiLon,
+    re.lat resiLat
+    FROM
+    `iwjw_residence_bound` b
+    LEFT JOIN of_residence re ON b.of_residence_id = re.id
+    WHERE
+    re.id = #{residenceId}
+  </select>
+
+  <select id="selectOfResidenceCenter" resultType="com.lezhi.address.admin.pojo.ResidenceBoundary">
+    SELECT
+    lon resiLon,
+    lat resiLat
+    FROM
+    of_residence
+    WHERE
+    id = #{residenceId}
+  </select>
+
 </mapper>

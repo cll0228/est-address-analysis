@@ -181,7 +181,7 @@
                             "<td id='houseCount1" + i + "'></td>" +
                             "<td id='totalFloor" + i + "'></td>" +
                             "<td id='updateTime1" + i + "'></td>" +
-                            "<td ><a href='javascript:void(0)' onclick='show();'>楼栋详情</a></td></tr>";
+                            "<td ><a href='javascript:void(0)' onclick='showBuilding(" + data[i].id + ");'>楼栋详情</a></td></tr>";
                     $("#tb1").append(html);
                     $("#id1" + i).html(data[i].id);
                     $("#buildingNo" + i).html(data[i].buildingNo);
@@ -192,6 +192,12 @@
             }
         })
         $("#page").val(startPage);
+    }
+    function showBuilding(buildingId) {
+        if(buildingId == ""){
+            return;
+        }
+        location.href ='building.do?buildingId='+buildingId;
     }
     function show() {
         $('#myModal').modal({
@@ -220,7 +226,7 @@
                             "<td id='houseCount1" + i + "'></td>" +
                             "<td id='totalFloor" + i + "'></td>" +
                             "<td id='updateTime1" + i + "'></td>" +
-                            "<td ><a href='javascript:void(0)' onclick='show();'>楼栋详情</a></td></tr>";
+                            "<td ><a href='javascript:void(0)' onclick='showBuilding(" + data[i].id + ");'>楼栋详情</a></td></tr>";
                     $("#tb1").append(html);
                     $("#id1" + i).html(data[i].id);
                     $("#buildingNo" + i).html(data[i].buildingNo);
@@ -254,7 +260,7 @@
                             "<td id='houseCount1" + i + "'></td>" +
                             "<td id='totalFloor" + i + "'></td>" +
                             "<td id='updateTime1" + i + "'></td>" +
-                            "<td ><a href='javascript:void(0)' onclick='show();'>楼栋详情</a></td></tr>";
+                            "<td ><a href='javascript:void(0)' onclick='showBuilding(" + data[i].id + ");'>楼栋详情</a></td></tr>";
                     $("#tb1").append(html);
                     $("#id1" + i).html(data[i].id);
                     $("#buildingNo" + i).html(data[i].buildingNo);

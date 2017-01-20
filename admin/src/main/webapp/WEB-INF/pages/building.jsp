@@ -87,12 +87,15 @@
                             <div id="coordinate">
                                 <table>
                                     <tr>
-                                        <th> 楼栋经纬度 </th>
+                                        <th> 楼栋经纬度： </th>
                                         <td id="baiduLon"><%=baiduLon==null?"":baiduLon+","%></td>
                                         <td id="baiduLat"><%=baiduLat==null?"":baiduLat%></td>
+                                        <th> &nbsp;&nbsp;实时经纬度： </th>
+                                        <td id="lon_lat"></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="button" value="编辑经纬度"/></td>
+                                        <td><input type="button" value="编辑经纬度" id="editLo"/></td>
+                                        <th>&nbsp;&nbsp; <input type="button" value="重置" id="reset"/></th>
                                     </tr>
                                 </table>
                             </div>
@@ -140,9 +143,19 @@
 <script type="text/javascript"
         src="http://api.map.baidu.com/api?v=2.0&ak=5ibDwRtW0ic8CacALvMkxt8tMtBEYyvc"></script>
 <script type="text/javascript">
+
+    var building_marker;
+
     $(function(){
         initMap();//加載地圖
 //        var aa=request.getAttribute("buildingInfo");
+
+        $("#editLo").click(function () {
+            bootbox.alert("请拖动楼栋图标编辑楼栋");
+            building_marker.enableDragging();
+        });
+
+
 
     })
     var map = null ;
@@ -183,9 +196,14 @@
         if(baiduLon != null && baiduLat != null){
             var point = new BMap.Point(<%=baiduLon%>,<%=baiduLat%>);
             var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
-            var marker2_i = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
+             building_marker = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
+            building_marker.addEventListener("dragging",function () {
+                var position = building_marker.getPosition();
+                $("#lon_lat").html(position.lng+","+position.lat);
+            })
         }
-        map.addOverlay(marker2_i);
+
+        map.addOverlay(building_marker);
         // 显示边界
         var residenceId = <%=residenceId%>;
         //单击获取点击的经纬度
@@ -193,6 +211,18 @@
             alert(e.point.lng + "," + e.point.lat);
         });
         initResidenceBoundary(residenceId);
+
+        $("#reset").click(function () {
+            map.removeOverlay(building_marker);
+            building_marker = new BMap.Marker(point, {icon: myIcon_i});
+            building_marker.addEventListener("dragging",function () {
+                var position = building_marker.getPosition();
+                $("#lon_lat").html(point.lng+","+point.lat);
+            });
+            $("#lon_lat").html(point.lng+","+point.lat);
+            map.addOverlay(building_marker);
+            map.centerAndZoom(point,config_map.scale);
+        });
     }
 
     var array ;

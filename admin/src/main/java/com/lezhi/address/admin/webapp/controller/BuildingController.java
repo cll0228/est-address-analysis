@@ -35,7 +35,7 @@ public class BuildingController {
     }
 
     @RequestMapping(value = "building")
-    public String queryResidence(HttpServletRequest request, HttpServletResponse response,
+    public String queryBuildingInfo(HttpServletRequest request, HttpServletResponse response,
                                  @RequestParam(value = "buildingId")String buildingId){
         if(null == buildingId || "".equals(buildingId)){
             return null;
@@ -43,7 +43,7 @@ public class BuildingController {
         System.out.println("buildingId:"+buildingId);
         // 楼栋详情信息
         OfBuilding ofBuilding = buildingService.getBuilidngInfoById(buildingId);
-        request.setAttribute("buildingInfo",ofBuilding);
+        request.setAttribute("buildingInfo", ofBuilding);
         return "building";
     }
 
@@ -67,11 +67,12 @@ public class BuildingController {
                                                   @RequestParam(value = "totalFloor")String totalFloor){
         Map<String, Object> result = new HashMap<>();
         buildingNo = buildingNo + "号";
-//        boolean success = 1 == buildingService.updateOfBuildingInfo(buildingId, buildingNo, houseCount, totalFloor);
-        boolean success = true;
+        boolean success = 1 == buildingService.updateOfBuildingInfo(buildingId, buildingNo, houseCount, totalFloor);
+//        boolean success = true;
         System.out.println("buildingId:"+buildingId);
         // 楼栋详情信息
-        OfBuilding ofBuilding = new OfBuilding();
+        OfBuilding ofBuilding = buildingService.getBuilidngInfoById(buildingId);
+/*        OfBuilding ofBuilding = new OfBuilding();
         ofBuilding.setId(111);
         ofBuilding.setBuildingNo("22号");
         ofBuilding.setResidenceId(1212121);
@@ -79,9 +80,47 @@ public class BuildingController {
         ofBuilding.setHouseCount(33);
         ofBuilding.setTotalFloor(12);
         ofBuilding.setBaiduLon("121.464034");
-        ofBuilding.setBaiduLat("31.260828");
+        ofBuilding.setBaiduLat("31.260828");*/
         result.put("status", success ? "success" : "failed");
         result.put("buildingInfo", ofBuilding);
         return result;
     }
+
+    @RequestMapping(value = "changeBuildingCoordinate", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> changeBuildingInfo(@RequestParam(value = "buildingId")String buildingId,
+                                                  @RequestParam(value = "newLon")String newLon,
+                                                  @RequestParam(value = "newLat")String newLat) {
+        Map<String, Object> result = new HashMap<>();
+        boolean success = 1 == buildingService.updateOfBuildingCoordinate(buildingId, newLon, newLat);
+//        boolean success = true;
+        System.out.println("buildingId:"+buildingId);
+        // 楼栋详情信息
+        OfBuilding ofBuilding = buildingService.getBuilidngInfoById(buildingId);
+/*        OfBuilding ofBuilding = new OfBuilding();
+        ofBuilding.setId(222);
+        ofBuilding.setBuildingNo("23号");
+        ofBuilding.setResidenceId(1313322111);
+        ofBuilding.setResidenceName("文化花园");
+        ofBuilding.setHouseCount(121);
+        ofBuilding.setTotalFloor(1313);
+        ofBuilding.setBaiduLon("121.494329");
+        ofBuilding.setBaiduLat("31.309174");*/
+        result.put("status", success ? "success" : "failed");
+        result.put("buildingInfo", ofBuilding);
+        return result;
+    }
+
+/*    @RequestMapping(value = "toSearch")
+    public String toSearch(HttpServletRequest request, HttpServletResponse response,
+                                 @RequestParam(value = "buildingId")String buildingId){
+        if(null == buildingId || "".equals(buildingId)){
+            return null;
+        }
+        System.out.println("buildingId:"+buildingId);
+        // 楼栋详情信息
+        OfBuilding ofBuilding = buildingService.getBuilidngListByBuildingId(buildingId);
+        request.setAttribute("buildingList",ofBuilding);
+        return "search";
+    }*/
 }

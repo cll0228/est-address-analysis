@@ -4,6 +4,7 @@ import com.lezhi.address.admin.mapper.OfBuildingMapper;
 import com.lezhi.address.admin.mapper.OfResidenceMapper;
 import com.lezhi.address.admin.pojo.OfBuilding;
 import com.lezhi.address.admin.pojo.OfResidence;
+import com.lezhi.address.admin.pojo.ResidenceBoundary;
 import com.lezhi.address.admin.service.ResidenceService;
 import org.apache.commons.collections.map.HashedMap;
 
@@ -52,5 +53,15 @@ public class ResidenceServiceImpl implements ResidenceService {
     @Override
     public OfResidence selectResidenceDetailByResidenceId(Integer residenceId) {
         return ofResidenceMapper.selectResidenceDetailByResidenceId(residenceId);
+    }
+
+    public List<ResidenceBoundary> selectResiBoundaryById(String residenceId){
+        List<ResidenceBoundary> boundaries = ofResidenceMapper.selectResiBoundaryById(residenceId);
+        return boundaries;
+    }
+
+    public List<ResidenceBoundary> selectOfResidenceCenter(String residenceId){
+        List<ResidenceBoundary> boundaries = ofResidenceMapper.selectOfResidenceCenter(residenceId);
+        return boundaries;
     }
 }

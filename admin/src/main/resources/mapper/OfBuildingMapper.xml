@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="building_no" property="buildingNo" jdbcType="VARCHAR"/>
         <result column="residence_id" property="residenceId" jdbcType="INTEGER"/>
+        <result column="residence_name" property="residenceName" jdbcType="VARCHAR"/>
         <result column="std_addr_id" property="stdAddrId" jdbcType="INTEGER"/>
         <result column="house_count" property="houseCount" jdbcType="INTEGER"/>
         <result column="total_floor" property="totalFloor" jdbcType="INTEGER"/>
@@ -16,74 +17,30 @@
         <result column="del_status" property="delStatus" jdbcType="INTEGER"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
-    <sql id="Example_Where_Clause">
-        <where>
-            <foreach collection="oredCriteria" item="criteria" separator="or">
-                <if test="criteria.valid">
-                    <trim prefix="(" suffix=")" prefixOverrides="and">
-                        <foreach collection="criteria.criteria" item="criterion">
-                            <choose>
-                                <when test="criterion.noValue">
-                                    and ${criterion.condition}
-                                </when>
-                                <when test="criterion.singleValue">
-                                    and ${criterion.condition} #{criterion.value}
-                                </when>
-                                <when test="criterion.betweenValue">
-                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                                </when>
-                                <when test="criterion.listValue">
-                                    and ${criterion.condition}
-                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
-                                             separator=",">
-                                        #{listItem}
-                                    </foreach>
-                                </when>
-                            </choose>
-                        </foreach>
-                    </trim>
-                </if>
-            </foreach>
-        </where>
-    </sql>
-    <sql id="Update_By_Example_Where_Clause">
-        <where>
-            <foreach collection="example.oredCriteria" item="criteria" separator="or">
-                <if test="criteria.valid">
-                    <trim prefix="(" suffix=")" prefixOverrides="and">
-                        <foreach collection="criteria.criteria" item="criterion">
-                            <choose>
-                                <when test="criterion.noValue">
-                                    and ${criterion.condition}
-                                </when>
-                                <when test="criterion.singleValue">
-                                    and ${criterion.condition} #{criterion.value}
-                                </when>
-                                <when test="criterion.betweenValue">
-                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                                </when>
-                                <when test="criterion.listValue">
-                                    and ${criterion.condition}
-                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
-                                             separator=",">
-                                        #{listItem}
-                                    </foreach>
-                                </when>
-                            </choose>
-                        </foreach>
-                    </trim>
-                </if>
-            </foreach>
-        </where>
-    </sql>
     <sql id="Base_Column_List">
-    id, building_no, residence_id, std_addr_id, house_count, total_floor, lat, lon, baidu_lon, 
-    baidu_lat, create_time, del_status, update_time
-  </sql>
+        id, building_no, residence_id, std_addr_id, house_count, total_floor, lat, lon, baidu_lon,
+        baidu_lat, create_time, del_status, update_time
+    </sql>
+
     <select id="selectBuildById" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"></include> FROM `of_building` WHERE residence_id = #{id} ORDER BY id asc
         <if test="null != page and '' != page">
             LIMIT  ${page},10
         </if>
     </select>
+
+    <select id="getBuilidngInfoById" resultMap="BaseResultMap">
+        select b.*,r.residence_name from ocn_address.of_building b, ocn_address.of_residence r where b.residence_id = r.id and b.id = #{buildingId}
+    </select>
+
+    <update id="updateOfBuildingInfo">
+        UPDATE ocn_address.of_building(building_no, house_count, total_floor, update_time)
+        VALUES (
+          #{buildingNo},
+          #{houseCount},
+          #{totalFloor},
+          NOW()
+        )
+        WHERE id = #{buildingId}
+    </update>
 </mapper>

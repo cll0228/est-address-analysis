@@ -231,7 +231,7 @@
                                                     </div>
                                                 
                                                 <div class="modal-footer">
-                                                	<button type="submit" class="btn green" onClick="">提交</button>
+                                                	<button type="button" class="btn green" onClick="detailModify()">提交</button>
                                                 	<button type="button" data-dismiss="modal" class="btn dark btn-outline">取消</button>
                                                 </div>
 												</form>                                                
@@ -248,9 +248,46 @@
         initMap();//加載地圖
     })
 
+	Date.prototype.pattern=function(fmt) {           
+    var o = {           
+    "M+" : this.getMonth()+1, //月份           
+    "d+" : this.getDate(), //日           
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时           
+    "H+" : this.getHours(), //小时           
+    "m+" : this.getMinutes(), //分           
+    "s+" : this.getSeconds(), //秒           
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度           
+    "S" : this.getMilliseconds() //毫秒           
+    };           
+    var week = {           
+    "0" : "/u65e5",           
+    "1" : "/u4e00",           
+    "2" : "/u4e8c",           
+    "3" : "/u4e09",           
+    "4" : "/u56db",           
+    "5" : "/u4e94",           
+    "6" : "/u516d"          
+    };           
+    if(/(y+)/.test(fmt)){           
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));           
+    }           
+    if(/(E+)/.test(fmt)){           
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);           
+    }           
+    for(var k in o){           
+        if(new RegExp("("+ k +")").test(fmt)){           
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));           
+        }           
+    }           
+    return fmt;           
+} 
+
     var resi_marker ;
     
     function detailModify() {
+    		if (! $("#form_sample_2").valid()) {
+        		return;
+     		}
             $.ajax({
                 url: '${ctx}/detailModify.do?',
                 type: "Post",
@@ -259,8 +296,10 @@
                 	if (data.status == true) {
             			$('#modifyDetail').modal('hide');
             			$('#residenceName').text($('#xqmid').val());
-            			var modifyHtml = "已于"+data.modifyTime+"检查更新";
-            			$('#modifyTime').append(modifyHtml);
+            			var date = new Date(data.modifyTime);
+            			var trs = date.pattern("yyyy年MM月dd日HH点mm分");
+            			var modifyHtml = "已于"+trs+"检查更新";
+            			$('#modifyTime').html(modifyHtml);
                     	setTimeout("bootbox.alert('更新成功!')",100);
         			} else {
         				$('#modifyDetail').modal('hide');

@@ -139,16 +139,6 @@
                                                 </div>
                                                 <form action="#" id="form_sample_2" class="form-horizontal">
                                                 <div class="modal-body">
-                                            <div class="form-group" style="display:none">
-                                                <label class="control-label col-md-4">小区id
-                                                    <span class="required"> * </span>
-                                                </label>
-                                                <div class="col-md-6">
-                                                    <div class="input-icon right">
-                                                        <i class="fa" style="z-index:999"></i>
-                                                        <input type="text" class="form-control" name="xqid" value="${ofResidences.id}"/></div>
-                                                </div>
-                                            </div>
                                             <div class="form-group">
                                                 <label class="control-label col-md-4">小区名
                                                     <span class="required"> * </span>
@@ -156,7 +146,7 @@
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
                                                         <i class="fa" style="z-index:999"></i>
-                                                        <input type="text" class="form-control" id="xqm" name="xqm" value="${ofResidences.residenceName}"/></div>
+                                                        <input type="text" class="form-control" id="xqmid" name="xqm" value="${ofResidences.residenceName}"/></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -225,75 +215,23 @@
                                                         <input type="text" class="form-control" name="rjl" value="${ofResidences.vp}"/> </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group" style="display:none">
+                                                <label class="control-label col-md-4">小区id
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <div class="input-icon right">
+                                                        <i class="fa" style="z-index:999"></i>
+                                                        <input type="text" class="form-control" name="xqid" value="${ofResidences.id}"/></div>
+                                                </div>
+                                            </div>
                                                     
                                                     
                                                     
-                                                        <!-- <div class="row">
-                                                            <table class="table table-bordered table-hover" style="width:95%;margin-left:20px">
-                                    							<tbody>
-                                    								<tr>
-                                        								<th width="13%"> 小区名 <span class="required"> * </span></th>
-                                        								<td width="30%">
-                                        									<div class="input-icon right">
-                                                        					<i class="fa"></i>
-                                                        					<input type="text" class="form-control" name="xqm" /></div>
-                                        								</td>
-                                        								<th width="13%"> 小区地址 <span class="required"> * </span></th>
-                                        								<td width="30%">
-                                        									<div class="input-icon right">
-                                                        					<i class="fa"></i>
-                                                        					<input type="text" class="form-control" name="xqdz" /></div>
-                                        								</td>
-                                    								</tr>
-                                    								<tr>
-                                        								<th> 所属区县 <span class="required"> * </span></th>
-                                        								<td>
-                                        									<div class="input-icon right">
-                                                        					<i class="fa"></i>
-                                                        					<input type="text" class="form-control" name="ssqx" /></div>
-                                        								</td>
-                                        								<th> 所属板块 <span class="required"> * </span></th>
-                                        								<td>
-                                        									<div class="input-icon right">
-                                                        					<i class="fa"></i>
-                                                        					<input type="text" class="form-control" name="ssbk" /></div>
-                                        								</td>
-                                    								</tr>
-                                    								<tr>
-                                        								<th> 总楼栋数 </th>
-                                        								<td>
-                                        									<div class="input-icon right">
-                                                        					<i class="fa"></i>
-                                                        					<input type="text" class="form-control" name="zlds" /></div>
-                                        								</td>
-                                        								<th> 总房屋数 </th>
-                                        								<td>
-                                        									<div class="input-icon right">
-                                                        					<i class="fa"></i>
-                                                        					<input type="text" class="form-control" name="zfws" /></div>
-                                        								</td>
-                                    								</tr>
-                                    								<tr>
-                                        								<th> 绿化率 </th>
-                                        								<td>
-                                        									<div class="input-icon right">
-                                                        					<i class="fa"></i>
-                                                        					<input type="text" class="form-control" name="lhl" /></div>
-                                        								</td>
-                                        								<th> 容积率 </th>
-                                        								<td>
-                                        									<div class="input-icon right">
-                                                        					<i class="fa"></i>
-                                                        					<input type="text" class="form-control" name="rjl" /></div>
-                                        								</td>
-                                    								</tr>
-                                    							</tbody>
-                                							</table>
-                                                        </div> -->
                                                     </div>
                                                 
                                                 <div class="modal-footer">
-                                                	<button type="button" class="btn green" onClick="detailModify()">提交</button>
+                                                	<button type="submit" class="btn green" onClick="">提交</button>
                                                 	<button type="button" data-dismiss="modal" class="btn dark btn-outline">取消</button>
                                                 </div>
 												</form>                                                
@@ -320,7 +258,7 @@
                 success: function (data) {
                 	if (data.status == true) {
             			$('#modifyDetail').modal('hide');
-            			$('#residenceName').text($('#xqm').val());
+            			$('#residenceName').text($('#xqmid').val());
             			var modifyHtml = "已于"+data.modifyTime+"检查更新";
             			$('#modifyTime').append(modifyHtml);
                     	setTimeout("bootbox.alert('更新成功!')",100);

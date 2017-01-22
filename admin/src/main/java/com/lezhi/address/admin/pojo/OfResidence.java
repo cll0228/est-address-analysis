@@ -1,6 +1,7 @@
 package com.lezhi.address.admin.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class OfResidence {
     private Integer id;
@@ -54,6 +55,16 @@ public class OfResidence {
     private String townName;
     
     private Date modifyTime;
+
+    private Object residenceBoundaries;
+
+    public Object getResidenceBoundaries() {
+        return residenceBoundaries;
+    }
+
+    public void setResidenceBoundaries(Object residenceBoundaries) {
+        this.residenceBoundaries = residenceBoundaries;
+    }
 
     public Integer getId() {
         return id;

@@ -13,11 +13,11 @@
         #coordinate {
             position: relative;
             width: 718px;
-            margin: 12px auto;
+            margin: 15px auto;
             height: 50px;
         }
         #coordinate tr {
-            height: 30px;
+            height: 10px;
          }
     </style>
 </head>
@@ -83,7 +83,7 @@
                             <!-- END PORTLET-->
                         </div>
                         <div class="col-md-8">
-                            <div id="map" style="height: 350px;width: 710px;border: 10px;"></div>
+                            <div id="map" style="height: 380px;width: 710px;border: 10px;"></div>
                             <div id="coordinate">
                                 <table>
                                     <tr>
@@ -94,8 +94,14 @@
                                         <td id="lon_lat"></td>
                                     </tr>
                                     <tr>
+                                        <th></th>
+                                        <td></td>
+                                        <td></td>
+                                        <th colspan="2"><span style="color:red;"> &nbsp;&nbsp;(可拖动地图楼栋图标显示实时经纬度)</span></th>
+                                    </tr>
+                                    <tr>
                                         <td><input type="button" id="editCoordinate" value="编辑经纬度"/></td>
-                                        <th>&nbsp;&nbsp; <input type="button" value="重置" id="reset"/></th>
+                                        <td>&nbsp;&nbsp; <input type="button" value="重置" id="reset"/></td>
                                     </tr>
                                 </table>
                             </div>
@@ -184,6 +190,7 @@
 
     $(function(){
         initMap();//加載地圖
+        building_marker.enableDragging();
 //        var aa=request.getAttribute("buildingInfo");
 
        /* $("#editCoordinate").click(function () {
@@ -231,14 +238,15 @@
         map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
         //        map.enableScrollWheelZoom(true);
         if(baiduLon != null && baiduLat != null){
-            point = new BMap.Point(<%=baiduLon%>,<%=baiduLat%>);
+            var point = new BMap.Point(<%=baiduLon%>,<%=baiduLat%>);
             var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
              building_marker = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
             building_marker.addEventListener("dragging",function () {
                 var position = building_marker.getPosition();
                 $("#lon_lat").html(position.lng+","+position.lat);
             });
-            building_marker.enableDragging();
+//            building_marker.enableDragging();
+            $("#lon_lat").html(point.lng+","+point.lat);
         }
 
         map.addOverlay(building_marker);
@@ -248,21 +256,20 @@
         map.addEventListener("click",function(e){
             alert(e.point.lng + "," + e.point.lat);
         });
-        $("#lon_lat").html(point.lng+","+point.lat);
         initResidenceBoundary(residenceId);
-    }
 
-    $("#reset").click(function () {
-        map.removeOverlay(building_marker);
-        building_marker = new BMap.Marker(point, {icon: myIcon_i});
-        building_marker.addEventListener("dragging",function () {
-            var position = building_marker.getPosition();
+        $("#reset").click(function () {
+            map.removeOverlay(building_marker);
+            building_marker = new BMap.Marker(point, {icon: myIcon_i});
+            building_marker.addEventListener("dragging",function () {
+                var position = building_marker.getPosition();
+                $("#lon_lat").html(point.lng+","+point.lat);
+            });
             $("#lon_lat").html(point.lng+","+point.lat);
+            map.addOverlay(building_marker);
+            map.centerAndZoom(point,config_map.scale);
         });
-        $("#lon_lat").html(point.lng+","+point.lat);
-        map.addOverlay(building_marker);
-        map.centerAndZoom(point,config_map.scale);
-    });
+    }
 
     var array ;
     var residence_lat = "";
@@ -365,8 +372,8 @@
                         $("#buildingNo").html(data.buildingInfo.buildingNo);
                         $("#houseCount").html(data.buildingInfo.houseCount);
                         $("#totalFloor").html(data.buildingInfo.totalFloor);
-                        $("#baiduLon").html(data.buildingInfo.baiduLon+",");
-                        $("#baiduLat").html(data.buildingInfo.baiduLat);
+                        $("#baiduLon").html(data.buildingInfo.baiduLon==null?"":data.buildingInfo.baiduLon+",");
+                        $("#baiduLat").html(data.buildingInfo.baiduLat==null?"":data.buildingInfo.baiduLat+",");
                         initMap();//加載地圖
                     }
                 },
@@ -382,6 +389,7 @@
     });
     toastr.options.positionClass = 'toast-bottom-center';
     $("#btn_submit").click(function(){
+        var oldBuildingNo = document.getElementById("buildingNo").innerText.replace("号","");
         var buildingNo = $("#txt_buildingNo").val();
         var houseCount = $("#txt_houseCount").val();
         var totalFloor = $("#txt_totalFloor").val();
@@ -393,6 +401,9 @@
             return;
         }if(!isPInt(totalFloor)){
             toastr.warning("总楼层请输入正整数！");
+            return;
+        }if(buildingNo == oldBuildingNo && houseCount == $("#houseCount").html() && totalFloor == $("#totalFloor").html()){
+            toastr.warning("楼栋信息未改变，请重新输入！");
             return;
         }
         Ewin.confirm({ message: "确认要更新楼栋数据吗？" }).on(function (e) {
@@ -411,8 +422,8 @@
                         $("#buildingNo").html(data.buildingInfo.buildingNo);
                         $("#houseCount").html(data.buildingInfo.houseCount);
                         $("#totalFloor").html(data.buildingInfo.totalFloor);
-                        $("#baiduLon").html(data.buildingInfo.baiduLon+",");
-                        $("#baiduLat").html(data.buildingInfo.baiduLat);
+                        $("#baiduLon").html(data.buildingInfo.baiduLon==null?"":data.buildingInfo.baiduLon+",");
+                        $("#baiduLat").html(data.buildingInfo.baiduLat==null?"":data.buildingInfo.baiduLat+",");
                     }
                 },
                 error: function () {

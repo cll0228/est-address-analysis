@@ -138,7 +138,7 @@ var FormValidation = function () {
                 errorPlacement: function (error, element) { // render error placement for each input type
                     var icon = $(element).parent('.input-icon').children('i');
                     icon.removeClass('fa-check').addClass("fa-warning");  
-                    icon.attr("data-original-title", "请求错误").tooltip({'container': 'body'});
+                    icon.attr("data-original-title", error.text()).tooltip();
                 },
 
                 highlight: function (element) { // hightlight error inputs

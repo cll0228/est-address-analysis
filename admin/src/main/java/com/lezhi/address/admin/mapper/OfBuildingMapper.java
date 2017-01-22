@@ -17,6 +17,9 @@ public interface OfBuildingMapper {
 
     List<OfBuilding> selectBuildById(@Param("id") String id, @Param("page") Integer page);
 
-    int updateOfBuildingInfo(@Param("buildingId")String buildingId, @Param("buildingNo")String buildingNo,
+    Integer updateOfBuildingInfo(@Param("buildingId")String buildingId, @Param("buildingNo")String buildingNo,
                              @Param("houseCount")String houseCount, @Param("totalFloor")String totalFloor);
+
+    Integer updateOfBuildingCoordinate(@Param("buildingId")String buildingId, @Param("newLon")String newLon,
+                                       @Param("newLat")String newLat);
 }

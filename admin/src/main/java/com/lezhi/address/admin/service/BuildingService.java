@@ -12,5 +12,7 @@ import java.util.List;
 public interface BuildingService {
     OfBuilding getBuilidngInfoById(String buildingId);
 
-    int updateOfBuildingInfo(String buildingId, String buildingNo, String houseCount, String totalFloor);
+    Integer updateOfBuildingInfo(String buildingId, String buildingNo, String houseCount, String totalFloor);
+
+    Integer updateOfBuildingCoordinate(String buildingId, String newLon, String newLat);
 }

@@ -98,9 +98,11 @@
                                         <th> 子小区地址 </th>
                                         <td id="chlidResidenceAddr2"></td>
                                     </tr>
+
                                     </tbody>
                                 </table>
                             	</div>
+
                          <div class="col-md-4">
                         	<button class="btn btn-success" type="button" onclick="window.history.back()"><i class="fa fa-arrow-left"></i> 返回上一页</button>
                         </div>
@@ -111,15 +113,15 @@
                         	<button class="btn btn-success" type="button"><i class="fa fa-plus"></i> 添加子小区</button>
                         </div>
                             </div>
+
                         </div>
-                    	
+
                         <div class="col-md-5" id="map" style="height: 350px;size: 350px;border: 10px;" >
+
                         </div>
-                        
                     </div>
-                    
-                    
                 </div>
+
             </div>
         </div>
         <!-- END PORTLET-->
@@ -298,6 +300,8 @@
 	$(function(){
         initMap();//加載地圖
     })
+
+    var resi_marker ;
     
     function initMap() {
         //加载地图
@@ -321,8 +325,33 @@
         map.addControl(top_left_control);
         map.addControl(top_left_navigation);
         var center = new BMap.Point($("#lon").text(), $("#lat").text());
-        map.centerAndZoom(center,18);
+        map.centerAndZoom(center,17);
 //        map.enableScrollWheelZoom(true);
+        //小区中心点
+            var point = new BMap.Point(${ofResidences.lon},${ofResidences.lat});
+            var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
+        resi_marker = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
+        resi_marker.addEventListener("dragging",function () {
+                var position = building_marker.getPosition();
+                $("#lon_lat").html(position.lng+","+position.lat);
+            })
+        map.addOverlay(resi_marker);
+        //小区边界
+        var array = ${ofResidences.residenceBoundaries};
+        var polArray = new Array;
+        if(null != array){
+            for(var i = 0;i < array.length;i++){
+                polArray[i] = new BMap.Point(array[i].baiduLon, array[i].baiduLat);
+            }
+            //添加边界
+            var  polygon = new BMap.Polygon(polArray, {
+                strokeColor: "red",
+                strokeWeight: 2,
+                strokeOpacity: 0.5,
+                fillColor: "none"
+            });
+            map.addOverlay(polygon);
+        }
     }
     
 </script>

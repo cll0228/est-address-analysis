@@ -112,13 +112,39 @@
                         <div class="col-md-4">
                         	<button class="btn btn-success" type="button"><i class="fa fa-plus"></i> 添加子小区</button>
                         </div>
+                        <div class="col-md-4" style="height:10px">
+                        </div>
+                        <div class="col-md-12">
+                            <div id="coordinate">
+                                <table>
+                                    <tr>
+                                        <th> 楼栋经纬度： </th>
+                                        <td id="baiduLon">${ofResidences.lon}</td>
+                                        <td id="baiduLat">${ofResidences.lat}</td>
+                                        <th> &nbsp;&nbsp;实时经纬度： </th>
+                                        <td id="lon_lat"></td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <td></td>
+                                        <td></td>
+                                        <th colspan="2"><span style="color:red;"> &nbsp;&nbsp;(可拖动地图楼栋图标显示实时经纬度)</span></th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="button" id="editCoordinate" value="编辑经纬度"/></td>
+                                        <td>&nbsp;&nbsp; <input type="button" value="重置" id="reset"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                             </div>
 
                         </div>
 
-                        <div class="col-md-5" id="map" style="height: 350px;size: 350px;border: 10px;" >
+                        <div class="col-md-5" id="map" style="height: 370px;size: 350px;border: 10px;" >
 
                         </div>
+                        
                     </div>
                 </div>
 
@@ -238,6 +264,43 @@
                                         </div>
                                         </div>
                                     </div>
+                                    
+                                    
+                                    
+                                    
+                                    <!-- 编辑经纬度弹出框 -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">编辑经纬度</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="old_lon">原经度</label>
+                        <input type="text" name="old_lon" class="form-control" id="old_lon">
+                    </div>
+                    <div class="form-group">
+                        <label for="old_lat">原维度</label>
+                        <input type="text" name="old_lat" class="form-control" id="old_lat">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_lon">实时经度</label>
+                        <input type="text" name="new_lon" class="form-control" id="new_lon" placeholder="保留小数点后六位">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_lat">实时维度</label>
+                        <input type="text" name="new_lat" class="form-control" id="new_lat" placeholder="保留小数点后六位">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+                    <button type="button" id="btn_submit1" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <%@include file="/WEB-INF/pages/include/bottom.jsp" %>
 </body>
@@ -282,6 +345,23 @@
     return fmt;           
 } 
 
+	$("#editCoordinate").click(function () {
+        var newCoordinate = $("#lon_lat").html();
+        var strs= new Array(); //定义一数组
+        strs=newCoordinate.split(","); //字符分割
+        $("#old_lon").val(document.getElementById("baiduLon").innerText.replace(",",""));
+        $("#old_lat").val(document.getElementById("baiduLat").innerText);
+        document.getElementById("old_lon").disabled= "disabled";
+        document.getElementById("old_lat").disabled= "disabled";
+        $("#new_lon").val(strs[0]);
+        $("#new_lat").val(strs[1]);
+        $("#myModalLabel1").text("编辑楼栋坐标");
+//        $('#myModal1').modal('show');
+        $('#myModal1').modal({
+            backdrop: false
+        })
+    });
+
     var resi_marker ;
     
     function detailModify() {
@@ -309,6 +389,14 @@
                 }
             })
     }
+    
+    var map = null ;
+    var point = "";
+    var map_center_lon = "";
+    var map_center_lan = "";
+    var config_map = {
+        scale: 17   //比例尺，默认20m
+    };
     
     function initMap() {
         //加载地图
@@ -339,9 +427,10 @@
             var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
         resi_marker = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
         resi_marker.addEventListener("dragging",function () {
-                var position = building_marker.getPosition();
+                var position = resi_marker.getPosition();
                 $("#lon_lat").html(position.lng+","+position.lat);
             })
+        resi_marker.enableDragging();
         map.addOverlay(resi_marker);
         //小区边界
         var array = ${ofResidences.residenceBoundaries};
@@ -359,6 +448,19 @@
             });
             map.addOverlay(polygon);
         }
+        
+        $("#reset").click(function () {
+        	map.removeOverlay(resi_marker);
+            resi_marker = new BMap.Marker(point, {icon: myIcon_i});
+            resi_marker.addEventListener("dragging",function () {
+                var position = resi_marker.getPosition();
+                $("#lon_lat").html(position.lng+","+position.lat);
+            });
+            $("#lon_lat").html(point.lng+","+point.lat);
+            map.addOverlay(resi_marker);
+            map.centerAndZoom(point,config_map.scale);
+            resi_marker.enableDragging();
+        });
     }
     
 </script>

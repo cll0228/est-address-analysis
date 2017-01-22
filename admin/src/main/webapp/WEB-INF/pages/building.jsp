@@ -184,6 +184,7 @@
 
     $(function(){
         initMap();//加載地圖
+        building_marker.enableDragging();
 //        var aa=request.getAttribute("buildingInfo");
 
        /* $("#editCoordinate").click(function () {
@@ -231,14 +232,14 @@
         map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
         //        map.enableScrollWheelZoom(true);
         if(baiduLon != null && baiduLat != null){
-            point = new BMap.Point(<%=baiduLon%>,<%=baiduLat%>);
+            var point = new BMap.Point(<%=baiduLon%>,<%=baiduLat%>);
             var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
              building_marker = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
             building_marker.addEventListener("dragging",function () {
                 var position = building_marker.getPosition();
                 $("#lon_lat").html(position.lng+","+position.lat);
             });
-            building_marker.enableDragging();
+//            building_marker.enableDragging();
             $("#lon_lat").html(point.lng+","+point.lat);
         }
 
@@ -250,19 +251,19 @@
             alert(e.point.lng + "," + e.point.lat);
         });
         initResidenceBoundary(residenceId);
-    }
 
-    $("#reset").click(function () {
-        map.removeOverlay(building_marker);
-        building_marker = new BMap.Marker(point, {icon: myIcon_i});
-        building_marker.addEventListener("dragging",function () {
-            var position = building_marker.getPosition();
+        $("#reset").click(function () {
+            map.removeOverlay(building_marker);
+            building_marker = new BMap.Marker(point, {icon: myIcon_i});
+            building_marker.addEventListener("dragging",function () {
+                var position = building_marker.getPosition();
+                $("#lon_lat").html(point.lng+","+point.lat);
+            });
             $("#lon_lat").html(point.lng+","+point.lat);
+            map.addOverlay(building_marker);
+            map.centerAndZoom(point,config_map.scale);
         });
-        $("#lon_lat").html(point.lng+","+point.lat);
-        map.addOverlay(building_marker);
-        map.centerAndZoom(point,config_map.scale);
-    });
+    }
 
     var array ;
     var residence_lat = "";

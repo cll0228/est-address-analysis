@@ -1,18 +1,18 @@
 package com.lezhi.address.admin.service.impl;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lezhi.address.admin.mapper.OfBuildingMapper;
 import com.lezhi.address.admin.mapper.OfResidenceMapper;
 import com.lezhi.address.admin.pojo.OfBuilding;
 import com.lezhi.address.admin.pojo.OfResidence;
 import com.lezhi.address.admin.pojo.ResidenceBoundary;
 import com.lezhi.address.admin.service.ResidenceService;
-import org.apache.commons.collections.map.HashedMap;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Cuill on 2017/1/18.
@@ -64,4 +64,9 @@ public class ResidenceServiceImpl implements ResidenceService {
         List<ResidenceBoundary> boundaries = ofResidenceMapper.selectOfResidenceCenter(residenceId);
         return boundaries;
     }
+
+	@Override
+	public Integer updateOfResidenceInfo(OfResidence ofResidence) {
+		return ofResidenceMapper.updateOfResidenceInfo(ofResidence);
+	}
 }

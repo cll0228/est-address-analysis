@@ -48,7 +48,7 @@
                                     <tr>
                                         <th width="30%"> 小区名称 </th>
                                         <td id="residenceName">${ofResidences.residenceName}</td>
-                                        <td></td>
+                                        <td id="modifyTime"><fmt:formatDate value="${ofResidences.modifyTime}" pattern="已于yyyy年MM月dd日HH点mm分检查更新" /></td>
                                     </tr>
                                     <tr>
                                         <th> 小区别名 </th>
@@ -154,7 +154,7 @@
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
                                                         <i class="fa" style="z-index:999"></i>
-                                                        <input type="text" class="form-control" name="xqm" value="${ofResidences.residenceName}"/></div>
+                                                        <input type="text" class="form-control" id="xqm" name="xqm" value="${ofResidences.residenceName}"/></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -314,7 +314,17 @@
                 type: "Post",
                 data: $('#form_sample_2').serialize(),
                 success: function (data) {
-                    alert("aaa");
+                	if (data.status == true) {
+            			$('#modifyDetail').modal('hide');
+            			$('#residenceName').text($('#xqm').val());
+            			var modifyHtml = "已于"+data.modifyTime+"检查更新";
+            			$('#modifyTime').append(modifyHtml);
+                    	setTimeout("bootbox.alert('更新成功!')",100);
+        			} else {
+        				$('#modifyDetail').modal('hide');
+                    	setTimeout("bootbox.alert('更新失败,请稍后再试!')",100);
+        			}
+                	
                 }
             })
     }

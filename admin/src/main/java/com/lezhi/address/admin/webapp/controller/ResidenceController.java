@@ -1,9 +1,12 @@
 package com.lezhi.address.admin.webapp.controller;
 
-import com.lezhi.address.admin.pojo.OfBuilding;
-import com.lezhi.address.admin.pojo.OfResidence;
-import com.lezhi.address.admin.pojo.OfResidenceModify;
-import com.lezhi.address.admin.service.ResidenceService;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,12 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.lezhi.address.admin.pojo.OfResidence;
+import com.lezhi.address.admin.service.ResidenceService;
 
 /**
  * Created by Cuill on 2017/1/17.
@@ -48,18 +47,31 @@ public class ResidenceController {
 
     @RequestMapping(value = "detailModify", method = RequestMethod.POST)
     @ResponseBody
-    public String detailModify(HttpServletRequest request, HttpServletResponse response) {
-    	OfResidenceModify ofm = new OfResidenceModify();
-    	ofm.setXqm(request.getParameter("xqm"));
-    	ofm.setXqdz(request.getParameter("xqdz"));
-    	ofm.setXqid(Integer.parseInt(request.getParameter("xqid")));
-    	ofm.setZfws(Integer.parseInt(request.getParameter("zfws")));
-    	ofm.setZlds(Integer.parseInt(request.getParameter("zlds")));
-    	ofm.setGp(Double.parseDouble(request.getParameter("gp")));
-    	ofm.setVp(Double.parseDouble(request.getParameter("vp")));
+    public Map<String, Object> detailModify(HttpServletRequest request, HttpServletResponse response) {
+    	Map<String, Object> result = new HashMap<>();
+    	OfResidence ofResidence = new OfResidence();
+    	ofResidence.setResidenceName(request.getParameter("xqm"));
+    	ofResidence.setResidenceAddr(request.getParameter("xqdz"));
+    	ofResidence.setId(Integer.parseInt(request.getParameter("xqid")));
+    	if(request.getParameter("zfws")!=null) {
+    		ofResidence.setHouseCount(Integer.parseInt(request.getParameter("zfws")));
+    	}
+    	if(request.getParameter("zlds")!=null) {
+    		ofResidence.setBuildingCount(Integer.parseInt(request.getParameter("zlds")));
+    	}
+    	if(request.getParameter("lhl")!=null) {
+    		ofResidence.setGp(Double.parseDouble(request.getParameter("lhl")));
+    	}
+		if(request.getParameter("rjl")!=null) {
+			ofResidence.setVp(Double.parseDouble(request.getParameter("rjl")));
+		}
+    	
+    	boolean success = 1 == residenceService.updateOfResidenceInfo(ofResidence);
 //    	ofm.setSsqx(request.getParameter("ssqx"));
 //    	ofm.setSsbk(request.getParameter("ssbk"));
-    	return null;
+    	result.put("status", success);
+        result.put("modifyTime", new Date());
+    	return result;
     }
     
     @RequestMapping(value = "query", method = RequestMethod.POST)

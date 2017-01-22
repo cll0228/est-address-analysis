@@ -52,6 +52,8 @@ public class OfResidence {
     private String districtNname;
     
     private String townName;
+    
+    private Date modifyTime;
 
     public Integer getId() {
         return id;
@@ -251,5 +253,13 @@ public class OfResidence {
 
 	public void setTownName(String townName) {
 		this.townName = townName;
+	}
+
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 }

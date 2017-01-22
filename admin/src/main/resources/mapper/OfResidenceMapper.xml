@@ -96,6 +96,7 @@
   <select id="selectResidenceDetailByResidenceId" resultType="com.lezhi.address.admin.pojo.OfResidence">
     SELECT
 	a.id,
+	a.modify_time modifyTime,
 	group_concat(c.road_lane SEPARATOR ';') residenceAddr,
 	a.residence_addr describeAddr,
 	a.residence_name residenceName,
@@ -144,5 +145,21 @@
     WHERE
     id = #{residenceId}
   </select>
+  
+  <update id="updateOfResidenceInfo" parameterType="com.lezhi.address.admin.pojo.OfResidence">
+        UPDATE `ocn_address`.`of_residence`
+            SET
+             `residence_name` = #{ofResidence.residenceName},
+             `residence_addr` = #{ofResidence.residenceAddr},
+             `modify_time` = now(),
+             `house_count` = #{ofResidence.houseCount},
+             `building_count` = #{ofResidence.buildingCount},
+             `vp` = #{ofResidence.vp},
+             `gp` = #{ofResidence.gp}
+            WHERE
+                (`id` = #{ofResidence.id});
+    </update>
+  
+  
 
 </mapper>

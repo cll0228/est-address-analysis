@@ -13,11 +13,11 @@
         #coordinate {
             position: relative;
             width: 718px;
-            margin: 12px auto;
+            margin: 15px auto;
             height: 50px;
         }
         #coordinate tr {
-            height: 30px;
+            height: 10px;
          }
     </style>
 </head>
@@ -83,7 +83,7 @@
                             <!-- END PORTLET-->
                         </div>
                         <div class="col-md-8">
-                            <div id="map" style="height: 350px;width: 710px;border: 10px;"></div>
+                            <div id="map" style="height: 380px;width: 710px;border: 10px;"></div>
                             <div id="coordinate">
                                 <table>
                                     <tr>
@@ -94,8 +94,14 @@
                                         <td id="lon_lat"></td>
                                     </tr>
                                     <tr>
+                                        <th></th>
+                                        <td></td>
+                                        <td></td>
+                                        <th colspan="2"><span style="color:red;"> &nbsp;&nbsp;(可拖动地图楼栋图标显示实时经纬度)</span></th>
+                                    </tr>
+                                    <tr>
                                         <td><input type="button" id="editCoordinate" value="编辑经纬度"/></td>
-                                        <th>&nbsp;&nbsp; <input type="button" value="重置" id="reset"/></th>
+                                        <td>&nbsp;&nbsp; <input type="button" value="重置" id="reset"/></td>
                                     </tr>
                                 </table>
                             </div>

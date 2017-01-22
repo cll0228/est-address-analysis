@@ -239,6 +239,7 @@
                 $("#lon_lat").html(position.lng+","+position.lat);
             });
             building_marker.enableDragging();
+            $("#lon_lat").html(point.lng+","+point.lat);
         }
 
         map.addOverlay(building_marker);
@@ -248,7 +249,6 @@
         map.addEventListener("click",function(e){
             alert(e.point.lng + "," + e.point.lat);
         });
-        $("#lon_lat").html(point.lng+","+point.lat);
         initResidenceBoundary(residenceId);
     }
 
@@ -365,8 +365,8 @@
                         $("#buildingNo").html(data.buildingInfo.buildingNo);
                         $("#houseCount").html(data.buildingInfo.houseCount);
                         $("#totalFloor").html(data.buildingInfo.totalFloor);
-                        $("#baiduLon").html(data.buildingInfo.baiduLon+",");
-                        $("#baiduLat").html(data.buildingInfo.baiduLat);
+                        $("#baiduLon").html(data.buildingInfo.baiduLon==null?"":data.buildingInfo.baiduLon+",");
+                        $("#baiduLat").html(data.buildingInfo.baiduLat==null?"":data.buildingInfo.baiduLat+",");
                         initMap();//加載地圖
                     }
                 },
@@ -382,6 +382,7 @@
     });
     toastr.options.positionClass = 'toast-bottom-center';
     $("#btn_submit").click(function(){
+        var oldBuildingNo = document.getElementById("buildingNo").innerText.replace("号","");
         var buildingNo = $("#txt_buildingNo").val();
         var houseCount = $("#txt_houseCount").val();
         var totalFloor = $("#txt_totalFloor").val();
@@ -393,6 +394,9 @@
             return;
         }if(!isPInt(totalFloor)){
             toastr.warning("总楼层请输入正整数！");
+            return;
+        }if(buildingNo == oldBuildingNo && houseCount == $("#houseCount").html() && totalFloor == $("#totalFloor").html()){
+            toastr.warning("楼栋信息未改变，请重新输入！");
             return;
         }
         Ewin.confirm({ message: "确认要更新楼栋数据吗？" }).on(function (e) {
@@ -411,8 +415,8 @@
                         $("#buildingNo").html(data.buildingInfo.buildingNo);
                         $("#houseCount").html(data.buildingInfo.houseCount);
                         $("#totalFloor").html(data.buildingInfo.totalFloor);
-                        $("#baiduLon").html(data.buildingInfo.baiduLon+",");
-                        $("#baiduLat").html(data.buildingInfo.baiduLat);
+                        $("#baiduLon").html(data.buildingInfo.baiduLon==null?"":data.buildingInfo.baiduLon+",");
+                        $("#baiduLat").html(data.buildingInfo.baiduLat==null?"":data.buildingInfo.baiduLat+",");
                     }
                 },
                 error: function () {

@@ -1,5 +1,6 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="com.lezhi.address.admin.pojo.OfBuilding" %>
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/pages/include/top.jsp" %>
 <!DOCTYPE html>
@@ -32,6 +33,7 @@
     String baiduLon = result.getBaiduLon();
     String baiduLat = result.getBaiduLat();
     Integer residenceId = result.getResidenceId();
+    Date updateTime = result.getUpdateTime();
 %>
 
     <div class="row" id="radarPrice" style="display:block">
@@ -65,11 +67,15 @@
                                     </tr>
                                     <tr>
                                         <th> 房屋数量 </th>
-                                        <td id="houseCount"><%=houseCount%></td>
+                                        <td id="houseCount"><%=houseCount==null?"":houseCount%></td>
                                     </tr>
                                     <tr>
                                         <th> 总楼层 </th>
                                         <td id="totalFloor"><%=(totalFloor==null?"":totalFloor)%></td>
+                                    </tr>
+                                    <tr>
+                                        <th> 更新时间 </th>
+                                        <td id="updateTime"><%=(updateTime==null?"":updateTime)%></td>
                                     </tr>
                                     <tr>
                                         <td id="edit" colspan="2"><input id="editBuilding" type="button" value="编辑楼栋"/></td>
@@ -370,8 +376,9 @@
                         $("#residenceName").html(data.buildingInfo.residenceName);
                         $("#buildingId").html(data.buildingInfo.id);
                         $("#buildingNo").html(data.buildingInfo.buildingNo);
-                        $("#houseCount").html(data.buildingInfo.houseCount);
-                        $("#totalFloor").html(data.buildingInfo.totalFloor);
+                        $("#houseCount").html(data.buildingInfo.houseCount==null?"":data.buildingInfo.houseCount+",");
+                        $("#totalFloor").html(data.buildingInfo.totalFloor==null?"":data.buildingInfo.totalFloor+",");
+                        $("#updateTime").html(data.buildingInfo.updateTime==null?"":data.buildingInfo.updateTime+",");
                         $("#baiduLon").html(data.buildingInfo.baiduLon==null?"":data.buildingInfo.baiduLon+",");
                         $("#baiduLat").html(data.buildingInfo.baiduLat==null?"":data.buildingInfo.baiduLat+",");
                         initMap();//加載地圖
@@ -387,7 +394,7 @@
             });
         });
     });
-    toastr.options.positionClass = 'toast-bottom-center';
+    toastr.options.positionClass = 'toast-top-center';
     $("#btn_submit").click(function(){
         var oldBuildingNo = document.getElementById("buildingNo").innerText.replace("号","");
         var buildingNo = $("#txt_buildingNo").val();
@@ -420,8 +427,9 @@
                         $("#residenceName").html(data.buildingInfo.residenceName);
                         $("#buildingId").html(data.buildingInfo.id);
                         $("#buildingNo").html(data.buildingInfo.buildingNo);
-                        $("#houseCount").html(data.buildingInfo.houseCount);
-                        $("#totalFloor").html(data.buildingInfo.totalFloor);
+                        $("#houseCount").html(data.buildingInfo.houseCount==null?"":data.buildingInfo.houseCount+",");
+                        $("#totalFloor").html(data.buildingInfo.totalFloor==null?"":data.buildingInfo.totalFloor+",");
+                        $("#updateTime").html(data.buildingInfo.updateTime==null?"":data.buildingInfo.updateTime+",");
                         $("#baiduLon").html(data.buildingInfo.baiduLon==null?"":data.buildingInfo.baiduLon+",");
                         $("#baiduLat").html(data.buildingInfo.baiduLat==null?"":data.buildingInfo.baiduLat+",");
                     }

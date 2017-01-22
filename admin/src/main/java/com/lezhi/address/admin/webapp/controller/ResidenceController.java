@@ -1,9 +1,6 @@
 package com.lezhi.address.admin.webapp.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,9 +42,10 @@ public class ResidenceController {
     	OfResidence ofResidences = residenceService.selectResidenceDetailByResidenceId(residenceId);
         //查询边界
         List<ResidenceBoundary> residenceBoundaries = residenceService.selectResiBoundaryById(residenceId.toString());
-        if(null != residenceBoundaries && residenceBoundaries.size() != 0){
+        if (null != residenceBoundaries && residenceBoundaries.size() != 0) {
             ofResidences.setResidenceBoundaries(objectMapper.writeValueAsString(residenceBoundaries));
-        }
+        } else
+            ofResidences.setResidenceBoundaries(new ArrayList<>());
         //封装要显示到视图的数据
         mv.addObject("ofResidences",ofResidences);
         //视图名

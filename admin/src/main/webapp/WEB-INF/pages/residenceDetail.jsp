@@ -308,7 +308,7 @@
         src="http://api.map.baidu.com/api?v=2.0&ak=5ibDwRtW0ic8CacALvMkxt8tMtBEYyvc"></script>
 <script type="text/javascript">
 	$(function(){
-        initMap();//加載地圖
+        initMap(${ofResidences.lon},${ofResidences.lat});//加載地圖
     })
 
 	Date.prototype.pattern=function(fmt) {           
@@ -381,15 +381,18 @@
                 data: {"residenceId":residenceId,"newLon":new_lon,"newLat":new_lat},
                 success: function (data) {
                     if (data.status == "success") {
-                        toastr.success('提交数据成功');
+                        //toastr.success('提交数据成功');
                         $('#modifyDetail').modal('hide');
                         $('#residenceName').text($('#xqmid').val());
                         var date = new Date(data.modifyTime);
                         var trs = date.pattern("yyyy年MM月dd日HH点mm分");
                         var modifyHtml = "已于"+trs+"检查更新";
+                        $("#baiduLon").html(new_lon);
+                        $("#baiduLat").html(new_lat);
+                        $("#lon_lat").html("");
                         $('#modifyTime').html(modifyHtml);
                         setTimeout("bootbox.alert('更新成功!')",100);
-                        initMap();//加載地圖
+                        initMap(new_lon,new_lat);//加載地圖
                     } else {
                         $('#modifyDetail').modal('hide');
                         setTimeout("bootbox.alert('更新失败,请稍后再试!')",100);
@@ -461,7 +464,7 @@
         scale: 17   //比例尺，默认20m
     };
     
-    function initMap() {
+    function initMap(lon,lat) {
         //加载地图
         map = new BMap.Map("map");
         map.setMapStyle({
@@ -486,7 +489,7 @@
         map.centerAndZoom(center,17);
 //        map.enableScrollWheelZoom(true);
         //小区中心点
-            var point = new BMap.Point(${ofResidences.lon},${ofResidences.lat});
+            var point = new BMap.Point(lon,lat);
             var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
         resi_marker = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
         resi_marker.addEventListener("dragging",function () {

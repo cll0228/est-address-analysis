@@ -161,8 +161,8 @@
     </update>
 
   <update id="updateOfResidenceCoordinate">
-    UPDATE dazhongdianping.of_residence
-    set baidu_lon=#{newLon}, baidu_lat=#{newLat}, modify_time=NOW()
+    UPDATE ocn_address.of_residence
+    set lon=#{newLon}, lat=#{newLat}, modify_time=NOW()
     WHERE id = #{residenceId}
   </update>
 

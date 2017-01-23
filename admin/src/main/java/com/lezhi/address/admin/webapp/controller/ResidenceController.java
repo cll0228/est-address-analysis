@@ -111,9 +111,10 @@ public class ResidenceController {
                                                   @RequestParam(value = "newLon")String newLon,
                                                   @RequestParam(value = "newLat")String newLat) {
         Map<String, Object> result = new HashMap<>();
-//        boolean success = 1 == residenceService.updateOfResidenceCoordinate(residenceId, newLon, newLat);
-        boolean success = true;
+        boolean success = 1 == residenceService.updateOfResidenceCoordinate(residenceId, newLon, newLat);
+//        boolean success = true;
         result.put("status", success ? "success" : "failed");
+        result.put("modifyTime", new Date());
         return result;
     }
 }

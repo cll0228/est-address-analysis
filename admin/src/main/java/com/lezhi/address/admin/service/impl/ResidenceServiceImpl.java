@@ -69,4 +69,8 @@ public class ResidenceServiceImpl implements ResidenceService {
 	public Integer updateOfResidenceInfo(OfResidence ofResidence) {
 		return ofResidenceMapper.updateOfResidenceInfo(ofResidence);
 	}
+
+    public Integer updateOfResidenceCoordinate(String residenceId, String newLon, String newLat) {
+        return ofResidenceMapper.updateOfResidenceCoordinate(residenceId, newLon, newLat);
+    }
 }

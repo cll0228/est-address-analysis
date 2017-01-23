@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lezhi.address.admin.pojo.OfBuilding;
 import com.lezhi.address.admin.pojo.OfResidence;
 import com.lezhi.address.admin.pojo.ResidenceBoundary;
 import com.lezhi.address.admin.service.ResidenceService;
@@ -102,5 +103,20 @@ public class ResidenceController {
             return null;
         }
         return residenceService.selectBuildById(id, page);
+    }
+
+    @RequestMapping(value = "changeResidenceCoordinate", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> changeBuildingInfo(@RequestParam(value = "residenceId")String residenceId,
+                                                  @RequestParam(value = "newLon")String newLon,
+                                                  @RequestParam(value = "newLat")String newLat) {
+        Map<String, Object> result = new HashMap<>();
+//        boolean success = 1 == residenceService.updateOfResidenceCoordinate(residenceId, newLon, newLat);
+        boolean success = true;
+        // 楼栋详情信息
+//        OfBuilding ofBuilding = buildingService.getBuilidngInfoById(buildingId);
+        result.put("status", success ? "success" : "failed");
+//        result.put("buildingInfo", ofBuilding);
+        return result;
     }
 }

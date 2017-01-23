@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <c:set var="pageTitle1" value="主页"/>
-<c:set var="pageTitle2" value="地址标准化"/>
+<c:set var="pageTitle2" value="小区搜索"/>
 <%@include file="/WEB-INF/pages/include/header.jsp" %>
 <head>
     <title>小区搜索</title>

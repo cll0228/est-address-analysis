@@ -2,8 +2,9 @@
 <ul class="nav navbar-nav">
 
     <li class="menu-dropdown classic-menu-dropdown ">
-        <a href="${ctx}/search.do"> 小区搜索
+        <a href="#">${pageTitle2}
         </a>
+
     </li>
 
     <%-- <li class="menu-dropdown classic-menu-dropdown ">

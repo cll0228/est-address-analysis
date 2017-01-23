@@ -113,10 +113,7 @@ public class ResidenceController {
         Map<String, Object> result = new HashMap<>();
 //        boolean success = 1 == residenceService.updateOfResidenceCoordinate(residenceId, newLon, newLat);
         boolean success = true;
-        // 楼栋详情信息
-//        OfBuilding ofBuilding = buildingService.getBuilidngInfoById(buildingId);
         result.put("status", success ? "success" : "failed");
-//        result.put("buildingInfo", ofBuilding);
         return result;
     }
 }

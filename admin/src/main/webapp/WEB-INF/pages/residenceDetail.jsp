@@ -344,7 +344,67 @@
     }           
     return fmt;           
 } 
+	//经度校验
+    function isLon(str) {
+        var g = /^-?(?:(?:180(?:\.0{1,6})?)|(?:(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d{1,6})?))$/;
+        return g.test(str);
+    }
+    //维度校验
+    function isLat(str) {
+        var g = /^-?(?:90(?:\.0{1,6})?|(?:[1-8]?\d(?:\.\d{1,6})?))$/;
+        return g.test(str);
+    }
+	
+	
+	$("#btn_submit1").click(function(){
+        var new_lon = $("#new_lon").val();
+        var new_lat = $("#new_lat").val();
+        if(!isLon(new_lon)){
+            toastr.warning("经度不符合规范！");
+            return;
+        }if(!isLat(new_lat)){
+            toastr.warning("维度不符合规范！");
+            return;
+        }if(new_lat == $("#old_lat").val() && new_lon == $("#old_lon").val()){
+            toastr.warning("经纬度未改变！");
+            return;
+        }
 
+        Ewin.confirm({ message: "确认要更新楼栋经纬度坐标吗？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            $.ajax({
+                url: '${ctx}/changeBuildingCoordinate.do?',
+                type: "POST",
+                data: {"buildingId":buildingId,"newLon":new_lon,"newLat":new_lat},
+                success: function (data) {
+                    if (data.status == "success") {
+                        toastr.success('提交数据成功');
+                        $("#residenceName").html(data.buildingInfo.residenceName);
+                        $("#buildingId").html(data.buildingInfo.id);
+                        $("#buildingNo").html(data.buildingInfo.buildingNo);
+                        $("#houseCount").html(data.buildingInfo.houseCount==null?"":data.buildingInfo.houseCount+",");
+                        $("#totalFloor").html(data.buildingInfo.totalFloor==null?"":data.buildingInfo.totalFloor+",");
+                        $("#updateTime").html(data.buildingInfo.updateTime==null?"":data.buildingInfo.updateTime+",");
+                        $("#baiduLon").html(data.buildingInfo.baiduLon==null?"":data.buildingInfo.baiduLon+",");
+                        $("#baiduLat").html(data.buildingInfo.baiduLat==null?"":data.buildingInfo.baiduLat+",");
+                        initMap();//加載地圖
+                    }
+                },
+                error: function () {
+                    toastr.error('Error');
+                },
+                complete: function () {
+
+                }
+
+            });
+        });
+    });
+	
+	
+	
 	$("#editCoordinate").click(function () {
         var newCoordinate = $("#lon_lat").html();
         var strs= new Array(); //定义一数组

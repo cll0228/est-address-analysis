@@ -21,4 +21,6 @@ public interface ResidenceService {
     List<ResidenceBoundary> selectOfResidenceCenter(String residenceId);
     
     Integer updateOfResidenceInfo(OfResidence ofResidence);
+
+    Integer updateOfResidenceCoordinate(String residenceId, String newLon, String newLat);
 }

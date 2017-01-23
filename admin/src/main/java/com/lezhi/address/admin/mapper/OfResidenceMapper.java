@@ -20,4 +20,7 @@ public interface OfResidenceMapper {
     List<ResidenceBoundary> selectOfResidenceCenter(@Param("residenceId")String residenceId);
     
     Integer updateOfResidenceInfo(@Param("ofResidence")OfResidence ofResidence);
+
+    Integer updateOfResidenceCoordinate(@Param("residenceId")String residenceId, @Param("newLon")String newLon,
+                                        @Param("newLat")String newLat);
 }

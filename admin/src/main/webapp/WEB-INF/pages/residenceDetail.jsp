@@ -118,7 +118,7 @@
                             <div id="coordinate">
                                 <table>
                                     <tr>
-                                        <th> 楼栋经纬度： </th>
+                                        <th> 小区经纬度： </th>
                                         <td id="baiduLon">${ofResidences.lon}</td>
                                         <td id="baiduLat">${ofResidences.lat}</td>
                                         <th> &nbsp;&nbsp;实时经纬度： </th>
@@ -128,7 +128,7 @@
                                         <th></th>
                                         <td></td>
                                         <td></td>
-                                        <th colspan="2"><span style="color:red;"> &nbsp;&nbsp;(可拖动地图楼栋图标显示实时经纬度)</span></th>
+                                        <th colspan="2"><span style="color:red;"> &nbsp;&nbsp;(可拖动地图小区中心点图标显示实时经纬度)</span></th>
                                     </tr>
                                     <tr>
                                         <td><input type="button" id="editCoordinate" value="编辑经纬度"/></td>
@@ -308,7 +308,7 @@
         src="http://api.map.baidu.com/api?v=2.0&ak=5ibDwRtW0ic8CacALvMkxt8tMtBEYyvc"></script>
 <script type="text/javascript">
 	$(function(){
-        initMap();//加載地圖
+        initMap(${ofResidences.lon},${ofResidences.lat});//加載地圖
     })
 
 	Date.prototype.pattern=function(fmt) {           
@@ -344,7 +344,73 @@
     }           
     return fmt;           
 } 
+	//经度校验
+    function isLon(str) {
+        var g = /^-?(?:(?:180(?:\.0{1,6})?)|(?:(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d{1,6})?))$/;
+        return g.test(str);
+    }
+    //维度校验
+    function isLat(str) {
+        var g = /^-?(?:90(?:\.0{1,6})?|(?:[1-8]?\d(?:\.\d{1,6})?))$/;
+        return g.test(str);
+    }
+	
+	
+	$("#btn_submit1").click(function(){
+        var residenceId = ${ofResidences.id};
+        var new_lon = $("#new_lon").val();
+        var new_lat = $("#new_lat").val();
+        if(!isLon(new_lon)){
+            toastr.warning("经度不符合规范！");
+            return;
+        }if(!isLat(new_lat)){
+            toastr.warning("维度不符合规范！");
+            return;
+        }if(new_lat == $("#old_lat").val() && new_lon == $("#old_lon").val()){
+            toastr.warning("经纬度未改变！");
+            return;
+        }
 
+        Ewin.confirm({ message: "确认要更新小区经纬度坐标吗？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            $.ajax({
+                url: '${ctx}/changeResidenceCoordinate.do?',
+                type: "POST",
+                data: {"residenceId":residenceId,"newLon":new_lon,"newLat":new_lat},
+                success: function (data) {
+                    if (data.status == "success") {
+                        //toastr.success('提交数据成功');
+                        $('#modifyDetail').modal('hide');
+                        $('#residenceName').text($('#xqmid').val());
+                        var date = new Date(data.modifyTime);
+                        var trs = date.pattern("yyyy年MM月dd日HH点mm分");
+                        var modifyHtml = "已于"+trs+"检查更新";
+                        $("#baiduLon").html(new_lon);
+                        $("#baiduLat").html(new_lat);
+                        $("#lon_lat").html("");
+                        $('#modifyTime').html(modifyHtml);
+                        setTimeout("bootbox.alert('更新成功!')",100);
+                        initMap(new_lon,new_lat);//加載地圖
+                    } else {
+                        $('#modifyDetail').modal('hide');
+                        setTimeout("bootbox.alert('更新失败,请稍后再试!')",100);
+                    }
+                },
+                error: function () {
+                    toastr.error('Error');
+                },
+                complete: function () {
+
+                }
+
+            });
+        });
+    });
+	
+	
+	
 	$("#editCoordinate").click(function () {
         var newCoordinate = $("#lon_lat").html();
         var strs= new Array(); //定义一数组
@@ -355,7 +421,7 @@
         document.getElementById("old_lat").disabled= "disabled";
         $("#new_lon").val(strs[0]);
         $("#new_lat").val(strs[1]);
-        $("#myModalLabel1").text("编辑楼栋坐标");
+        $("#myModalLabel1").text("编辑小区坐标");
 //        $('#myModal1').modal('show');
         $('#myModal1').modal({
             backdrop: false
@@ -398,7 +464,7 @@
         scale: 17   //比例尺，默认20m
     };
     
-    function initMap() {
+    function initMap(lon,lat) {
         //加载地图
         map = new BMap.Map("map");
         map.setMapStyle({
@@ -423,7 +489,7 @@
         map.centerAndZoom(center,17);
 //        map.enableScrollWheelZoom(true);
         //小区中心点
-            var point = new BMap.Point(${ofResidences.lon},${ofResidences.lat});
+            var point = new BMap.Point(lon,lat);
             var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
         resi_marker = new BMap.Marker(point, {icon: myIcon_i});  // 创建标注
         resi_marker.addEventListener("dragging",function () {
@@ -462,6 +528,160 @@
             resi_marker.enableDragging();
         });
     }
-    
+
+
+    (function ($) {
+
+        window.Ewin = function () {
+            var html = '<div id="[Id]" class="modal fade" role="dialog" aria-labelledby="modalLabel">' +
+                    '<div class="modal-dialog modal-sm">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' +
+                    '<h4 class="modal-title" id="modalLabel">[Title]</h4>' +
+                    '</div>' +
+                    '<div class="modal-body">' +
+                    '<p>[Message]</p>' +
+                    '</div>' +
+                    '<div class="modal-footer">' +
+                    '<button type="button" class="btn btn-default cancel" data-dismiss="modal">[BtnCancel]</button>' +
+                    '<button type="button" class="btn btn-primary ok" data-dismiss="modal">[BtnOk]</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+
+            var dialogdHtml = '<div id="[Id]" class="modal fade" role="dialog" aria-labelledby="modalLabel">' +
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' +
+                    '<h4 class="modal-title" id="modalLabel">[Title]</h4>' +
+                    '</div>' +
+                    '<div class="modal-body">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+            var reg = new RegExp("\\[([^\\[\\]]*?)\\]", 'igm');
+            var generateId = function () {
+                var date = new Date();
+                return 'mdl' + date.valueOf();
+            }
+            var init = function (options) {
+                options = $.extend({}, {
+                    title: "操作提示",
+                    message: "提示内容",
+                    btnok: "确定",
+                    btncl: "取消",
+                    width: 200,
+                    auto: false
+                }, options || {});
+                var modalId = generateId();
+                var content = html.replace(reg, function (node, key) {
+                    return {
+                        Id: modalId,
+                        Title: options.title,
+                        Message: options.message,
+                        BtnOk: options.btnok,
+                        BtnCancel: options.btncl
+                    }[key];
+                });
+                $('body').append(content);
+                $('#' + modalId).modal({
+                    width: options.width,
+                    backdrop: 'static'
+                });
+                $('#' + modalId).on('hide.bs.modal', function (e) {
+                    $('body').find('#' + modalId).remove();
+                });
+                return modalId;
+            }
+
+            return {
+                alert: function (options) {
+                    if (typeof options == 'string') {
+                        options = {
+                            message: options
+                        };
+                    }
+                    var id = init(options);
+                    var modal = $('#' + id);
+                    modal.find('.ok').removeClass('btn-success').addClass('btn-primary');
+                    modal.find('.cancel').hide();
+
+                    return {
+                        id: id,
+                        on: function (callback) {
+                            if (callback && callback instanceof Function) {
+                                modal.find('.ok').click(function () { callback(true); });
+                            }
+                        },
+                        hide: function (callback) {
+                            if (callback && callback instanceof Function) {
+                                modal.on('hide.bs.modal', function (e) {
+                                    callback(e);
+                                });
+                            }
+                        }
+                    };
+                },
+                confirm: function (options) {
+                    var id = init(options);
+                    var modal = $('#' + id);
+                    modal.find('.ok').removeClass('btn-primary').addClass('btn-success');
+                    modal.find('.cancel').show();
+                    return {
+                        id: id,
+                        on: function (callback) {
+                            if (callback && callback instanceof Function) {
+                                modal.find('.ok').click(function () { callback(true); });
+                                modal.find('.cancel').click(function () { callback(false); });
+                            }
+                        },
+                        hide: function (callback) {
+                            if (callback && callback instanceof Function) {
+                                modal.on('hide.bs.modal', function (e) {
+                                    callback(e);
+                                });
+                            }
+                        }
+                    };
+                },
+                dialog: function (options) {
+                    options = $.extend({}, {
+                        title: 'title',
+                        url: '',
+                        width: 800,
+                        height: 550,
+                        onReady: function () { },
+                        onShown: function (e) { }
+                    }, options || {});
+                    var modalId = generateId();
+
+                    var content = dialogdHtml.replace(reg, function (node, key) {
+                        return {
+                            Id: modalId,
+                            Title: options.title
+                        }[key];
+                    });
+                    $('body').append(content);
+                    var target = $('#' + modalId);
+                    target.find('.modal-body').load(options.url);
+                    if (options.onReady())
+                        options.onReady.call(target);
+                    target.modal();
+                    target.on('shown.bs.modal', function (e) {
+                        if (options.onReady(e))
+                            options.onReady.call(target, e);
+                    });
+                    target.on('hide.bs.modal', function (e) {
+                        $('body').find(target).remove();
+                    });
+                }
+            }
+        }();
+    })(jQuery);
 </script>
 </html>

@@ -159,7 +159,11 @@
             WHERE
                 (`id` = #{ofResidence.id});
     </update>
-  
-  
+
+  <update id="updateOfResidenceCoordinate">
+    UPDATE ocn_address.of_residence
+    set lon=#{newLon}, lat=#{newLat}, modify_time=NOW()
+    WHERE id = #{residenceId}
+  </update>
 
 </mapper>

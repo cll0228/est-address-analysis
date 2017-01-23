@@ -117,6 +117,9 @@ public class StdController {
     					}
                     	result.put("g", hangPrice);
                     	result.put("b", month);
+                	} else {
+                		result.put("g", new int[]{0});
+                    	result.put("b", new String[]{"暂无数据"});
                 	}
                 }
                 

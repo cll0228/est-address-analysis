@@ -118,7 +118,7 @@
                             <div id="coordinate">
                                 <table>
                                     <tr>
-                                        <th> 楼栋经纬度： </th>
+                                        <th> 小区经纬度： </th>
                                         <td id="baiduLon">${ofResidences.lon}</td>
                                         <td id="baiduLat">${ofResidences.lat}</td>
                                         <th> &nbsp;&nbsp;实时经纬度： </th>
@@ -128,7 +128,7 @@
                                         <th></th>
                                         <td></td>
                                         <td></td>
-                                        <th colspan="2"><span style="color:red;"> &nbsp;&nbsp;(可拖动地图楼栋图标显示实时经纬度)</span></th>
+                                        <th colspan="2"><span style="color:red;"> &nbsp;&nbsp;(可拖动地图小区中心点图标显示实时经纬度)</span></th>
                                     </tr>
                                     <tr>
                                         <td><input type="button" id="editCoordinate" value="编辑经纬度"/></td>
@@ -371,7 +371,7 @@
             return;
         }
 
-        Ewin.confirm({ message: "确认要更新楼栋经纬度坐标吗？" }).on(function (e) {
+        Ewin.confirm({ message: "确认要更新小区经纬度坐标吗？" }).on(function (e) {
             if (!e) {
                 return;
             }
@@ -421,7 +421,7 @@
         document.getElementById("old_lat").disabled= "disabled";
         $("#new_lon").val(strs[0]);
         $("#new_lat").val(strs[1]);
-        $("#myModalLabel1").text("编辑楼栋坐标");
+        $("#myModalLabel1").text("编辑小区坐标");
 //        $('#myModal1').modal('show');
         $('#myModal1').modal({
             backdrop: false

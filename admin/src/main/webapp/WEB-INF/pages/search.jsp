@@ -28,7 +28,7 @@
                 <th>户数</th>
                 <th>容积率</th>
                 <th>绿化率</th>
-                <th>物业类型</th>
+                <th>小区类型</th>
                 <th>小区别名</th>
                 <th>占地面积</th>
                 <th>操作</th>
@@ -136,8 +136,8 @@
                                 "<td id='vp" + i + "'></td>" +
                                 "<td id='gp" + i + "'></td>" +
                                 "<td id='residenceType" + i + "'></td>" +
-                                "<td id='area" + i + "'></td>" +
                                 "<td id='aliases" + i + "'></td>" +
+                                "<td id='area" + i + "'></td>" +
                                 "<td id= " + i + "><a href='${ctx}/residenceDetail.do?residenceId="+data[i].id+"'>小区详情</a>  <a href='javascript:void(0)' onclick='build(" + data[i].id + ")'>楼栋列表</a> </td></tr>";
                         $("#tb").append(html);
                         $("#id" + i).html(data[i].id);

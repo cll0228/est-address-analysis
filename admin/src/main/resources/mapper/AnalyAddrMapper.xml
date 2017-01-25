@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lezhi.address.admin.mapper.AnalyAddrMapper">
+    <select id="getParsedFailedAddr" resultType="com.lezhi.address.admin.pojo.Address">
+        SELECT
+            `id`,
+            `address`,
+            road_lane roadLane,
+            `building_no` buildingNo,
+            `house_no` houseNo,
+            `parsed_version` parsedVersion,
+            `parsed_time` parsedTime,
+            `status`
+        FROM
+            `abc_address` WHERE `status` = 20;
+    </select>
+</mapper>

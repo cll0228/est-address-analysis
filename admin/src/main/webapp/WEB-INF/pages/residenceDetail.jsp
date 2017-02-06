@@ -192,7 +192,7 @@
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
                                                         <i class="fa" style="z-index:999"></i>
-                                                        <input type="text" class="form-control" name="ssqx" value="${ofResidences.districtNname}"/> </div>
+                                                        <input type="text" class="form-control" name="ssqx" value="${ofResidences.districtNname}" disabled="true"/> </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -202,7 +202,7 @@
                                                 <div class="col-md-6">
                                                     <div class="input-icon right">
                                                         <i class="fa" style="z-index:999"></i>
-                                                        <input type="text" class="form-control" name="ssbk" value="${ofResidences.townName}"/> </div>
+                                                        <input type="text" class="form-control" name="ssbk" value="${ofResidences.townName}" disabled="true"/> </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">

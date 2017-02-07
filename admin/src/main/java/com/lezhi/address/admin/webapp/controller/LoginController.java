@@ -54,6 +54,7 @@ public class LoginController {
     				if(tUser.getPassword().equals(password)) {
     					//在Session里保存信息  
     		            session.setAttribute("username", username);
+    		            session.setAttribute("userId", tUser.getId());
     		    		success = true;
     		    		result.put("status", success);
     		    		//插入t_user表最后登录时间和ip

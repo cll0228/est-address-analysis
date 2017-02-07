@@ -1,26 +1,25 @@
 package com.lezhi.address.admin.webapp.controller;
 
-import com.lezhi.address.admin.pojo.OfBuilding;
-import com.lezhi.address.admin.pojo.OfResidence;
-import com.lezhi.address.admin.pojo.ResidenceBoundary;
-import com.lezhi.address.admin.service.BuildingService;
-import com.lezhi.address.admin.service.ResidenceService;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.lezhi.address.admin.pojo.TUser;
+import com.lezhi.address.admin.service.LoginService;
+import com.lezhi.address.admin.util.Iputil;
 
 /**
  * Created by chendl on 2017/1/18.
@@ -29,9 +28,7 @@ import java.util.Map;
 @RequestMapping("/")
 public class LoginController {
     @Autowired
-    private BuildingService buildingService;
-    @Autowired
-    private ResidenceService residenceService;
+    private LoginService loginService;
 
     /** 
      * 登录 
@@ -49,17 +46,34 @@ public class LoginController {
     	Map<String, Object> result = new HashMap<>();
     	String username = request.getParameter("username");
     	String password = request.getParameter("password");
-    	if(username.equals("dfjr")) {
-    		//在Session里保存信息  
-            session.setAttribute("username", username);
-    		boolean success = true;
-    		result.put("status", success);
-    		return result;
+    	boolean success = false;
+    	if(username!=null) {
+    		TUser tUser= loginService.userLogin(username);
+    		if(tUser!=null) {
+    			if(null!=tUser.getPassword()) {
+    				if(tUser.getPassword().equals(password)) {
+    					//在Session里保存信息  
+    		            session.setAttribute("username", username);
+    		    		success = true;
+    		    		result.put("status", success);
+    		    		//插入t_user表最后登录时间和ip
+    		    		String lastLoginIp = Iputil.getIpAddr(request);
+    		    		tUser.setLastLoginIp(lastLoginIp);
+    		    		loginService.updateLoginTime(tUser);
+    				} else {
+    					success = false;
+    	        		result.put("status", success);
+    				}
+    			}
+    		} else {
+    			success = false;
+        		result.put("status", success);
+    		}
     	} else {
-    		boolean success = false;
+			success = false;
     		result.put("status", success);
-    		return result;
-    	}
+		}
+		return result;
     }  
       
     /** 
@@ -72,8 +86,8 @@ public class LoginController {
     @RequestMapping(value="/logout")  
     public String logout(HttpSession session) throws Exception{  
         //清除Session  
-        session.invalidate();  
+        session.invalidate();
           
-        return "redirect:hello.action";  
+        return "redirect:search.do";  
     }
 }

@@ -14,6 +14,9 @@ public class Address {
     private String pareseVersion;
     private String parsedTime;
     private Integer status;
+    private Integer matchStatus;
+    private Date matchTime;
+
 
     public Integer getId() {
         return id;
@@ -77,5 +80,21 @@ public class Address {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getMatchStatus() {
+        return matchStatus;
+    }
+
+    public void setMatchStatus(Integer matchStatus) {
+        this.matchStatus = matchStatus;
+    }
+
+    public Date getMatchTime() {
+        return matchTime;
+    }
+
+    public void setMatchTime(Date matchTime) {
+        this.matchTime = matchTime;
     }
 }

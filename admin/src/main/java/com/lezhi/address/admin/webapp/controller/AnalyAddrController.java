@@ -37,6 +37,12 @@ public class AnalyAddrController {
         return "addr_list";
     }
 
+    @RequestMapping(value = "editAddr", method = RequestMethod.GET)
+    public String toPage1(HttpServletRequest request, HttpServletResponse response) {
+        return "editAddr";
+    }
+
+
     @RequestMapping(value = "addrQuery", method = RequestMethod.GET)
     @ResponseBody
     public List<Address> list(HttpServletRequest request, HttpServletResponse response) {

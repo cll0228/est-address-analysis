@@ -308,11 +308,11 @@
             }
         })
     }
-    var buildingId = <%=buildingId%>;
+/*    var buildingId = <%=buildingId%>;
 
     $("#building_bk").click(function (){
         location.href ='toSearch.do?buildingId='+buildingId;
-    });
+    });*/
 
     $("#editBuilding").click(function () {
         $("#txt_buildingNo").val(document.getElementById("buildingNo").innerText.replace("号",""));

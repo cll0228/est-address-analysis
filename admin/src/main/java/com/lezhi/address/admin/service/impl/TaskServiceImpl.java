@@ -33,8 +33,11 @@ public class TaskServiceImpl implements TaskService {
     	//根据analysisTaskId获取
     	Task task = taskMapper.getTaskInfo(analysisTaskId);
     	String address = null;
+    	Address reAdd = new Address();
+    	reAdd.setId(addressId);
+    	reAdd.setMatchStatus(20);
+    	reAdd.setMatchTime(new Date());
     	if(task!=null) {
-    		
     		String sql = "SELECT "+task.getAddressColumn()+" FROM "+task.getTableName()+" WHERE id="+addressId;
     		try {
     			ResultSet rs = AddressExtractor.connJDBC(task.getServer(), task.getDbSchema(), task.getUsername(), task.getPassword(), sql);
@@ -49,22 +52,21 @@ public class TaskServiceImpl implements TaskService {
     					outerAddress.setSrcTableId(task.getId());
     					outerAddress.setStdAddrId(Integer.parseInt(rList.get(0).getId()));
     					stdMapper.insertOuterAddress(outerAddress);
-    					Address reAdd = new Address();
     					reAdd.setMatchStatus(10);
     					reAdd.setMatchTime(new Date());
     					return reAdd;
     				} else {
-    					return null;
+    					return reAdd;
     				}
     			} else {
-    				return null;
+    				return reAdd;
     			}
     		} catch (Exception e) {
 				e.printStackTrace();
-				return null;
+				return reAdd;
 			}
     	} else {
-    		return null;
+    		return reAdd;
     	}
     	
     }

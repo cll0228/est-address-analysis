@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lezhi.address.admin.mapper.DbServerMapper">
+  <resultMap id="BaseResultMap" type="com.lezhi.address.admin.pojo.DbServer">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="server_ip" jdbcType="VARCHAR" property="serverIp" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="alias" jdbcType="VARCHAR" property="alias" />
+    <result column="add_staff" jdbcType="VARCHAR" property="addStaff" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <select id="getDataSourceList" resultMap="BaseResultMap">
+      select * from dazhongdianping.db_server where state = 0;
+  </select>
+
+  <insert id="addServer">
+    INSERT INTO dazhongdianping.db_server
+    (id, server_ip, user_name, password, alias, add_staff, state, create_time)
+    VALUES (
+      NULL ,
+      #{serverIp},
+      #{userName},
+      #{password},
+      #{alias},
+      #{addStaff},
+      0,
+      now()
+    )
+  </insert>
+
+  <update id="editServer">
+    UPDATE dazhongdianping.db_server
+    set server_ip=#{serverIp}, user_name=#{userName}, password=#{password}, alias=#{alias}, operate_staff=#{operateStaff}, update_time=NOW()
+    WHERE id = #{id}
+  </update>
+
+  <update id="deleteServer">
+    UPDATE dazhongdianping.db_server
+    SET operate_staff = #{operateStaff}, state = 1, update_time = NOW()
+    where id = #{id}
+  </update>
+</mapper>

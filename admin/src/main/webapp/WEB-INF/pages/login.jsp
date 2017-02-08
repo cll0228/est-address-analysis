@@ -39,7 +39,7 @@
         <link rel="shortcut icon" href="favicon.ico" /> </head>
     <!-- END HEAD -->
 
-    <body class=" login">
+    <body class="login">
         <div class="menu-toggler sidebar-toggler"></div>
         <!-- END SIDEBAR TOGGLER BUTTON -->
         <!-- BEGIN LOGO -->
@@ -64,6 +64,8 @@
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">密码</label>
                     <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="密码" name="password" /> </div>
+                    
+                    <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="隐藏" name="password2" style="display:none"/> 
                 <div class="form-actions">
                     <button type="button" class="btn green uppercase" onClick="login()">登录</button>
                         <!--<input type="checkbox" name="remember" value="1" />Remember </label>-->
@@ -119,7 +121,13 @@
         <script src="${ctx}/static/assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
 		<script src="${ctx}/static/assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>
         
-<script type="text/javascript">        
+<script type="text/javascript">
+		document.onkeydown = function (event) {
+                var e = event || window.event || arguments.callee.caller.arguments[0];
+                if (e && e.keyCode == 13) {
+                    return false;
+                }
+            };
         function login() {
         	if (! $("#userForm").valid()) {
         		return;

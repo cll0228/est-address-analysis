@@ -12,20 +12,20 @@
 <body>
 <div class="container">
     <div>
-        地址&nbsp;<input type="text" id="name" />&nbsp;
-        解析结果&nbsp;<select  style="width: 100px; height: 26px;">
+        地址&nbsp;<input type="text" id="name"/>&nbsp;
+        解析结果&nbsp;<select style="width: 100px; height: 26px;">
         <option value="all">全部</option>
         <option value="notStart">未开始</option>
         <option value="success">成功</option>
         <option value="lose">失效</option>
     </select>&nbsp;
-        匹配结果&nbsp;<select  style="width: 100px; height: 26px;">
+        匹配结果&nbsp;<select style="width: 100px; height: 26px;">
         <option value="all">全部</option>
         <option value="notStart">未开始</option>
         <option value="success">成功</option>
         <option value="lose">失效</option>
     </select>&nbsp;
-        <input type="button" value="查找" />
+        <input type="button" value="查找"/>
     </div>
     <div style="display: block" id="table1">
         <table id="residence" class="table table-striped table-bordered table-hover order-column" height="80px">
@@ -36,12 +36,12 @@
                 <th>所在数据库</th>
                 <th>所在表</th>
                 <th>原地址</th>
-                <th>是否解析成功</th>
+                <th>解析状态</th>
                 <th>解析时间</th>
                 <th>路弄</th>
                 <th>楼栋</th>
                 <th>房屋</th>
-                <th>是否匹配成功</th>
+                <th>匹配状态</th>
                 <th>匹配时间</th>
                 <th>操作</th>
 
@@ -53,7 +53,7 @@
             <td id="data"></td>
             <td id="table"></td>
             <td id="address"></td>
-            <td id="ifSuccess"></td>
+            <td id="ifAnalySis"></td>
             <td id="analTime"></td>
             <td id="roadLane"></td>
             <td id="building"></td>
@@ -63,7 +63,7 @@
             <td id="do"><a href="#"></a></td>
             </tbody>
         </table>
-        <div >
+        <div>
             <button type="button" class="btn btn-primary" onclick="query($('#in').val())">返回任务管理页面</button>
             <ul class="pager" style="position: relative;left: 36.5%;top: -61px;">
                 <li>第 <input id="page" style="width:30px;" value="1"> 页</li>
@@ -73,8 +73,6 @@
             </ul>
         </div>
     </div>
-
-
 
 
     <!-- 模态框（Modal） -->
@@ -97,47 +95,166 @@
 <%@include file="/WEB-INF/pages/include/bottom.jsp" %>
 </body>
 <script type="text/javascript">
+    var name = null;//所在任务名称
+    var id = null;//所在任务id
+    var totalPage = null;
+    var startPage = 1;
     $(function () {
         $.ajax({
-            url: '${ctx}/addrQuery.do?',
+            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 ,
             type: "get",
 //            data: {"keyword": keyword},
             success: function (data) {
                 $("#tb").empty();
                 for (var i = 0; i < data.length; i++) {
+                    name = data[i].name;
+                    id = data[i].id;
+                    totalPage = data[i].totalPage;
                     var html = "<tr><td id='addressId" + i + "'></td>" +
                             "<td id='analTaskId" + i + "'></td>" +
-                            "<td id='data" + i + "'></td>" +
-                            "<td id='table" + i + "'></td>" +
-                            "<td id='address" + i + "'></td>" +
-                            "<td id='ifSuccess" + i + "'></td>" +
+                            "<td id='dataName" + i + "'></td>" +
+                            "<td id='table_" + i + "'></td>" +
+                            "<td id='address" + i + "' width='170;'></td>" +
+                            "<td id='ifAnalySis" + i + "'></td>" +
                             "<td id='analTime" + i + "'></td>" +
-                            "<td id='roadLane" + i + "'></td>" +
+                            "<td id='roadLane" + i + "' width='100'></td>" +
                             "<td id='building" + i + "'></td>" +
                             "<td id='house" + i + "'></td>" +
                             "<td id='ifMatch" + i + "'></td>" +
                             "<td id='matchTime" + i + "'></td>" +
-                            "<td id= " + i + "><a href='javascript:void(0)' onclick='toEdit(" + data[i].id + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
+                            "<td id= '" + i + "' width='150'><a href='javascript:void(0)' onclick='toEdit(" + data[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
                     $("#tb").append(html);
-                    $("#addressId" + i).html(data[i].id);
-                    $("#analTaskId" + i).html(data[i].address);
-                    $("#data" + i).html(data[i].roadLane);
-                    $("#table" + i).html(data[i].buildingNo);
-                    $("#address" + i).html(data[i].houseNo);
-                    $("#ifSuccess" + i).html(data[i].parsedVersion);
-                    $("#analTime" + i).html(data[i].parsedTime);
-                    $("#roadLane" + i).html(data[i].status);
-                    $("#building" + i).html(data[i].status);
-                    $("#house" + i).html(data[i].status);
-                    $("#ifMatch" + i).html(data[i].status);
-                    $("#matchTime" + i).html(data[i].status);
+                    $("#addressId" + i).html(data[i].addressId);
+                    $("#analTaskId" + i).html(data[i].analTaskId);
+                    $("#dataName" + i).html(data[i].dataName);
+                    $("#table_" + i).html(data[i].tableName);
+                    $("#address" + i).html(data[i].address);
+                    if(data[i].ifAnalySis == 10){
+                        $("#ifAnalySis" + i).html("成功");
+                    }else{
+                        $("#ifAnalySis" + i).html("失败");
+                    }
+                    $("#analTime" + i).html(data[i].analTime);
+                    $("#roadLane" + i).html(data[i].roadLane);
+                    $("#building" + i).html(data[i].building);
+                    $("#house" + i).html(data[i].house);
+                    $("#ifMatch" + i).html(data[i].ifMatch);
+                    $("#matchTime" + i).html(data[i].matchTime);
                 }
+                //总页数
+                $("#totalPage").val(totalPage);
             }
         })
     });
 
-    function toEdit(id) {
-        location.href = "${ctx}/editAddr.do?"
+    function toEdit(addressId) {
+        var dataName = $("#dataName0").html();
+        var tabelName = $("#table_0").html();
+        location.href = "${ctx}/editAddr.do?addressId=" + addressId + "&dataName=" + dataName + "&tableName=" + tabelName + "&name=" + name + "&id=" + id;
+    }
+
+    function addPage() {
+        if(startPage == totalPage){
+            bootbox.alert("已是最后一页！！");
+            return;
+        }
+        startPage = startPage + 1;
+        $("#page").val(startPage);
+        $.ajax({
+            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 + "&page=" + startPage  ,
+            type: "get",
+//            data: {"keyword": keyword},
+            success: function (data) {
+                $("#tb").empty();
+                for (var i = 0; i < data.length; i++) {
+                    name = data[i].name;
+                    id = data[i].id;
+                    totalPage = data[i].totalPage;
+                    var html = "<tr><td id='addressId" + i + "'></td>" +
+                            "<td id='analTaskId" + i + "'></td>" +
+                            "<td id='dataName" + i + "'></td>" +
+                            "<td id='table_" + i + "'></td>" +
+                            "<td id='address" + i + "' width='170;'></td>" +
+                            "<td id='ifAnalySis" + i + "'></td>" +
+                            "<td id='analTime" + i + "'></td>" +
+                            "<td id='roadLane" + i + "' width='100'></td>" +
+                            "<td id='building" + i + "'></td>" +
+                            "<td id='house" + i + "'></td>" +
+                            "<td id='ifMatch" + i + "'></td>" +
+                            "<td id='matchTime" + i + "'></td>" +
+                            "<td id= '" + i + "' width='150'><a href='javascript:void(0)' onclick='toEdit(" + data[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
+                    $("#tb").append(html);
+                    $("#addressId" + i).html(data[i].addressId);
+                    $("#analTaskId" + i).html(data[i].analTaskId);
+                    $("#dataName" + i).html(data[i].dataName);
+                    $("#table_" + i).html(data[i].tableName);
+                    $("#address" + i).html(data[i].address);
+                    if(data[i].ifAnalySis == 10){
+                        $("#ifAnalySis" + i).html("成功");
+                    }else{
+                        $("#ifAnalySis" + i).html("失败");
+                    }
+                    $("#analTime" + i).html(data[i].analTime);
+                    $("#roadLane" + i).html(data[i].roadLane);
+                    $("#building" + i).html(data[i].building);
+                    $("#house" + i).html(data[i].house);
+                    $("#ifMatch" + i).html(data[i].ifMatch);
+                    $("#matchTime" + i).html(data[i].matchTime);
+                }
+            }
+        })
+    }
+
+    function reducePage() {
+        if(startPage == 1){
+            bootbox.alert("已是最前一页！！");
+            return;
+        }
+        startPage = startPage - 1;
+        $("#page").val(startPage);
+        $.ajax({
+            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 + "&page=" + startPage  ,
+            type: "get",
+//            data: {"keyword": keyword},
+            success: function (data) {
+                $("#tb").empty();
+                for (var i = 0; i < data.length; i++) {
+                    name = data[i].name;
+                    id = data[i].id;
+                    totalPage = data[i].totalPage;
+                    var html = "<tr><td id='addressId" + i + "'></td>" +
+                            "<td id='analTaskId" + i + "'></td>" +
+                            "<td id='dataName" + i + "'></td>" +
+                            "<td id='table_" + i + "'></td>" +
+                            "<td id='address" + i + "' width='170;'></td>" +
+                            "<td id='ifAnalySis" + i + "'></td>" +
+                            "<td id='analTime" + i + "'></td>" +
+                            "<td id='roadLane" + i + "' width='100'></td>" +
+                            "<td id='building" + i + "'></td>" +
+                            "<td id='house" + i + "'></td>" +
+                            "<td id='ifMatch" + i + "'></td>" +
+                            "<td id='matchTime" + i + "'></td>" +
+                            "<td id= '" + i + "' width='150'><a href='javascript:void(0)' onclick='toEdit(" + data[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
+                    $("#tb").append(html);
+                    $("#addressId" + i).html(data[i].addressId);
+                    $("#analTaskId" + i).html(data[i].analTaskId);
+                    $("#dataName" + i).html(data[i].dataName);
+                    $("#table_" + i).html(data[i].tableName);
+                    $("#address" + i).html(data[i].address);
+                    if(data[i].ifAnalySis == 10){
+                        $("#ifAnalySis" + i).html("成功");
+                    }else{
+                        $("#ifAnalySis" + i).html("失败");
+                    }
+                    $("#analTime" + i).html(data[i].analTime);
+                    $("#roadLane" + i).html(data[i].roadLane);
+                    $("#building" + i).html(data[i].building);
+                    $("#house" + i).html(data[i].house);
+                    $("#ifMatch" + i).html(data[i].ifMatch);
+                    $("#matchTime" + i).html(data[i].matchTime);
+                }
+            }
+        })
     }
 </script>
 </html>

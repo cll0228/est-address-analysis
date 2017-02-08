@@ -46,7 +46,7 @@ var FormValidation = function () {
                         creditcard: true
                     },
                     occupation: {
-                        minlength: 5,
+                        minlength: 5
                     },
                     select: {
                         required: true
@@ -126,7 +126,7 @@ var FormValidation = function () {
                     },
                     rjl: {
                         number: true
-                    },
+                    }
                 },
 
                 invalidHandler: function (event, validator) { //display error alert on form submit              
@@ -209,7 +209,7 @@ var FormValidation = function () {
                         required: true
                     },
                     occupation: {
-                        minlength: 5,
+                        minlength: 5
                     },
                     membership: {
                         required: true
@@ -301,6 +301,63 @@ var FormValidation = function () {
             })
     }
 
+    var handleValidation4 = function() {
+        var form4 = $('#form_datasource_edit');
+        var error4 = $('.alert-danger', form4);
+        var success4 = $('.alert-success', form4);
+
+        form4.validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",  // validate all fields including form hidden input
+            rules: {
+                newServerIP: {
+                    required: true
+                },
+                newUserName: {
+                    required: true
+                },
+                newPassword: {
+                    required: true
+                }
+            },
+
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                success4.hide();
+                error4.show();
+                App.scrollTo(error4, -200);
+            },
+
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').removeClass("has-success").addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                success4.show();
+                error4.hide();
+                form[0].submit(); // submit the form
+            }
+        });
+    }
+
     var handleWysihtml5 = function() {
         if (!jQuery().wysihtml5) {
             
@@ -322,6 +379,7 @@ var FormValidation = function () {
             handleValidation1();
             handleValidation2();
             handleValidation3();
+            handleValidation4();
 
         }
 

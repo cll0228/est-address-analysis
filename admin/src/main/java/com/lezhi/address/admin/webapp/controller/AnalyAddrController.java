@@ -1,5 +1,6 @@
 package com.lezhi.address.admin.webapp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.lezhi.address.admin.pojo.Address;
+import com.lezhi.address.admin.pojo.TaskManageInfo;
 import com.lezhi.address.admin.service.AnalyAddrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +45,11 @@ public class AnalyAddrController {
     }
 
 
+    @RequestMapping(value = "analysisTask", method = RequestMethod.GET)
+    public String toAnalysisTask(HttpServletRequest request, HttpServletResponse response) {
+        return "analysisTask";
+    }
+
     @RequestMapping(value = "addrQuery", method = RequestMethod.GET)
     @ResponseBody
     public List<Address> list(HttpServletRequest request, HttpServletResponse response) {
@@ -51,5 +58,29 @@ public class AnalyAddrController {
             return null;
         }
         return addresses;
+    }
+
+    @RequestMapping(value = "getAnalysisTask", method = RequestMethod.GET)
+    @ResponseBody
+    public List<TaskManageInfo> getAnalysisTask(HttpServletRequest request, HttpServletResponse response) {
+        List<TaskManageInfo> taskManageInfos = new ArrayList<>();
+        TaskManageInfo taskManageInfo = new TaskManageInfo();
+        taskManageInfo.setId(1);
+        taskManageInfo.setDataSourceServer("192.168.201.26");
+        taskManageInfo.setDataTable("ocn_address");
+        taskManageInfo.setAddressColumn("address");
+        taskManageInfo.setTotalCount(10000);
+        taskManageInfo.setSuccessCount(8000);
+        taskManageInfo.setFailCount(2000);
+        taskManageInfo.setSchedule("35%");
+        taskManageInfo.setStatus("进行中");
+        taskManageInfo.setStartTime("2017/02/06 14:38");
+        taskManageInfo.setFinishTime("2017/02/06 18:58");
+        taskManageInfo.setOperator("cdl");
+        taskManageInfos.add(taskManageInfo);
+        if(null == taskManageInfos){
+            return null;
+        }
+        return taskManageInfos;
     }
 }

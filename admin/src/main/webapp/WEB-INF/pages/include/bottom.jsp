@@ -67,3 +67,5 @@
         <script src="${ctx}/static/assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js" type="text/javascript"></script>
 <script src="${ctx}/static/assets/pages/scripts/table-datatables-scroller.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+<script src="${ctx}/static/js/datetime.js" type="text/javascript"></script>
+<script src="${ctx}/static/js/ewin.js" type="text/javascript"></script>

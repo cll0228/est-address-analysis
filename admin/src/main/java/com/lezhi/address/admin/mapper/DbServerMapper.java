@@ -13,5 +13,7 @@ public interface DbServerMapper {
 
     Integer editServer(@Param("serverIp")String serverIp, @Param("userName")String userName,
                        @Param("password")String password, @Param("alias")String alias,
-                       @Param("operatorStaff")String operatorStaff, @Param("id")Integer id);
+                       @Param("operateStaff")String operateStaff, @Param("id")Integer id);
+
+    Integer deleteServer(@Param("operateStaff")String operateStaff, @Param("id")Integer id);
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -80,11 +81,28 @@ public class DataSourceController {
         String password = request.getParameter("pword");
         String alias = request.getParameter("bieming");
         Integer id = Integer.valueOf(request.getParameter("id"));
-        String operatorStaff = String.valueOf(session.getAttribute("username"));
+        String operateStaff = String.valueOf(session.getAttribute("username"));
 
         Map<String, Object> result = new HashMap<>();
-        boolean success = 1 == dataSourceService.editServer(serverIp, userName, password, alias, operatorStaff, id);
+        boolean success = 1 == dataSourceService.editServer(serverIp, userName, password, alias, operateStaff, id);
         System.out.println("serverIp:"+serverIp);
+        result.put("status", success ? "success" : "failed");
+        List<DbServer> dbServers = dataSourceService.getDataSourceList();
+        for(DbServer dbServer: dbServers){
+            dbServer.setCreateTime(dbServer.getCreateTime().replace(".0",""));
+        }
+        result.put("dbServerList", dbServers);
+        return result;
+    }
+    @RequestMapping(value = "deleteServer", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> deleteServer(HttpServletRequest request, HttpServletResponse response) {
+        Integer id = Integer.valueOf(request.getParameter("id"));
+        HttpSession session = request.getSession();
+        String operateStaff = String.valueOf(session.getAttribute("username"));
+        Map<String, Object> result = new HashMap<>();
+        boolean success = 1 == dataSourceService.deleteServer(operateStaff, id);
+        System.out.println("id:"+id);
         result.put("status", success ? "success" : "failed");
         List<DbServer> dbServers = dataSourceService.getDataSourceList();
         for(DbServer dbServer: dbServers){

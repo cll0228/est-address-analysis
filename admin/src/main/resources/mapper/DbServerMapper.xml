@@ -34,7 +34,13 @@
 
   <update id="editServer">
     UPDATE dazhongdianping.db_server
-    set server_ip=#{serverIp}, user_name=#{userName}, password=#{password}, alias=#{alias}, operator_staff=#{operatorStaff}, update_time=NOW()
+    set server_ip=#{serverIp}, user_name=#{userName}, password=#{password}, alias=#{alias}, operate_staff=#{operateStaff}, update_time=NOW()
     WHERE id = #{id}
+  </update>
+
+  <update id="deleteServer">
+    UPDATE dazhongdianping.db_server
+    SET operate_staff = #{operateStaff}, state = 1, update_time = NOW()
+    where id = #{id}
   </update>
 </mapper>

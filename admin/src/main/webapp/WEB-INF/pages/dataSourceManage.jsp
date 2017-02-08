@@ -200,7 +200,7 @@
                             "<td id='alias" + i + "'></td>" +
                             "<td id='addStaff" + i + "'></td>" +
                             "<td id='createTime" + i + "'></td>" +
-                            "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + data[i].id + "','" + data[i].serverIp + "','" + data[i].userName + "','" + data[i].password + "','" + data[i].alias + "');>编辑  </a><a href='javascript:void(0)'>删除</a></td></tr>";
+                            "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + data[i].id + "','" + data[i].serverIp + "','" + data[i].userName + "','" + data[i].password + "','" + data[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + data[i].id + ");'>删除</a></td></tr>";
                     $("#tb").append(html);
                     $("#serverIp" + i).html(data[i].serverIp);
                     $("#userName" + i).html(data[i].userName);
@@ -236,7 +236,7 @@
                 data: $('#form_datasource_add').serialize(),
                 success: function (data) {
                     if (data.status == "success") {
-                        toastr.success('提交数据成功');
+                        toastr.success('数据提交成功');
                         $("#tb").empty();
                         var serverList = data.dbServerList;
                         for (var i = 0; i < serverList.length; i++) {
@@ -246,14 +246,14 @@
                                     "<td id='alias" + i + "'></td>" +
                                     "<td id='addStaff" + i + "'></td>" +
                                     "<td id='createTime" + i + "'></td>" +
-                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList.id + "','" + serverList.serverIp + "','" + serverList.userName + "','" + serverList.password + "','" + serverList.alias + "');>编辑  </a><a href='javascript:void(0)'>删除</a></td></tr>";
+                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].serverIp + "','" + serverList[i].userName + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
                             $("#tb").append(html);
-                            $("#serverIp" + i).html(serverList.serverIp);
-                            $("#userName" + i).html(serverList.userName);
-                            $("#password" + i).html(serverList.password);
-                            $("#alias" + i).html(serverList.alias);
-                            $("#addStaff" + i).html(serverList.addStaff);
-                            $("#createTime" + i).html(serverList.createTime);
+                            $("#serverIp" + i).html(serverList[i].serverIp);
+                            $("#userName" + i).html(serverList[i].userName);
+                            $("#password" + i).html(serverList[i].password);
+                            $("#alias" + i).html(serverList[i].alias);
+                            $("#addStaff" + i).html(serverList[i].addStaff);
+                            $("#createTime" + i).html(serverList[i].createTime);
                         }
                     }
 
@@ -296,8 +296,25 @@
                 data: $('#form_datasource_edit').serialize(),
                 success: function (data) {
                     if (data.status == "success") {
-                        alert("OK!");
-
+                        toastr.success('数据提交成功');
+                        $("#tb").empty();
+                        var serverList = data.dbServerList;
+                        for (var i = 0; i < serverList.length; i++) {
+                            var html = "<tr><td id='serverIp" + i + "'></td>" +
+                                    "<td id='userName" + i + "'></td>" +
+                                    "<td id='password" + i + "'></td>" +
+                                    "<td id='alias" + i + "'></td>" +
+                                    "<td id='addStaff" + i + "'></td>" +
+                                    "<td id='createTime" + i + "'></td>" +
+                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].serverIp + "','" + serverList[i].userName + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
+                            $("#tb").append(html);
+                            $("#serverIp" + i).html(serverList[i].serverIp);
+                            $("#userName" + i).html(serverList[i].userName);
+                            $("#password" + i).html(serverList[i].password);
+                            $("#alias" + i).html(serverList[i].alias);
+                            $("#addStaff" + i).html(serverList[i].addStaff);
+                            $("#createTime" + i).html(serverList[i].createTime);
+                        }
                     }
 
                 },
@@ -311,6 +328,50 @@
             });
         });
     });
+
+    function deleteServer(id){
+        Ewin.confirm({ message: "确认要删除该服务器数据吗？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            $.ajax({
+                url: '${ctx}/deleteServer.do?',
+                type: "POST",
+                data: {"id":id},
+                success: function (data) {
+                    if (data.status == "success") {
+                        toastr.success('数据提交成功');
+                        $("#tb").empty();
+                        var serverList = data.dbServerList;
+                        for (var i = 0; i < serverList.length; i++) {
+                            var html = "<tr><td id='serverIp" + i + "'></td>" +
+                                    "<td id='userName" + i + "'></td>" +
+                                    "<td id='password" + i + "'></td>" +
+                                    "<td id='alias" + i + "'></td>" +
+                                    "<td id='addStaff" + i + "'></td>" +
+                                    "<td id='createTime" + i + "'></td>" +
+                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].serverIp + "','" + serverList[i].userName + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
+                            $("#tb").append(html);
+                            $("#serverIp" + i).html(serverList[i].serverIp);
+                            $("#userName" + i).html(serverList[i].userName);
+                            $("#password" + i).html(serverList[i].password);
+                            $("#alias" + i).html(serverList[i].alias);
+                            $("#addStaff" + i).html(serverList[i].addStaff);
+                            $("#createTime" + i).html(serverList[i].createTime);
+                        }
+                    }
+
+                },
+                error: function () {
+                    toastr.error('Error');
+                },
+                complete: function () {
+
+                }
+
+            });
+        });
+    }
 
     function isNull( str ){
         if ( str == "" ) return true;

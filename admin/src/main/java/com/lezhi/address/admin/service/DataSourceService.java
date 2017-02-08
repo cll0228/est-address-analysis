@@ -13,5 +13,7 @@ public interface DataSourceService {
 
     Integer addServer(String serverIp, String userName, String password, String alias, String addStaff);
 
-    Integer editServer(String serverIp, String userName, String password, String alias, String operatorStaff, Integer id);
+    Integer editServer(String serverIp, String userName, String password, String alias, String operateStaff, Integer id);
+
+    Integer deleteServer(String operateStaff, Integer id);
 }

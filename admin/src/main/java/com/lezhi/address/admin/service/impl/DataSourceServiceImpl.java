@@ -24,7 +24,11 @@ public class DataSourceServiceImpl implements DataSourceService {
         return dbServerMapper.addServer(serverIp, userName, password, alias, addStaff);
     }
 
-    public Integer editServer(String serverIp, String userName, String password, String alias, String operatorStaff, Integer id){
-        return dbServerMapper.editServer(serverIp, userName, password, alias, operatorStaff, id);
+    public Integer editServer(String serverIp, String userName, String password, String alias, String operateStaff, Integer id){
+        return dbServerMapper.editServer(serverIp, userName, password, alias, operateStaff, id);
+    }
+
+    public Integer deleteServer(String operateStaff, Integer id){
+        return dbServerMapper.deleteServer(operateStaff, id);
     }
 }

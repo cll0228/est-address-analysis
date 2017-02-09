@@ -1,14 +1,17 @@
 package com.lezhi.address.admin.pojo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.xml.crypto.Data;
 
 /**
  * Created by Cuill on 2017/2/7.
  */
 public class AnalyMatchDto {
-    private Integer id;//任務id
+    private Integer id;// 任務id
 
-    private String name;//解析任务名称
+    private String name;// 解析任务名称
 
     private Integer addressId;
 
@@ -22,7 +25,7 @@ public class AnalyMatchDto {
 
     private Integer ifAnalySis;// 是否解析成功
 
-    private Data analTime;
+    private String parsedTime;
 
     private String roadLane;
 
@@ -32,9 +35,26 @@ public class AnalyMatchDto {
 
     private Integer ifMatch;// 是否
 
-    private Data matchTime;
+    private String matchTime;
 
-    private Integer totalPage;//地址总条数
+    public String getParsedTime() {
+        return parsedTime;
+    }
+
+    public void setParsedTime(String parsedTime) {
+        this.parsedTime = parsedTime;
+    }
+
+    public String getMatchTime() {
+        return matchTime;
+    }
+
+    public void setMatchTime(String matchTime) {
+        this.matchTime = matchTime;
+    }
+
+    private Integer totalPage;// 地址总条数
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public Integer getTotalPage() {
         return totalPage;
@@ -109,13 +129,8 @@ public class AnalyMatchDto {
         this.ifAnalySis = ifAnalySis;
     }
 
-    public Data getAnalTime() {
-        return analTime;
-    }
 
-    public void setAnalTime(Data analTime) {
-        this.analTime = analTime;
-    }
+
 
     public String getRoadLane() {
         return roadLane;
@@ -149,11 +164,4 @@ public class AnalyMatchDto {
         this.ifMatch = ifMatch;
     }
 
-    public Data getMatchTime() {
-        return matchTime;
-    }
-
-    public void setMatchTime(Data matchTime) {
-        this.matchTime = matchTime;
-    }
 }

@@ -2,6 +2,7 @@ package com.lezhi.address.admin.mapper;
 
 import java.util.List;
 
+import com.lezhi.address.admin.pojo.TaskManageInfo;
 import org.apache.ibatis.annotations.Param;
 
 import com.lezhi.address.admin.pojo.Address;
@@ -19,5 +20,9 @@ public interface AnalyAddrMapper {
 
     AnalyMatchDto selectAddressById(@Param("id") Integer id, @Param("dataName") String dataName,
             @Param("tableName") String tableName);
+
+    List<TaskManageInfo> selcetMatchTask();
+
+    List<TaskManageInfo> getAnalyAddrTaskList();
 
 }

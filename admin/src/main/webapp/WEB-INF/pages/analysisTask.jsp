@@ -109,8 +109,16 @@
                     $("#totalCount" + i).html(data[i].totalCount);
                     $("#successCount" + i).html(data[i].successCount);
                     $("#failCount" + i).html(data[i].failCount);
-                    $("#schedule" + i).html(data[i].schedule);
-                    $("#status" + i).html(data[i].status);
+                    $("#schedule" + i).html(data[i].schedule+" %");
+                    if (data[i].status == 100) {
+                        $("#status" + i).html("新建");
+                    } else if (data[i].status == 200) {
+                        $("#status" + i).html("执行中");
+                    }else if(data[i].status == 300){
+                        $("#status" + i).html("完成");
+                    }else {
+                        $("#status" + i).html("未知");
+                    }
                     $("#startTime" + i).html(data[i].startTime);
                     $("#finishTime" + i).html(data[i].finishTime);
                     $("#operator" + i).html(data[i].operator);

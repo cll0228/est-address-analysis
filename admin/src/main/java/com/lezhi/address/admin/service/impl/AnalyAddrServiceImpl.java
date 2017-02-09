@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lezhi.address.admin.mapper.AnalyAddrMapper;
 import com.lezhi.address.admin.pojo.Address;
 import com.lezhi.address.admin.pojo.AnalyMatchDto;
+import com.lezhi.address.admin.pojo.TaskManageInfo;
 import com.lezhi.address.admin.service.AnalyAddrService;
 
 /**
@@ -31,19 +32,22 @@ public class AnalyAddrServiceImpl implements AnalyAddrService {
         AnalyMatchDto dto1 = analyAddrMapper.selectAddrTableNameByAnaTaskId(analysisTaskId);
         if (null == dto1)
             return null;
-
-        List<AnalyMatchDto> analyMatchDtos = analyAddrMapper.selectAddrList(dto1.getTableName(), null);
-        List<AnalyMatchDto> page_result = analyAddrMapper.selectAddrList(dto1.getTableName(),
-                (page - 1) * 20);
-        if (null == analyMatchDtos)
-            return null;
-        for (AnalyMatchDto dto : page_result) {
-            dto.setDataName("ocn_Address");// 数据库
-            dto.setTableName(dto1.getTableName());
-            dto.setAnalTaskId(analysisTaskId);
-            dto.setName(dto1.getName());
-            dto.setId(dto1.getId());
-            dto.setTotalPage(analyMatchDtos.size() / 20 + 1);
+        List<AnalyMatchDto> page_result = null;
+        try {
+            List<AnalyMatchDto> analyMatchDtos = analyAddrMapper.selectAddrList(dto1.getTableName(), null);
+            page_result = analyAddrMapper.selectAddrList(dto1.getTableName(), (page - 1) * 20);
+            if (null == analyMatchDtos)
+                return null;
+            for (AnalyMatchDto dto : page_result) {
+                dto.setDataName("ocn_Address");// 数据库
+                dto.setTableName(dto1.getTableName());
+                dto.setAnalTaskId(analysisTaskId);
+                dto.setName(dto1.getName());
+                dto.setId(dto1.getId());
+                dto.setTotalPage(analyMatchDtos.size() / 20 + 1);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
         return page_result;
     }
@@ -51,5 +55,15 @@ public class AnalyAddrServiceImpl implements AnalyAddrService {
     @Override
     public AnalyMatchDto selectAddressById(Integer id, String dataName, String tableName) {
         return analyAddrMapper.selectAddressById(id, dataName, tableName);
+    }
+
+    @Override
+    public List<TaskManageInfo> selcetMatchTask() {
+        return analyAddrMapper.selcetMatchTask();
+    }
+
+    @Override
+    public List<TaskManageInfo> getAnalyAddrTaskList() {
+        return analyAddrMapper.getAnalyAddrTaskList();
     }
 }

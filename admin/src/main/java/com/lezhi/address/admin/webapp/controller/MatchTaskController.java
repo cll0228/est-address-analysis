@@ -32,20 +32,7 @@ public class MatchTaskController {
     @RequestMapping(value = "getMatchTask", method = RequestMethod.GET)
     @ResponseBody
     public List<TaskManageInfo> getMatchTask(HttpServletRequest request, HttpServletResponse response) {
-        List<TaskManageInfo> taskManageInfos = new ArrayList<>();
-        TaskManageInfo taskManageInfo = new TaskManageInfo();
-        taskManageInfo.setId(1);
-        taskManageInfo.setAnalysisTaskId("10086");
-        taskManageInfo.setAnalysisTaskName("复评数据解析");
-        taskManageInfo.setTotalCount(10000);
-        taskManageInfo.setSuccessCount(8000);
-        taskManageInfo.setFailCount(2000);
-        taskManageInfo.setSchedule("35%");
-        taskManageInfo.setStatus("进行中");
-        taskManageInfo.setStartTime("2017/02/06 14:38");
-        taskManageInfo.setFinishTime("2017/02/06 18:58");
-        taskManageInfo.setOperator("cdl");
-        taskManageInfos.add(taskManageInfo);
+        List<TaskManageInfo> taskManageInfos = analyAddrService.selcetMatchTask();
         if(null == taskManageInfos){
             return null;
         }

@@ -117,12 +117,12 @@
                             "<td id='table_" + i + "'></td>" +
                             "<td id='address" + i + "' width='170;'></td>" +
                             "<td id='ifAnalySis" + i + "'></td>" +
-                            "<td id='analTime" + i + "'></td>" +
+                            "<td id='parsedTime" + i + "' width='140'></td>" +
                             "<td id='roadLane" + i + "' width='100'></td>" +
                             "<td id='building" + i + "'></td>" +
                             "<td id='house" + i + "'></td>" +
                             "<td id='ifMatch" + i + "'></td>" +
-                            "<td id='matchTime" + i + "'></td>" +
+                            "<td id='matchTime" + i + "' width='140'></td>" +
                             "<td id= '" + i + "' width='150'><a href='javascript:void(0)' onclick='toEdit(" + Startdata[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
                     $("#tb").append(html);
                     $("#addressId" + i).html(Startdata[i].addressId);
@@ -135,7 +135,7 @@
                     } else {
                         $("#ifAnalySis" + i).html("失败");
                     }
-                    $("#analTime" + i).html(Startdata[i].analTime);
+                    $("#parsedTime" + i).html(Startdata[i].parsedTime);
                     $("#roadLane" + i).html(Startdata[i].roadLane);
                     $("#building" + i).html(Startdata[i].building);
                     $("#house" + i).html(Startdata[i].house);
@@ -172,12 +172,12 @@
                             "<td id='table_" + i + "'></td>" +
                             "<td id='address" + i + "' width='170;'></td>" +
                             "<td id='ifAnalySis" + i + "'></td>" +
-                            "<td id='analTime" + i + "'></td>" +
+                            "<td id='parsedTime" + i + "' width='150'></td>" +
                             "<td id='roadLane" + i + "' width='100'></td>" +
                             "<td id='building" + i + "'></td>" +
                             "<td id='house" + i + "'></td>" +
                             "<td id='ifMatch" + i + "'></td>" +
-                            "<td id='matchTime" + i + "'></td>" +
+                            "<td id='matchTime" + i + "' width='150'></td>" +
                             "<td id= '" + i + "' width='150'><a href='javascript:void(0)' onclick='toEdit(" + data[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
                     $("#tb").append(html);
                     $("#addressId" + i).html(data[i].addressId);
@@ -190,7 +190,7 @@
                     } else {
                         $("#ifAnalySis" + i).html("失败");
                     }
-                    $("#analTime" + i).html(data[i].analTime);
+                    $("#parsedTime" + i).html(data[i].parsedTime);
                     $("#roadLane" + i).html(data[i].roadLane);
                     $("#building" + i).html(data[i].building);
                     $("#house" + i).html(data[i].house);
@@ -221,12 +221,12 @@
                             "<td id='table_" + i + "'></td>" +
                             "<td id='address" + i + "' width='170;'></td>" +
                             "<td id='ifAnalySis" + i + "'></td>" +
-                            "<td id='analTime" + i + "'></td>" +
+                            "<td id='parsedTime" + i + "' width='150'></td>" +
                             "<td id='roadLane" + i + "' width='100'></td>" +
                             "<td id='building" + i + "'></td>" +
                             "<td id='house" + i + "'></td>" +
                             "<td id='ifMatch" + i + "'></td>" +
-                            "<td id='matchTime" + i + "'></td>" +
+                            "<td id='matchTime" + i + "' width='150'></td>" +
                             "<td id= '" + i + "' width='150'><a href='javascript:void(0)' onclick='toEdit(" + data[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
                     $("#tb").append(html);
                     $("#addressId" + i).html(data[i].addressId);
@@ -234,12 +234,12 @@
                     $("#dataName" + i).html(data[i].dataName);
                     $("#table_" + i).html(data[i].tableName);
                     $("#address" + i).html(data[i].address);
+                    $("#parsedTime" + i).html(data[i].parsedTime);
                     if (data[i].ifAnalySis == 10) {
                         $("#ifAnalySis" + i).html("成功");
                     } else {
                         $("#ifAnalySis" + i).html("失败");
                     }
-                    $("#analTime" + i).html(data[i].analTime);
                     $("#roadLane" + i).html(data[i].roadLane);
                     $("#building" + i).html(data[i].building);
                     $("#house" + i).html(data[i].house);

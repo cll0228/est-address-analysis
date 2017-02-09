@@ -5,18 +5,31 @@ package com.lezhi.address.admin.pojo;
  */
 public class TaskManageInfo {
     private Integer id;
+
     private String dataSourceServer;
+
     private String dataTable;
+
     private String addressColumn;
+
     private Integer totalCount;
+
     private Integer successCount;
+
     private Integer failCount;
+
     private String schedule;
+
     private String status;
+
     private String startTime;
+
     private String finishTime;
+
     private String operator;
+
     private String analysisTaskId;
+
     private String analysisTaskName;
 
     public Integer getId() {
@@ -91,14 +104,6 @@ public class TaskManageInfo {
         this.status = status;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
     public String getOperator() {
         return operator;
     }
@@ -113,6 +118,15 @@ public class TaskManageInfo {
 
     public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
+    }
+
+    public String getStartTime() {
+
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
     public String getAnalysisTaskId() {
@@ -130,4 +144,5 @@ public class TaskManageInfo {
     public void setAnalysisTaskName(String analysisTaskName) {
         this.analysisTaskName = analysisTaskName;
     }
+
 }

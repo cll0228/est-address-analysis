@@ -12,10 +12,10 @@
 <body>
 <div class="container">
     <div>
-        解析任务名称&nbsp;<input type="text" id="name" />&nbsp;
+        解析任务名称&nbsp;<input type="text" id="name"/>&nbsp;
         开始时间&nbsp;<input type="text" class="sang_Calender" id="stime"/>&nbsp;
         结束时间&nbsp;<input type="text" class="sang_Calender" id="etime"/>&nbsp;
-        <input type="button" value="查找" />
+        <input type="button" value="查找"/>
     </div>
     <br>
     <div style="display: block" id="table1">
@@ -37,23 +37,21 @@
             </tr>
             </thead>
             <tbody id="tb" align="middle">
-                <td id="id"></td>
-                <td id="analysisTaskId"></td>
-                <td id="analysisTaskName"></td>
-                <td id="totalCount"></td>
-                <td id="successCount"></td>
-                <td id="failCount"></td>
-                <td id="schedule"></td>
-                <td id="status"></td>
-                <td id="startTime"></td>
-                <td id="finishTime"></td>
-                <td id="operator"></td>
-                <td id="operate"></td>
+            <td id="id"></td>
+            <td id="analysisTaskId"></td>
+            <td id="analysisTaskName"></td>
+            <td id="totalCount"></td>
+            <td id="successCount"></td>
+            <td id="failCount"></td>
+            <td id="schedule"></td>
+            <td id="status"></td>
+            <td id="startTime"></td>
+            <td id="finishTime"></td>
+            <td id="operator"></td>
+            <td id="operate"></td>
             </tbody>
         </table>
     </div>
-
-
 
 
     <!-- 模态框（Modal） -->
@@ -105,8 +103,16 @@
                     $("#totalCount" + i).html(data[i].totalCount);
                     $("#successCount" + i).html(data[i].successCount);
                     $("#failCount" + i).html(data[i].failCount);
-                    $("#schedule" + i).html(data[i].schedule);
-                    $("#status" + i).html(data[i].status);
+                    $("#schedule" + i).html(data[i].schedule + " %");
+                    if (data[i].status == 100) {
+                        $("#status" + i).html("新建");
+                    } else if (data[i].status == 200) {
+                        $("#status" + i).html("执行中");
+                    }else if(data[i].status == 300){
+                        $("#status" + i).html("完成");
+                    }else {
+                        $("#status" + i).html("未知");
+                    }
                     $("#startTime" + i).html(data[i].startTime);
                     $("#finishTime" + i).html(data[i].finishTime);
                     $("#operator" + i).html(data[i].operator);

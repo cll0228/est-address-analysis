@@ -620,6 +620,23 @@ public class AddressExtractor {
 		ResultSet rs = stmt.executeQuery(sql);
 		return rs;
 	}
+	
+	/**
+	 * 修改表结构
+	 * 
+	 * @param startName
+	 * @return
+	 * @throws Exception
+	 */
+	public static void alterTable(String ip,String schema,String userName,String password,String sql) throws Exception {
+		// 加载驱动
+
+		Class.forName("com.mysql.jdbc.Driver");
+		String url = "jdbc:mysql://"+ip+":3306/"+schema;
+		Connection conn = DriverManager.getConnection(url, userName, password);
+		Statement stmt = conn.createStatement();
+		stmt.execute(sql);
+	}
     
     private static Object firstNotNull(Object... params) {
         if (params == null)

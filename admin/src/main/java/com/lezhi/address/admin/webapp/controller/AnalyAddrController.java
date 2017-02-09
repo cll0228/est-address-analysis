@@ -6,8 +6,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +27,8 @@ import com.lezhi.address.admin.service.AnalyAddrService;
 @RequestMapping("/")
 @SuppressWarnings("all")
 public class AnalyAddrController {
+
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private AnalyAddrService analyAddrService;
@@ -59,9 +64,31 @@ public class AnalyAddrController {
 
     @RequestMapping(value = "addrQuery", method = RequestMethod.GET)
     @ResponseBody
-    public List<AnalyMatchDto> list(HttpServletRequest request, HttpServletResponse response,
+    public ModelAndView list(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(value = "analySisTaskId", required = false) Integer analysisTaskId,
             @RequestParam(value = "page", required = false) Integer page) {
+        ModelAndView view = new ModelAndView();
+        System.out.println(analysisTaskId);
+        // List<Address> addresses = analyAddrService.getParsedFailedAddr();
+        List<AnalyMatchDto> analyMatchDtos = analyAddrService.getAnalyMatchList(analysisTaskId,page);
+        if (null == analyMatchDtos) {
+            return null;
+        }
+        try {
+            view.addObject("analyMatchDtos",mapper.writeValueAsString(analyMatchDtos));
+        } catch (JsonProcessingException e) {
+            System.out.println("com.lezhi.address.admin.webapp.controller.AnalyAddrController解析失败"+e);
+        }
+        view.setViewName("addr_list");
+        return view;
+    }
+
+    @RequestMapping(value = "addrQueryPage", method = RequestMethod.GET)
+    @ResponseBody
+    public List<AnalyMatchDto> list1(HttpServletRequest request, HttpServletResponse response,
+                             @RequestParam(value = "analySisTaskId", required = false) Integer analysisTaskId,
+                             @RequestParam(value = "page", required = false) Integer page) {
+        ModelAndView view = new ModelAndView();
         System.out.println(analysisTaskId);
         // List<Address> addresses = analyAddrService.getParsedFailedAddr();
         List<AnalyMatchDto> analyMatchDtos = analyAddrService.getAnalyMatchList(analysisTaskId,page);

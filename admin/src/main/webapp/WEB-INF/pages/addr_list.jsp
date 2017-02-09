@@ -101,19 +101,16 @@
     var startPage = 1;
     var dataName = null;
     var tableName = null;
+    var analysisTaskId = null;
     $(function () {
-        $.ajax({
-            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1,
-            type: "get",
-//            data: {"keyword": keyword},
-            success: function (data) {
+       var Startdata = ${analyMatchDtos}
                 $("#tb").empty();
-                for (var i = 0; i < data.length; i++) {
-                    name = data[i].name;
-                    id = data[i].id;
-                    totalPage = data[i].totalPage;
-                    dataName =  data[i].dataName;
-                    tableName =  data[i].tableName;
+                for (var i = 0; i < Startdata.length; i++) {
+                    name = Startdata[i].name;
+                    id = Startdata[i].id;
+                    totalPage = Startdata[i].totalPage;
+                    dataName =  Startdata[i].dataName;
+                    tableName =  Startdata[i].tableName;
                     var html = "<tr><td id='addressId" + i + "'></td>" +
                             "<td id='analTaskId" + i + "'></td>" +
                             "<td id='dataName" + i + "'></td>" +
@@ -126,30 +123,27 @@
                             "<td id='house" + i + "'></td>" +
                             "<td id='ifMatch" + i + "'></td>" +
                             "<td id='matchTime" + i + "'></td>" +
-                            "<td id= '" + i + "' width='150'><a href='javascript:void(0)' onclick='toEdit(" + data[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
+                            "<td id= '" + i + "' width='150'><a href='javascript:void(0)' onclick='toEdit(" + Startdata[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
                     $("#tb").append(html);
-                    $("#addressId" + i).html(data[i].addressId);
-                    $("#analTaskId" + i).html(data[i].analTaskId);
-                    $("#dataName" + i).html(data[i].dataName);
-                    $("#table_" + i).html(data[i].tableName);
-                    $("#address" + i).html(data[i].address);
-                    if (data[i].ifAnalySis == 10) {
+                    $("#addressId" + i).html(Startdata[i].addressId);
+                    $("#analTaskId" + i).html(Startdata[i].analTaskId);
+                    $("#dataName" + i).html(Startdata[i].dataName);
+                    $("#table_" + i).html(Startdata[i].tableName);
+                    $("#address" + i).html(Startdata[i].address);
+                    if (Startdata[i].ifAnalySis == 10) {
                         $("#ifAnalySis" + i).html("成功");
                     } else {
                         $("#ifAnalySis" + i).html("失败");
                     }
-                    $("#analTime" + i).html(data[i].analTime);
-                    $("#roadLane" + i).html(data[i].roadLane);
-                    $("#building" + i).html(data[i].building);
-                    $("#house" + i).html(data[i].house);
-                    $("#ifMatch" + i).html(data[i].ifMatch);
-                    $("#matchTime" + i).html(data[i].matchTime);
+                    $("#analTime" + i).html(Startdata[i].analTime);
+                    $("#roadLane" + i).html(Startdata[i].roadLane);
+                    $("#building" + i).html(Startdata[i].building);
+                    $("#house" + i).html(Startdata[i].house);
+                    $("#ifMatch" + i).html(Startdata[i].ifMatch);
+                    $("#matchTime" + i).html(Startdata[i].matchTime);
                 }
                 //总页数
                 $("#totalPage").val(totalPage);
-            }
-        })
-
     });
 
     function toEdit(addressId) {
@@ -166,15 +160,12 @@
         startPage = startPage + 1;
         $("#page").val(startPage);
         $.ajax({
-            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 + "&page=" + startPage,
+            url: '${ctx}/addrQueryPage.do?analySisTaskId=' + id + "&page=" + startPage,
             type: "get",
 //            data: {"keyword": keyword},
             success: function (data) {
                 $("#tb").empty();
                 for (var i = 0; i < data.length; i++) {
-                    name = data[i].name;
-                    id = data[i].id;
-                    totalPage = data[i].totalPage;
                     var html = "<tr><td id='addressId" + i + "'></td>" +
                             "<td id='analTaskId" + i + "'></td>" +
                             "<td id='dataName" + i + "'></td>" +
@@ -218,15 +209,12 @@
         startPage = startPage - 1;
         $("#page").val(startPage);
         $.ajax({
-            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 + "&page=" + startPage,
+            url: '${ctx}/addrQueryPage.do?analySisTaskId=' + id + "&page=" + startPage,
             type: "get",
 //            data: {"keyword": keyword},
             success: function (data) {
                 $("#tb").empty();
                 for (var i = 0; i < data.length; i++) {
-                    name = data[i].name;
-                    id = data[i].id;
-                    totalPage = data[i].totalPage;
                     var html = "<tr><td id='addressId" + i + "'></td>" +
                             "<td id='analTaskId" + i + "'></td>" +
                             "<td id='dataName" + i + "'></td>" +

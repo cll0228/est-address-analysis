@@ -98,7 +98,12 @@ public class StdController {
                 		int[] price = new int[list.size()];
 //                    	String[] month = new String[list.size()];
                     	for (int i = 0; i < list.size(); i++) {
-                    		price[i] = list.get(i).getDealAvgPrice2nd();
+                            PriceTrend priceTrend = list.get(i);
+                            if (priceTrend != null) {
+                                Integer p = priceTrend.getDealAvgPrice2nd();
+                                if (p != null)
+                                    price[i] = p;
+                            }
 //                    		month[i] = list.get(i).getMonth();
     					}
                     	result.put("a", price);
@@ -110,10 +115,10 @@ public class StdController {
                 		int[] hangPrice = new int[hangList.size()];
                 		String[] month = new String[hangList.size()];
                     	for (int i = 0; i < hangList.size(); i++) {
-                    		hangPrice[i] = hangList.get(i).getHangAvgPrice();
-                    		SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM");
-            				String sdf = format.format(hangList.get(i).getMonth());
-                    		month[i] = sdf;
+                    	    try {
+                                hangPrice[i] = hangList.get(i).getHangAvgPrice();
+                                month[i] = new SimpleDateFormat("yyyy-MM").format(hangList.get(i).getMonth());
+                            } catch (Exception e){}
     					}
                     	result.put("g", hangPrice);
                     	result.put("b", month);

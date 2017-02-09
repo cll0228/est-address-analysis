@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lezhi.address.admin.mapper.TaskMapper">
+	<resultMap id="BaseResultMap" type="com.lezhi.address.admin.pojo.Task">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="dbs_id" property="dbsId" jdbcType="INTEGER" />
+		<result column="table_name" property="tableName" jdbcType="VARCHAR" />
+		<result column="address_column" property="addressColumn" jdbcType="VARCHAR" />
+		<result column="server" property="server" jdbcType="VARCHAR" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="db_schema" property="dbSchema" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getTaskInfo" resultMap="BaseResultMap">
+		SELECT
+		t.id,
+		t.dbs_id,
+		t.table_name,
+		t.address_column,
+		t.db_schema,
+		d.server,
+		d.username,
+		d.password
+		FROM
+		ocn_address.t_analysis_task t
+		LEFT JOIN ocn_address.t_datasource d ON t.dbs_id = d.id
+		WHERE
+		t.id = #{id};
+	</select>
+
+</mapper>

@@ -14,4 +14,35 @@
         FROM
             `abc_address` WHERE `status` = 20;
     </select>
+    <select id="selectAddrTableNameByAnaTaskId" resultType="com.lezhi.address.admin.pojo.AnalyMatchDto">
+      SELECT id, table_name tableName,name FROM `t_analysis_task` WHERE id = #{analysisTaskId};
+    </select>
+    <select id="selectAddrList" resultType="com.lezhi.address.admin.pojo.AnalyMatchDto">
+      SELECT  	id addressId,
+        address,
+        road_lane roadLane,
+        building_no building,
+        parsed_time analTime,
+        house_no house,
+        status ifAnalySis,
+        match_status ifMatch,
+        match_time matchTime
+	 FROM ${tableName}
+	 <if test="null != page">
+         LIMIT  ${page},20
+     </if>
+    </select>
+
+    <select id="selectAddressById" resultType="com.lezhi.address.admin.pojo.AnalyMatchDto">
+        SELECT id addressId,
+        address,
+        road_lane roadLane,
+        building_no building,
+        parsed_time analTime,
+        house_no house,
+        status ifAnalySis,
+        match_status ifMatch,
+        match_time matchTime
+        FROM ${dataName}.${tableName} WHERE id = #{id}
+    </select>
 </mapper>

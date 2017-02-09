@@ -25,83 +25,89 @@
                 </div>
                 <br class="portlet-body">
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-scrollable">
-                                <table class="table table-striped table-hover">
-                                    <tbody>
-                                    <tr>
-                                        <th>地址来源-服务器</th>
-                                        <td id="server">192.168.0.201</td>
-                                    </tr>
-                                    <tr>
-                                        <th>地址来源-数据库</th>
-                                        <td id="data">ocn_address</td>
-                                    </tr>
-                                    <tr>
-                                        <th>地址来源-表</th>
-                                        <td id="table">abc_address</td>
-                                    </tr>
-                                    <tr>
-                                        <th>地址来源-ID</th>
-                                        <td id="id"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>所在任务ID</th>
-                                        <td id="taskId"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>所在任务名称</th>
-                                        <td id="taskName">农行复评地址库</td>
-                                    </tr>
-                                    <tr>
-                                        <th>原始地址</th>
-                                        <td id="address">四川北路93号203</td>
-                                    </tr>
-                                    <tr>
-                                        <th>是否可拆分</th>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-scrollable">
+                            <table class="table table-striped table-hover">
+                                <tbody>
+                                <tr>
+                                    <th>地址来源-服务器</th>
+                                    <td id="server">192.168.0.201</td>
+                                </tr>
+                                <tr>
+                                    <th>地址来源-数据库</th>
+                                    <td id="data">${dataName}</td>
+                                </tr>
+                                <tr>
+                                    <th>地址来源-表</th>
+                                    <td id="table">${tableName}</td>
+                                </tr>
+                                <tr>
+                                    <th>地址来源-ID</th>
+                                    <td id="id">${analyMatchDto.addressId}</td>
+                                </tr>
+                                <tr>
+                                    <th>所在任务ID</th>
+                                    <td id="taskId">${id}</td>
+                                </tr>
+                                <tr>
+                                    <th>所在任务名称</th>
+                                    <td id="taskName">${analyMatchDto.name}</td>
+                                </tr>
+                                <tr>
+                                    <th>原始地址</th>
+                                    <td id="address">${analyMatchDto.address}</td>
+                                </tr>
+                                <tr>
+                                    <th>是否可拆分</th>
+                                    <c:if test="${analyMatchDto.ifAnalySis == 10}">
+                                        <td id="ifAnal">是</td>
+                                    </c:if>
+                                    <c:if test="${analyMatchDto.ifAnalySis == 20}">
                                         <td id="ifAnal">否</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- END PORTLET-->
+                                    </c:if>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
-                    <span class="label label-info">请修改拆分结果</span></br></br>
-                    <div class="" >
-                        <div class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label for="roadLane" class="col-sm-2 control-label"><span class="required"> * </span>路弄</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="roadLane" >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="building" class="col-sm-2 control-label">楼栋</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="building" >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="house" class="col-sm-2 control-label">房间</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="house" >
-                                </div>
-                                <div class="col-sm-3">
-                                    <button type="submit" class="btn btn-default" id="submit">提交</button>
-                                </div>
-                            </div>
-
-                        </div>
+                        <!-- END PORTLET-->
                     </div>
                 </div>
+                <span class="label label-info">请修改拆分结果</span></br></br>
+                <div class="">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="roadLane" class="col-sm-2 control-label"><span
+                                    class="required"> * </span>路弄</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="roadLane">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="building" class="col-sm-2 control-label">楼栋</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="building">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="house" class="col-sm-2 control-label">房间</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="house">
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-default" id="submit">提交</button>
+                            </div>
+                        </div>
 
+                    </div>
+                </div>
             </div>
 
         </div>
-        <!-- END PORTLET-->
+
     </div>
+    <!-- END PORTLET-->
+</div>
 
 </div>
 
@@ -126,14 +132,18 @@
 <script type="text/javascript">
     $(function () {
         $("#submit").click(function () {
-           var roadLane = $("#roadLane").val();
-            if("" == roadLane || null == roadLane){
+            var roadLane = $("#roadLane").val();
+            if ("" == roadLane || null == roadLane) {
                 $('#myModal').modal({
                     keyboard: true
                 });
                 return;
             }
         });
+
+        $("#roadLane").val('${analyMatchDto.roadLane}');
+        $("#building").val('${analyMatchDto.building}');
+        $("#house").val('${analyMatchDto.house}');
     })
 </script>
 </html>

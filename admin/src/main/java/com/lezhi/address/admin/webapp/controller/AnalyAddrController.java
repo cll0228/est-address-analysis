@@ -72,7 +72,7 @@ public class AnalyAddrController {
         // List<Address> addresses = analyAddrService.getParsedFailedAddr();
         List<AnalyMatchDto> analyMatchDtos = analyAddrService.getAnalyMatchList(analysisTaskId,page);
         if (null == analyMatchDtos) {
-            return null;
+            view.addObject("analyMatchDtos",null);
         }
         try {
             view.addObject("analyMatchDtos",mapper.writeValueAsString(analyMatchDtos));

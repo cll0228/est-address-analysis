@@ -109,7 +109,11 @@
                     $("#totalCount" + i).html(data[i].totalCount);
                     $("#successCount" + i).html(data[i].successCount);
                     $("#failCount" + i).html(data[i].failCount);
-                    $("#schedule" + i).html(data[i].schedule+" %");
+                    if(null == data[i].schedule){
+                        $("#schedule" + i).html("");
+                    }else {
+                        $("#schedule" + i).html(data[i].schedule+" %");
+                    }
                     if (data[i].status == 100) {
                         $("#status" + i).html("新建");
                     } else if (data[i].status == 200) {

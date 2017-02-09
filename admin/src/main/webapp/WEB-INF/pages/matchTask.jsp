@@ -94,7 +94,7 @@
                             "<td id='startTime" + i + "'></td>" +
                             "<td id='finishTime" + i + "'></td>" +
                             "<td id='operator" + i + "'></td>" +
-                            "<td id= 'operate" + i + "'><a>开始</a><br><a>结束</a><br><a href='javascript:void(0)' onclick='showAddrList(" + data[i].id + ");'>查询地址列表</a></td></tr>";
+                            "<td id= 'operate" + i + "'><a>开始</a><br><a>结束</a><br><a href='javascript:void(0)' onclick='showAddrList(" + data[i].analysisTaskId + ");'>查询地址列表</a></td></tr>";
 //                            "<td id= 'operate" + i + "'><input type='button' value='开始'><br><input type='button' value='结束'><br><input type='button' value='查询地址列表'></td></tr>";
                     $("#tb").append(html);
                     $("#id" + i).html(data[i].id);
@@ -120,5 +120,9 @@
             }
         })
     });
+
+    function showAddrList(id) {
+        location.href ='${ctx}/addrQuery.do?analySisTaskId=' + id;
+    }
 </script>
 </html>

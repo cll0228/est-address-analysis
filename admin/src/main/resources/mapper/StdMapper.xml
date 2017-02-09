@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lezhi.address.admin.mapper.StdMapper">
+    <select id="getStdAddr" resultType="com.lezhi.address.admin.pojo.ReturnParam" parameterType="com.lezhi.address.admin.pojo.StdModel">
+     <!-- SELECT
+            district.district_name district,
+            std_address.std_addr_id id,
+            std_address.road_lane roadLane,
+            std_address.addr_code addrCode,
+            town.town_name street,
+            COMMIT.neighborhood_name committe
+        FROM
+            ocn_address.of_std_address std_address
+        LEFT JOIN ocn_address.of_district district ON std_address.of_district_id = district.district_id
+        LEFT JOIN ocn_address.of_neighborhood COMMIT ON std_address.of_neighborhood_id = COMMIT.neighborhood_id
+        LEFT JOIN ocn_address.of_town town ON std_address.of_town_id = town.town_id
+        LEFT JOIN ocn_address.of_road_lane_links road_lane_links ON std_address.std_addr_id = road_lane_links.std_addr_id
+        WHERE
+            road_lane_links.road_lane_id in (
+                SELECT
+                    road_lane_id
+                FROM
+                    ocn_address.of_road_lane_match
+                WHERE
+                    lianjia_residence_name = #{model.residence}
+                OR soufang_residence_name = #{model.residence}
+                OR iwjw_residence_name = #{model.residence}
+                OR centanet_residence_name = #{model.residence}
+                OR fangjia_residence_name = #{model.residence}
+                OR lezhi_residence_name = #{model.residence}
+            ) -->
+        SELECT std_address.building_no building,std_address.house_no houseNo,district.district_name district, std_address.std_addr_id id, std_address.road_lane roadLane, std_address.addr_code addrCode, town.town_name street, COMMIT.neighborhood_name committe 
+		FROM ocn_address.of_std_address std_address 
+		LEFT JOIN ocn_address.of_district district ON std_address.of_district_id = district.district_id 
+		LEFT JOIN ocn_address.of_neighborhood COMMIT ON std_address.of_neighborhood_id = COMMIT.neighborhood_id 
+		LEFT JOIN ocn_address.of_town town ON std_address.of_town_id = town.town_id 
+		WHERE std_address.road_lane in 
+		(SELECT road_lane FROM ocn_address.of_road_lane WHERE id in(
+        SELECT road_lane_id FROM ocn_address.of_road_lane_match
+		WHERE
+                    lianjia_residence_name = #{model.residence}
+                OR soufang_residence_name = #{model.residence}
+                OR iwjw_residence_name = #{model.residence}
+                OR centanet_residence_name = #{model.residence}
+                OR fangjia_residence_name = #{model.residence}
+                OR lezhi_residence_name = #{model.residence}
+		 ))
+        <if test="null != model.building">
+            AND building_no = '${model.building}'
+        </if>
+        <if test="null != model.houseNum">
+            AND house_no = '${model.houseNum}室'
+        </if>
+
+        GROUP BY road_lane
+    </select>
+
+    <select id="getStdAddr1" resultType="com.lezhi.address.admin.pojo.ReturnParam" parameterType="com.lezhi.address.admin.pojo.StdModel">
+        SELECT
+        district.district_name district,
+        town.town_name street,
+        COMMIT.neighborhood_name committe,
+        max(std_addr_id) id,
+        addr_code addrCode,
+        road_lane roadLane,
+        building_no building,
+        house_no houseNo
+        FROM
+        ocn_address.of_std_address std_address
+        LEFT JOIN ocn_address.of_district district ON std_address.of_district_id = district.district_id
+        LEFT JOIN ocn_address.of_neighborhood COMMIT ON std_address.of_neighborhood_id = COMMIT.neighborhood_id
+        LEFT JOIN ocn_address.of_town town ON std_address.of_town_id = town.town_id
+        WHERE 1=1
+        <if test="null != model.road and null != model.lane">
+            AND road_lane = '${model.road}${model.lane}'
+        </if>
+        <if test="null == model.road and null == model.lane">
+            AND road_lane = '${model.residence}'
+        </if>
+        <if test="null != model.road and null == model.lane and null != model.building">
+            AND road_lane = '${model.road}${model.building}'
+        </if>
+        <if test="null != model.building and null != model.lane">
+            AND building_no = '${model.building}'
+        </if>
+        <if test="null == model.road and null == model.lane and null != model.building">
+            AND building_no = '${model.building}'
+        </if>
+        <if test="null != model.houseNum">
+            AND house_no = '${model.houseNum}室'
+        </if>
+        <if test="null != model.road and null == model.houseNum and null == model.lane and null == model.building">
+            AND road_lane = '${model.road}'
+        </if>
+    </select>
+    
+    <insert id="insertOuterAddress" parameterType="com.lezhi.address.admin.pojo.OuterAddress">
+        INSERT INTO `ocn_address`.`of_outer_address_links`
+        (`src_table`,`std_addr_id`,`src_table_id`) VALUES(#{outerAddress.srcTable},#{outerAddress.stdAddrId},#{outerAddress.srcTableId});
+    </insert>
+
+</mapper>

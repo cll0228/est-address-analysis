@@ -12,20 +12,20 @@
 <body>
 <div class="container">
     <div>
-        地址&nbsp;<input type="text" id="name"/>&nbsp;
-        解析结果&nbsp;<select style="width: 100px; height: 26px;">
-        <option value="all">全部</option>
-        <option value="notStart">未开始</option>
-        <option value="success">成功</option>
-        <option value="lose">失效</option>
+        地址&nbsp;<input type="text" id="addrLike"/>&nbsp;
+        解析结果&nbsp;<select style="width: 100px; height: 26px;" id="analyStatus">
+        <option value="40">全部</option>
+        <option value="30">未开始</option>
+        <option value="20">成功</option>
+        <option value="10">失效</option>
     </select>&nbsp;
-        匹配结果&nbsp;<select style="width: 100px; height: 26px;">
-        <option value="all">全部</option>
-        <option value="notStart">未开始</option>
-        <option value="success">成功</option>
-        <option value="lose">失效</option>
+        匹配结果&nbsp;<select style="width: 100px; height: 26px;" id="matchStatus">
+        <option value="40">全部</option>
+        <option value="30">未开始</option>
+        <option value="20">成功</option>
+        <option value="10">失效</option>
     </select>&nbsp;
-        <input type="button" value="查找"/>
+        <input type="button" value="查找" onclick="query();"/>
     </div>
     <div style="display: block" id="table1">
         <table id="residence" class="table table-striped table-bordered table-hover order-column" height="80px">
@@ -99,9 +99,11 @@
     var id = null;//所在任务id
     var totalPage = null;
     var startPage = 1;
+    var dataName = null;
+    var tableName = null;
     $(function () {
         $.ajax({
-            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 ,
+            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1,
             type: "get",
 //            data: {"keyword": keyword},
             success: function (data) {
@@ -110,6 +112,8 @@
                     name = data[i].name;
                     id = data[i].id;
                     totalPage = data[i].totalPage;
+                    dataName =  data[i].dataName;
+                    tableName =  data[i].tableName;
                     var html = "<tr><td id='addressId" + i + "'></td>" +
                             "<td id='analTaskId" + i + "'></td>" +
                             "<td id='dataName" + i + "'></td>" +
@@ -129,9 +133,9 @@
                     $("#dataName" + i).html(data[i].dataName);
                     $("#table_" + i).html(data[i].tableName);
                     $("#address" + i).html(data[i].address);
-                    if(data[i].ifAnalySis == 10){
+                    if (data[i].ifAnalySis == 10) {
                         $("#ifAnalySis" + i).html("成功");
-                    }else{
+                    } else {
                         $("#ifAnalySis" + i).html("失败");
                     }
                     $("#analTime" + i).html(data[i].analTime);
@@ -145,6 +149,7 @@
                 $("#totalPage").val(totalPage);
             }
         })
+
     });
 
     function toEdit(addressId) {
@@ -154,14 +159,14 @@
     }
 
     function addPage() {
-        if(startPage == totalPage){
+        if (startPage == totalPage) {
             bootbox.alert("已是最后一页！！");
             return;
         }
         startPage = startPage + 1;
         $("#page").val(startPage);
         $.ajax({
-            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 + "&page=" + startPage  ,
+            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 + "&page=" + startPage,
             type: "get",
 //            data: {"keyword": keyword},
             success: function (data) {
@@ -189,9 +194,9 @@
                     $("#dataName" + i).html(data[i].dataName);
                     $("#table_" + i).html(data[i].tableName);
                     $("#address" + i).html(data[i].address);
-                    if(data[i].ifAnalySis == 10){
+                    if (data[i].ifAnalySis == 10) {
                         $("#ifAnalySis" + i).html("成功");
-                    }else{
+                    } else {
                         $("#ifAnalySis" + i).html("失败");
                     }
                     $("#analTime" + i).html(data[i].analTime);
@@ -206,14 +211,14 @@
     }
 
     function reducePage() {
-        if(startPage == 1){
+        if (startPage == 1) {
             bootbox.alert("已是最前一页！！");
             return;
         }
         startPage = startPage - 1;
         $("#page").val(startPage);
         $.ajax({
-            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 + "&page=" + startPage  ,
+            url: '${ctx}/addrQuery.do?analySisTaskId=' + 1 + "&page=" + startPage,
             type: "get",
 //            data: {"keyword": keyword},
             success: function (data) {
@@ -241,9 +246,9 @@
                     $("#dataName" + i).html(data[i].dataName);
                     $("#table_" + i).html(data[i].tableName);
                     $("#address" + i).html(data[i].address);
-                    if(data[i].ifAnalySis == 10){
+                    if (data[i].ifAnalySis == 10) {
                         $("#ifAnalySis" + i).html("成功");
-                    }else{
+                    } else {
                         $("#ifAnalySis" + i).html("失败");
                     }
                     $("#analTime" + i).html(data[i].analTime);
@@ -255,6 +260,17 @@
                 }
             }
         })
+    }
+
+    function query() {
+        var analyStatus = $("#analyStatus").val();
+        var matchStatus = $("#matchStatus").val();
+        var addrLike = $("#addrLike").val();
+        if("" == addrLike){
+            bootbox.alert("请输入查找的地址！！");
+            return;
+        }
+
     }
 </script>
 </html>

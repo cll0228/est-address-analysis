@@ -139,6 +139,7 @@
                 });
                 return;
             }
+            bootbox.alert("该功能尚未开放！");
         });
 
         $("#roadLane").val('${analyMatchDto.roadLane}');

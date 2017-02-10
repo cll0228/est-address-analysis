@@ -14,6 +14,7 @@ import com.lezhi.address.admin.pojo.OuterAddress;
 import com.lezhi.address.admin.pojo.ReturnParam;
 import com.lezhi.address.admin.pojo.StdModel;
 import com.lezhi.address.admin.pojo.TAnalysisTask;
+import com.lezhi.address.admin.pojo.TMatchTask;
 import com.lezhi.address.admin.pojo.Task;
 import com.lezhi.address.admin.service.StdService;
 import com.lezhi.address.admin.service.TaskService;
@@ -49,28 +50,26 @@ public class TaskServiceImpl implements TaskService {
     			if(address!=null) {
     				List<ReturnParam> rList = stdService.analysis(address);
     				if(rList!=null&&rList.size()>0) {
-    					OuterAddress outerAddress = new OuterAddress();
-    					outerAddress.setSrcTable(task.getTableName());
-    					outerAddress.setSrcTableId(task.getId());
-    					outerAddress.setStdAddrId(Integer.parseInt(rList.get(0).getId()));
-    					stdMapper.insertOuterAddress(outerAddress);
-    					reAdd.setMatchStatus(10);
-    					reAdd.setMatchTime(new Date());
-    					return reAdd;
-    				} else {
-    					return reAdd;
+    					if(rList.get(0).getFlag().equals(1)) {
+    						OuterAddress outerAddress = new OuterAddress();
+        					outerAddress.setSrcTable(task.getTableName());
+        					outerAddress.setSrcTableId(task.getId());
+        					outerAddress.setStdAddrId(Integer.parseInt(rList.get(0).getId()));
+        					try {
+								stdMapper.insertOuterAddress(outerAddress);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+        					reAdd.setMatchStatus(10);
+        					reAdd.setMatchTime(new Date());
+    					}
     				}
-    			} else {
-    				return reAdd;
     			}
     		} catch (Exception e) {
 				e.printStackTrace();
-				return reAdd;
 			}
-    	} else {
-    		return reAdd;
     	}
-    	
+    	return reAdd;
     }
 
     @Override
@@ -89,7 +88,7 @@ public class TaskServiceImpl implements TaskService {
     	//根据analysisTaskId获取
     	Task task2 = taskMapper.getTaskInfo(id);
     	
-    	String sql = "ALTER TABLE "+targetTableName+" ADD parsed_road_lane varchar(210), ADD parsed_building_no varchar(20), ADD parsed_house_no varchar(20), ADD parsed_version int(11), ADD parsed_time datetime(6), ADD parsed_status int(11);";
+    	String sql = "ALTER TABLE "+targetTableName+" ADD parsed_road_lane varchar(210), ADD parsed_building_no varchar(20), ADD parsed_house_no varchar(20), ADD parsed_version int(11) DEFAULT '0', ADD parsed_time datetime(6), ADD parsed_status int(11) DEFAULT '0', ADD match_status int(11) DEFAULT '0', ADD match_time datetime(6);";
     	try {
 			AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql);
 		} catch (Exception e) {
@@ -117,17 +116,15 @@ public class TaskServiceImpl implements TaskService {
         						sql3.append("UPDATE "+targetTableName+" SET parsed_road_lane='"+std.getRoad()+std.getBuilding()+"',parsed_house_no='"+std.getHouseNum()+"',");
         					} else {
         						sql3.append("UPDATE "+targetTableName+" SET parsed_status=20,parsed_version=1,parsed_time=NOW() WHERE "+targetTablePk+"="+rs.getInt(targetTablePk));
-        						AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql3.toString());
         						failedCount++;
         					}
         					sql3.append("parsed_status=10,parsed_version=1,parsed_time=NOW() WHERE "+targetTablePk+"="+rs.getInt(targetTablePk));
-        					AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql3.toString());
         					successCount++;
         				} else {
         					sql3.append("UPDATE "+targetTableName+" SET parsed_status=20,parsed_version=1,parsed_time=NOW() WHERE "+targetTablePk+"="+rs.getInt(targetTablePk));
-        					AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql3.toString());
         					failedCount++;
         				}
+        				AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql3.toString());
         				if(count==100) {
         					count=0;
         					task.setSuccessCount(successCount);
@@ -139,6 +136,9 @@ public class TaskServiceImpl implements TaskService {
 					task.setFailedCount(failedCount);
 					task.setStatus(300);
 					taskMapper.updateTAnalysisTask(task);
+					if(autoMatch) {
+						createMatchTask(operatorUserId, id, true);
+					}
             	} catch (Exception e) {
         			e.printStackTrace();
         		}
@@ -149,6 +149,78 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public int createMatchTask(int operatorUserId, int analysisTaskId, boolean unMatchedOnly) {
-        return 0;
+    	//根据analysisTaskId获取
+    	Task task = taskMapper.getTaskInfo(analysisTaskId);
+    	int id = 0;
+    	if(task!=null) {
+    		TMatchTask tMatchTask = new TMatchTask();
+    		tMatchTask.setAnalysisTaskId(analysisTaskId);
+    		tMatchTask.setStatus(200);
+    		tMatchTask.setOperator(operatorUserId);
+    		taskMapper.insertTMatchTask(tMatchTask);
+    		id = tMatchTask.getId();
+    		
+    		Thread t = new Thread(new Runnable(){  
+                public void run(){
+                	String sql = null;
+                	if(unMatchedOnly) {
+                		sql = "SELECT "+task.getAddressColumn()+" FROM "+task.getTableName()+" WHERE match_status!=10";
+                	} else {
+                		sql = "SELECT "+task.getAddressColumn()+" FROM "+task.getTableName();
+                	}
+            		try {
+            			ResultSet rs = AddressExtractor.connJDBC(task.getServer(), task.getDbSchema(), task.getUsername(), task.getPassword(), sql);
+            			int count = 0;
+            			int successCount = 0;
+            			int failedCount = 0;
+            			String address = null;
+            			while (rs.next()) {
+            				count++;
+            				address = rs.getString(task.getAddressColumn());
+            				StringBuffer sql2 = new StringBuffer();
+            				if(address!=null) {
+                				List<ReturnParam> rList = stdService.analysis(address);
+                				if(rList!=null&&rList.size()>0) {
+                					if(rList.get(0).getFlag().equals("1")) {
+                						OuterAddress outerAddress = new OuterAddress();
+                    					outerAddress.setSrcTable(task.getTableName());
+                    					outerAddress.setSrcTableId(task.getId());
+                    					outerAddress.setStdAddrId(Integer.parseInt(rList.get(0).getId()));
+                    					try {
+											stdMapper.insertOuterAddress(outerAddress);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+                    					successCount++;
+                    					sql2.append("UPDATE "+task.getTableName()+" SET match_status=10,match_time=NOW()");
+                					} else {
+                						failedCount++;
+                						sql2.append("UPDATE "+task.getTableName()+" SET match_status=20,match_time=NOW()");
+                					}
+                				} else {
+                					failedCount++;
+                					sql2.append("UPDATE "+task.getTableName()+" SET match_status=20,match_time=NOW()");
+                				}
+                				AddressExtractor.alterTable(task.getServer(), task.getDbSchema(), task.getUsername(), task.getPassword(), sql2.toString());
+                			}
+            				if(count==100) {
+            					count=0;
+            					tMatchTask.setSuccessCount(successCount);
+            					tMatchTask.setFailedCount(failedCount);
+            					taskMapper.updateTMatchTask(tMatchTask);
+            				}
+            			}
+            			tMatchTask.setSuccessCount(successCount);
+            			tMatchTask.setFailedCount(failedCount);
+            			tMatchTask.setStatus(300);
+        				taskMapper.updateTMatchTask(tMatchTask);
+            		} catch (Exception e) {
+        				e.printStackTrace();
+        			}
+                }});  
+            t.start(); 
+    	}
+    	
+        return id;
     }
 }

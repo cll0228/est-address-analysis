@@ -1,7 +1,5 @@
 package com.lezhi.address.admin.service;
 
-import javax.servlet.http.HttpSession;
-
 import com.lezhi.address.admin.pojo.Address;
 
 /**

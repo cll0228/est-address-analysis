@@ -36,6 +36,18 @@
 		SELECT LAST_INSERT_ID()
 		</selectKey>
     </insert>
-	
+    
+    <update id="updateTAnalysisTask" parameterType="com.lezhi.address.admin.pojo.TAnalysisTask">
+        UPDATE `ocn_address`.`t_analysis_task`
+            SET
+             `success_count` = #{successCount},
+            <if test="status == 300">
+            	`finish_time` = NOW(),
+            	`status` = #{status},
+        	</if>
+             `failed_count` = #{failedCount}
+            WHERE
+                (`id` = #{id});
+    </update>
 	
 </mapper>

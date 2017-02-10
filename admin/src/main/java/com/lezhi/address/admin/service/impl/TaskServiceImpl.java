@@ -4,21 +4,20 @@ import java.sql.ResultSet;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lezhi.address.admin.mapper.StdMapper;
 import com.lezhi.address.admin.mapper.TaskMapper;
 import com.lezhi.address.admin.pojo.Address;
 import com.lezhi.address.admin.pojo.OuterAddress;
 import com.lezhi.address.admin.pojo.ReturnParam;
+import com.lezhi.address.admin.pojo.StdModel;
 import com.lezhi.address.admin.pojo.TAnalysisTask;
 import com.lezhi.address.admin.pojo.Task;
 import com.lezhi.address.admin.service.StdService;
 import com.lezhi.address.admin.service.TaskService;
 import com.lezhi.address.admin.util.AddressExtractor;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * Created by Colin Yan on 2017/2/7.
@@ -75,7 +74,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public int createAnalysisTask(int datasourceId, String targetTableName, String targetColumnName, String dbSchema, String taskName, boolean autoMatch, int operatorUserId) {
+    public int createAnalysisTask(int datasourceId, String targetTablePk, String targetTableName, String targetColumnName, String dbSchema, String taskName, boolean autoMatch, int operatorUserId) {
     	TAnalysisTask task = new TAnalysisTask();
     	task.setName(taskName);
     	task.setDbsId(datasourceId);
@@ -95,8 +94,56 @@ public class TaskServiceImpl implements TaskService {
 			AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return 0;
 		}
+    	Thread t = new Thread(new Runnable(){  
+            public void run(){  
+            	//开始解析入库操作
+            	String sql2 = "SELECT "+targetColumnName+","+targetTablePk+" FROM "+targetTableName+" WHERE parsed_status is null";
+            	try {
+            		String address = null;
+        			ResultSet rs = AddressExtractor.connJDBC(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql2);
+        			int count = 0;
+        			int successCount = 0;
+        			int failedCount = 0;
+        			while (rs.next()) {
+        				count++;
+        				address = rs.getString(task.getAddressColumn());
+        				StdModel std = AddressExtractor.parseAll(new StdModel(address));
+        				StringBuffer sql3 = new StringBuffer();
+        				if((null!=std.getRoad()&&null!=std.getLane())||(null!=std.getRoad()&&null!=std.getBuilding())) {
+        					if(null!=std.getRoad()&&null!=std.getLane()) {
+        						sql3.append("UPDATE "+targetTableName+" SET parsed_road_lane='"+std.getRoad()+std.getLane()+"',parsed_building_no='"+std.getBuilding()+"',parsed_house_no='"+std.getHouseNum()+"',");
+        					} else if(null!=std.getRoad()&&null!=std.getBuilding()&&null==std.getLane()){
+        						sql3.append("UPDATE "+targetTableName+" SET parsed_road_lane='"+std.getRoad()+std.getBuilding()+"',parsed_house_no='"+std.getHouseNum()+"',");
+        					} else {
+        						sql3.append("UPDATE "+targetTableName+" SET parsed_status=20,parsed_version=1,parsed_time=NOW() WHERE "+targetTablePk+"="+rs.getInt(targetTablePk));
+        						AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql3.toString());
+        						failedCount++;
+        					}
+        					sql3.append("parsed_status=10,parsed_version=1,parsed_time=NOW() WHERE "+targetTablePk+"="+rs.getInt(targetTablePk));
+        					AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql3.toString());
+        					successCount++;
+        				} else {
+        					sql3.append("UPDATE "+targetTableName+" SET parsed_status=20,parsed_version=1,parsed_time=NOW() WHERE "+targetTablePk+"="+rs.getInt(targetTablePk));
+        					AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql3.toString());
+        					failedCount++;
+        				}
+        				if(count==100) {
+        					count=0;
+        					task.setSuccessCount(successCount);
+        					task.setFailedCount(failedCount);
+        					taskMapper.updateTAnalysisTask(task);
+        				}
+        			}
+        			task.setSuccessCount(successCount);
+					task.setFailedCount(failedCount);
+					task.setStatus(300);
+					taskMapper.updateTAnalysisTask(task);
+            	} catch (Exception e) {
+        			e.printStackTrace();
+        		}
+            }});  
+        t.start();  
     	return id;
     }
 

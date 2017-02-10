@@ -4,11 +4,14 @@ import java.sql.ResultSet;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import com.lezhi.address.admin.mapper.StdMapper;
 import com.lezhi.address.admin.mapper.TaskMapper;
 import com.lezhi.address.admin.pojo.Address;
 import com.lezhi.address.admin.pojo.OuterAddress;
 import com.lezhi.address.admin.pojo.ReturnParam;
+import com.lezhi.address.admin.pojo.TAnalysisTask;
 import com.lezhi.address.admin.pojo.Task;
 import com.lezhi.address.admin.service.StdService;
 import com.lezhi.address.admin.service.TaskService;
@@ -72,12 +75,33 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public int createAnalysisTask(int datasourceId, String targetTableName, String targetColumnName, String taskName, boolean autoMatch, int operatorUserId) {
-        return 0;
+    public int createAnalysisTask(int datasourceId, String targetTableName, String targetColumnName, String dbSchema, String taskName, boolean autoMatch, int operatorUserId) {
+    	TAnalysisTask task = new TAnalysisTask();
+    	task.setName(taskName);
+    	task.setDbsId(datasourceId);
+    	task.setTableName(targetTableName);
+    	task.setAddressColumn(targetColumnName);
+    	task.setAutoMatch(autoMatch);
+    	task.setStatus(200);
+    	task.setOperator(operatorUserId);
+    	task.setDbSchema(dbSchema);
+    	taskMapper.insertTAnalysisTask(task);
+    	int id = task.getId();
+    	//根据analysisTaskId获取
+    	Task task2 = taskMapper.getTaskInfo(id);
+    	
+    	String sql = "ALTER TABLE "+targetTableName+" ADD parsed_road_lane varchar(210), ADD parsed_building_no varchar(20), ADD parsed_house_no varchar(20), ADD parsed_version int(11), ADD parsed_time datetime(6), ADD parsed_status int(11);";
+    	try {
+			AddressExtractor.alterTable(task2.getServer(), task2.getDbSchema(), task2.getUsername(), task2.getPassword(), sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+    	return id;
     }
 
     @Override
-    public int createMatchTask(int analysisTaskId, boolean unMatchedOnly) {
+    public int createMatchTask(int operatorUserId, int analysisTaskId, boolean unMatchedOnly) {
         return 0;
     }
 }

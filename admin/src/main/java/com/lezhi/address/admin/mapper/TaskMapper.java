@@ -2,6 +2,7 @@ package com.lezhi.address.admin.mapper;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.lezhi.address.admin.pojo.TAnalysisTask;
 import com.lezhi.address.admin.pojo.Task;
 
 /**
@@ -9,4 +10,6 @@ import com.lezhi.address.admin.pojo.Task;
  */
 public interface TaskMapper {
 	Task getTaskInfo(@Param("id") Integer id);
+	
+	int insertTAnalysisTask(TAnalysisTask tAnalysisTask);
 }

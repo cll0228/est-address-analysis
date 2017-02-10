@@ -27,5 +27,15 @@
 		WHERE
 		t.id = #{id};
 	</select>
-
+	<insert id="insertTAnalysisTask" parameterType="com.lezhi.address.admin.pojo.TAnalysisTask">
+        INSERT INTO `ocn_address`.`t_analysis_task`
+        (`name`,`dbs_id`,`table_name`,`address_column`,`auto_match`,`create_time`,`start_time`,`status`,`operator`,`db_schema`) 
+        VALUES(#{name},#{dbsId},#{tableName},#{addressColumn},
+        #{autoMatch},NOW(),NOW(),#{status},#{operator},#{dbSchema});
+    	<selectKey resultType="int" keyProperty="id" order="AFTER">
+		SELECT LAST_INSERT_ID()
+		</selectKey>
+    </insert>
+	
+	
 </mapper>

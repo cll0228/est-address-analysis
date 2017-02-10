@@ -5,13 +5,13 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface DbServerMapper {
+public interface TDatasourceMapper {
     List<TDatasource> getDataSourceList();
 
-    Integer addServer(@Param("serverIp")String serverIp, @Param("userName")String userName,
+    Integer addServer(@Param("serverIp")String serverIp, @Param("type")String type, @Param("userName")String userName,
                       @Param("password")String password, @Param("alias")String alias, @Param("addStaff")String addStaff);
 
-    Integer editServer(@Param("serverIp")String serverIp, @Param("userName")String userName,
+    Integer editServer(@Param("serverIp")String serverIp, @Param("type")String type, @Param("userName")String userName,
                        @Param("password")String password, @Param("alias")String alias,
                        @Param("operateStaff")String operateStaff, @Param("id")Integer id);
 

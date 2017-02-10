@@ -32,11 +32,11 @@
             </tr>
             </thead>
             <tbody id="tb">
-                <td id="serverIp"></td>
+                <td id="server"></td>
                 <td id="userName"></td>
                 <td id="password"></td>
                 <td id="alias"></td>
-                <td id="addStaff"></td>
+                <td id="operator"></td>
                 <td id="createTime"></td>
                 <td id="operate"></td>
             </tbody>
@@ -62,6 +62,17 @@
                                     <i class="fa" style="z-index:999"></i>
                                     <input type="text" name="newServerIp" class="form-control" id="newServerIp">
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                <label >数据库类型</label>
+                            </label>
+                            <div class="col-md-6">
+                                <label for="newMysql">mysql</label>
+                                <input type="radio" name="newDbtype" id="newMysql" checked>
+                                <label for="newMssql">mssql</label>
+                                <input type="radio" name="newDbtype" id="newMssql">
                             </div>
                         </div>
                         <div class="form-group">
@@ -132,6 +143,17 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">
+                                <label >数据库类型</label>
+                            </label>
+                            <div class="col-md-6">
+                                   <label for="mysql">mysql</label>
+                                   <input type="radio" name="dbtype" id="mysql">
+                                   <label for="mssql">mssql</label>
+                                   <input type="radio" name="dbtype" id="mssql">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
                                 <label for="uname">用户名<span class="required"> * </span></label>
                             </label>
                             <div class="col-md-6">
@@ -194,19 +216,20 @@
             success: function (data) {
                 $("#tb").empty();
                 for (var i = 0; i < data.length; i++) {
-                    var html = "<tr><td id='serverIp" + i + "'></td>" +
+                    var html = "<tr><td id='server" + i + "'></td>" +
                             "<td id='userName" + i + "'></td>" +
                             "<td id='password" + i + "'></td>" +
                             "<td id='alias" + i + "'></td>" +
-                            "<td id='addStaff" + i + "'></td>" +
+                            "<td id='operator" + i + "'></td>" +
+                            <%--"<fmt:formatDate value='" + data[i].createTime + "' var='result' dateStyle='medium' timeStyle='medium' type='both'/>"+--%>
                             "<td id='createTime" + i + "'></td>" +
-                            "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + data[i].id + "','" + data[i].serverIp + "','" + data[i].userName + "','" + data[i].password + "','" + data[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + data[i].id + ");'>删除</a></td></tr>";
+                            "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + data[i].id + "','" + data[i].server + "','" + data[i].type + "','" + data[i].username + "','" + data[i].password + "','" + data[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + data[i].id + ");'>删除</a></td></tr>";
                     $("#tb").append(html);
-                    $("#serverIp" + i).html(data[i].serverIp);
-                    $("#userName" + i).html(data[i].userName);
+                    $("#server" + i).html(data[i].server);
+                    $("#userName" + i).html(data[i].username);
                     $("#password" + i).html(data[i].password);
                     $("#alias" + i).html(data[i].alias);
-                    $("#addStaff" + i).html(data[i].addStaff);
+                    $("#operator" + i).html(data[i].operatorUserName);
                     $("#createTime" + i).html(data[i].createTime);
                 }
             }
@@ -225,7 +248,13 @@
         if (!$("#form_datasource_add").valid()) {
             return;
         }
-
+        var type;
+        if(document.getElementById("newMysql").checked == true){
+            type = 1;
+        }
+        if(document.getElementById("newMssql").checked == true){
+            type = 2;
+        }
         Ewin.confirm({ message: "确认要添加服务器数据吗？" }).on(function (e) {
             if (!e) {
                 return;
@@ -233,26 +262,26 @@
             $.ajax({
                 url: '${ctx}/addServer.do?',
                 type: "POST",
-                data: $('#form_datasource_add').serialize(),
+                data: {"server":$("#newServerIp").val(),"type": type,"username":$("#newUserName").val(),"password":$("#newPassword").val(),"alias":$("#newAlias").val()},
                 success: function (data) {
                     if (data.status == "success") {
                         toastr.success('数据提交成功');
                         $("#tb").empty();
                         var serverList = data.dbServerList;
                         for (var i = 0; i < serverList.length; i++) {
-                            var html = "<tr><td id='serverIp" + i + "'></td>" +
+                            var html = "<tr><td id='server" + i + "'></td>" +
                                     "<td id='userName" + i + "'></td>" +
                                     "<td id='password" + i + "'></td>" +
                                     "<td id='alias" + i + "'></td>" +
-                                    "<td id='addStaff" + i + "'></td>" +
+                                    "<td id='operator" + i + "'></td>" +
                                     "<td id='createTime" + i + "'></td>" +
-                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].serverIp + "','" + serverList[i].userName + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
+                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].server + "','" + serverList[i].type + "''" + serverList[i].username + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
                             $("#tb").append(html);
-                            $("#serverIp" + i).html(serverList[i].serverIp);
-                            $("#userName" + i).html(serverList[i].userName);
+                            $("#server" + i).html(serverList[i].server);
+                            $("#userName" + i).html(serverList[i].username);
                             $("#password" + i).html(serverList[i].password);
                             $("#alias" + i).html(serverList[i].alias);
-                            $("#addStaff" + i).html(serverList[i].addStaff);
+                            $("#operator" + i).html(serverList[i].operatorUserName);
                             $("#createTime" + i).html(serverList[i].createTime);
                         }
                     }
@@ -269,12 +298,23 @@
         });
     });
 
-    function editServer(id,serverIp,userName,password,alias){
+    function editServer(id,serverIp,type,userName,password,alias){
         $("#sip").val(serverIp);
         $("#uname").val(userName);
         $("#pword").val(password);
-        $("#bieming").val(alias);
+        if(alias == "null"){
+            $("#bieming").val("");
+        } else {
+            $("#bieming").val(alias);
+        }
         $("#id").val(id);
+        var radio = document.getElementsByName("dbtype");
+        if(type == 1){
+            radio[0].checked = true;
+        }
+        if(type == 2){
+            radio[1].checked = true;
+        }
         $('#myModal1').modal({
             backdrop: false,
             show: true
@@ -290,29 +330,36 @@
             if (!e) {
                 return;
             }
+            var type;
+            if(document.getElementById("mysql").checked == true){
+                type = 1;
+            }
+            if(document.getElementById("mssql").checked == true){
+                type = 2;
+            }
             $.ajax({
                 url: '${ctx}/editServer.do?',
                 type: "POST",
-                data: $('#form_datasource_edit').serialize(),
+                data: {"server":$("#sip").val(),"type": type,"username":$("#uname").val(),"password":$("#pword").val(),"alias":$("#bieming").val(),"id":$("#id").val()},
                 success: function (data) {
                     if (data.status == "success") {
                         toastr.success('数据提交成功');
                         $("#tb").empty();
                         var serverList = data.dbServerList;
                         for (var i = 0; i < serverList.length; i++) {
-                            var html = "<tr><td id='serverIp" + i + "'></td>" +
+                            var html = "<tr><td id='server" + i + "'></td>" +
                                     "<td id='userName" + i + "'></td>" +
                                     "<td id='password" + i + "'></td>" +
                                     "<td id='alias" + i + "'></td>" +
-                                    "<td id='addStaff" + i + "'></td>" +
+                                    "<td id='operator" + i + "'></td>" +
                                     "<td id='createTime" + i + "'></td>" +
-                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].serverIp + "','" + serverList[i].userName + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
+                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].server + "','" + serverList[i].username + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
                             $("#tb").append(html);
-                            $("#serverIp" + i).html(serverList[i].serverIp);
-                            $("#userName" + i).html(serverList[i].userName);
+                            $("#server" + i).html(serverList[i].server);
+                            $("#userName" + i).html(serverList[i].username);
                             $("#password" + i).html(serverList[i].password);
                             $("#alias" + i).html(serverList[i].alias);
-                            $("#addStaff" + i).html(serverList[i].addStaff);
+                            $("#operator" + i).html(serverList[i].operatorUserName);
                             $("#createTime" + i).html(serverList[i].createTime);
                         }
                     }
@@ -344,19 +391,19 @@
                         $("#tb").empty();
                         var serverList = data.dbServerList;
                         for (var i = 0; i < serverList.length; i++) {
-                            var html = "<tr><td id='serverIp" + i + "'></td>" +
+                            var html = "<tr><td id='server" + i + "'></td>" +
                                     "<td id='userName" + i + "'></td>" +
                                     "<td id='password" + i + "'></td>" +
                                     "<td id='alias" + i + "'></td>" +
-                                    "<td id='addStaff" + i + "'></td>" +
+                                    "<td id='operator" + i + "'></td>" +
                                     "<td id='createTime" + i + "'></td>" +
-                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].serverIp + "','" + serverList[i].userName + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
+                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].server + "','" + serverList[i].username + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
                             $("#tb").append(html);
-                            $("#serverIp" + i).html(serverList[i].serverIp);
-                            $("#userName" + i).html(serverList[i].userName);
+                            $("#server" + i).html(serverList[i].server);
+                            $("#userName" + i).html(serverList[i].username);
                             $("#password" + i).html(serverList[i].password);
                             $("#alias" + i).html(serverList[i].alias);
-                            $("#addStaff" + i).html(serverList[i].addStaff);
+                            $("#operator" + i).html(serverList[i].operatorUserName);
                             $("#createTime" + i).html(serverList[i].createTime);
                         }
                     }

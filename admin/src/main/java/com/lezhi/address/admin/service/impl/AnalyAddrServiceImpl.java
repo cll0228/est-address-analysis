@@ -15,6 +15,7 @@ import com.lezhi.address.admin.service.AnalyAddrService;
  * Created by Cuill on 2017/1/23.
  */
 @Service
+@SuppressWarnings("all")
 public class AnalyAddrServiceImpl implements AnalyAddrService {
     @Autowired
     private AnalyAddrMapper analyAddrMapper;
@@ -65,5 +66,31 @@ public class AnalyAddrServiceImpl implements AnalyAddrService {
     @Override
     public List<TaskManageInfo> getAnalyAddrTaskList() {
         return analyAddrMapper.getAnalyAddrTaskList();
+    }
+
+    @Override
+    public List<AnalyMatchDto> getAnalyAddrLikeList(String addrLike, Integer page, Integer analyStatus,
+                                                    Integer matchStatus, String dataName, String tableName, Integer analySisTaskId) {
+        if (null == page)
+            page = 1;
+        AnalyMatchDto dto1 = analyAddrMapper.selectAddrTableNameByAnaTaskId(analySisTaskId);
+        if (null == dto1)
+            return null;
+        List<AnalyMatchDto> analyAddrLikeList = analyAddrMapper.getAnalyAddrLikeList(addrLike, page, analyStatus, matchStatus, dataName,
+                tableName);
+        for (AnalyMatchDto dto : analyAddrLikeList) {
+            dto.setDataName(dataName);// 数据库
+            dto.setTableName(dto1.getTableName());
+            dto.setAnalTaskId(analySisTaskId);
+            dto.setName(dto1.getName());
+            dto.setId(dto1.getId());
+            dto.setTotalPage(analyAddrLikeList.size() / 20 + 1);
+        }
+        return analyAddrLikeList;
+    }
+
+    @Override
+    public void humanEditAddr(String roadLane, String building, String house, Integer addressId, String dataName, String tableName) throws Exception {
+        analyAddrMapper.humanEditAddr(roadLane, building, house, addressId, dataName, tableName);
     }
 }

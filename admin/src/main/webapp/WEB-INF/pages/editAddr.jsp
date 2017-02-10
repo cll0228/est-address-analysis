@@ -36,15 +36,15 @@
                                 </tr>
                                 <tr>
                                     <th>地址来源-数据库</th>
-                                    <td id="data">${dataName}</td>
+                                    <td id="dataName">${dataName}</td>
                                 </tr>
                                 <tr>
                                     <th>地址来源-表</th>
-                                    <td id="table">${tableName}</td>
+                                    <td id="tableName">${tableName}</td>
                                 </tr>
                                 <tr>
                                     <th>地址来源-ID</th>
-                                    <td id="id">${analyMatchDto.addressId}</td>
+                                    <td id="addressId">${analyMatchDto.addressId}</td>
                                 </tr>
                                 <tr>
                                     <th>所在任务ID</th>
@@ -139,12 +139,57 @@
                 });
                 return;
             }
-            bootbox.alert("该功能尚未开放！");
+
+            bootbox.confirm({
+                buttons: {
+                    confirm: {
+                        label: '确认',
+                        className: 'btn-myStyle'
+                    },
+                    cancel: {
+                        label: '取消',
+                        className: 'btn-default'
+                    }
+                },
+                message: '此操作將修改数据库，确定提交吗？',
+                callback: function (result) {
+                    if (result) {
+                        updateInfo(roadLane);
+                    }
+                },
+            });
         });
 
         $("#roadLane").val('${analyMatchDto.roadLane}');
         $("#building").val('${analyMatchDto.building}');
         $("#house").val('${analyMatchDto.house}');
+
     })
+
+    function updateInfo(roadLane) {
+        var building = $("#building").val();
+        var house = $("#house").val();
+        var addressId = $("#addressId").html();
+        var dataName = $("#dataName").html();
+        var tableName = $("#tableName").html();
+        var taskId = $("#taskId").html();
+        $.ajax({
+            url: '${ctx}/humanEditAddr.do',
+            type: "Post",
+            data: {
+                "roadLane": roadLane,
+                "building": building,
+                "house": house,
+                "addressId": addressId,
+                "dataName": dataName,
+                "tableName": tableName
+            },
+            success: function (data) {
+               if(data == 1){
+                   location.href = "${ctx}/addrQuery.do?analySisTaskId="+taskId;
+               }
+            }
+        })
+    }
 </script>
 </html>

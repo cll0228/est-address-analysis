@@ -87,4 +87,46 @@
     FROM
         ocn_address.`t_analysis_task` m LEFT JOIN ocn_address.db_server db ON m.dbs_id = db.id;
     </select>
+
+    <select id="getAnalyAddrLikeList" resultType="com.lezhi.address.admin.pojo.AnalyMatchDto">
+        SELECT id addressId,
+        address,
+        parsed_road_lane roadLane,
+        parsed_building_no building,
+        parsed_time analTime,
+        parsed_house_no house,
+        parsed_status ifAnalySis,
+        match_status ifMatch,
+        match_time matchTime
+        FROM ${dataName}.${tableName} WHERE address like '%${addrLike}%' and 1=1
+        <if test="analyStatus == 30">
+            AND parsed_status = null
+        </if>
+        <if test="analyStatus == 20">
+            AND parsed_status = 10
+        </if>
+        <if test="analyStatus == 10">
+            AND parsed_status = 20
+        </if>
+
+        <if test="matchStatus == 30">
+            AND match_status = null
+        </if>
+        <if test="matchStatus == 20">
+            AND match_status = 10
+        </if>
+        <if test="matchStatus == 10">
+            AND match_status = 20
+        </if>
+    </select>
+
+    <update id="humanEditAddr">
+      UPDATE ${dataName}.${tableName}
+    SET
+      `parsed_road_lane` = #{roadLane},
+      `parsed_building_no` = #{building},
+      `parsed_house_no` = #{house}
+    WHERE
+      (`id` = #{addressId});
+    </update>
 </mapper>

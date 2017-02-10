@@ -101,9 +101,9 @@
     var startPage = 1;
     var dataName = null;
     var tableName = null;
-    var analysisTaskId = null;
     $(function () {
-        var Startdata =${analyMatchDtos}
+        var Startdata =
+        ${analyMatchDtos}
         if (null == Startdata) {
             bootbox.alert({
                 buttons: {
@@ -113,7 +113,7 @@
                     }
                 },
                 message: '未找到数据！！',
-                callback: function() {
+                callback: function () {
                     window.history.go(-1);
                 },
                 title: "温馨提示",
@@ -152,7 +152,7 @@
             } else if (Startdata[i].ifAnalySis == 20) {
                 $("#ifMatch" + i).html("失败");
             } else {
-                $("#ifAnalySis" + i).html("位置");
+                $("#ifAnalySis" + i).html("未知");
             }
             $("#parsedTime" + i).html(Startdata[i].parsedTime);
             $("#roadLane" + i).html(Startdata[i].roadLane);
@@ -216,7 +216,7 @@
                     } else if (data[i].ifAnalySis == 20) {
                         $("#ifMatch" + i).html("失败");
                     } else {
-                        $("#ifAnalySis" + i).html("位置");
+                        $("#ifAnalySis" + i).html("未知");
                     }
                     $("#parsedTime" + i).html(data[i].parsedTime);
                     $("#roadLane" + i).html(data[i].roadLane);
@@ -275,7 +275,7 @@
                     } else if (data[i].ifAnalySis == 20) {
                         $("#ifMatch" + i).html("失败");
                     } else {
-                        $("#ifAnalySis" + i).html("位置");
+                        $("#ifAnalySis" + i).html("未知");
                     }
                     $("#roadLane" + i).html(data[i].roadLane);
                     $("#building" + i).html(data[i].building);
@@ -298,8 +298,67 @@
         var matchStatus = $("#matchStatus").val();
         var addrLike = $("#addrLike").val();
         if ("" == addrLike) {
+            bootbox.alert("请输入有效地址！！");
             return;
         }
+
+        $.ajax({
+            url: '${ctx}/addrLikeQuery.do',
+            type: "Post",
+            data: {
+                "addrLike": addrLike,
+                "page": startPage,
+                "analyStatus": analyStatus,
+                "matchStatus": matchStatus,
+                "dataName": dataName,
+                "tableName": tableName,
+                "analySisTaskId":id
+            },
+            success: function (data) {
+                $("#tb").empty();
+                for (var i = 0; i < data.length; i++) {
+                    var html = "<tr><td id='addressId" + i + "' width='50;'></td>" +
+                            "<td id='analTaskId" + i + "' width='70;'></td>" +
+                            "<td id='dataName" + i + "'></td>" +
+                            "<td id='table_" + i + "'></td>" +
+                            "<td id='address" + i + "' width='170;'></td>" +
+                            "<td id='ifAnalySis" + i + "' width='50;'></td>" +
+                            "<td id='parsedTime" + i + "' width='140'></td>" +
+                            "<td id='roadLane" + i + "' width='100'></td>" +
+                            "<td id='building" + i + "'></td>" +
+                            "<td id='house" + i + "'></td>" +
+                            "<td id='ifMatch" + i + "'width='50;'></td>" +
+                            "<td id='matchTime" + i + "' width='140'></td>" +
+                            "<td id= '" + i + "' width='150'><a href='javascript:void(0)' " +
+                            "onclick='toEdit(" + data[i].addressId + ");'>手动解析</a>&nbsp;<a href='#'>执行匹配</a>  </td></tr>";
+                    $("#tb").append(html);
+                    $("#addressId" + i).html(data[i].addressId);
+                    $("#analTaskId" + i).html(data[i].analTaskId);
+                    $("#dataName" + i).html(data[i].dataName);
+                    $("#table_" + i).html(data[i].tableName);
+                    $("#address" + i).html(data[i].address);
+                    $("#parsedTime" + i).html(data[i].parsedTime);
+                    if (data[i].ifAnalySis == 10) {
+                        $("#ifAnalySis" + i).html("成功");
+                    } else if (data[i].ifAnalySis == 20) {
+                        $("#ifMatch" + i).html("失败");
+                    } else {
+                        $("#ifAnalySis" + i).html("未知");
+                    }
+                    $("#roadLane" + i).html(data[i].roadLane);
+                    $("#building" + i).html(data[i].building);
+                    $("#house" + i).html(data[i].house);
+                    if (data[i].ifMatch == 10) {
+                        $("#ifMatch" + i).html("成功");
+                    } else if (data[i].ifMatch == 20) {
+                        $("#ifMatch" + i).html("失败");
+                    } else {
+                        $("#ifMatch" + i).html("未知");
+                    }
+                    $("#matchTime" + i).html(data[i].matchTime);
+                }
+            }
+        })
     }
 
     function goback() {

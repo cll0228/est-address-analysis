@@ -12,4 +12,7 @@ public interface TaskMapper {
 	Task getTaskInfo(@Param("id") Integer id);
 	
 	int insertTAnalysisTask(TAnalysisTask tAnalysisTask);
+	
+	void updateTAnalysisTask(TAnalysisTask tAnalysisTask);
+	
 }

@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -6,25 +11,25 @@
 		<meta http-equiv="Cache-Control" content="no-transform" />
 		<meta http-equiv="Cache-Control" content="no-siteapp" />
 		<meta name="format-detection" content="telephone=no" />
-		<link href="public/img/favicon.ico" type="image/x-icon" rel=icon>
-		<link href="public/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
+		<link href="${ctx}/public/img/favicon.ico" type="image/x-icon" rel=icon>
+		<link href="${ctx}/public/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
 		<title>运营平台</title>
 
-		<link rel="stylesheet" href="public/css/common.css?v=1486395054054">
-		<link rel="stylesheet" href="static/css/map/font.css?v=1486395054054">
+		<link rel="stylesheet" href="${ctx}/public/css/common.css?v=1486395054054">
+		<link rel="stylesheet" href="${ctx}/static/css/map/font.css?v=1486395054054">
 
 
-		<link rel="stylesheet" href="http://192.168.0.172/static/css/map/style.css?v=1486395054054" />
+		<link rel="stylesheet" href="${ctx}/static/css/map/style.css?v=1486395054054" />
 		<script>
 			var headerParameters = {
 				env : 'production',
 				publichost : '',
-				statichost : 'http://192.168.0.172',
+				statichost : 'http://localhost',
 				managehost : 'http://support.dooioo.com',
 				webhost : '',
 				xinfanghost : 'http://sh.fang.lianjia.com',
-				uchost : 'http://user.192.168.0.172',
-				agenthost : 'http://agent.192.168.0.172',
+				uchost : 'http://user.localhost',
+				agenthost : 'http://agent.localhost',
 				apihost : 'http://soa.dooioo.com',
 				openhost : 'http://open.dooioo.com',
 				chathost : 'http://chat.dooioo.com',
@@ -152,8 +157,8 @@
 							<a href="ershoufang/sh{{item.houseSellId}}.html" target="_blank" gahref="results_click_order_{{$index + 1 }}" v-for="item in searchResults.list">
 								<li class="search-list__list-prop-item" data-id="{{item.dataId}}" gahref="results_click_order_{{$index + 1}}">
 									<div class="search-list__thumb">
-										<img width="124" height="124" :src="item.mainPhotoUrl ? item.mainPhotoUrl : 'http://192.168.0.172/static/img/new-version/default_block.png'" gahref="results_click_order_{{$index + 1}}"
-											 onerror="this.src='http://192.168.0.172/static/img/new-version/default_block.png'; this.onerror=null;" title="{{item.title}}">
+										<img width="124" height="124" :src="item.mainPhotoUrl ? item.mainPhotoUrl : '${ctx}/static/img/new-version/default_block.png'" gahref="results_click_order_{{$index + 1}}"
+											 onerror="this.src='${ctx}/static/img/new-version/default_block.png'; this.onerror=null;" title="{{item.title}}">
 										<div class="global__video-icon global__video-icon--small global__video-icon--right" v-if="item.videoDisplay" ></div>
 									</div>
 									<div class="search-list__info" gahref="results_click_order_{{$index + 1}}">
@@ -248,39 +253,39 @@
 			}
 			function callback_getUserInfo() {}
 		</script>
-		<script src="http://192.168.0.172/public/js/jquery/jquery.min.js"></script>
-		<script src="http://192.168.0.172/static/js/common.js?v=1486395054054"></script>
-		<script src="http://192.168.0.172/public/js/saveSearchInit.js?v=1486395054054"></script>
-		<script src="http://192.168.0.172/static/js/lib/vue.min.js"></script>
-		<script src="http://192.168.0.172/static/js/lib/vuex.min.js"></script>
+		<script src="${ctx}/public/js/jquery/jquery.min.js"></script>
+		<script src="${ctx}/static/js/common.js?v=1486395054054"></script>
+		<script src="${ctx}/public/js/saveSearchInit.js?v=1486395054054"></script>
+		<script src="${ctx}/static/js/lib/vue.min.js"></script>
+		<script src="${ctx}/static/js/lib/vuex.min.js"></script>
 
 		<!-- webpack begin -->
-		<!-- 16 --><script type="text/javascript" src="http://192.168.0.172/static/js/suggestion.js?"></script>
-		<!-- 13 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/service/commonService.js?"></script>
-		<!-- 14 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/service/mapService.js?"></script>
-		<!-- 15 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/vuex/store.js?"></script>
-		<!-- 7 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/slide-nav-component.js?"></script>
-		<!-- 9 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/switch-channel-component.js?"></script>
-		<!-- 8 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/suggestion-component.js?"></script>
-		<!-- 6 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/single-condition-component.js?"></script>
-		<!-- 2 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/ershoufang-conditionwrap-component.js?"></script>
-		<!-- 11 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/zufang-conditionwrap-component.js?"></script>
-		<!-- 5 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/searchlist-component.js?"></script>
-		<!-- 4 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/map-component.js?"></script>
-		<!-- 1 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/ditie-map-component.js?"></script>
-		<!-- 3 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/filter-bar-component.js?"></script>
-		<!-- 10 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/component/tolist-component.js?"></script>
-		<!-- 12 --><script type="text/javascript" src="http://192.168.0.172/static/js/map/main.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/suggestion.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/service/commonService.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/service/mapService.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/vuex/store.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/slide-nav-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/switch-channel-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/suggestion-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/single-condition-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/ershoufang-conditionwrap-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/zufang-conditionwrap-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/searchlist-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/map-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/ditie-map-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/filter-bar-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/tolist-component.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/main.js?"></script>
 		<!-- webpack end-->
 
 		<script src="http://api.map.baidu.com/api?v=2.0&ak=C106a48023d9606dcdad761cbc070095"></script>
 		<script src="http://api.map.baidu.com/library/RichMarker/1.2/src/RichMarker_min.js"></script>
-		<script src="http://192.168.0.172/public/js/jquery/jquery.cookie.js" defer></script>
-		<script src="http://192.168.0.172/static/js/lj_sh_loginpoplayer.js?v=1486395054054" defer></script>
-		<script src="http://192.168.0.172/public/js/passport.js?v=1486395054054" defer></script>
+		<script src="${ctx}/public/js/jquery/jquery.cookie.js" defer></script>
+		<script src="${ctx}/static/js/lj_sh_loginpoplayer.js?v=1486395054054" defer></script>
+		<script src="${ctx}/public/js/passport.js?v=1486395054054" defer></script>
 		<!--
-		<script src="http://192.168.0.172/public/js/user.js?v=1486395054054" defer></script>
+		<script src="${ctx}/public/js/user.js?v=1486395054054" defer></script>
 		-->
-		<script src="http://192.168.0.172/public/js/footer/analysisTools.js?v=1486395054054" async></script>
+		<script src="${ctx}/public/js/footer/analysisTools.js?v=1486395054054" async></script>
 	</body>
 </html>

@@ -109,6 +109,17 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">
+                                <label >数据库类型</label>
+                            </label>
+                            <div class="col-md-6">
+                                <label for="newMysql">mysql</label>
+                                <input type="radio" name="dbtype" id="newMysql" checked>
+                                <label for="newMssql">mssql</label>
+                                <input type="radio" name="dbtype" id="newMssql">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
                                 <label for="newUserName">用户名<span class="required"> * </span></label>
                             </label>
                             <div class="col-md-6">
@@ -186,6 +197,13 @@
         if (!$("#form_datasource_add").valid()) {
             return;
         }
+        var type;
+        if(document.getElementById("newMysql").checked == true){
+            type = 1;
+        }
+        if(document.getElementById("newMssql").checked == true){
+            type = 2;
+        }
 
         Ewin.confirm({ message: "确认要添加服务器数据吗？" }).on(function (e) {
             if (!e) {
@@ -194,7 +212,7 @@
             $.ajax({
                 url: '${ctx}/addNewServer.do?',
                 type: "POST",
-                data: $('#form_datasource_add').serialize(),
+                data: {"server":$("#newServerIp").val(),"type": type,"username":$("#newUserName").val(),"password":$("#newPassword").val(),"alias":$("#newAlias").val()},
                 success: function (data) {
                     if (data.status == "success") {
                         toastr.success('数据提交成功');

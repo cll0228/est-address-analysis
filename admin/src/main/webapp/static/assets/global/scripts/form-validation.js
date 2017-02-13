@@ -302,7 +302,7 @@ var FormValidation = function () {
     }
 
     var handleValidation4 = function() {
-        var form4 = $('#form_datasource_edit');
+        var form4 = $('#form_datasource_add');
         var error4 = $('.alert-danger', form4);
         var success4 = $('.alert-success', form4);
 
@@ -312,7 +312,7 @@ var FormValidation = function () {
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",  // validate all fields including form hidden input
             rules: {
-                newServerIP: {
+                newServerIp: {
                     required: true
                 },
                 newUserName: {
@@ -371,6 +371,63 @@ var FormValidation = function () {
         }
     }
 
+    var handleValidation6 = function() {
+        var form6 = $('#form_datasource_edit');
+        var error6 = $('.alert-danger', form6);
+        var success6 = $('.alert-success', form6);
+
+        form6.validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",  // validate all fields including form hidden input
+            rules: {
+                sip: {
+                    required: true
+                },
+                uname: {
+                    required: true
+                },
+                pword: {
+                    required: true
+                }
+            },
+
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                success6.hide();
+                error6.show();
+                App.scrollTo(error6, -200);
+            },
+
+            errorPlacement: function (error, element) { // render error placement for each input type
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");
+                icon.attr("data-original-title", error.text()).tooltip();
+            },
+
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').removeClass("has-success").addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // set success class to the control group
+                icon.removeClass("fa-warning").addClass("fa-check");
+            },
+
+            submitHandler: function (form) {
+                success6.show();
+                error6.hide();
+                form[0].submit(); // submit the form
+            }
+        });
+    }
+
     return {
         //main function to initiate the module
         init: function () {
@@ -380,6 +437,7 @@ var FormValidation = function () {
             handleValidation2();
             handleValidation3();
             handleValidation4();
+            handleValidation6();
 
         }
 

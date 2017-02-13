@@ -18,31 +18,115 @@
       SELECT id, table_name tableName,name FROM `t_analysis_task` WHERE id = #{analysisTaskId};
     </select>
     <select id="selectAddrList" resultType="com.lezhi.address.admin.pojo.AnalyMatchDto">
-      SELECT  	id addressId,
+        SELECT id addressId,
         address,
-        road_lane roadLane,
-        building_no building,
-        parsed_time analTime,
-        house_no house,
-        status ifAnalySis,
+        parsed_road_lane roadLane,
+        parsed_building_no building,
+        date_format(parsed_time,'%y-%m-%d %H:%m:%s') parsedTime,
+        parsed_house_no house,
+        parsed_status ifAnalySis,
         match_status ifMatch,
-        match_time matchTime
-	 FROM ${tableName}
-	 <if test="null != page">
-         LIMIT  ${page},20
-     </if>
+        date_format(match_time,'%y-%m-%d %H:%m:%s') matchTime
+        FROM ${tableName}
+        <if test="null != page">
+            LIMIT ${page},20
+        </if>
     </select>
 
     <select id="selectAddressById" resultType="com.lezhi.address.admin.pojo.AnalyMatchDto">
+       SELECT 	id addressId,
+	address,
+	parsed_road_lane roadLane,
+	parsed_building_no building,
+	parsed_time analTime,
+	parsed_house_no house,
+	parsed_status ifAnalySis,
+	match_status ifMatch,
+	match_time matchTime
+    FROM ${dataName}.${tableName} WHERE id = #{id}
+    </select>
+
+    <select id="selcetMatchTask" resultType="com.lezhi.address.admin.pojo.TaskManageInfo">
+        SELECT
+        m.id id,
+        m.analysis_task_id analysisTaskId,
+        a.`name` analysisTaskName,
+        m.success_count + m.failed_count totalCount,
+        m.success_count successCount,
+        m.failed_count failCount,
+        m.`status` status,
+        floor(m.success_count / (m.success_count + m.failed_count) * 100) schedule,
+        date_format( m.start_time,'%y-%m-%d %H:%m:%s') startTime,
+        date_format( m.finish_time,'%y-%m-%d %H:%m:%s') finishTime,
+        a.operator operator
+
+        FROM
+            `t_match_task` m
+        LEFT JOIN t_analysis_task a ON m.analysis_task_id = a.id;
+    </select>
+    <select id="getAnalyAddrTaskList" resultType="com.lezhi.address.admin.pojo.TaskManageInfo">
+        SELECT
+        m.id id,
+
+        m.`name` analysisTaskName,
+        m.success_count + m.failed_count totalCount,
+        m.success_count successCount,
+        m.failed_count failCount,
+        m.`status` STATUS,
+        floor(
+            m.success_count / (
+                m.success_count + m.failed_count
+            ) * 100
+        ) SCHEDULE,
+        date_format( m.start_time,'%y-%m-%d %H:%m:%s') startTime,
+        date_format( m.finish_time,'%y-%m-%d %H:%m:%s') finishTime,
+        m.operator operator,
+        db.server_ip dataSourceServer,
+        m.table_name dataTable,
+        m.address_column addressColumn
+    FROM
+        ocn_address.`t_analysis_task` m LEFT JOIN ocn_address.db_server db ON m.dbs_id = db.id;
+    </select>
+
+    <select id="getAnalyAddrLikeList" resultType="com.lezhi.address.admin.pojo.AnalyMatchDto">
         SELECT id addressId,
         address,
-        road_lane roadLane,
-        building_no building,
+        parsed_road_lane roadLane,
+        parsed_building_no building,
         parsed_time analTime,
-        house_no house,
-        status ifAnalySis,
+        parsed_house_no house,
+        parsed_status ifAnalySis,
         match_status ifMatch,
         match_time matchTime
-        FROM ${dataName}.${tableName} WHERE id = #{id}
+        FROM ${dataName}.${tableName} WHERE address like '%${addrLike}%' and 1=1
+        <if test="analyStatus == 30">
+            AND parsed_status = null
+        </if>
+        <if test="analyStatus == 20">
+            AND parsed_status = 10
+        </if>
+        <if test="analyStatus == 10">
+            AND parsed_status = 20
+        </if>
+
+        <if test="matchStatus == 30">
+            AND match_status = null
+        </if>
+        <if test="matchStatus == 20">
+            AND match_status = 10
+        </if>
+        <if test="matchStatus == 10">
+            AND match_status = 20
+        </if>
     </select>
+
+    <update id="humanEditAddr">
+      UPDATE ${dataName}.${tableName}
+    SET
+      `parsed_road_lane` = #{roadLane},
+      `parsed_building_no` = #{building},
+      `parsed_house_no` = #{house}
+    WHERE
+      (`id` = #{addressId});
+    </update>
 </mapper>

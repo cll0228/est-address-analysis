@@ -3,6 +3,7 @@ package com.lezhi.address.admin.webapp.controller;
 import com.lezhi.address.admin.pojo.DbServer;
 import com.lezhi.address.admin.pojo.OfBuilding;
 import com.lezhi.address.admin.pojo.ResidenceBoundary;
+import com.lezhi.address.admin.pojo.TDatasource;
 import com.lezhi.address.admin.service.BuildingService;
 import com.lezhi.address.admin.service.DataSourceService;
 import com.lezhi.address.admin.service.ResidenceService;
@@ -40,18 +41,14 @@ public class NewTaskController {
     @RequestMapping(value = "getNewTaskInfo", method = RequestMethod.GET    )
     @ResponseBody
     public Map<String, Object> getNewTaskInfo(HttpServletRequest request, HttpServletResponse response) {
-        List<DbServer> dbServers = dataSourceService.getDataSourceList();
+        List<TDatasource> tDatasources = dataSourceService.getDataSourceList();
         Map<String, Object> result = new HashMap<>();
         List<String> serverList = new ArrayList<>();
-        if(dbServers.size()>0){
-            for(DbServer dbServer: dbServers){
-                serverList.add(dbServer.getServerIp());
+        if(tDatasources.size()>0){
+            for(TDatasource tDatasource: tDatasources){
+                serverList.add(tDatasource.getServer());
             }
         }
-/*        serverList.add("192.168.1.1");
-        serverList.add("192.168.1.2");
-        serverList.add("192.168.1.3");
-        serverList.add("192.168.1.4");*/
         result.put("serverList",serverList);
         result.put("tableName","ocn_address");
         result.put("addressColumn","address");
@@ -64,19 +61,20 @@ public class NewTaskController {
     @ResponseBody
     public Map<String, Object> addNewServer(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        String serverIp = request.getParameter("newServerIp");
-        String userName = request.getParameter("newUserName");
-        String password = request.getParameter("newPassword");
-        String alias = request.getParameter("newAlias");
-        String addStaff = String.valueOf(session.getAttribute("username"));
+        String serverIp = request.getParameter("server");
+        String type = request.getParameter("type");
+        String userName = request.getParameter("username");
+        String password = request.getParameter("password");
+        String alias = request.getParameter("alias");
+        String addStaff = String.valueOf(session.getAttribute("userId"));
 
         Map<String, Object> result = new HashMap<>();
-        boolean success = 1 == dataSourceService.addServer(serverIp, userName, password, alias, addStaff);
-        List<DbServer> dbServers = dataSourceService.getDataSourceList();
+        boolean success = 1 == dataSourceService.addServer(serverIp, type, userName, password, alias, addStaff);
+        List<TDatasource> tDatasources = dataSourceService.getDataSourceList();
         List<String> serverList = new ArrayList<>();
-        if(dbServers.size()>0){
-            for(DbServer dbServer: dbServers){
-                serverList.add(dbServer.getServerIp());
+        if(tDatasources.size()>0){
+            for(TDatasource tDatasource: tDatasources){
+                serverList.add(tDatasource.getServer());
             }
         }
         result.put("serverList",serverList);

@@ -27,5 +27,49 @@
 		WHERE
 		t.id = #{id};
 	</select>
-
+	<insert id="insertTAnalysisTask" parameterType="com.lezhi.address.admin.pojo.TAnalysisTask">
+        INSERT INTO `ocn_address`.`t_analysis_task`
+        (`name`,`dbs_id`,`table_name`,`address_column`,`auto_match`,`create_time`,`start_time`,`status`,`operator`,`db_schema`) 
+        VALUES(#{name},#{dbsId},#{tableName},#{addressColumn},
+        #{autoMatch},NOW(),NOW(),#{status},#{operator},#{dbSchema});
+    	<selectKey resultType="int" keyProperty="id" order="AFTER">
+		SELECT LAST_INSERT_ID()
+		</selectKey>
+    </insert>
+    
+    <insert id="insertTMatchTask" parameterType="com.lezhi.address.admin.pojo.TMatchTask">
+        INSERT INTO `ocn_address`.`t_match_task`
+        (`analysis_task_id`,`create_time`,`start_time`,`status`,`operator`) 
+        VALUES(#{analysisTaskId},NOW(),NOW(),#{status},#{operator});
+    	<selectKey resultType="int" keyProperty="id" order="AFTER">
+		SELECT LAST_INSERT_ID()
+		</selectKey>
+    </insert>
+    
+    <update id="updateTAnalysisTask" parameterType="com.lezhi.address.admin.pojo.TAnalysisTask">
+        UPDATE `ocn_address`.`t_analysis_task`
+            SET
+             `success_count` = #{successCount},
+            <if test="status == 300">
+            	`finish_time` = NOW(),
+            	`status` = #{status},
+        	</if>
+             `failed_count` = #{failedCount}
+            WHERE
+                (`id` = #{id});
+    </update>
+    
+    <update id="updateTMatchTask" parameterType="com.lezhi.address.admin.pojo.TMatchTask">
+        UPDATE `ocn_address`.`t_match_task`
+            SET
+             `success_count` = #{successCount},
+            <if test="status == 300">
+            	`finish_time` = NOW(),
+            	`status` = #{status},
+        	</if>
+             `failed_count` = #{failedCount}
+            WHERE
+                (`id` = #{id});
+    </update>
+	
 </mapper>

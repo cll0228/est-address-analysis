@@ -182,7 +182,7 @@ public class AddressExtractor {
     public static void main(String[] args) {
         // 10层全幢室
         // System.out.println(extractRoomNo("上海市浦东长清路773弄31号401室"));
-        System.out.println(parseAll(new StdModel("安龙路939号-3")));
+    	System.out.println(parseAll(new StdModel("上海市浦东长清路773弄31号401室")));
     }
 
     private static boolean isMatch(String str, Pattern p) {
@@ -619,6 +619,23 @@ public class AddressExtractor {
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 		return rs;
+	}
+	
+	/**
+	 * 修改表结构
+	 * 
+	 * @param startName
+	 * @return
+	 * @throws Exception
+	 */
+	public static void alterTable(String ip,String schema,String userName,String password,String sql) throws Exception {
+		// 加载驱动
+
+		Class.forName("com.mysql.jdbc.Driver");
+		String url = "jdbc:mysql://"+ip+":3306/"+schema;
+		Connection conn = DriverManager.getConnection(url, userName, password);
+		Statement stmt = conn.createStatement();
+		stmt.execute(sql);
 	}
     
     private static Object firstNotNull(Object... params) {

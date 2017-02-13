@@ -23,14 +23,16 @@ public interface TaskService {
      * 每解析完100条，更新t_analysis_task中的success_count和failed_count
      *
      * @param datasourceId     数据源id，对应t_datasource表id
+     * @param targetTablePk    目前地址表主键字段名，如id
      * @param targetTableName  目前地址表id，如abc_address，表示农行复评地址表
      * @param targetColumnName 目前地址表的中表示地址的字段，如address
+     * @param dbSchema		      数据库连接的schema
      * @param taskName         一个好识别的名字
      * @param autoMatch        是否在解析完成以后自动开启匹配任务，如果为true，则在解析线程执行完以后，调用createMatchTask方法
      * @param operatorUserId   操作人员，从session中获取
      * @return 返回新建的task id
      */
-    public int createAnalysisTask(int datasourceId, String targetTableName, String targetColumnName, String taskName, boolean autoMatch, int operatorUserId);
+    public int createAnalysisTask(int datasourceId,String targetTablePk, String targetTableName, String targetColumnName, String dbSchema, String taskName, boolean autoMatch, int operatorUserId);
 
     /**
      * 新建匹配任务，此方法中除了要写入匹配任务表数据以外，还要【异步】调用匹配接口，开始地址匹配任务
@@ -40,5 +42,5 @@ public interface TaskService {
      * @param unMatchedOnly  仅去匹配没匹配过的地址，即abc_address表中 match_status不等于10的记录
      * @return 返回新建的匹配任务id
      */
-    public int createMatchTask(int analysisTaskId, boolean unMatchedOnly);
+    public int createMatchTask(int operatorUserId, int analysisTaskId, boolean unMatchedOnly);
 }

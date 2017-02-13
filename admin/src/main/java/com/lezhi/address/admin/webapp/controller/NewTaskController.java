@@ -50,9 +50,6 @@ public class NewTaskController {
             }
         }
         result.put("serverList",serverList);
-        result.put("tableName","ocn_address");
-        result.put("addressColumn","address");
-        result.put("taskName","农行复评地址解析");
         result.put("status", 1==1 ? "success" : "failed");
         return result;
     }

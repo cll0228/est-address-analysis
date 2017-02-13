@@ -41,13 +41,7 @@ public class DataSourceController {
     @ResponseBody
     public List<TDatasource> getDataSourceList(HttpServletRequest request, HttpServletResponse response) {
         List<TDatasource> tDatasources = dataSourceService.getDataSourceList();
-        if(null == tDatasources){
-            return null;
-        }
-    /*    for(TDatasource tDatasource: tDatasources){
-            tDatasource.setCreateTime(tDatasource.getCreateTime().replace(".0",""));
-        }
-*/
+
         return tDatasources;
     }
 
@@ -67,9 +61,6 @@ public class DataSourceController {
         System.out.println("serverIp:"+serverIp);
         result.put("status", success ? "success" : "failed");
         List<TDatasource> dbServers = dataSourceService.getDataSourceList();
-       /* for(DbServer dbServer: dbServers){
-            dbServer.setCreateTime(dbServer.getCreateTime().replace(".0",""));
-        }*/
         result.put("dbServerList", dbServers);
         return result;
     }
@@ -87,14 +78,10 @@ public class DataSourceController {
         String operateStaff = String.valueOf(session.getAttribute("userId"));
 
         Map<String, Object> result = new HashMap<>();
-//        boolean success = true;
         boolean success = 1 == dataSourceService.editServer(serverIp, type, userName, password, alias, operateStaff, id);
         System.out.println("serverIp:"+serverIp);
         result.put("status", success ? "success" : "failed");
         List<TDatasource> dbServers = dataSourceService.getDataSourceList();
-        /*for(DbServer dbServer: dbServers){
-            dbServer.setCreateTime(dbServer.getCreateTime().replace(".0",""));
-        }*/
         result.put("dbServerList", dbServers);
         return result;
     }
@@ -109,9 +96,6 @@ public class DataSourceController {
         System.out.println("id:"+id);
         result.put("status", success ? "success" : "failed");
         List<TDatasource> dbServers = dataSourceService.getDataSourceList();
-       /* for(DbServer dbServer: dbServers){
-            dbServer.setCreateTime(dbServer.getCreateTime().replace(".0",""));
-        }*/
         result.put("dbServerList", dbServers);
         return result;
     }

@@ -18,7 +18,14 @@ public class DataSourceServiceImpl implements DataSourceService {
     private TDatasourceMapper tDatasourceMapper;
     @Override
     public List<TDatasource> getDataSourceList() {
-        return tDatasourceMapper.getDataSourceList();
+        List<TDatasource> tDatasources = tDatasourceMapper.getDataSourceList();
+        if(null == tDatasources){
+            return null;
+        }
+        for(TDatasource tDatasource: tDatasources){
+            tDatasource.setCreateTime(tDatasource.getCreateTime().replace(".0",""));
+        }
+        return tDatasources;
     }
 
     public Integer addServer(String serverIp,String type, String userName, String password, String alias, String addStaff){

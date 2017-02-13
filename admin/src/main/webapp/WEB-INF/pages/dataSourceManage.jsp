@@ -308,12 +308,11 @@
             $("#bieming").val(alias);
         }
         $("#id").val(id);
-        var radio = document.getElementsByName("dbtype");
         if(type == 1){
-            radio[0].checked = true;
+            $("#mysql").parent().attr("class","checked");
         }
         if(type == 2){
-            radio[1].checked = true;
+            $("#mssql").parent().attr("class","checked");
         }
         $('#myModal1').modal({
             backdrop: false,

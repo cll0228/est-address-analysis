@@ -25,15 +25,7 @@
 				env : 'production',
 				publichost : '',
 				statichost : 'http://localhost',
-				managehost : 'http://support.dooioo.com',
-				webhost : '',
-				xinfanghost : 'http://sh.fang.lianjia.com',
-				uchost : 'http://user.localhost',
-				agenthost : 'http://agent.localhost',
 				apihost : 'http://soa.dooioo.com',
-				openhost : 'http://open.dooioo.com',
-				chathost : 'http://chat.dooioo.com',
-				loginhost:'http://huihua.lianjia.com',
 				cityCode : 'sh',
 				cityName: '上海',
 				cityCoordinate : {//城市中心坐标
@@ -43,7 +35,6 @@
 				hasSaveSearch : true //是否支持登录后把缓存在本地local中的“已保存搜索”数据存入服务端功能
 			};
 			var houseType = 'ershoufang';
-			function callback_getUserInfo(){}
 		</script>
 	</head>
 
@@ -254,38 +245,33 @@
 			function callback_getUserInfo() {}
 		</script>
 		<script src="${ctx}/public/js/jquery/jquery.min.js"></script>
-		<script src="${ctx}/static/js/common.js?v=1486395054054"></script>
-		<script src="${ctx}/public/js/saveSearchInit.js?v=1486395054054"></script>
+		<script src="${ctx}/public/js/jquery/jquery.cookie.js" defer></script>
+		<script src="${ctx}/static/js/common.js"></script>
+		<script src="${ctx}/public/js/saveSearchInit.js"></script>
 		<script src="${ctx}/static/js/lib/vue.min.js"></script>
 		<script src="${ctx}/static/js/lib/vuex.min.js"></script>
 
 		<!-- webpack begin -->
-		<script type="text/javascript" src="${ctx}/static/js/suggestion.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/service/commonService.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/service/mapService.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/vuex/store.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/slide-nav-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/switch-channel-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/suggestion-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/single-condition-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/ershoufang-conditionwrap-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/zufang-conditionwrap-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/searchlist-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/map-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/ditie-map-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/filter-bar-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/component/tolist-component.js?"></script>
-		<script type="text/javascript" src="${ctx}/static/js/map/main.js?"></script>
+		<script type="text/javascript" src="${ctx}/static/js/suggestion.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/service/commonService.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/service/mapService.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/vuex/store.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/slide-nav-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/switch-channel-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/suggestion-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/single-condition-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/ershoufang-conditionwrap-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/zufang-conditionwrap-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/searchlist-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/map-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/ditie-map-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/filter-bar-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/component/tolist-component.js"></script>
+		<script type="text/javascript" src="${ctx}/static/js/map/main.js"></script>
 		<!-- webpack end-->
 
 		<script src="http://api.map.baidu.com/api?v=2.0&ak=C106a48023d9606dcdad761cbc070095"></script>
 		<script src="http://api.map.baidu.com/library/RichMarker/1.2/src/RichMarker_min.js"></script>
-		<script src="${ctx}/public/js/jquery/jquery.cookie.js" defer></script>
-		<script src="${ctx}/static/js/lj_sh_loginpoplayer.js?v=1486395054054" defer></script>
-		<script src="${ctx}/public/js/passport.js?v=1486395054054" defer></script>
-		<!--
-		<script src="${ctx}/public/js/user.js?v=1486395054054" defer></script>
-		-->
-		<script src="${ctx}/public/js/footer/analysisTools.js?v=1486395054054" async></script>
+
 	</body>
 </html>

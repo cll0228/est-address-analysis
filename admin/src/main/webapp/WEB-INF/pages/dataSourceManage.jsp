@@ -352,7 +352,7 @@
                                     "<td id='alias" + i + "'></td>" +
                                     "<td id='operator" + i + "'></td>" +
                                     "<td id='createTime" + i + "'></td>" +
-                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].server + "','" + serverList[i].username + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
+                                    "<td id= 'operate" + i + "'><a href='javascript:void(0)' onclick=editServer('" + serverList[i].id + "','" + serverList[i].server + "','" + serverList[i].type + "','" + serverList[i].username + "','" + serverList[i].password + "','" + serverList[i].alias + "');>编辑  </a><a href='javascript:void(0)' onclick='deleteServer(" + serverList[i].id + ");'>删除</a></td></tr>";
                             $("#tb").append(html);
                             $("#server" + i).html(serverList[i].server);
                             $("#userName" + i).html(serverList[i].username);

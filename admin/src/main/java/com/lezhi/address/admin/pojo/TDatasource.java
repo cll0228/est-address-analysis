@@ -14,7 +14,7 @@ public class TDatasource {
 
     private String password;
 
-    private Date createTime;
+    private String createTime;
 
     private Integer operator;
 
@@ -65,11 +65,11 @@ public class TDatasource {
         this.password = password == null ? null : password.trim();
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

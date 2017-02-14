@@ -7,7 +7,7 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="operator" property="operator" jdbcType="INTEGER" />
     <result column="alias" property="alias" jdbcType="VARCHAR" />
     <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />

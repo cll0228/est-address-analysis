@@ -230,13 +230,40 @@ window.commonService = {
                     group.plateList.push(normalizedPlate);
                 }
             }*/
-            group = {
+            /*group = {
+                    plateList: [normalizedPlate]
+                };*/
+                result.push(normalizedPlate);
+        }.bind(this));
+
+        result.unshift({firstLetter: null, type: 'district', dataId: currentDistrict.districtId, name: '全部'});
+        return result.concat([]);
+    },
+    normalizeNeighborhoodList: function(currentDistrict){  //重新生成标准化格式的板块列表
+        var group = null,
+            result = [];
+//        (currentDistrict.bizcircle || []).forEach(function(plate){
+        (currentDistrict.neighborhoodList || []).forEach(function(neighborhood){
+            var normalizedNeighborhood = this.normalizeItem(neighborhood, 'neighborhood');
+
+            /*if(plate.firstLetter){
+                group = {
+                    firstLetter: plate.firstLetter,
                     plateList: [normalizedPlate]
                 };
                 result.push(group);
+            }else{
+                if(group && group.plateList){
+                    group.plateList.push(normalizedPlate);
+                }
+            }*/
+            /*group = {
+            		neighborhoodList: [normalizedNeighborhood]
+                };*/
+                result.push(normalizedNeighborhood);
         }.bind(this));
 
-        result.unshift({firstLetter: null, plateList: [{type: 'district', dataId: currentDistrict.district_quanpin, name: '全部'}]});
+        result.unshift({firstLetter: null, type: 'neighborhoodList', dataId: currentDistrict.townId, name: '全部'});
         return result.concat([]);
     },
     normalizeItem: function (item, tp){
@@ -254,6 +281,11 @@ window.commonService = {
 //            name = item.bizcircle_name;
         	dataId = item.townId;
             name = item.townName;
+        }else if(type === 'neighborhood'){
+//          dataId = item.bizcircle_quanpin;
+//          name = item.bizcircle_name;
+        	dataId = item.neighborhoodId;
+        	name = item.neighborhoodName;
         }else if(type === 'line'){
             dataId = item.lineId;
             name = item.lineName;

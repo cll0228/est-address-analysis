@@ -405,6 +405,52 @@ body a:hover {
     flex: 1; }
   .side-bar__level2-item-subitem {
     margin-right: 12px; }
+    
+    
+    
+    
+    
+    .side-bar__level3 {
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    right: auto;
+    bottom: auto;
+    left: calc(100% + 400px);
+    width: 217px;
+    height: 100%;
+    overflow-y: auto;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 0 16px; }
+    .side-bar__level3-item {
+      display: -moz-box;
+      /* OLD - Firefox 19- (buggy but mostly works) */
+      display: -ms-flexbox;
+      /* TWEENER - IE 10 */
+      display: -webkit-flex;
+      /* NEW - Chrome */
+      display: flex;
+      padding: 12px 0; }
+      .side-bar__level3-item:hover, .side-bar__level3-item--active {
+        color: #00ae66; }
+      .side-bar__level3-item--selected {
+        color: #00ae66;
+        font-weight: bold; }
+    .side-bar__level3 a:hover {
+      text-decoration: underline; }
+  .side-bar__level3-item-letter {
+    display: inline-block;
+    width: 24px; }
+  .side-bar__level3-item-sublist {
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    /* Chrome */
+    -ms-flex: 1;
+    /* IE 10 */
+    flex: 1; }
+  .side-bar__level3-item-subitem {
+    margin-right: 12px; }
 
 /* 搜索列表 */
 .search-list {

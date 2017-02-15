@@ -33,6 +33,21 @@ window.commonService = {
             }
         });
     },
+    //ajax获取列表数据方法
+    ajaxGetBase2: function(url, urlParams, data, callback){
+        var p = this.parseNotEmptyFields(urlParams);
+        return $.ajax({
+            type: "get",
+            url : headerParameters.quxianhost + url,
+            dataType : "json",
+            success: function(res){
+            	callback(res);
+            },
+            error: function(response,status){
+                console.log(status);
+            }
+        });
+    },
     level2Scale: function(level){	//层级 => 缩放比例(地图比例尺与气泡层级对应关系（默认值）)
         if(level === 'district' || level === 'line'){
             return 12;
@@ -200,10 +215,11 @@ window.commonService = {
     normalizePlateList: function(currentDistrict){  //重新生成标准化格式的板块列表
         var group = null,
             result = [];
-        (currentDistrict.bizcircle || []).forEach(function(plate){
+//        (currentDistrict.bizcircle || []).forEach(function(plate){
+        (currentDistrict.townList || []).forEach(function(plate){
             var normalizedPlate = this.normalizeItem(plate, 'plate');
 
-            if(plate.firstLetter){
+            /*if(plate.firstLetter){
                 group = {
                     firstLetter: plate.firstLetter,
                     plateList: [normalizedPlate]
@@ -213,7 +229,11 @@ window.commonService = {
                 if(group && group.plateList){
                     group.plateList.push(normalizedPlate);
                 }
-            }
+            }*/
+            group = {
+                    plateList: [normalizedPlate]
+                };
+                result.push(group);
         }.bind(this));
 
         result.unshift({firstLetter: null, plateList: [{type: 'district', dataId: currentDistrict.district_quanpin, name: '全部'}]});
@@ -225,11 +245,15 @@ window.commonService = {
             name;
 
         if(type === 'district'){
-            dataId = item.district_quanpin;
-            name = item.district_name;
+            dataId = item.districtId;
+            name = item.districtName;
+//            dataId = item.district_quanpin;
+//            name = item.district_name;
         }else if(type === 'plate'){
-            dataId = item.bizcircle_quanpin;
-            name = item.bizcircle_name;
+//            dataId = item.bizcircle_quanpin;
+//            name = item.bizcircle_name;
+        	dataId = item.townId;
+            name = item.townName;
         }else if(type === 'line'){
             dataId = item.lineId;
             name = item.lineName;

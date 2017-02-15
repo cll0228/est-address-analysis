@@ -18,9 +18,11 @@ Vue.component('slide-nav-component', {
     },
     created: function(){
         setTimeout(function(){
-            commonService.ajaxGetBase('/district.do', null, null, function(res){
+//        	commonService.ajaxGetBase('/api/v4/online/dict/city/info', null, null, function(res){
+            commonService.ajaxGetBase2('/district.do', null, null, function(res){
                 //区域/板块
-                var dList = res.data.info[0].district.map(function(d){
+                var dList = res.list.map(function(d){
+//        		var dList = res.data.info[0].district.map(function(d){
                     var normalizedDistrictList = commonService.normalizeItem(d, 'district');
                     normalizedDistrictList.children = commonService.normalizePlateList(d);
 
@@ -43,16 +45,27 @@ Vue.component('slide-nav-component', {
         }.bind(this), 1000);
     },
     template: '<div class="side-bar" id="sidebarWrap">\
-                        <a href="javascript:;"><div class="side-bar__item side-bar__item-quyu"\
-                                 @mouseover="mouseoverQuyu()" @mouseout="mouseoutLevel()" @click="clickQuyu()" :class="{\'side-bar__item--active\': isActiveQuyu()}">区县\
-                        </div></a>\
-                        <div class="side-bar__level1" :class="{\'gio_district\': isActiveQuyu(), \'gio_line\': isActiveDitie()}" id="districtWrap" \
-                            :style="{display: showLevel2 && \'block\' || \'none\'}" @mouseover="mouseoverLevel(2)" @mouseout="mouseoutLevel()">\
-                                <a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel2(d)" @mouseover="mouseoverLevel2(d)"\
-                                    :class="{\'side-bar__level1-item--selected\': level2Selected && level2Selected.dataId == d.dataId, \'side-bar__level1-item--active\': level2Mouseovered && level2Mouseovered.dataId == d.dataId}"\
-                                    gahref="{{d.isAll ? \'district-nolimit\' : d.dataId}}">{{d.name}}</a>\
-                        </div>\
-                    </div>',
+        <a href="javascript:;"><div class="side-bar__item side-bar__item-quyu"\
+                 @mouseover="mouseoverQuyu()" @mouseout="mouseoutLevel()" @click="clickQuyu()" :class="{\'side-bar__item--active\': isActiveQuyu()}">区县\
+        </div></a>\
+        <div class="side-bar__level1" :class="{\'gio_district\': isActiveQuyu(), \'gio_line\': isActiveDitie()}" id="districtWrap" \
+            :style="{display: showLevel2 && \'block\' || \'none\'}" @mouseover="mouseoverLevel(2)" @mouseout="mouseoutLevel()">\
+                <a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel2(d)" @mouseover="mouseoverLevel2(d)"\
+                    :class="{\'side-bar__level1-item--selected\': level2Selected && level2Selected.dataId == d.dataId, \'side-bar__level1-item--active\': level2Mouseovered && level2Mouseovered.dataId == d.dataId}"\
+                    gahref="{{d.isAll ? \'district-nolimit\' : d.dataId}}">{{d.name}}</a>\
+        </div>\
+        <div class="side-bar__level2" :class="{\'gio_plate\': isActiveQuyu(), \'gio_stop\': isActiveDitie()}" id="plateWrap" \
+                v-show="showLevel3 && level2Mouseovered.children.length > 0" @mouseover="mouseoverLevel(3)" @mouseout="mouseoutLevel()">\
+            <!-- 板块 -->\
+            <div class="side-bar__level2-item" v-for="group in level2Mouseovered.children" v-if="!isMouseoverDitie()">\
+                <span class="side-bar__level2-item-letter" v-if="group.firstLetter">{{group.firstLetter}}</span>\
+                <p class="side-bar__level2-item-sublist">\
+                    <a href="javascript:;" class="side-bar__level2-item-subitem" gahref="{{plate.isAll ? \'plate-nolimit\' : plate.bizcircle_quanpin}}" @click="clickLevel3(plate)"\
+                        v-for="plate in group.plateList" :class="{\'side-bar__level2-item--selected\': level3Selected && level3Selected.dataId == plate.dataId}">{{plate.name}}</a>\
+                </p>\
+            </div>\
+        </div>\
+    </div>',
     data: function(){
         return {
             districtList: null,             //区域列表

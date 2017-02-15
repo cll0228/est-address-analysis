@@ -328,6 +328,9 @@ body a:hover {
     .side-bar__item-quyu {
       background: transparent url(../../img/map/icons_nav_item.png) no-repeat left top;
       background-size: 60px; }
+      .side-bar__item-jidinghe {
+      background: transparent url(../../img/map/jidinghe.png) no-repeat center top;
+      background-size: 30px; }
     .side-bar__item--active {
       background-color: #3b96e6; }
     .side-bar__item svg {

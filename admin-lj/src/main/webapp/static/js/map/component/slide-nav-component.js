@@ -50,6 +50,9 @@ Vue.component('slide-nav-component', {
         <a href="javascript:;"><div class="side-bar__item side-bar__item-quyu"\
                  @mouseover="mouseoverQuyu()" @mouseout="mouseoutLevel()" @click="clickQuyu()" :class="{\'side-bar__item--active\': isActiveQuyu()}">区县\
         </div></a>\
+    	<a href="javascript:;"><div class="side-bar__item side-bar__item-jidinghe" \
+        		 @mouseover="mouseoverDitie()" @mouseout="mouseoutLevel()" @click="clickDitie()" :class="{\'side-bar__item--active\': isActiveDitie()}">机顶盒\
+		</div></a>\
         <div class="side-bar__level1" :class="{\'gio_district\': isActiveQuyu(), \'gio_line\': isActiveDitie()}" id="districtWrap" \
             :style="{display: showLevel2 && \'block\' || \'none\'}" @mouseover="mouseoverLevel(2)" @mouseout="mouseoutLevel()">\
                 <a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel2(d)" @mouseover="mouseoverLevel2(d)"\

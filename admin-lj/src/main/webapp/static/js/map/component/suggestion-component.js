@@ -32,7 +32,8 @@ Vue.component('suggestion-component', {
         var me = this;
         setTimeout(function(){
             $('#keyword-box').suggestion({
-                urlOrData: '/headerMind.json?cityCode=' + headerParameters.cityCode,
+                //urlOrData: '/headerMind.json?cityCode=' + headerParameters.cityCode,
+                urlOrData: headerParameters.quxianhost+'/search.do?cityCode=' + headerParameters.cityCode,
                 dataKey: 'list',
                 setRequestParams: function(requstParams){
                     requstParams.keyword = $.trim($('#keyword-box').val()).replace(/[:./#%?\\]/g,'');

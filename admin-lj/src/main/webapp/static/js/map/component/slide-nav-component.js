@@ -25,7 +25,9 @@ Vue.component('slide-nav-component', {
 //        		var dList = res.data.info[0].district.map(function(d){
                     var normalizedDistrictList = commonService.normalizeItem(d, 'district');
                     normalizedDistrictList.children = commonService.normalizePlateList(d);
-
+                    for (var k = 1,length = normalizedDistrictList.children.length;k < length; k++) {
+                    	normalizedDistrictList.children[k].children = commonService.normalizeNeighborhoodList(d.townList[k-1]);
+                    	}
                     return normalizedDistrictList;
                 });
                 dList.unshift({type: 'city', dataId: headerParameters.cityCode, name: '全部'});
@@ -48,6 +50,9 @@ Vue.component('slide-nav-component', {
         <a href="javascript:;"><div class="side-bar__item side-bar__item-quyu"\
                  @mouseover="mouseoverQuyu()" @mouseout="mouseoutLevel()" @click="clickQuyu()" :class="{\'side-bar__item--active\': isActiveQuyu()}">区县\
         </div></a>\
+    	<a href="javascript:;"><div class="side-bar__item side-bar__item-jidinghe" \
+        		 @mouseover="mouseoverDitie()" @mouseout="mouseoutLevel()" @click="clickDitie()" :class="{\'side-bar__item--active\': isActiveDitie()}">机顶盒\
+		</div></a>\
         <div class="side-bar__level1" :class="{\'gio_district\': isActiveQuyu(), \'gio_line\': isActiveDitie()}" id="districtWrap" \
             :style="{display: showLevel2 && \'block\' || \'none\'}" @mouseover="mouseoverLevel(2)" @mouseout="mouseoutLevel()">\
                 <a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel2(d)" @mouseover="mouseoverLevel2(d)"\
@@ -60,24 +65,39 @@ Vue.component('slide-nav-component', {
             <div class="side-bar__level2-item" v-for="group in level2Mouseovered.children" v-if="!isMouseoverDitie()">\
                 <span class="side-bar__level2-item-letter" v-if="group.firstLetter">{{group.firstLetter}}</span>\
                 <p class="side-bar__level2-item-sublist">\
-                    <a href="javascript:;" class="side-bar__level2-item-subitem" gahref="{{plate.isAll ? \'plate-nolimit\' : plate.bizcircle_quanpin}}" @click="clickLevel3(plate)"\
-                        v-for="plate in group.plateList" :class="{\'side-bar__level2-item--selected\': level3Selected && level3Selected.dataId == plate.dataId}">{{plate.name}}</a>\
+                    <a href="javascript:;" class="side-bar__level2-item-subitem" gahref="{{group.isAll ? \'group-nolimit\' : group.dataId}}" @mouseover="mouseoverLevel3(group)" @click="clickLevel3(plate)"\
+                         :class="{\'side-bar__level2-item--selected\': level3Selected && level3Selected.dataId == group.dataId}">{{group.name}}</a>\
                 </p>\
             </div>\
         </div>\
+    	<div class="side-bar__level3" :class="{\'gio_plate\': isActiveQuyu(), \'gio_stop\': isActiveDitie()}" id="neighborhoodWrap" \
+		        v-show="showLevel4 && level3Mouseovered.children.length > 0" @mouseover="mouseoverLevel(4)" @mouseout="mouseoutLevel()">\
+		    <!-- 板块 -->\
+		    <div class="side-bar__level3-item" v-for="group in level3Mouseovered.children" v-if="!isMouseoverDitie()">\
+		        <span class="side-bar__level3-item-letter" v-if="group.firstLetter">{{group.firstLetter}}</span>\
+		        <p class="side-bar__level3-item-sublist">\
+		            <a href="javascript:;" class="side-bar__level3-item-subitem" gahref="{{group.isAll ? \'group-nolimit\' : group.dataId}}" @click="clickLevel4(neighborhood)"\
+		                :class="{\'side-bar__level3-item--selected\': level4Selected && level4Selected.dataId == group.dataId}">{{group.name}}</a>\
+		        </p>\
+		    </div>\
+		</div>\
     </div>',
     data: function(){
         return {
             districtList: null,             //区域列表
             mouseoveredSiteType: null,
-            level2Selected: null,            //选中区域|地铁线
-            level3Selected: null,            //选中板块|地铁站
+            level2Selected: null,            //选中区县|地铁线
+            level3Selected: null,            //选中街道|地铁站
+            level4Selected: null,            //选中居委|地铁站
             level2Mouseovered: null,         //移上去的区域|地铁线
             level2Chidren: null,             //当前区域|地铁线下的板块|地铁站列表
+            level3Mouseovered: null,         //移上去的街道|地铁线
+            level3Chidren: null,             //当前区域|地铁线下的板块|地铁站列表
 
             showLevel1: true,		//站点: 区域|地铁
-            showLevel2: false,		//区域|地铁线
-            showLevel3: false		//板块|地铁站
+            showLevel2: false,		//区县|机顶盒
+            showLevel3: false,		//街道|地铁站
+            showLevel4: false		//居委|地铁站
         };
     },
     methods: {
@@ -98,17 +118,21 @@ Vue.component('slide-nav-component', {
             this.mouseoveredSiteType = commonService.SITE_TYPE_DITIE;
         },
         mouseoverLevel: function(level){
-            var nextLevel = level < 3 ? (level + 1) : 3;
+            var nextLevel = level < 4 ? (level + 1) : 4;
             for(var i=1; i<=nextLevel; i++){
                 this['showLevel' + i] = true;
             }
         },
         mouseoutLevel: function(){
-            this.showLevel1 = this.showLevel2 = this.showLevel3 = false;
+            this.showLevel1 = this.showLevel2 = this.showLevel3 = this.showLevel4 = false;
         },
         mouseoverLevel2: function(item){
             this.level2Mouseovered = item;
             console.log(this.level2Mouseovered);
+        },
+        mouseoverLevel3: function(item){
+            this.level3Mouseovered = item;
+            console.log(this.level3Mouseovered);
         },
         clickLevel2: function(item){
             this.level2Selected = item;
@@ -136,6 +160,21 @@ Vue.component('slide-nav-component', {
             if(this.siteType === commonService.SITE_TYPE_QUYU){
                 this.setVisited([this.level2Selected.district_quanpin, this.level3Selected.bizcircle_quanpin]);
             }
+        },
+        clickLevel4: function(item){		//点击板块
+            /*this.level3Selected = item;
+            this.level2Selected = this.level2Mouseovered;
+            this.setSiteType(this.mouseoveredSiteType);
+
+            var level2Selected = this.level2Selected;
+            this.clickLevel3Action($.extend({parentDataId: level2Selected.dataId}, item));
+
+            this.mouseoutLevel();
+
+            //设置当前区域和板块为访问过
+            if(this.siteType === commonService.SITE_TYPE_QUYU){
+                this.setVisited([this.level2Selected.district_quanpin, this.level3Selected.bizcircle_quanpin]);
+            }*/
         },
         isMouseoverDitie: function(){
             return this.mouseoveredSiteType === commonService.SITE_TYPE_DITIE;

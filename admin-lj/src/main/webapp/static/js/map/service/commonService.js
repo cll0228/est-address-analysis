@@ -33,6 +33,20 @@ window.commonService = {
             }
         });
     },
+    ajaxGetBase3: function(url,callback){
+        return $.ajax({
+            type: "get",
+            url : url,
+            success: function(res){
+                // if(res.status == "ok" && callback){
+                    callback(res);
+                // }
+            },
+            error: function(response,status){
+                console.log(status);
+            }
+        });
+    },
     //ajax获取列表数据方法
     ajaxGetBase2: function(url, urlParams, data, callback){
         var p = this.parseNotEmptyFields(urlParams);

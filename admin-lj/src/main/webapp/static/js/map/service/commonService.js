@@ -33,6 +33,20 @@ window.commonService = {
             }
         });
     },
+    ajaxGetBase3: function(url,callback){
+        return $.ajax({
+            type: "get",
+            url : url,
+            success: function(res){
+                // if(res.status == "ok" && callback){
+                    callback(res);
+                // }
+            },
+            error: function(response,status){
+                console.log(status);
+            }
+        });
+    },
     //ajax获取列表数据方法
     ajaxGetBase2: function(url, urlParams, data, callback){
         var p = this.parseNotEmptyFields(urlParams);
@@ -135,27 +149,14 @@ window.commonService = {
     },
     getEmptyFilters: function(){
         var filters = {
-            t: null,	//地铁房
-            m: null,	//自定义面积
-
-            b: null,	//出售: 自定义售价
-            k: null,    //出租: 自定义租金
-
-            z: null,	//出租价格
-            p: null,    //出售价格
-
-            a: null,	//面积
-            l: null,	//户型
-            f: null,	//朝向
-            y: null,	//房龄
-            c: null,	//楼层
-            u: null,	//房本年限
-            v: null,	//标签
-            x: null,    //装修
-            o: null,    //类型
-            n: null,    //租房品牌
-            i: null,    //租房类型
-            g: null     //距离(仅二手的地铁有)
+            t: null,	//小区分类
+            o: null,	//账单活跃度
+            b: null,	//小区用户占比
+            p: null,    //小区均价
+            a: null,	//用户规模
+            l: null,	//账单活跃度
+            f: null,	//是否订阅增值节目
+            g: null //不动产估值
         };
 
         return $.extend({}, filters);

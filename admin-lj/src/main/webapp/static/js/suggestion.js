@@ -6,8 +6,8 @@
 		var listItem;
 		if(data && data.length>0){
 			$.each(data, function(index, node){
-				var keyword = $.trim($keywordCtrl.val());
-				var name = options.pageType=='xinfang'?this.nameShow:this.showName;
+/*				var keyword = $.trim($keywordCtrl.val());
+				var name = options.pageType=='xinfang'?this.name:this.addr;
 				var showName = name.replace(keyword, '<b '+(options.pageType=='xinfang'?'class="red"':'')+'>'+keyword+'</b>');
 				if(options.pageType == "xinfang"){
 					var villaNameTag, priceTag = "";
@@ -27,6 +27,8 @@
 				}else{
 					listItem = $('<li class="actSelect ui-menu-item" key="'+this.url+'" gahref="search_suggestion_click_order_'+(index+1)+'"><span class="left hot-title"><i>'+showName+'</i><span class="sub-text"> '+this.remark+'</span></span><span class="count right">约&nbsp;'+this.sellCount+'<b>套'+rentOrSoldText+'</b></span></li>'+((index != data.length-1)?'<li class="ui-menu-line"></li>':''));
 				}
+*/
+				listItem = $('<li class="actSelect ui-menu-item" key="'+this.id+'" gahref="search_suggestion_click_order_'+(index+1)+'"><span class="left hot-title"><i>'+this.name+'</i><span class="sub-text"> '+(this.addr == null?'':this.addr) +'</span></span></li>'+((index != data.length-1)?'<li class="ui-menu-line"></li>':''));
 				listItem.data('itemData', this);
 				$sugCtrl.append(listItem);
 			});

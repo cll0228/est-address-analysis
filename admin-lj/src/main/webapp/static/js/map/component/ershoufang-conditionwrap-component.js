@@ -9,54 +9,49 @@ Vue.component('ershoufang-conditionwrap-component', {
             searchParams: commonService.getSearchParams
         }
     },
-    template:  '<single-condition-component :datasource="conditionMap[\'p\']" key="p" alias="售价" gahrefval="sale-price-nolimit" class="gio_price" style="margin-left: 15px;"></single-condition-component>\
-                <single-condition-component :datasource="conditionMap[\'a\']" key="a" alias="面积" gahrefval="area-nolimit" class="gio_area"></single-condition-component>\
-                <single-condition-component :datasource="conditionMap[\'l\']" key="l" alias="户型" gahrefval="room-nolimit" class="gio_room"></single-condition-component>\
+    template:  '<single-condition-component :datasource="conditionMap[\'a\']" key="a" alias="用户规模" gahrefval="sale-price-nolimit" class="gio_price" style="margin-left: 15px;"></single-condition-component>\
+                <single-condition-component :datasource="conditionMap[\'l\']" key="l" alias="小区规模" gahrefval="area-nolimit" class="gio_area"></single-condition-component>\
+                <single-condition-component :datasource="conditionMap[\'p\']" key="p" alias="小区均价" gahrefval="room-nolimit" class="gio_room"></single-condition-component>\
                 <!--begin: 筛选条件：更多-->\
                 <div class="c-filterbox ml_10" @mouseover="helper.showMoreOptions=true" @mouseout="helper.showMoreOptions=false">\
                     <div class="c-filterbox__selector">\
                         <p class="c-filterbox__selector-text">更多</p>\
                         <i class="iconfont c-filterbox__selector-icon" :class="{\'icon-arrow-down\': !isMouseover, \'icon-arrow-up\':isMouseover}"></i>\
                     </div>\
-                    <ul class="c-filterbox__multilist" v-show="helper.showMoreOptions">\
-                        <div class="c-filterbox__multilist-item" v-if="searchParams.siteType === \'ditie\'">\
-                            <span class="c-filterbox__multilist-item-label">距离</span>\
-                            <single-condition-component :datasource="conditionMap[\'g\']" key="g" gahrefval="distance-nolimit" class="gio_distance c-filterbox--large"></single-condition-component>\
-                        </div>\
-                        <div class="c-filterbox__multilist-item">\
-                            <span class="c-filterbox__multilist-item-label">朝向</span>\
-                            <single-condition-component :datasource="conditionMap[\'f\']" key="f" gahrefval="face-nolimit" class="gio_face c-filterbox--large"></single-condition-component>\
-                        </div>\
-                        <div class="c-filterbox__multilist-item">\
-                            <span class="c-filterbox__multilist-item-label">房龄</span>\
-                            <single-condition-component :datasource="conditionMap[\'y\']" key="y" gahrefval="house-age-nolimit" class="gio_house_age c-filterbox--large"></single-condition-component>\
-                        </div>\
-                        <div class="c-filterbox__multilist-item">\
-                            <span class="c-filterbox__multilist-item-label">楼层</span>\
-                            <single-condition-component :datasource="conditionMap[\'c\']" key="c" gahrefval="floor-nolimit" class="gio_floor c-filterbox--large"></single-condition-component>\
-                        </div>\
-                        <div class="c-filterbox__multilist-item">\
-                            <span class="c-filterbox__multilist-item-label">房本年限</span>\
-                            <single-condition-component :datasource="conditionMap[\'u\']" key="u" gahrefval="fangben-nolimit" class="gio_fangben c-filterbox--large"></single-condition-component>\
-                        </div>\
-                        <div class="c-filterbox__multilist-item">\
-                            <span class="c-filterbox__multilist-item-label">装修</span>\
-                            <single-condition-component :datasource="conditionMap[\'x\']" key="x" gahrefval="decoration-nolimit"  class="gio_decoration c-filterbox--large"></single-condition-component>\
-                        </div>\
-                        <div class="c-filterbox__multilist-item">\
-                            <span class="c-filterbox__multilist-item-label">类型</span>\
-                            <single-condition-component :datasource="conditionMap[\'o\']" key="o" gahrefval="houseTypeCode-nolimit"  class="gio_houseTypeCode c-filterbox--large"></single-condition-component>\
-                        </div>\
-                        <div class="c-filterbox__multilist-item">\
-                            <span class="c-filterbox__multilist-item-label">标签</span>\
-                            <single-condition-component :datasource="conditionMap[\'v\']" key="v" gahrefval="lable-nolimit" class="gio_label c-filterbox--large"></single-condition-component>\
-                        </div>\
+                     <ul class="c-filterbox__multilist" v-show="helper.showMoreOptions">\
+                            <div class="c-filterbox__item">小区特征<img src="/static/img/jia.png" class="jiajian" @click="helper.residenceProperty=!helper.residenceProperty" onmousemove=""></div>\
+                                    <ul class="" v-show="helper.residenceProperty">\
+                                        <div class="c-filterbox__multilist-item" >\
+                                            <single-condition-component :datasource="conditionMap[\'t\']" key="t" gahrefval="face-nolimit" class="gio_face c-filterbox--large"></single-condition-component>\
+                                        </div>\
+                                        <div class="c-filterbox__multilist-item" >\
+                                            <single-condition-component :datasource="conditionMap[\'b\']" key="b" gahrefval="face-nolimit" class="gio_face c-filterbox--large"></single-condition-component>\
+                                        </div>\
+                                    </ul>\
+                            <li class="c-filterbox__item">不动产估值<img src="/static/img/jia.png" class="jiajian" @click="helper.showHouseValue=!helper.showHouseValue"></li>\
+                                    <ul class="" v-show="helper.showHouseValue">\
+                                        <div class="c-filterbox__multilist-item" >\
+                                            <single-condition-component :datasource="conditionMap[\'g\']" key="g" gahrefval="face-nolimit" class="gio_face c-filterbox--large"></single-condition-component>\
+                                        </div>\
+                                    </ul>\
+                            <li class="c-filterbox__item">有线账单<img src="/static/img/jia.png" class="jiajian" @click="helper.showOcnBill=!helper.showOcnBill"></li>\
+                                    <ul class="" v-show="helper.showOcnBill">\
+                                        <div class="c-filterbox__multilist-item" >\
+                                            <single-condition-component :datasource="conditionMap[\'o\']" key="o" gahrefval="face-nolimit" class="gio_face c-filterbox--large_m"></single-condition-component>\
+                                        </div>\
+                                         <div class="c-filterbox__multilist-item" >\
+                                            <single-condition-component :datasource="conditionMap[\'f\']" key="f" gahrefval="face-nolimit" class="gio_face c-filterbox--large_m"></single-condition-component>\
+                                        </div>\
+                                    </ul>\
                     </ul>\
                 </div>',
     data: function(){
         return {
             helper: {
-                showMoreOptions: false
+                showMoreOptions: false,
+                residenceProperty :false,
+                showHouseValue:false,
+                showOcnBill:false
             }
         }
     },

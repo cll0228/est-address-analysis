@@ -1,6 +1,7 @@
-/**
+/*
+/!**
  * Created by colin on 16/8/11.
- */
+ *!/
 
 
 Vue.component('zufang-conditionwrap-component', {
@@ -48,4 +49,4 @@ Vue.component('zufang-conditionwrap-component', {
         }
     },
     props: ['conditionMap']
-});
+});*/

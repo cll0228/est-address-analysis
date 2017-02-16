@@ -43,6 +43,15 @@ Vue.component('slide-nav-component', {
                     return normalizedLineList;
                 });
                 this.subwayList = sList;*/
+                var result = [];
+                
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 5, name: '标清'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 4, name: '高清无EOC'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 3, name: '高清+EOC'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 2, name: '智能1000'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 1, name: '智能2000'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 0, name: '全部'});
+                this.subwayList = result;
             }.bind(this));
         }.bind(this), 1000);
     },
@@ -53,6 +62,7 @@ Vue.component('slide-nav-component', {
     	<a href="javascript:;"><div class="side-bar__item side-bar__item-jidinghe" \
         		 @mouseover="mouseoverDitie()" @mouseout="mouseoutLevel()" @click="clickDitie()" :class="{\'side-bar__item--active\': isActiveDitie()}">机顶盒\
 		</div></a>\
+    	<!-- 区县 -->\
         <div class="side-bar__level1" :class="{\'gio_district\': isActiveQuyu(), \'gio_line\': isActiveDitie()}" id="districtWrap" \
             :style="{display: showLevel2 && \'block\' || \'none\'}" @mouseover="mouseoverLevel(2)" @mouseout="mouseoutLevel()">\
                 <a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel2(d)" @mouseover="mouseoverLevel2(d)"\
@@ -85,6 +95,7 @@ Vue.component('slide-nav-component', {
     data: function(){
         return {
             districtList: null,             //区域列表
+            subwayList: null,               //地铁列表
             mouseoveredSiteType: null,
             level2Selected: null,            //选中区县|地铁线
             level3Selected: null,            //选中街道|地铁站

@@ -1,6 +1,7 @@
-/**
+/*
+/!**
  * Created by colin on 16/7/21.
- */
+ *!/
 
 Vue.component('switch-channel-component', {
     template: '<a href="javascript:;">\
@@ -32,4 +33,4 @@ Vue.component('switch-channel-component', {
             }
         }
     }
-});
+});*/

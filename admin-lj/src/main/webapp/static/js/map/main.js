@@ -23,23 +23,22 @@
 
             //加载字典
             if (window.houseType === commonService.ERSHOUFANG) {
-                commonService.ajaxGetBase('/api/v4/online/dict/solrCode/info', null, {range: 'ditu'}, function (res) {
-                    var data = res.data.info,
+                commonService.ajaxGetBase3('getSearchCond.do', function (res) {
+                    var data = res,
                         tmp = {};
 
-                    tmp.p = buildSingleDictionary(data['prices']);      //售价
-                    tmp.a = buildSingleDictionary(data['acreages']);    //面积
-                    tmp.l = buildSingleDictionary(data['roomCount']);   //
+                    tmp.a = buildSingleDictionary(data['userScale']);      //用户规模
+                    tmp.l = buildSingleDictionary(data['residenceScale']);    //小区规模
+                    tmp.p = buildSingleDictionary(data['residenceAvg']);   //小区均价
 
-                    tmp.g = buildSingleDictionary(data['subway_distance']);     //距离
-                    tmp.f = buildSingleDictionary(data['orientation']);     //朝向
-                    tmp.y = buildSingleDictionary(data['house_year']);      //房龄
-                    tmp.c = buildSingleDictionary(data['floor_level']);     //楼层
-                    tmp.o = buildSingleDictionary(data['houseTypeCode']);        //房屋类型
-                    tmp.x = buildSingleDictionary(data['decoration']);        //装修
+                    tmp.t = mybuildSingleDictionary(data['residenceKind'],1);//小区分类
+                    tmp.b = mybuildSingleDictionary(data['residenceUserProportion'],2);//小区用户占比
+                    tmp.g = mybuildSingleDictionary(data['estateTotalValue'],3);   //不动产估值
 
-                    tmp.u = buildSpecial('u', data['tags']);        //房本年限
-                    tmp.v = buildSpecial('v', data['tags']);        //标签
+                    tmp.o = mybuildSingleDictionary(data['billActDegree'],4);   //账单活跃度
+                    tmp.f = mybuildSingleDictionary(data['ifSubIncrement'],5);   //是否订阅增值节目
+
+
 
                     this.conditionMap = tmp;
                 }.bind(this));
@@ -50,29 +49,30 @@
                     }));
                 }
 
-            } else if (window.houseType === commonService.ZUFANG) {
-                commonService.ajaxGetBase('/api/v4/online/dict/solrCode/info', null, {range: 'zufangditu'}, function (res) {
-                    var data = res.data.info,
-                        tmp = {};
-
-                    tmp.z = buildSingleDictionary(data['prices']);
-                    tmp.a = buildSingleDictionary(data['acreages']);
-                    tmp.l = buildSingleDictionary(data['roomCount']);
-                    tmp.f = buildSingleDictionary(data['orientation']);
-                    tmp.c = buildSingleDictionary(data['floor_level']);
-                    tmp.t = buildSingleDictionary(data['tags']);
-                    tmp.x = buildSingleDictionary(data['decoration']);        //装修
-                    tmp.n = buildSingleDictionary(data['brand']);        //品牌
-                    tmp.i = buildSingleDictionary(data['rentType']);        //类型
-
-                    this.conditionMap = tmp;
-
-                }.bind(this));
             }
 
             function buildSingleDictionary(list){
                 var result = (list || []).map(function(item) { return {code: item.urldata, codeDesc: item.text}; });
                 result.unshift({code: null, codeDesc: '不限'});
+                return result;
+            }
+
+            function mybuildSingleDictionary(list,kind){
+                var result = (list || []).map(function(item) { return {code: item.urldata, codeDesc: item.text}; });
+                if(kind == 1){
+                    result.unshift({code: null, codeDesc: '小区分类'});
+                }else if(kind == 2){
+                    result.unshift({code: null, codeDesc: '小区用户占比'});
+                }else if(kind == 3){
+                    result.unshift({code: null, codeDesc: '不动产估值'});
+                }else if(kind == 4){
+                    result.unshift({code: null, codeDesc: '账单活跃度'});
+                }else if(kind == 5){
+                    result.unshift({code: null, codeDesc: '是否订阅增值节目'});
+                }else {
+                    result.unshift({code: null, codeDesc: '未知'});
+                }
+
                 return result;
             }
         },

@@ -46,43 +46,6 @@ public class SearchController {
 	String houseAddressIndexDirPath;
 	Analyzer analyzer = new IKAnalyzer();
 
-	@Autowired
-	private SlideNavService slideNavService;
-
-    @RequestMapping(value = "searchKeyword", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> searchKeyword(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception{
-    	Map<String, Object> result = new HashMap<>();
-//    	ArrayList<District> dList = slideNavService.districtList();
-		List<SearchData> searchDataList = new ArrayList<>();
-		SearchData searchData1 = new SearchData();
-		searchData1.setId("st100021816");
-		searchData1.setDataId("100021816");
-		searchData1.setRemark("1号线");
-		searchData1.setShowName("共康路站");
-		searchData1.setTypeName("地铁站");
-		searchData1.setSellCount(50);
-		SearchData searchData2 = new SearchData();
-		searchData2.setId("5011000013338");
-		searchData2.setDataId("5011000013338");
-		searchData2.setRemark("共康 宝山");
-		searchData2.setShowName("共康五村");
-		searchData2.setTypeName("小区");
-		searchData2.setSellCount(30);
-		SearchData searchData3 = new SearchData();
-		searchData3.setId("sq611900003");
-		searchData3.setDataId("gongkang");
-		searchData3.setRemark("");
-		searchData3.setShowName("共康");
-		searchData3.setTypeName("板块");
-		searchData3.setSellCount(11);
-		searchDataList.add(searchData1);
-		searchDataList.add(searchData2);
-		searchDataList.add(searchData3);
-    	result.put("list", searchDataList);
-		return result;
-    }
-
 	@ResponseBody
 	@RequestMapping(value = "search", method = RequestMethod.GET)
 	public Map<String, Object> search(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception{

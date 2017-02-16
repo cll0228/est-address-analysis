@@ -2,7 +2,6 @@ package com.lezhi.adminlj.controller;
 
 import com.lezhi.adminlj.pojo.District;
 import com.lezhi.adminlj.pojo.LuceneSearchDto;
-import com.lezhi.adminlj.pojo.SearchData;
 import com.lezhi.adminlj.service.SlideNavService;
 import com.lezhi.adminlj.util.PropertyUtil;
 import org.apache.lucene.analysis.Analyzer;

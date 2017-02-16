@@ -35,8 +35,8 @@
                     tmp.b = mybuildSingleDictionary(data['residenceUserProportion'],2);//小区用户占比
                     tmp.g = mybuildSingleDictionary(data['estateTotalValue'],3);   //不动产估值
 
-                    tmp.d = mybuildSingleDictionary(data['billActDegree'],4);   //账单活跃度
-                    tmp.j = mybuildSingleDictionary(data['ifSubIncrement'],5);   //是否订阅增值节目
+                    tmp.o = mybuildSingleDictionary(data['billActDegree'],4);   //账单活跃度
+                    tmp.f = mybuildSingleDictionary(data['ifSubIncrement'],5);   //是否订阅增值节目
 
 
 

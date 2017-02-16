@@ -37,10 +37,10 @@ Vue.component('ershoufang-conditionwrap-component', {
                             <li class="c-filterbox__item">有线账单<img src="/static/img/jia.png" class="jiajian" @click="helper.showOcnBill=!helper.showOcnBill"></li>\
                                     <ul class="" v-show="helper.showOcnBill">\
                                         <div class="c-filterbox__multilist-item" >\
-                                            <single-condition-component :datasource="conditionMap[\'d\']" key="d" gahrefval="face-nolimit" class="gio_face c-filterbox--large_m"></single-condition-component>\
+                                            <single-condition-component :datasource="conditionMap[\'o\']" key="o" gahrefval="face-nolimit" class="gio_face c-filterbox--large_m"></single-condition-component>\
                                         </div>\
                                          <div class="c-filterbox__multilist-item" >\
-                                            <single-condition-component :datasource="conditionMap[\'j\']" key="j" gahrefval="face-nolimit" class="gio_face c-filterbox--large_m"></single-condition-component>\
+                                            <single-condition-component :datasource="conditionMap[\'f\']" key="f" gahrefval="face-nolimit" class="gio_face c-filterbox--large_m"></single-condition-component>\
                                         </div>\
                                     </ul>\
                     </ul>\

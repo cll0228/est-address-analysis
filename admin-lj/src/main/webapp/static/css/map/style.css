@@ -556,6 +556,12 @@ body a:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap; }
+    .search-list__show-name-title {
+    float: left;
+    overflow: hidden;
+    width: 66px;
+    height: 100%;
+    text-align: left; }
   .search-list__price, .search-list__count {
     float: left;
     overflow: hidden;

@@ -177,7 +177,7 @@ body a:hover {
   display: -webkit-flex;
   /* NEW - Chrome */
   display: flex;
-  width: 270px;
+  width: 330px;
   border: 1px solid #babdc2;
   border-right: none;
   height: 30px;

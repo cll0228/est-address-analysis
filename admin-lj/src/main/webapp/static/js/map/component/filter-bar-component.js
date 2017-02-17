@@ -15,7 +15,7 @@ Vue.component('filter-bar-component', {
                     <div class="filter-bar__value">\
                         <span v-for="item in filterList">{{item.text}}\
                             <a href="javascript:;" @click="removeCondition(item.key)" class="filter-bar__close-filter" gahref="tooltip_filters_delete_item">\
-                            <svg><use xlink:href="/static/css/map/map-icon.svg#icon-close"></use></svg>\
+                            <svg><use xlink:href="./static/css/map/map-icon.svg#icon-close"></use></svg>\
                             </a>\
                         </span>\
                         <a href="javascript:;" @click="clearAllCondition" class="filter-bar__clear-filter" gahref="tooltip_filters_empty">\

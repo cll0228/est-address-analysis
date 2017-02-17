@@ -19,7 +19,7 @@ Vue.component('filter-bar-component', {
                             </a>\
                         </span>\
                         <a href="javascript:;" @click="clearAllCondition" class="filter-bar__clear-filter" gahref="tooltip_filters_empty">\
-                            <svg><use xlink:href="/static/css/map/map-icon.svg#icon-delete"></use></svg>\
+                            <svg><use xlink:href="./static/css/map/map-icon.svg#icon-delete"></use></svg>\
                             <span style="text-decoration: underline;">清空</span>\
                         </a>\
                     </div>\

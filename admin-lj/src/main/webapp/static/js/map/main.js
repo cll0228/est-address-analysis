@@ -32,7 +32,7 @@
                     tmp.p = buildSingleDictionary(data['residenceAvg']);   //小区均价
 
                     tmp.t = mybuildSingleDictionary(data['residenceKind'],1);//小区分类
-                    tmp.b = mybuildSingleDictionary(data['residenceUserProportion'],2);//小区用户占比
+                    tmp.c = mybuildSingleDictionary(data['residenceUserProportion'],2);//小区用户占比
                     tmp.g = mybuildSingleDictionary(data['estateTotalValue'],3);   //不动产估值
 
                     tmp.o = mybuildSingleDictionary(data['billActDegree'],4);   //账单活跃度

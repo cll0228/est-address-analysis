@@ -152,12 +152,12 @@ window.commonService = {
         var filters = {
             t: null,	//小区分类
             o: null,	//账单活跃度
-            b: null,	//小区用户占比
+            c: null,	//小区用户占比
             p: null,    //小区均价
             a: null,	//用户规模
-            l: null,	//账单活跃度
+            l: null,	//小區規模;
             f: null,	//是否订阅增值节目
-            g: null //不动产估值
+            g: null     //不动产估值
         };
 
         return $.extend({}, filters);

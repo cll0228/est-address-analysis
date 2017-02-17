@@ -177,7 +177,7 @@ body a:hover {
   display: -webkit-flex;
   /* NEW - Chrome */
   display: flex;
-  width: 270px;
+  width: 330px;
   border: 1px solid #babdc2;
   border-right: none;
   height: 30px;
@@ -189,6 +189,7 @@ body a:hover {
     -ms-flex: 1;
     /* IE 10 */
     flex: 1;
+    width: 300px;
     border: none;
     padding: 0 8px; }
   .c-searchbox__icon-cancel {

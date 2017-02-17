@@ -21,25 +21,25 @@ public class SearchConditionController {
     public SearchCondition getSearchCond() {
         SearchCondition condition = new SearchCondition();
         List<Common> usrScale = new ArrayList<>();// 用户规模
-        usrScale.add(new Common("u", "100户以下", "a1", "1"));
-        usrScale.add(new Common("u", "100-200户", "a2", "2"));
-        usrScale.add(new Common("u", "200-500户", "a3", "3"));
-        usrScale.add(new Common("u", "500户以上", "a4", "4"));
+        usrScale.add(new Common("a", "100户以下", "a1", "1"));
+        usrScale.add(new Common("a", "100-200户", "a2", "2"));
+        usrScale.add(new Common("a", "200-500户", "a3", "3"));
+        usrScale.add(new Common("a", "500户以上", "a4", "4"));
         condition.setUserScale(usrScale);
 
         List<Common> residenceScale = new ArrayList<>();
-        residenceScale.add(new Common("r", "500户以下", "r500", "1"));
-        residenceScale.add(new Common("r", "500-1000户", "r1000", "2"));
-        residenceScale.add(new Common("r", "1000-2000户", "r2000", "3"));
-        residenceScale.add(new Common("r", "2000户以上", "r3000", "4"));
+        residenceScale.add(new Common("l", "500户以下", "l500", "1"));
+        residenceScale.add(new Common("l", "500-1000户", "l1000", "2"));
+        residenceScale.add(new Common("l", "1000-2000户", "l2000", "3"));
+        residenceScale.add(new Common("l", "2000户以上", "l3000", "4"));
         condition.setResidenceScale(residenceScale);
 
         List<Common> residenceAvg = new ArrayList<>();
-        residenceAvg.add(new Common("p", "2万以下", "r2", "1"));
-        residenceAvg.add(new Common("p", "2-3万", "r3", "2"));
-        residenceAvg.add(new Common("p", "3-5万", "r4", "3"));
-        residenceAvg.add(new Common("p", "5-8万", "r5", "4"));
-        residenceAvg.add(new Common("p", "8万以上", "r8", "45"));
+        residenceAvg.add(new Common("p", "2万以下", "p2", "1"));
+        residenceAvg.add(new Common("p", "2-3万", "p3", "2"));
+        residenceAvg.add(new Common("p", "3-5万", "p4", "3"));
+        residenceAvg.add(new Common("p", "5-8万", "p5", "4"));
+        residenceAvg.add(new Common("p", "8万以上", "p8", "45"));
         condition.setResidenceAvg(residenceAvg);
 
         List<Common> residenceKind = new ArrayList<>();
@@ -49,11 +49,11 @@ public class SearchConditionController {
         condition.setResidenceKind(residenceKind);
 
         List<Common> residenceUserProportion = new ArrayList<>();
-        residenceUserProportion.add(new Common("b","10%以下","b1","1"));
-        residenceUserProportion.add(new Common("b","10%-20%","b2","2"));
-        residenceUserProportion.add(new Common("b","20%-30%","b3","3"));
-        residenceUserProportion.add(new Common("b","30%-50%","b4","4"));
-        residenceUserProportion.add(new Common("b","50%以上","b5","5"));
+        residenceUserProportion.add(new Common("c","10%以下","c1","1"));
+        residenceUserProportion.add(new Common("c","10%-20%","c2","2"));
+        residenceUserProportion.add(new Common("c","20%-30%","c3","3"));
+        residenceUserProportion.add(new Common("c","30%-50%","c4","4"));
+        residenceUserProportion.add(new Common("c","50%以上","c5","5"));
         condition.setResidenceUserProportion(residenceUserProportion);
 
         List<Common> estateTotalValue = new ArrayList<>();
@@ -67,15 +67,15 @@ public class SearchConditionController {
         condition.setEstateTotalValue(estateTotalValue);
 
         List<Common> billActDegree = new ArrayList<>();
-        billActDegree.add(new Common("d", "3个月内有缴费记录", "d3", "1"));
-        billActDegree.add(new Common("d", "6个月内有缴费记录", "d6", "2"));
-        billActDegree.add(new Common("d", "12个月内有缴费记录", "d12", "3"));
-        billActDegree.add(new Common("d", "24个月内有缴费记录", "d24", "4"));
+        billActDegree.add(new Common("o", "3个月内有缴费记录", "o3", "1"));
+        billActDegree.add(new Common("o", "6个月内有缴费记录", "o6", "2"));
+        billActDegree.add(new Common("o", "12个月内有缴费记录", "o12", "3"));
+        billActDegree.add(new Common("o", "24个月内有缴费记录", "o24", "4"));
         condition.setBillActDegree(billActDegree);
 
         List<Common> ifSubIncrement = new ArrayList<>();
-        ifSubIncrement.add(new Common("j", "是", "j1", "1"));
-        ifSubIncrement.add(new Common("j", "否", "j2", "2"));
+        ifSubIncrement.add(new Common("f", "是", "f1", "1"));
+        ifSubIncrement.add(new Common("f", "否", "f2", "2"));
         condition.setIfSubIncrement(ifSubIncrement);
         return condition;
     }

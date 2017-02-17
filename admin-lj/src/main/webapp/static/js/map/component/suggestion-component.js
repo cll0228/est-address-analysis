@@ -22,7 +22,7 @@ Vue.component('suggestion-component', {
                     <div id="suggest-cont" class="suggest-wrap" style="width: 500px; display: none;">\
                         <ul style="width: 100%;" class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="suggestion"></ul>\
                     </div>\
-                    <input type="text" class="c-searchbox__input" name="keyword" id="keyword-box" placeholder="输入区域、板块或小区名找房"\
+                    <input type="text" class="c-searchbox__input" name="keyword" id="keyword-box" placeholder="请输入区县、街道、居委、道路或小区地址"\
                         maxlength="50" autocomplete="off" popdiv="suggestion" v-model="inputKeyword" @click="handleClickAndFocus()" @focus="handleClickAndFocus()" @keyup="handleKeyup()" @keyup.13="searchKeyword()">\
                         <i class="icon-cancel c-searchbox__icon-cancel" @click="handleCancel()" v-show="keyword"></i>\
                     <button class="c-searchbox__button" type="button" @click="searchKeyword()"><i class="icon-message"></i></button>\

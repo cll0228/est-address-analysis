@@ -177,7 +177,7 @@ body a:hover {
   display: -webkit-flex;
   /* NEW - Chrome */
   display: flex;
-  width: 270px;
+  width: 340px;
   border: 1px solid #babdc2;
   border-right: none;
   height: 30px;
@@ -557,6 +557,12 @@ body a:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap; }
+    .search-list__show-name-title {
+    float: left;
+    overflow: hidden;
+    width: 66px;
+    height: 100%;
+    text-align: left; }
   .search-list__price, .search-list__count {
     float: left;
     overflow: hidden;

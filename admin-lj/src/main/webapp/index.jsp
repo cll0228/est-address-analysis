@@ -103,7 +103,7 @@
 						<h1 class="search-list__main-info">
 							<i class="search-list__position-icon"></i>
 							<div class="search-list__main-show-name" title="{{mainInfo.showName}}">
-								{{mainInfo.showName}}
+								<!-- {{mainInfo.showName}} -->上海
 								<p class="search-list__breadcrumb">
 									<span v-for="item in displayBreadCrumb">
 										<a href="javascript:;" @click="clickBreadCrumb(item)" gahref="crumb_{{item.dataId}}" >{{item.showName}}</a>
@@ -120,25 +120,25 @@
 						<h2 class="search-list__list-header">
 							<span v-if="mainInfo.currentType != 'village'">
 								为您找到 <span class="search-list__stat-num">{{searchResults.list.length}}</span>
-
+								<span v-if="searchParams.siteType === 'quyu'">个行政区</span>
 								<!-- 区域找房 -->
-								<span v-if="mainInfo.currentType == 'city' && searchParams.siteType === 'quyu'">个行政区</span>
-								<span v-if="mainInfo.currentType == 'district'">个板块</span>
+								<!-- <span v-if="mainInfo.currentType == 'city' && searchParams.siteType === 'quyu'">个行政区</span>
+								<span v-if="mainInfo.currentType == 'district'">个板块</span> -->
 
 								<!-- 地铁找房 -->
-								<span v-if="mainInfo.currentType == 'city' && searchParams.siteType === 'ditie'">条线路</span>
+								<!-- <span v-if="mainInfo.currentType == 'city' && searchParams.siteType === 'ditie'">条线路</span>
 								<span v-if="mainInfo.currentType == 'line'">个站点</span>
 
 								<span v-if="mainInfo.currentType == 'plate' || mainInfo.currentType == 'stop'">个小区</span>
-								，
+								， -->
 							</span>
-							<span>共 <span class="search-list__stat-num">{{searchResults.count}}</span> 套<span v-if="searchParams.siteType === 'ditie'">近地铁的</span>在售房源</span>
+							<!-- <span>共 <span class="search-list__stat-num">{{searchResults.count}}</span> 套<span v-if="searchParams.siteType === 'ditie'">近地铁的</span>在售房源</span>
 
 							<div class="search-list__sort-container" v-if="mainInfo.currentType == 'village'">
 								<a class="search-list__sort-item" href="javascript:;" gahref="default-order" @click="sortBy()" :class="{'search-list__sort-item--active': !searchParams.s}">默认</a>
 								<a class="search-list__sort-item" href="javascript:;" gahref="s7" @click="sortBy('s7')" :class="{'search-list__sort-item--active': searchParams.s == 's7'}">最新</a>
 								<a class="search-list__sort-item" href="javascript:;" gahref="s1" @click="sortBy('s1')" :class="{'search-list__sort-item--active': searchParams.s == 's1'}">总价<i class="icon-up" gahref="s1"></i></a>
-							</div>
+							</div> -->
 						</h2>
 					</div>
 
@@ -172,14 +172,26 @@
 
 						<!-- 非房源卡片列表 -->
 						<ul v-if="!searchResults.isHouseList">
-							<li class="search-list__list-item" gahref="{{item.dataId}}" v-for="item in searchResults.list"
+							<!-- <li class="search-list__list-item" gahref="{{item.dataId}}" v-for="item in searchResults.list"
 								@click="clickListItem(item)" @mouseover="mouseoverItem(item)" @mouseout="mouseoutItem(item)" v-if="item.saleTotal > 0">
 								<span class="search-list__show-name" title="{{item.showName}}" gahref="{{item.dataId}}">{{item.showName}}</span>
 								<span class="search-list__price" gahref="{{item.dataId}}"><span v-if="searchParams.siteType !== 'ditie'">{{item.saleAvgPrice | formatPrice}}</span></span>
 								<span class="search-list__separator" gahref="{{item.dataId}}"><span v-if="searchParams.siteType !== 'ditie'">|</span></span>
 								<i class="search-list__arrow icon-arrow-right" gahref="{{item.dataId}}"></i>
 								<span class="search-list__count" gahref="{{item.dataId}}">{{item.saleTotal}} 套</span>
+							</li> -->
+							<ul v-if="!searchResults.isHouseList">
+							<li class="search-list__list-item">
+								<span class="search-list__show-name" title="区域">区域</span>
+								<span class="search-list__show-name-title"><span>户数</span></span>
+								<span class="search-list__count">占比</span>
 							</li>
+							<li class="search-list__list-item" gahref="{{item.dataId}}" v-for="item in searchResults.list">
+								<span class="search-list__show-name" title="{{item.showName}}" gahref="{{item.dataId}}">{{item.showName}}</span>
+								<span class="search-list__price" gahref="{{item.dataId}}"><span>{{item.households}}户</span></span>
+								<span class="search-list__count" gahref="{{item.dataId}}">{{item.proportion}}%</span>
+							</li>
+						</ul>
 						</ul>
 					</div>
 

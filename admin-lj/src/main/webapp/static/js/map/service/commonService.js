@@ -9,6 +9,7 @@ window.commonService = {
     'SITE_TYPE_QUYU': 'quyu',
     'ERSHOUFANG': 'ershoufang',
     'ZUFANG': 'zufang',
+    'CHAXUN': 'chaxun',
     getIsDidSearch: function(){
         return sessionStorage['isDidSearch'];
     },

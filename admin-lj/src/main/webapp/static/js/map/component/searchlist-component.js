@@ -78,6 +78,7 @@ Vue.component('searchlist-component', {
 
             params.siteType = this.searchParams.siteType;
             return commonService.ajaxGetBase(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
+//            return commonService.ajaxGetBase('/list.do', null, null, function(res){
                 //面包屑信息
                 this.setBreadCrumb(res.breadCrumb);
 
@@ -89,7 +90,8 @@ Vue.component('searchlist-component', {
                 }
 
                 //加载主信息
-                this.setMainInfo(res.data);
+//                this.setMainInfo(res.data);
+                this.setMainInfo("all");
 
                 //加载列表
                 this.loadChildren();
@@ -117,7 +119,11 @@ Vue.component('searchlist-component', {
 
             var me = this;
             this.isLoadingList = true;
-            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
+//            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
+            commonService.ajaxGetBase2('/list.do', null, null, function(res){
+            	if(this.searchParams.siteType==null) {
+            		this.searchParams.siteType="quyu";
+            	}
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;
             }.bind(this)).fail(function(){ me.isLoadingList = false; })
@@ -140,7 +146,7 @@ Vue.component('searchlist-component', {
             var list = isLoadHouseList ? res.data.list : res.dataList;
 
             return {
-                count: isLoadHouseList ? res.data.total_count : res.dataCount,
+                count: res.dataList.length,
                 list: list,
                 isHouseList: isLoadHouseList
             };

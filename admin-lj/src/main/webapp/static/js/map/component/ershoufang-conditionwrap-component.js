@@ -19,7 +19,7 @@ Vue.component('ershoufang-conditionwrap-component', {
                         <i class="iconfont c-filterbox__selector-icon" :class="{\'icon-arrow-down\': !isMouseover, \'icon-arrow-up\':isMouseover}"></i>\
                     </div>\
                      <ul class="c-filterbox__multilist" v-show="helper.showMoreOptions">\
-                            <div class="c-filterbox__item">小区特征<img src="/static/img/jia.png" class="jiajian" @click="helper.residenceProperty=!helper.residenceProperty"   onclick="updateSrc(this);" onmousemove=""></div>\
+                            <div class="c-filterbox__item">小区特征<img src="./static/img/jia.png" class="jiajian" @click="helper.residenceProperty=!helper.residenceProperty"   onclick="updateSrc(this);" onmousemove=""></div>\
                                     <ul class="" v-show="helper.residenceProperty">\
                                         <div class="c-filterbox__multilist-item" >\
                                             <single-condition-component :datasource="conditionMap[\'t\']" key="t" gahrefval="face-nolimit" class="gio_face c-filterbox--large"></single-condition-component>\
@@ -28,13 +28,13 @@ Vue.component('ershoufang-conditionwrap-component', {
                                             <single-condition-component :datasource="conditionMap[\'c\']" key="c" gahrefval="face-nolimit" class="gio_face c-filterbox--large"></single-condition-component>\
                                         </div>\
                                     </ul>\
-                            <li class="c-filterbox__item">不动产估值<img src="/static/img/jia.png" class="jiajian" @click="helper.showHouseValue=!helper.showHouseValue"  onclick="updateSrc(this);"></li>\
+                            <li class="c-filterbox__item">不动产估值<img src="./static/img/jia.png" class="jiajian" @click="helper.showHouseValue=!helper.showHouseValue"  onclick="updateSrc(this);"></li>\
                                     <ul class="" v-show="helper.showHouseValue">\
                                         <div class="c-filterbox__multilist-item" >\
                                             <single-condition-component :datasource="conditionMap[\'g\']" key="g" gahrefval="face-nolimit" class="gio_face c-filterbox--large"></single-condition-component>\
                                         </div>\
                                     </ul>\
-                            <li class="c-filterbox__item">有线账单<img src="/static/img/jia.png" class="jiajian" @click="helper.showOcnBill=!helper.showOcnBill"  onclick="updateSrc(this);"></li>\
+                            <li class="c-filterbox__item">有线账单<img src="./static/img/jia.png" class="jiajian" @click="helper.showOcnBill=!helper.showOcnBill"  onclick="updateSrc(this);"></li>\
                                     <ul class="" v-show="helper.showOcnBill">\
                                         <div class="c-filterbox__multilist-item" >\
                                             <single-condition-component :datasource="conditionMap[\'o\']" key="o" gahrefval="face-nolimit" class="gio_face c-filterbox--large_m"></single-condition-component>\
@@ -60,8 +60,8 @@ Vue.component('ershoufang-conditionwrap-component', {
 });
 
 function updateSrc(obj) {
-    if ($(obj).attr("src") == "/static/img/jia.png") {
-        $(obj).attr("src", "/static/img/jian.png");
+    if ($(obj).attr("src") == "./static/img/jia.png") {
+        $(obj).attr("src", "./static/img/jian.png");
     } else
-        $(obj).attr("src", "/static/img/jia.png");
+        $(obj).attr("src", "./static/img/jia.png");
 }

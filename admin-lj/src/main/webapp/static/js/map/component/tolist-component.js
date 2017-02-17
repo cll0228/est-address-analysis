@@ -11,9 +11,9 @@ Vue.component('tolist-component', {
             searchParams: commonService.getSearchParams
         }
     },
-    template: '<a target="_blank" href="javascript:;" id="gotoListMode" class="to-list" @click="toList()">\
+   /* template: '<a target="_blank" href="javascript:;" id="gotoListMode" class="to-list" @click="toList()">\
                     <em class="iconfont icon-map-list" style="margin-right: 4px;"></em>列表找房</a>\
-                </a>',
+                </a>',*/
     props: ['houseType'],
     methods: {
         toList: function() {

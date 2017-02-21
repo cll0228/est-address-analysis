@@ -87,7 +87,7 @@ Vue.component('searchlist-component', {
                     this.loadChildren();
             	} else {
             		//加载列表
-                    this.loadChildren2();
+                    this.loadChildren2(params.dataId,params.type);
             	}
             }.bind(this));
         },
@@ -122,13 +122,13 @@ Vue.component('searchlist-component', {
                 this.isLoadingList = false;
             }.bind(this)).fail(function(){ me.isLoadingList = false; })
         },
-        loadChildren2: function(){
-            var dataId = this.mainInfo.dataId,
+        loadChildren2: function(dataId,type){
+            var dataId = dataId,
                 currentType = this.mainInfo.currentType,
                 siteType = this.searchParams.siteType,
                 params = {
                     siteType: siteType,
-                    type: this.mainInfo.type,
+                    type: type,
                     dataId: dataId,
                     showType: 'list',
                     limit_offset: 0,

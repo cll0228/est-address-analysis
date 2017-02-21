@@ -10,7 +10,7 @@ public class DataList {
     private Double longitude;
     private String showName;
     private Integer households;
-    private Integer proportion;
+    private Double proportion;
     private String type;
 	public String getDataId() {
 		return dataId;
@@ -42,10 +42,10 @@ public class DataList {
 	public void setHouseholds(Integer households) {
 		this.households = households;
 	}
-	public Integer getProportion() {
+	public Double getProportion() {
 		return proportion;
 	}
-	public void setProportion(Integer proportion) {
+	public void setProportion(Double proportion) {
 		this.proportion = proportion;
 	}
 	public String getType() {

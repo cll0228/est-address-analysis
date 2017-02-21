@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lezhi.adminlj.mapper.SlideNavMapper;
+import com.lezhi.adminlj.pojo.CountParam;
 import com.lezhi.adminlj.pojo.District;
 import com.lezhi.adminlj.service.SlideNavService;
 
@@ -20,6 +21,16 @@ public class SlideNavServiceImpl implements SlideNavService {
 	@Override
 	public ArrayList<District> districtList() {
 		return slideNavMapper.districtList();
+	}
+
+	@Override
+	public ArrayList<CountParam> districtCount() {
+		return slideNavMapper.districtCount();
+	}
+
+	@Override
+	public ArrayList<CountParam> levelOneCount(Integer districtId) {
+		return slideNavMapper.levelOneCount(districtId);
 	}
 
 }

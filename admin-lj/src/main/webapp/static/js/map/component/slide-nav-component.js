@@ -45,11 +45,11 @@ Vue.component('slide-nav-component', {
                 this.subwayList = sList;*/
                 var result = [];
                 
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 5, name: '标清'});
+/*                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 5, name: '标清'});
                 result.unshift({firstLetter: null, type: 'jidinghe', dataId: 4, name: '高清无EOC'});
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 3, name: '高清+EOC'});
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 2, name: '智能1000'});
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 1, name: '智能2000'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 3, name: '高清+EOC'});*/
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 2, name: '高清机顶盒+EOC'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 1, name: '智能机顶盒'});
                 result.unshift({firstLetter: null, type: 'jidinghe', dataId: 0, name: '全部'});
                 this.subwayList = result;
             }.bind(this));
@@ -113,9 +113,6 @@ Vue.component('slide-nav-component', {
         };
     },
     methods: {
-    	clickSearch: function(id,div){
-            alert(id+":"+div);
-        },
         clickQuyu: function(){
             this.setSiteType(commonService.SITE_TYPE_QUYU);
             this.clickLevel1Action({dataId: headerParameters.cityCode, type: '0'});
@@ -167,25 +164,6 @@ Vue.component('slide-nav-component', {
         	this.clickLevel1Action({dataId: item.dataId, type: div});
 
             this.mouseoutLevel();
-        },
-        clickAll: function(item,div){		//点击所有
-            
-
-        },
-        clickLevel4: function(item){		//点击板块
-            /*this.level3Selected = item;
-            this.level2Selected = this.level2Mouseovered;
-            this.setSiteType(this.mouseoveredSiteType);
-
-            var level2Selected = this.level2Selected;
-            this.clickLevel3Action($.extend({parentDataId: level2Selected.dataId}, item));
-
-            this.mouseoutLevel();
-
-            //设置当前区域和板块为访问过
-            if(this.siteType === commonService.SITE_TYPE_QUYU){
-                this.setVisited([this.level2Selected.district_quanpin, this.level3Selected.bizcircle_quanpin]);
-            }*/
         },
         isMouseoverDitie: function(){
             return this.mouseoveredSiteType === commonService.SITE_TYPE_DITIE;

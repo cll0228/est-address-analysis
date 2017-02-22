@@ -121,6 +121,9 @@
 							<span v-if="mainInfo.currentType != 'village'">
 								为您找到 <span class="search-list__stat-num">{{searchResults.list.length}}</span>
 								<span v-if="searchParams.siteType === 'quyu'">个行政区</span>
+								<span v-if="searchParams.siteType === 'jiedao'">个街道</span>
+								<span v-if="searchParams.siteType === 'juwei'">个居委</span>
+								<span v-if="searchParams.siteType === 'xiaoqu'">个小区</span>
 								<!-- 区域找房 -->
 								<!-- <span v-if="mainInfo.currentType == 'city' && searchParams.siteType === 'quyu'">个行政区</span>
 								<span v-if="mainInfo.currentType == 'district'">个板块</span> -->

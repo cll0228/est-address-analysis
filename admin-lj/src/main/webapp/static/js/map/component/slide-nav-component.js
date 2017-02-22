@@ -159,8 +159,17 @@ Vue.component('slide-nav-component', {
             }
         },
         clickLevel3: function(item,div){		//点击板块
-        	this.setSiteType(this.mouseoveredSiteType);
-
+        	if(div=="1"&&item.name=="全部") {
+        		this.setSiteType(this.mouseoveredSiteType);
+        	} else if((div=="1"&&item.name!="全部")||(div=="2"&&item.name=="全部")) {
+        		this.setSiteType("jiedao");
+        	} else if((div=="2"&&item.name!="全部")||(div=="3"&&item.name=="全部")) {
+        		this.setSiteType("juwei");
+        	} else if(div=="3"&&item.name!="全部") {
+        		this.setSiteType("xiaoqu");
+        	}
+        	
+        	
         	this.clickLevel1Action({dataId: item.dataId, type: div});
 
             this.mouseoutLevel();

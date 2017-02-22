@@ -94,16 +94,14 @@ public class SlideNavController {
     		result.put("status", "1");
     		result.put("dataList", dataList);
     	} else {
-    		if(type.equals("0")) {
+    		if(type.equals("0")||(dataId.equals("sh")&&type.equals("1"))) {
     			countList = slideNavService.districtCount();
-    		} else if(dataId.equals("sh")&&type.equals("1")) {
-    			countList = slideNavService.districtCount();
-    		} else if(dataId.length()==6&&type.equals("1")) {
-    			countList = slideNavService.levelOneCount(Integer.parseInt(dataId));
-    		} else if(dataId.equals("2")) {
-    			
-    		} else if(dataId.equals("3")) {
-    			
+    		} else if((dataId.length()==6&&type.equals("1"))||(dataId.length()==6&&type.equals("2"))) {
+    			countList = slideNavService.levelOneCount(dataId);
+    		} else if((dataId.length()==9&&type.equals("2"))||(dataId.length()==9&&type.equals("3"))) {
+    			countList = slideNavService.levelTwoCount(dataId);
+    		} else if((dataId.length()==12&&type.equals("3"))) {
+    			countList = slideNavService.levelThreeCount(dataId);
     		}
     		for (CountParam countParam : countList) {
     			DataList da = new DataList();

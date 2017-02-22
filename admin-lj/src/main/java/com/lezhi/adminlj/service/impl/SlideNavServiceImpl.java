@@ -29,8 +29,18 @@ public class SlideNavServiceImpl implements SlideNavService {
 	}
 
 	@Override
-	public ArrayList<CountParam> levelOneCount(Integer districtId) {
+	public ArrayList<CountParam> levelOneCount(String districtId) {
 		return slideNavMapper.levelOneCount(districtId);
+	}
+
+	@Override
+	public ArrayList<CountParam> levelTwoCount(String townId) {
+		return slideNavMapper.levelTwoCount(townId);
+	}
+
+	@Override
+	public ArrayList<CountParam> levelThreeCount(String neighborhoodId) {
+		return slideNavMapper.levelThreeCount(neighborhoodId);
 	}
 
 }

@@ -15,5 +15,9 @@ public interface SlideNavMapper {
 	
 	ArrayList<CountParam> districtCount();
 	
-	ArrayList<CountParam> levelOneCount(@Param("districtId")Integer districtId);
+	ArrayList<CountParam> levelOneCount(@Param("districtId")String districtId);
+	
+	ArrayList<CountParam> levelTwoCount(@Param("townId")String townId);
+	
+	ArrayList<CountParam> levelThreeCount(@Param("neighborhoodId")String neighborhoodId);
 }

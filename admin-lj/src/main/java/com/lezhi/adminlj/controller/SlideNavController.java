@@ -110,7 +110,12 @@ public class SlideNavController {
             	da.setHouseholds(countParam.getHouseholds());
             	da.setProportion(countParam.getProportion());
             	da.setShowName(countParam.getLevelName());
-            	da.setDiv(type);
+            	if(dataId.equals("sh")) {
+            		da.setDiv(type);
+            	} else {
+            		Integer d = Integer.parseInt(type)+1;
+            		da.setDiv(d.toString());
+            	}
             	da.setType("init");
             	
             	dataList.add(da);

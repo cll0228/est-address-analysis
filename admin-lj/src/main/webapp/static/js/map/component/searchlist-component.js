@@ -75,8 +75,24 @@ Vue.component('searchlist-component', {
                     params.stopId = searchParams.stopId;
                 }
             }
-
-            params.siteType = this.searchParams.siteType;
+            if(params.type=="4") {
+            	return;
+            }
+            if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {
+            	this.searchParams.siteType = "quyu";
+            	params.siteType = "quyu";
+        	} else if(params.type=="1") {
+        		this.searchParams.siteType = "jiedao";
+        		params.siteType = "jiedao";
+        	} else if(params.type=="2") {
+        		this.searchParams.siteType = "juwei";
+        		params.siteType = "juwei";
+        	} else if(params.type=="3") {
+        		this.searchParams.siteType = "xiaoqu";
+        		params.siteType = "xiaoqu";
+        	}
+            
+//            params.siteType = this.searchParams.siteType;
 //            return commonService.ajaxGetBase2(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
             return commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
             	this.searchResults = this._normalizeSearchResult("All", res);
@@ -152,22 +168,6 @@ Vue.component('searchlist-component', {
         },
         mouseoverItem: function(item){      //添加轮廓
             this.$root.$broadcast('mouseoverListItem', item.dataId, item.currentType);
-        },
-        clickListItem: function(item){		//点击板块
-        	if(item.div=="1"&&item.name=="全部") {
-        		this.setSiteType(this.mouseoveredSiteType);
-        	} else if((item.div=="1"&&item.name!="全部")||(item.div=="2"&&item.name=="全部")) {
-        		this.setSiteType("jiedao");
-        	} else if((item.div=="2"&&item.name!="全部")||(item.div=="3"&&item.name=="全部")) {
-        		this.setSiteType("juwei");
-        	} else if(item.div=="3"&&item.name!="全部") {
-        		this.setSiteType("xiaoqu");
-        	}
-        	
-        	
-        	this.clickListItem({dataId: item.dataId, type: item.div});
-
-            this.mouseoutLevel();
         },
         mouseoutItem: function(item){       //删除轮廓
             this.$root.$broadcast('mouseoutListItem', item.dataId);

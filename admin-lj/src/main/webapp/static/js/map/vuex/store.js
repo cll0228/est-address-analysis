@@ -134,7 +134,7 @@
 
 
         'CLICK_LIST_ITEM': function(state, clickedItem){
-            updateSearchParams(state.searchParams, clickedItem.dataId, clickedItem.currentType);
+            updateSearchParams(state.searchParams, clickedItem.dataId, clickedItem.div);
 
             setLineIdAndStopIdIfDitie(state.searchParams, state.breadCrumb, clickedItem);
         },

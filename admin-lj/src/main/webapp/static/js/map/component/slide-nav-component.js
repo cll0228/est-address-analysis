@@ -115,11 +115,11 @@ Vue.component('slide-nav-component', {
     methods: {
         clickQuyu: function(){
             this.setSiteType(commonService.SITE_TYPE_QUYU);
-            this.clickLevel1Action({dataId: headerParameters.cityCode, type: '0'});
+            this.clickLevel1Action({dataId: headerParameters.cityCode, type: '1'});
         },
         clickDitie: function(){
             this.setSiteType(commonService.SITE_TYPE_DITIE);
-            this.clickLevel1Action({dataId: headerParameters.cityCode, type: '0'});
+            this.clickLevel1Action({dataId: headerParameters.cityCode, type: '1'});
         },
         mouseoverQuyu: function(){
             this.mouseoverLevel(1);

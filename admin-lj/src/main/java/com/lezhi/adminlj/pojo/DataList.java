@@ -12,6 +12,7 @@ public class DataList {
     private Integer households;
     private Double proportion;
     private String type;
+    private String div;
 	public String getDataId() {
 		return dataId;
 	}
@@ -54,11 +55,17 @@ public class DataList {
 	public void setType(String type) {
 		this.type = type;
 	}
+	public String getDiv() {
+		return div;
+	}
+	public void setDiv(String div) {
+		this.div = div;
+	}
 	@Override
 	public String toString() {
 		return "DataList [dataId=" + dataId + ", latitude=" + latitude
 				+ ", longitude=" + longitude + ", showName=" + showName
 				+ ", households=" + households + ", proportion=" + proportion
-				+ ", type=" + type + "]";
+				+ ", type=" + type + ", div=" + div + "]";
 	}
 }

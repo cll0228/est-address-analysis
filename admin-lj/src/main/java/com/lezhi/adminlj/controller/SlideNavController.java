@@ -60,6 +60,7 @@ public class SlideNavController {
         	da.setHouseholds(countParam.getHouseholds());
         	da.setProportion(countParam.getProportion());
         	da.setShowName(countParam.getLevelName());
+        	da.setDiv("1");
         	da.setType("init");
         	
         	dataList.add(da);
@@ -109,6 +110,7 @@ public class SlideNavController {
             	da.setHouseholds(countParam.getHouseholds());
             	da.setProportion(countParam.getProportion());
             	da.setShowName(countParam.getLevelName());
+            	da.setDiv(type);
             	da.setType("init");
             	
             	dataList.add(da);

@@ -153,6 +153,22 @@ Vue.component('searchlist-component', {
         mouseoverItem: function(item){      //添加轮廓
             this.$root.$broadcast('mouseoverListItem', item.dataId, item.currentType);
         },
+        clickListItem: function(item){		//点击板块
+        	if(item.div=="1"&&item.name=="全部") {
+        		this.setSiteType(this.mouseoveredSiteType);
+        	} else if((item.div=="1"&&item.name!="全部")||(item.div=="2"&&item.name=="全部")) {
+        		this.setSiteType("jiedao");
+        	} else if((item.div=="2"&&item.name!="全部")||(item.div=="3"&&item.name=="全部")) {
+        		this.setSiteType("juwei");
+        	} else if(item.div=="3"&&item.name!="全部") {
+        		this.setSiteType("xiaoqu");
+        	}
+        	
+        	
+        	this.clickListItem({dataId: item.dataId, type: item.div});
+
+            this.mouseoutLevel();
+        },
         mouseoutItem: function(item){       //删除轮廓
             this.$root.$broadcast('mouseoutListItem', item.dataId);
         },

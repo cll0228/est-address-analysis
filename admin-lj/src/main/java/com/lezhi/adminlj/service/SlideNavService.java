@@ -2,6 +2,9 @@ package com.lezhi.adminlj.service;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.lezhi.adminlj.pojo.CountParam;
 import com.lezhi.adminlj.pojo.District;
 
 /**
@@ -11,4 +14,11 @@ public interface SlideNavService {
 	
 	ArrayList<District> districtList();
     
+	ArrayList<CountParam> districtCount();
+	
+	ArrayList<CountParam>levelOneCount(String districtId);
+	
+	ArrayList<CountParam> levelTwoCount(String townId);
+	
+	ArrayList<CountParam> levelThreeCount(String neighborhoodId);
 }

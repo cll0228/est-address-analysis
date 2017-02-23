@@ -568,7 +568,7 @@ body a:hover {
     overflow: hidden;
     width: 66px;
     height: 100%;
-    text-align: right; }
+    text-align: left; }
   .search-list__count {
     float: right; }
   .search-list__separator {

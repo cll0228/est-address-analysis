@@ -63,6 +63,21 @@ window.commonService = {
             }
         });
     },
+  //ajax获取列表数据方法
+    ajaxGetBase4: function(url, urlParams, data, callback){
+        var p = this.parseNotEmptyFields(urlParams);
+        return $.ajax({
+            type: "get",
+            url : headerParameters.quxianhost + url + "?dataId="+data.dataId+"&type="+data.type,
+            dataType : "json",
+            success: function(res){
+            	callback(res);
+            },
+            error: function(response,status){
+                console.log(status);
+            }
+        });
+    },
     level2Scale: function(level){	//层级 => 缩放比例(地图比例尺与气泡层级对应关系（默认值）)
         if(level === 'district' || level === 'line'){
             return 12;

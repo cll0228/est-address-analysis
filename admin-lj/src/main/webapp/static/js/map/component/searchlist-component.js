@@ -75,26 +75,36 @@ Vue.component('searchlist-component', {
                     params.stopId = searchParams.stopId;
                 }
             }
-
-            params.siteType = this.searchParams.siteType;
-            return commonService.ajaxGetBase(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
-//            return commonService.ajaxGetBase('/list.do', null, null, function(res){
-                //面包屑信息
-                this.setBreadCrumb(res.breadCrumb);
-
-                //查询不到结果的情况
-                if(!res.data){
-                    this.setMainInfo(null);
-                    this.searchResults = { count: 0, list: [] };
-                    return;
-                }
-
-                //加载主信息
-//                this.setMainInfo(res.data);
-                this.setMainInfo("all");
-
-                //加载列表
-                this.loadChildren();
+            if(params.type=="4") {
+            	return;
+            }
+            if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {
+            	this.searchParams.siteType = "quyu";
+            	params.siteType = "quyu";
+        	} else if(params.type=="1") {
+        		this.searchParams.siteType = "jiedao";
+        		params.siteType = "jiedao";
+        	} else if(params.type=="2") {
+        		this.searchParams.siteType = "juwei";
+        		params.siteType = "juwei";
+        	} else if(params.type=="3") {
+        		this.searchParams.siteType = "xiaoqu";
+        		params.siteType = "xiaoqu";
+        	}
+            
+//            params.siteType = this.searchParams.siteType;
+//            return commonService.ajaxGetBase2(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
+            return commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
+            	this.searchResults = this._normalizeSearchResult("All", res);
+            	this.setMainInfo("all");
+            	this.searchResults = null;
+            	if(res.status=="1") {
+            		//加载列表
+                    this.loadChildren();
+            	} else {
+            		//加载列表
+                    this.loadChildren2(params.dataId,params.type);
+            	}
             }.bind(this));
         },
         loadChildren: function(){
@@ -124,6 +134,34 @@ Vue.component('searchlist-component', {
             	if(this.searchParams.siteType==null) {
             		this.searchParams.siteType="quyu";
             	}
+                this.searchResults = this._normalizeSearchResult(currentType, res);
+                this.isLoadingList = false;
+            }.bind(this)).fail(function(){ me.isLoadingList = false; })
+        },
+        loadChildren2: function(dataId,type){
+            var dataId = dataId,
+                currentType = this.mainInfo.currentType,
+                siteType = this.searchParams.siteType,
+                params = {
+                    siteType: siteType,
+                    type: type,
+                    dataId: dataId,
+                    showType: 'list',
+                    limit_offset: 0,
+                    limit_count: 2000
+                },
+                filters = commonService.getFilters(this.searchParams);
+
+            //加载房源列表
+            if(currentType === 'village'){
+                this._loadHouseList(dataId, currentType);
+                return;
+            }
+
+            var me = this;
+            this.isLoadingList = true;
+//            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
+            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;
             }.bind(this)).fail(function(){ me.isLoadingList = false; })

@@ -42,4 +42,139 @@
 		LEFT JOIN of_neighborhood n ON t.town_id = n.town_id
     </select>
     
+    <select id="districtCount" resultType="com.lezhi.adminlj.pojo.CountParam">
+        SELECT
+			a.*, b.levelHouseCount,
+			a.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					count(a.TYPE_NAME) AS households,
+					a.district_name AS levelName,
+					a.of_district_id AS levelId,
+					a.of_district_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				WHERE
+					district_name IS NOT NULL
+				GROUP BY
+					a.of_district_id
+			) a
+		INNER JOIN (
+			SELECT
+				of_district_id,
+				sum(house_count) AS levelHouseCount
+			FROM
+				ocn_address.of_residence
+			WHERE
+				of_district_id IS NOT NULL
+			GROUP BY
+				of_district_id
+		) b ON a.of_district_id = b.of_district_id
+    </select>
+    
+    <select id="levelOneCount" resultType="com.lezhi.adminlj.pojo.CountParam">
+        SELECT
+			a.*, b.levelHouseCount,
+			a.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					count(a.TYPE_NAME) AS households,
+					a.town_name AS levelName,
+					a.of_town_id AS levelId,
+					a.of_town_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				WHERE
+					district_name IS NOT NULL
+				AND 
+					a.of_district_id = #{districtId}
+				GROUP BY
+					a.of_town_id
+			) a
+		INNER JOIN (
+			SELECT
+				of_town_id,
+				sum(house_count) AS levelHouseCount
+			FROM
+				ocn_address.of_residence
+			WHERE
+				of_town_id IS NOT NULL
+			AND 
+				of_district_id = #{districtId}
+			GROUP BY
+				of_town_id
+		) b ON a.of_town_id = b.of_town_id
+    </select>
+    
+    <select id="levelTwoCount" resultType="com.lezhi.adminlj.pojo.CountParam">
+        SELECT
+			a.*, b.levelHouseCount,
+			a.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					count(a.TYPE_NAME) AS households,
+					a.neighborhood_name AS levelName,
+					a.of_neighborhood_id AS levelId,
+					a.of_neighborhood_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				WHERE
+					district_name IS NOT NULL
+				AND 
+					a.of_town_id = #{townId}
+				GROUP BY
+					a.of_neighborhood_id
+			) a
+		INNER JOIN (
+			SELECT
+				of_neighborhood_id,
+				sum(house_count) AS levelHouseCount
+			FROM
+				ocn_address.of_residence
+			WHERE
+				of_neighborhood_id IS NOT NULL
+			AND 
+				of_town_id = #{townId}
+			GROUP BY
+				of_neighborhood_id
+		) b ON a.of_neighborhood_id = b.of_neighborhood_id
+    </select>
+    
+    <select id="levelThreeCount" resultType="com.lezhi.adminlj.pojo.CountParam">
+        SELECT
+			a.*, b.levelHouseCount,
+			a.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					count(a.TYPE_NAME) AS households,
+					a.residence_name AS levelName,
+					a.residence_id AS levelId,
+					a.residence_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				WHERE
+					district_name IS NOT NULL
+				AND 
+					a.of_neighborhood_id = #{neighborhoodId}
+				GROUP BY
+					a.residence_id
+			) a
+		INNER JOIN (
+			SELECT
+				id,
+				sum(house_count) AS levelHouseCount
+			FROM
+				ocn_address.of_residence
+			WHERE
+				id IS NOT NULL
+			AND 
+				of_neighborhood_id = #{neighborhoodId}
+			GROUP BY
+				id
+		) b ON a.residence_id = b.id
+    </select>
 </mapper>

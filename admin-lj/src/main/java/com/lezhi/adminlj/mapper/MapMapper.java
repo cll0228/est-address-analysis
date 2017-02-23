@@ -1,6 +1,7 @@
 package com.lezhi.adminlj.mapper;
 
 import com.lezhi.adminlj.pojo.Neighborhood;
+import com.lezhi.adminlj.pojo.Residence;
 import com.lezhi.adminlj.pojo.ShDistrict;
 import com.lezhi.adminlj.pojo.Town;
 import org.apache.ibatis.annotations.Param;
@@ -18,4 +19,6 @@ public interface MapMapper {
     List<Town> showtown(@Param("districtId")Integer districtId);
 
     List<Neighborhood> neighborhood(@Param("townId")Integer townId);
+
+    List<Residence> residence(@Param("neighborhoodId")String neighborhoodId);
 }

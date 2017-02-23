@@ -10,10 +10,10 @@
             count(a.STD_ADDR_ID) hdUserNum
         FROM
             ocn_address.of_district d
-        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id GROUP BY a.of_district_id
+        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id WHERE d.is_available = 1 GROUP BY a.of_district_id
     </select>
     <select id="getDistrictBoundryInfo" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.ShDistrict">
-        SELECT latitude centerLatitude,longitude centerLongitude FROM hsrjop.lianjia_boundary_data WHERE district_id  = #{districtId};
+        SELECT latitude centerLatitude,longitude centerLongitude FROM hsrjop.lianjia_boundary_data WHERE new_district_id  = #{districtId};
     </select>
     <select id="showtown" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Town">
         SELECT
@@ -27,7 +27,7 @@
             ocn_address.of_town t
         LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.town_id = a.of_town_id
         <if test="districtId != null">
-            WHERE t.district_id = #{districtId}
+            WHERE t.new_district_id = #{districtId}
         </if>
         GROUP BY
             a.of_town_id;
@@ -50,5 +50,25 @@
         AND t.lng is not null
         GROUP BY
             a.of_neighborhood_id;
+    </select>
+    <select id="residence" parameterType="java.lang.String" resultType="com.lezhi.adminlj.pojo.Residence">
+      SELECT
+            t.id residenceId,
+            t.residence_name residenceName,
+            t.of_neighborhood_id neighborhoodId,
+            t.lon lon,
+            t.lat lat,
+            t.residence_addr residenceAddr,
+            count(a.STD_ADDR_ID) hdUserNum
+        FROM
+            ocn_address.of_residence t
+        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.id = a.residence_id
+        WHERE 1=1
+        <if test="neighborhoodId != null">
+          and  t.of_neighborhood_id = #{neighborhoodId}
+        </if>
+        AND t.lon IS NOT NULL and t.of_neighborhood_id is not null
+        GROUP BY
+            a.residence_id;
     </select>
 </mapper>

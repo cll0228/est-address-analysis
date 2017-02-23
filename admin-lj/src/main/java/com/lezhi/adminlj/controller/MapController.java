@@ -3,6 +3,7 @@ package com.lezhi.adminlj.controller;
 import java.util.List;
 
 import com.lezhi.adminlj.pojo.Neighborhood;
+import com.lezhi.adminlj.pojo.Residence;
 import com.lezhi.adminlj.pojo.Town;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,12 +54,22 @@ public class MapController {
 
     @RequestMapping(value = "neighborhood", method = RequestMethod.GET)
     @ResponseBody
-    public List<Neighborhood> neighborhood(@RequestParam(value = "townId",required = false) Integer townId) {
+        public List<Neighborhood> neighborhood(@RequestParam(value = "townId",required = false) Integer townId) {
         List<Neighborhood> shDistricts = mapService.neighborhood(townId);
         if (null == shDistricts) {
             return null;
         }
         return shDistricts;
+    }
+
+    @RequestMapping(value = "/getResidence", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Residence> residence(@RequestParam(value = "neighborhoodId",required = false) String neighborhoodId) {
+        List<Residence> Residence = mapService.residence(neighborhoodId);
+        if (null == Residence) {
+            return null;
+        }
+        return Residence;
     }
 
 }

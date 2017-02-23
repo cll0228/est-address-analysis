@@ -301,6 +301,7 @@
     var map = null;
     var boundary = null;
     var flag = 1;
+    var com_param = false;
     $(function () {
         map = new BMap.Map("mapWrap", {minZoom: 11, maxZoom: 19, enableMapClick: false});
         var center = new BMap.Point("121.464427", "31.228894");
@@ -321,12 +322,17 @@
                 if(flag == 1)initDistrictInfo();
 
             }
-            if ( scale == 17 ) {
+            if ( scale == 16 ) {
                 map.clearOverlays();
                 if(flag == 1)showneighborhood();
                 map.disableScrollWheelZoom();
                 return;
             }
+            if(scale == 18){
+				map.clearOverlays();
+				if(flag == 1)showResidenceInfo();
+				return;
+			}
         });
         //加載行政區域
         initDistrictInfo();
@@ -337,38 +343,6 @@
         });
     });
 
-    function showResidenceInfo(data) {
-        $.each(data, function (i, item) {
-            var bus_lat = item.baiduLat;
-            var bus_lon = item.baiduLon;
-            var bus_point_i = new BMap.Point(bus_lon, bus_lat);
-            var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
-            var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
-
-            //点击事件，显示文本内容
-            var opts_i = {
-                position: bus_point_i,    // 指定文本标注所在的地理位置
-                title: item.poiName,
-                offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
-            }
-            var infoWindow_i = new BMap.InfoWindow("地址：" + item.poiAddress, opts_i);  // 创建信息窗口对象
-            //标签
-            var label_i = new BMap.Label(i+1,{offset:new BMap.Size(7,3)});
-            label_i.setStyle({
-                color: "white",
-                fontSize: "10px",
-                backgroundColor: "0.05",
-                border: "0",
-                fontFamily: "微软雅黑"
-            });
-            marker2_i.setLabel(label_i);
-            //圖標點擊事件
-            marker2_i.addEventListener("click", function () {
-                map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
-            });
-            map.addOverlay(marker2_i);
-        })
-    }
 
     function initDistrictInfo() {
         //请求区域中心点坐标
@@ -388,6 +362,12 @@
                     overlayTop.css("background", "transparent").addClass('map-overlay');
                 })
             },
+			beforeSend:function () {
+				com_param = false;
+			},
+			complete:function () {
+				com_param = true;
+			}
         });
     }
 
@@ -422,6 +402,12 @@
 
                     });
                 })
+            },
+            beforeSend:function () {
+                com_param = false;
+            },
+            complete:function () {
+                com_param = true;
             }
         });
     }
@@ -440,13 +426,13 @@
             success: function (data) {
                 if(null != lon && lat !=null ){
                     var ceterPoint = new BMap.Point(lon, lat);
-                    map.centerAndZoom(ceterPoint, 17);
+                    map.centerAndZoom(ceterPoint, 16);
                 }
                 $.each(data, function (i, item) {
                     var point_dis_i = new BMap.Point(item.lng, item.lat);
 
                     //添加园圈
-                    var html = '<div id="' + item.neighborhoodId + '" onclick="getResidence();" class="plate-overlay"><p>' + item.neighborhoodName + '</p><p class="map-overlay__total">' + item.hdUserNum + '户</p></div>';
+                    var html = '<div id="' + item.neighborhoodId + '" onclick="getResidence('+item.neighborhoodId+','+item.lng+','+item.lat+');" class="plate-overlay"><p>' + item.neighborhoodName + '</p><p class="map-overlay__total">' + item.hdUserNum + '户</p></div>';
                     var anchor = new BMap.Size(-30, -25);
                     var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
                     map.addOverlay(richMarker_i);
@@ -457,8 +443,68 @@
 
                     });
                 })
+            },
+            beforeSend:function () {
+                com_param = false;
+            },
+            complete:function () {
+                com_param = true;
             }
         });
+    }
+
+    function getResidence(neighborhoodId,lon,lat) {
+        flag = 0;
+        showResidenceInfo(neighborhoodId,lon,lat);
+    }
+
+    function showResidenceInfo(neighborhoodId,lon,lat) {
+		map.clearOverlays();
+        $.ajax({
+            type: "get",
+            url: "${ctx}/getResidence.do",
+            data:{"neighborhoodId":neighborhoodId},
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    var bus_lat = item.lat;
+                    var bus_lon = item.lon;
+                    var bus_point_i = new BMap.Point(bus_lon, bus_lat);
+					map.centerAndZoom(bus_point_i, 18);
+                    var myIcon_i = new BMap.Icon("${ctx}/static/img/point.png", new BMap.Size(30, 70));
+                    var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
+
+                    //点击事件，显示文本内容
+                    var opts_i = {
+                        position: bus_point_i,    // 指定文本标注所在的地理位置
+                        title: item.residenceName,
+                        offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
+                    }
+                    var infoWindow_i = new BMap.InfoWindow("地址：" + item.residenceAddr+'</br>'+"高清机顶盒用户数："+item.hdUserNum, opts_i);  // 创建信息窗口对象
+                    //标签
+                    var label_i = new BMap.Label(i+1,{offset:new BMap.Size(7,3)});
+                    label_i.setStyle({
+                        color: "white",
+                        fontSize: "10px",
+                        backgroundColor: "0.05",
+                        border: "0",
+                        fontFamily: "微软雅黑"
+                    });
+                    marker2_i.setLabel(label_i);
+                    //圖標點擊事件
+                    marker2_i.addEventListener("mouseover", function () {
+                        map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
+                    });
+                    map.addOverlay(marker2_i);
+                })
+            },
+            beforeSend:function () {
+                com_param = false;
+            },
+            complete:function () {
+                com_param = true;
+            }
+        });
+
     }
 
     function clearOutLine() {
@@ -496,39 +542,51 @@
     }
 
     function addMapZoomSize() {
-        flag = 1;
-        var a_zoom = map.getZoom();
-        if (a_zoom == 12) {
-            map.setZoom(14);
-            map.clearOverlays();
-            return;
+        if(com_param){
+            flag = 1;
+            var a_zoom = map.getZoom();
+            if (a_zoom == 12) {
+                map.setZoom(14);
+                map.clearOverlays();
+                return;
+            }
+            if (a_zoom == 14) {
+                map.setZoom(16);
+                map.clearOverlays();
+                return;
+            }
+            if(a_zoom == 16){
+				map.setZoom(18);
+				map.clearOverlays();
+                return;
+            }
+            if(a_zoom == 18){
+            	return;
+			}
         }
-        if (a_zoom == 14) {
-            map.setZoom(17);
-            map.clearOverlays();
-            return;
-        }
-        if(a_zoom == 16){
-            return;
-        }
-
     }
 
     function reduceMapZoomSize() {
-        flag = 1;
-        map.clearOverlays();
-        var a_zoom = map.getZoom();
-        if(a_zoom == 17){
-            map.setZoom(14);
-            return;
-        }
-        if (a_zoom == 14) {
-            map.setZoom(12);
-            return;
+        if(com_param){
+            flag = 1;
+            var a_zoom = map.getZoom();
+            if(a_zoom == 16){
+                map.setZoom(14);
+                return;
+            }
+            if (a_zoom == 14) {
+                map.setZoom(12);
+                return;
 
-        }
-        if(a_zoom == 12){
-            return;
+            }
+			if (a_zoom == 18) {
+				map.setZoom(16);
+				return;
+
+			}
+            if(a_zoom == 12){
+                return;
+            }
         }
     }
 </script>

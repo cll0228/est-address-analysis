@@ -2,6 +2,7 @@ package com.lezhi.adminlj.service.impl;
 
 import com.lezhi.adminlj.mapper.MapMapper;
 import com.lezhi.adminlj.pojo.Neighborhood;
+import com.lezhi.adminlj.pojo.Residence;
 import com.lezhi.adminlj.pojo.ShDistrict;
 import com.lezhi.adminlj.pojo.Town;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,9 @@ public class MapService {
 
     public List<Neighborhood> neighborhood(Integer townId) {
         return mapMapper.neighborhood(townId);
+    }
+
+    public List<Residence> residence(String neighborhoodId) {
+        return mapMapper.residence(neighborhoodId);
     }
 }

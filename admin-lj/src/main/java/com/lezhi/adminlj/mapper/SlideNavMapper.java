@@ -2,6 +2,7 @@ package com.lezhi.adminlj.mapper;
 
 import java.util.ArrayList;
 
+import com.lezhi.adminlj.pojo.ParamInfo;
 import org.apache.ibatis.annotations.Param;
 
 import com.lezhi.adminlj.pojo.CountParam;
@@ -20,4 +21,6 @@ public interface SlideNavMapper {
 	ArrayList<CountParam> levelTwoCount(@Param("townId")String townId);
 	
 	ArrayList<CountParam> levelThreeCount(@Param("neighborhoodId")String neighborhoodId);
+
+	ArrayList<CountParam> searchKeyword(@Param("paramInfo")ParamInfo paramInfo);
 }

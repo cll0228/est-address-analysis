@@ -92,7 +92,7 @@ Vue.component('searchlist-component', {
         		params.siteType = "xiaoqu";
         	}
             
-//            params.siteType = this.searchParams.siteType;
+            params.siteType = this.searchParams.siteType;
 //            return commonService.ajaxGetBase2(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
             return commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
             	this.searchResults = this._normalizeSearchResult("All", res);
@@ -131,6 +131,7 @@ Vue.component('searchlist-component', {
             this.isLoadingList = true;
 //            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
             commonService.ajaxGetBase2('/list.do', null, null, function(res){
+                //alert("aaa")
             	if(this.searchParams.siteType==null) {
             		this.searchParams.siteType="quyu";
             	}
@@ -142,10 +143,16 @@ Vue.component('searchlist-component', {
             var dataId = dataId,
                 currentType = this.mainInfo.currentType,
                 siteType = this.searchParams.siteType,
+                keyId = this.searchParams.keyId;
+                keyType = this.searchParams.keyType;
+                keyword = this.searchParams.query,
                 params = {
                     siteType: siteType,
                     type: type,
                     dataId: dataId,
+                    keyword:keyword,
+                    keyId:keyId,
+                    keyType:keyType,
                     showType: 'list',
                     limit_offset: 0,
                     limit_count: 2000
@@ -161,7 +168,9 @@ Vue.component('searchlist-component', {
             var me = this;
             this.isLoadingList = true;
 //            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
-            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
+//            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
+            commonService.ajaxGetBase4('/searchKeyword.do', filters, params, function(res){
+                //alert("bbb")
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;
             }.bind(this)).fail(function(){ me.isLoadingList = false; })

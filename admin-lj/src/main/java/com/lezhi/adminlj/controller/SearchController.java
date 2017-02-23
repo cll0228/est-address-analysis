@@ -1,7 +1,6 @@
 package com.lezhi.adminlj.controller;
 
-import com.lezhi.adminlj.pojo.District;
-import com.lezhi.adminlj.pojo.LuceneSearchDto;
+import com.lezhi.adminlj.pojo.*;
 import com.lezhi.adminlj.service.SlideNavService;
 import com.lezhi.adminlj.util.PropertyUtil;
 import org.apache.lucene.analysis.Analyzer;
@@ -41,6 +40,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/")
 public class SearchController {
+	@Autowired
+	private SlideNavService slideNavService;
+
 	String luceneIndexPathProp = "Lucene.Index.FilePath";
 	String houseAddressIndexDirPath;
 	Analyzer analyzer = new IKAnalyzer();
@@ -101,5 +103,84 @@ public class SearchController {
 			}
 		}
 		return null;
+	}
+
+
+	@RequestMapping(value = "searchKeyword", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> searchKeyword(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		Map<String, Object> result = new HashMap<>();
+		ArrayList<DataList> dataList = new ArrayList<DataList>();
+		String dataId = request.getParameter("dataId");
+		String type = request.getParameter("type");
+		String keyword = "null".equals(request.getParameter("keyword"))?null:request.getParameter("keyword");
+		String keyId = "null".equals(request.getParameter("keyId"))?null:request.getParameter("keyId");
+		String keyType = "null".equals(request.getParameter("keyType"))?null:request.getParameter("keyType");
+		String a = request.getParameter("a");// 用户规模
+		String l = request.getParameter("l");// 小区规模
+		String p = request.getParameter("p");// 小区均价
+		String t = request.getParameter("t");// 小区特征/小区分类
+		String c = request.getParameter("c");// 小区特征/小区用户占比
+/*		String g = request.getParameter("g");// 不动产估值
+		String o = request.getParameter("o");// 有限账单/账单活跃度
+		String f = request.getParameter("f");// 有限账单/是否订阅增值节目*/
+		ParamInfo paramInfo = new ParamInfo();
+		paramInfo.setKeyword(keyword);
+		paramInfo.setKeyId(keyId);
+		paramInfo.setKeyType(keyType);
+		paramInfo.setA(a);
+		paramInfo.setL(l);
+		paramInfo.setP(p);
+		paramInfo.setT(t);
+		paramInfo.setC(c);
+		paramInfo.setDataId(dataId);
+		paramInfo.setType(type);
+
+		ArrayList<CountParam> countList = new ArrayList<CountParam>();
+		countList = slideNavService.searchKeyword(paramInfo);
+
+		if(type.equals("city")) {
+			result.put("status", "1");
+			result.put("dataList", dataList);
+		} else {
+/*			if(type.equals("0")) {
+				countList = slideNavService.districtCount();
+			} else if(dataId.equals("sh")&&type.equals("1")) {
+				countList = slideNavService.districtCount();
+			} else if(dataId.length()==6&&type.equals("1")) {
+				countList = slideNavService.levelOneCount(dataId);
+			} else if(dataId.equals("2")) {
+
+			} else if(dataId.equals("3")) {
+
+			}*/
+			for (CountParam countParam : countList) {
+				DataList da = new DataList();
+				da.setDataId(countParam.getLevelId().toString());
+				da.setHouseholds(countParam.getHouseholds());
+				da.setProportion(countParam.getProportion());
+				da.setShowName(countParam.getLevelName());
+				da.setType("init");
+
+				dataList.add(da);
+			}
+    		/*String qupin[] = new String[]{"pudongxinqu","minhang","baoshan","xuhui","putuo","yangpu","changning","songjiang","jiading","huangpu","jingan","zhabei","hongkou","qingpu","fengxian","jinshan","chongming"};
+        	String qu[] = new String[]{"浦东新区1","闵行区1","宝山区1","徐汇区","普陀区","杨浦区","长宁区","松江区","嘉定区","黄浦区","静安区","闸北区","虹口区","青浦区","奉贤区","金山区","崇明区"};
+        	for (int i = 0; i < qupin.length; i++) {
+        		DataList da = new DataList();
+            	da.setDataId(qupin[i]);
+            	da.setHouseholds((int)((Math.random()*9+1)*100000));
+            	da.setProportion(1+(int)(Math.random()*90));
+            	da.setLatitude(31.2080020904541);
+            	da.setLongitude(121.60652923583984);
+            	da.setShowName(qu[i]);
+            	da.setType("init");
+
+            	dataList.add(da);
+    		}*/
+			result.put("status", "0");
+			result.put("dataList", dataList);
+		}
+		return result;
 	}
 }

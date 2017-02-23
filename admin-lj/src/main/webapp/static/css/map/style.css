@@ -16,7 +16,16 @@ body a:hover {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
   content: "혿"; }
-
+.c-filterbox__item-checkbox {
+    display: inline-block;
+    padding: 6px;
+    margin-right: 2px;
+    vertical-align: -3px;
+    background: #fff;
+    border: 1px solid #C5C5C5;
+    border-radius: 2px;
+    zoom:140%;
+}
 .icon-map-list:before {
   font-family: iconfont !important;
   font-size: 16px;

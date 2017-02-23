@@ -45,12 +45,11 @@ Vue.component('slide-nav-component', {
                 this.subwayList = sList;*/
                 var result = [];
                 
-/*                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 5, name: '标清'});
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 4, name: '高清无EOC'});
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 3, name: '高清+EOC'});*/
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 2, name: '高清机顶盒+EOC'});
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 1, name: '智能机顶盒'});
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 0, name: '全部'});
+/*                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 5, name: '标清'});*/
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 4, name: '高清'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 3, name: '高清+EOC'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 2, name: '智能1000'});
+                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 1, name: '智能2000'});
                 this.subwayList = result;
             }.bind(this));
         }.bind(this), 1000);
@@ -63,11 +62,10 @@ Vue.component('slide-nav-component', {
         		 @mouseover="mouseoverDitie()" @mouseout="mouseoutLevel()" @click="clickDitie()" :class="{\'side-bar__item--active\': isActiveDitie()}">机顶盒\
 		</div></a>\
     	<!-- 区县 -->\
-        <div class="side-bar__level1" :class="{\'gio_district\': isActiveQuyu(), \'gio_line\': isActiveDitie()}" id="districtWrap" \
+        <div class="side-bar__level1" id="districtWrap" \
             :style="{display: showLevel2 && \'block\' || \'none\'}" @mouseover="mouseoverLevel(2)" @mouseout="mouseoutLevel()">\
-                <a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel3(d,1)" @mouseover="mouseoverLevel2(d)"\
-                    :class="{\'side-bar__level1-item--selected\': level2Selected && level2Selected.dataId == d.dataId, \'side-bar__level1-item--active\': level2Mouseovered && level2Mouseovered.dataId == d.dataId}"\
-                    gahref="{{d.isAll ? \'district-nolimit\' : d.dataId}}">{{d.name}}</a>\
+    	<a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel3(d,1)" @mouseover="mouseoverLevel2(d)"\
+                    gahref="{d.dataId}"><label><input type="checkbox" value="{{d.name}}" name="ckb" class="c-filterbox__item-checkbox" :style="{display: isActiveDitie() ? \'inline\' : \'none\'}">{{d.name}}</label></a>\
         </div>\
         <div class="side-bar__level2" :class="{\'gio_plate\': isActiveQuyu(), \'gio_stop\': isActiveDitie()}" id="plateWrap" \
                 v-show="showLevel3 && level2Mouseovered.children.length > 0" @mouseover="mouseoverLevel(3)" @mouseout="mouseoutLevel()">\
@@ -138,6 +136,14 @@ Vue.component('slide-nav-component', {
         mouseoutLevel: function(){
             this.showLevel1 = this.showLevel2 = this.showLevel3 = this.showLevel4 = false;
         },
+         stopDefault :function( e ) {   
+            if ( e && e.preventDefault )   
+               e.preventDefault();   
+           else   
+               window.event.returnValue = false;   
+                 
+           return false;   
+       }   ,
         mouseoverLevel2: function(item){
             this.level2Mouseovered = item;
             console.log(this.level2Mouseovered);
@@ -171,8 +177,16 @@ Vue.component('slide-nav-component', {
         	
         	
         	this.clickLevel1Action({dataId: item.dataId, type: div});
-
-            this.mouseoutLevel();
+        	if(this.isActiveQuyu()) {
+        		this.mouseoutLevel();
+        	} else {
+        		var str=""; 
+        		$("[name='ckb']").filter(":checked").each(function(){ 
+        			str+=$(this).val()+","; 
+        			}) 
+        			alert(str);
+        	}
+            
         },
         isMouseoverDitie: function(){
             return this.mouseoveredSiteType === commonService.SITE_TYPE_DITIE;

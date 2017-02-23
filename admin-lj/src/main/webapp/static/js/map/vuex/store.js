@@ -59,6 +59,8 @@
             siteType: commonService.SITE_TYPE_QUYU,
             query: null,
             dataId: null,
+            keyType:null,
+            keyId:null,
             type: null,
             lineId: null,       //只在地铁找房中存在
             stopId: null,       //只在地铁找房中存在
@@ -85,6 +87,8 @@
                 state.searchParams.dataId = null;
                 state.searchParams.type = null;
                 state.searchParams.query = params.keyword;
+                state.searchParams.keyType = params.keyType;
+                state.searchParams.keyId = params.keyId;
             }else{
                 //清空搜索条件
                 $.extend(state.searchParams, commonService.getInitialState());

@@ -2,6 +2,7 @@ package com.lezhi.adminlj.service;
 
 import java.util.ArrayList;
 
+import com.lezhi.adminlj.pojo.ParamInfo;
 import org.apache.ibatis.annotations.Param;
 
 import com.lezhi.adminlj.pojo.CountParam;
@@ -21,4 +22,6 @@ public interface SlideNavService {
 	ArrayList<CountParam> levelTwoCount(String townId);
 	
 	ArrayList<CountParam> levelThreeCount(String neighborhoodId);
+
+	ArrayList<CountParam> searchKeyword(ParamInfo paramInfo);
 }

@@ -76,11 +76,16 @@ Vue.component('suggestion-component', {
 
             var params = {};
             if(selectedItem){       //从下拉中选择
-                params.keyword = selectedItem.showName;
+                //params.keyword = selectedItem.showName;
+                params.keyword = selectedItem.name;
                 params.siteType = (selectedItem.type === 'line' || selectedItem.type === 'stop') ? commonService.SITE_TYPE_DITIE : commonService.SITE_TYPE_QUYU;
+                params.keyType = selectedItem.type;
+                params.keyId = selectedItem.id;
             }else{                  //直接按回车或点击搜索按钮
                 params.keyword = this.keyword;
                 params.siteType = commonService.SITE_TYPE_QUYU;
+                params.keyType = null;
+                params.keyId = null;
             }
 
             var t = setTimeout(function(){

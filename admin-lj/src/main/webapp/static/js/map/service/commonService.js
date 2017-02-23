@@ -68,7 +68,7 @@ window.commonService = {
         var p = this.parseNotEmptyFields(urlParams);
         return $.ajax({
             type: "get",
-            url : headerParameters.quxianhost + url + "?dataId="+data.dataId+"&type="+data.type,
+            url : headerParameters.quxianhost + url + "?dataId="+data.dataId+"&type="+data.type+"&keyId="+data.keyId+"&keyType="+data.keyType+"&keyword="+data.keyword + ($.isEmptyObject(p) ? '' : '&' + $.param(p)),
             dataType : "json",
             success: function(res){
             	callback(res);
@@ -149,6 +149,8 @@ window.commonService = {
             dataId: headerParameters.cityCode,
             type: 'city',
 
+            keyType:null,
+            keyId:null,
             lineId: null,
             stopId: null,
 
@@ -217,7 +219,7 @@ window.commonService = {
         }
         return '/api/v4/online/house/rent/getBaseInfo';
     },
-    getListMapResultUrl: function(houseType){
+        getListMapResultUrl: function(houseType){
         if(houseType === this.ERSHOUFANG){
             return '/api/v4/online/house/ershoufang/listMapResult';
         }

@@ -2,6 +2,7 @@ package com.lezhi.adminlj.service.impl;
 
 import java.util.ArrayList;
 
+import com.lezhi.adminlj.pojo.ParamInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,10 @@ public class SlideNavServiceImpl implements SlideNavService {
 	@Override
 	public ArrayList<CountParam> levelThreeCount(String neighborhoodId) {
 		return slideNavMapper.levelThreeCount(neighborhoodId);
+	}
+	@Override
+	public ArrayList<CountParam> searchKeyword(ParamInfo paramInfo){
+		return slideNavMapper.searchKeyword(paramInfo);
 	}
 
 }

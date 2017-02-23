@@ -413,7 +413,7 @@ $(function(){
 			resultNum = 0,
 			selectResult = $(this).attr("key"),
 			selectIndex = $(this).closest("li").index() + 1;
-		ubtApi.trackSearch(searchType, searchKeyword, resultNum, selectResult, selectIndex);
+		//ubtApi.trackSearch(searchType, searchKeyword, resultNum, selectResult, selectIndex);
     });
 
     $('#oldclose').click(function(){

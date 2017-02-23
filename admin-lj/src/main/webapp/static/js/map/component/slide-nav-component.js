@@ -175,17 +175,26 @@ Vue.component('slide-nav-component', {
         		this.setSiteType("xiaoqu");
         	}
         	
+        	var str=""; 
         	
-        	this.clickLevel1Action({dataId: item.dataId, type: div});
         	if(this.isActiveQuyu()) {
         		this.mouseoutLevel();
-        	} else {
+        	} else if(this.isActiveDitie()){
         		var str=""; 
-        		$("[name='ckb']").filter(":checked").each(function(){ 
-        			str+=$(this).val()+","; 
+        		$("[name='ckb']").filter(":checked").each(function(){
+        			if(str=="") {
+        				str = "\""+$(this).val()+"\"";
+        			} else {
+        				str+= ",\""+$(this).val()+"\""
+        			}
         			}) 
-        			alert(str);
         	}
+        	if(str=="") {
+        		this.clickLevel1Action({dataId: item.dataId, type: div});
+        	} else {
+        		this.clickLevel1Action({dataId: item.dataId, type: str});
+        	}
+        	
             
         },
         isMouseoverDitie: function(){

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lezhi.adminlj.mapper.MapMapper">
+    <select id="getDistrictCenterTude" resultType="com.lezhi.adminlj.pojo.ShDistrict">
+      SELECT
+            d.district_id districtId,
+            d.district_name district,
+            d.center_lng centerLongitude,
+            d.center_lat centerLatitude,
+            count(a.STD_ADDR_ID) hdUserNum
+        FROM
+            ocn_address.of_district d
+        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id GROUP BY a.of_district_id
+    </select>
+    <select id="getDistrictBoundryInfo" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.ShDistrict">
+        SELECT latitude centerLatitude,longitude centerLongitude FROM hsrjop.lianjia_boundary_data WHERE district_id  = #{districtId};
+    </select>
+    <select id="showtown" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Town">
+        SELECT
+            t.town_id townId,
+            t.town_name townName,
+            t.district_id districtId,
+            t.latitude latitude,
+            t.longitude longitude,
+            count(a.STD_ADDR_ID) hdUserNum
+        FROM
+            ocn_address.of_town t
+        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.town_id = a.of_town_id
+        <if test="districtId != null">
+            WHERE t.district_id = #{districtId}
+        </if>
+        GROUP BY
+            a.of_town_id;
+    </select>
+    <select id="neighborhood" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Neighborhood">
+        SELECT
+            t.neighborhood_id neighborhoodId,
+            t.neighborhood_name neighborhoodName,
+            t.town_id town_id,
+            t.lng lng,
+            t.lat lat,
+            count(a.STD_ADDR_ID) hdUserNum
+        FROM
+            ocn_address.of_neighborhood t
+        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.neighborhood_id = a.of_neighborhood_id
+        WHERE 1= 1
+        <if test="townId != null">
+            AND  t.town_id = #{townId}
+        </if>
+        AND t.lng is not null
+        GROUP BY
+            a.of_neighborhood_id;
+    </select>
+</mapper>

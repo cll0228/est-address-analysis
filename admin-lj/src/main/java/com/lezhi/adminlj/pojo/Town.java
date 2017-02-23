@@ -5,12 +5,12 @@ import java.util.ArrayList;
 /**
  * Created by Wangyh on 2017/2/14.
  */
-public class Town {
+public class Town extends Num{
     private Integer townId;
     private String townName;
-    private Integer longitude;
-    private Double latitude;
-    private ArrayList<Neighborhood> neighborhoodList;
+    private String longitude;
+    private String latitude;
+	private ArrayList<Neighborhood> neighborhoodList;
 	public Integer getTownId() {
 		return townId;
 	}
@@ -23,18 +23,23 @@ public class Town {
 	public void setTownName(String townName) {
 		this.townName = townName;
 	}
-	public Integer getLongitude() {
+
+	public String getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(Integer longitude) {
+
+	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
-	public Double getLatitude() {
+
+	public String getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(Double latitude) {
+
+	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
+
 	public ArrayList<Neighborhood> getNeighborhoodList() {
 		return neighborhoodList;
 	}

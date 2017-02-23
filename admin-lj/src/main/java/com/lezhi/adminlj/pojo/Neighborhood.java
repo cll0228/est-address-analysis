@@ -3,7 +3,7 @@ package com.lezhi.adminlj.pojo;
 /**
  * Created by Wangyh on 2017/2/14.
  */
-public class Neighborhood {
+public class Neighborhood extends Num{
     private Double neighborhoodId;
     private String neighborhoodName;
     private String neighborhoodAddr;

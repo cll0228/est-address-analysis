@@ -11,6 +11,7 @@
 		<meta http-equiv="Cache-Control" content="no-transform" />
 		<meta http-equiv="Cache-Control" content="no-siteapp" />
 		<meta name="format-detection" content="telephone=no" />
+        <meta http-equiv="pragma" content="no-cache"/>
 		<link href="${ctx}/public/img/favicon.ico" type="image/x-icon" rel=icon>
 		<link href="${ctx}/public/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
 		<title>运营平台</title>
@@ -26,7 +27,7 @@
 				publichost : '',
 				statichost : 'http://localhost',
 				apihost : 'http://soa.dooioo.com',
-				quxianhost : 'http://localhost:8080/admin-lj',
+				quxianhost : 'http://localhost:9568/',
 				cityCode : 'sh',
 				cityName: '上海',
 				cityCoordinate : {//城市中心坐标
@@ -320,7 +321,7 @@
                 if(flag == 1)initDistrictInfo();
 
             }
-            if ( scale == 16 ) {
+            if ( scale == 17 ) {
                 map.clearOverlays();
                 if(flag == 1)showneighborhood();
                 map.disableScrollWheelZoom();
@@ -336,7 +337,38 @@
         });
     });
 
+    function showResidenceInfo(data) {
+        $.each(data, function (i, item) {
+            var bus_lat = item.baiduLat;
+            var bus_lon = item.baiduLon;
+            var bus_point_i = new BMap.Point(bus_lon, bus_lat);
+            var myIcon_i = new BMap.Icon("${ctx}/static/img/aroundPos.png", new BMap.Size(30, 70));
+            var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
 
+            //点击事件，显示文本内容
+            var opts_i = {
+                position: bus_point_i,    // 指定文本标注所在的地理位置
+                title: item.poiName,
+                offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
+            }
+            var infoWindow_i = new BMap.InfoWindow("地址：" + item.poiAddress, opts_i);  // 创建信息窗口对象
+            //标签
+            var label_i = new BMap.Label(i+1,{offset:new BMap.Size(7,3)});
+            label_i.setStyle({
+                color: "white",
+                fontSize: "10px",
+                backgroundColor: "0.05",
+                border: "0",
+                fontFamily: "微软雅黑"
+            });
+            marker2_i.setLabel(label_i);
+            //圖標點擊事件
+            marker2_i.addEventListener("click", function () {
+                map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
+            });
+            map.addOverlay(marker2_i);
+        })
+    }
 
     function initDistrictInfo() {
         //请求区域中心点坐标
@@ -408,13 +440,13 @@
             success: function (data) {
                 if(null != lon && lat !=null ){
                     var ceterPoint = new BMap.Point(lon, lat);
-                    map.centerAndZoom(ceterPoint, 16);
+                    map.centerAndZoom(ceterPoint, 17);
                 }
                 $.each(data, function (i, item) {
                     var point_dis_i = new BMap.Point(item.lng, item.lat);
 
                     //添加园圈
-                    var html = '<div id="' + item.neighborhoodId + '" class="plate-overlay"><p>' + item.neighborhoodName + '</p><p class="map-overlay__total">' + item.hdUserNum + '户</p></div>';
+                    var html = '<div id="' + item.neighborhoodId + '" onclick="getResidence();" class="plate-overlay"><p>' + item.neighborhoodName + '</p><p class="map-overlay__total">' + item.hdUserNum + '户</p></div>';
                     var anchor = new BMap.Size(-30, -25);
                     var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
                     map.addOverlay(richMarker_i);
@@ -428,7 +460,6 @@
             }
         });
     }
-
 
     function clearOutLine() {
         map.getOverlays().forEach(function(overlay){
@@ -464,7 +495,6 @@
         return polygon;
     }
 
-
     function addMapZoomSize() {
         flag = 1;
         var a_zoom = map.getZoom();
@@ -474,7 +504,7 @@
             return;
         }
         if (a_zoom == 14) {
-            map.setZoom(16);
+            map.setZoom(17);
             map.clearOverlays();
             return;
         }
@@ -483,11 +513,12 @@
         }
 
     }
+
     function reduceMapZoomSize() {
         flag = 1;
         map.clearOverlays();
         var a_zoom = map.getZoom();
-        if(a_zoom == 16){
+        if(a_zoom == 17){
             map.setZoom(14);
             return;
         }

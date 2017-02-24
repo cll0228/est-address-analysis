@@ -255,7 +255,7 @@ window.commonService = {
                 result.push(normalizedPlate);
         }.bind(this));
 
-        result.unshift({firstLetter: null, type: 'district', dataId: currentDistrict.districtId, name: '全部'});
+//        result.unshift({firstLetter: null, type: 'district', dataId: currentDistrict.districtId, name: '全部'});
         return result.concat([]);
     },
     normalizeNeighborhoodList: function(currentDistrict){  //重新生成标准化格式的板块列表
@@ -282,7 +282,7 @@ window.commonService = {
                 result.push(normalizedNeighborhood);
         }.bind(this));
 
-        result.unshift({firstLetter: null, type: 'neighborhoodList', dataId: currentDistrict.townId, name: '全部'});
+//        result.unshift({firstLetter: null, type: 'neighborhoodList', dataId: currentDistrict.townId, name: '全部'});
         return result.concat([]);
     },
     normalizeItem: function (item, tp){

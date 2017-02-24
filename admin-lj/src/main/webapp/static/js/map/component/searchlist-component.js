@@ -78,7 +78,19 @@ Vue.component('searchlist-component', {
             if(params.type=="4") {
             	return;
             }
-            
+            if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {
+            	this.searchParams.siteType = "quyu";
+            	params.siteType = "quyu";
+        	} else if(params.type=="1"&&(params.dataId+"").length==6) {
+        		this.searchParams.siteType = "jiedao";
+        		params.siteType = "jiedao";
+        	} else if(params.type=="2") {
+        		this.searchParams.siteType = "juwei";
+        		params.siteType = "juwei";
+        	} else if(params.type=="3") {
+        		this.searchParams.siteType = "xiaoqu";
+        		params.siteType = "xiaoqu";
+        	}
             params.siteType = this.searchParams.siteType;
 //            return commonService.ajaxGetBase2(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
             return commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
@@ -154,19 +166,7 @@ Vue.component('searchlist-component', {
 
             var me = this;
             this.isLoadingList = true;
-            if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {
-            	this.searchParams.siteType = "quyu";
-            	params.siteType = "quyu";
-        	} else if(params.type=="1"&&(params.dataId+"").length==6) {
-        		this.searchParams.siteType = "jiedao";
-        		params.siteType = "jiedao";
-        	} else if(params.type=="2") {
-        		this.searchParams.siteType = "juwei";
-        		params.siteType = "juwei";
-        	} else if(params.type=="3") {
-        		this.searchParams.siteType = "xiaoqu";
-        		params.siteType = "xiaoqu";
-        	}
+            
 //            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
 //            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
             commonService.ajaxGetBase4('/searchKeyword.do', filters, params, function(res){

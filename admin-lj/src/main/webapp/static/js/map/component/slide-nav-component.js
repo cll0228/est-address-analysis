@@ -32,7 +32,7 @@ Vue.component('slide-nav-component', {
                     	}
                     return normalizedDistrictList;
                 });
-                dList.unshift({type: 'city', dataId: headerParameters.cityCode, name: '全部'});
+//                dList.unshift({type: 'city', dataId: headerParameters.cityCode, name: '全部'});
                 this.districtList = dList;
 
                 //地铁/地铁站
@@ -167,7 +167,7 @@ Vue.component('slide-nav-component', {
             }
         },
         clickLevel3: function(item,div){		//点击板块
-        	if(item.type!="jidinghe") {
+        	/*if(item.type!="jidinghe") {
         		this.div=item.dataId;
         		if(div=="1"&&item.name=="全部") {
             		this.setSiteType(this.mouseoveredSiteType);
@@ -178,8 +178,17 @@ Vue.component('slide-nav-component', {
             	} else if(div=="3"&&item.name!="全部") {
             		this.setSiteType("xiaoqu");
             	}
+        	}*/
+        	if(item.type!="jidinghe") {
+        		this.div=item.dataId;
+        		if(div=="1") {
+            		this.setSiteType("jiedao");
+            	} else if(div=="2") {
+            		this.setSiteType("juwei");
+            	} else if(div=="3") {
+            		this.setSiteType("xiaoqu");
+            	}
         	}
-        	
         	var str=""; 
         	
         	if(this.isActiveQuyu()) {

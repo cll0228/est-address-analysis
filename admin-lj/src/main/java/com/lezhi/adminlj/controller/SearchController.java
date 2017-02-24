@@ -166,12 +166,14 @@ public class SearchController {
 			da.setHouseholds(countParam.getHouseholds());
 			da.setProportion(countParam.getProportion());
 			da.setShowName(countParam.getLevelName());
-			/*if(dataId != null && dataId.equals("sh")) {
-				da.setDiv(type);
-			} else if(type != null && !"city".equals(type)) {
-				Integer d = Integer.parseInt(type.replace("\"",""))+1;
-				da.setDiv(d.toString());
-			}*/
+			if(!type.contains("\'")) {
+				if(dataId != null && dataId.equals("sh")) {
+					da.setDiv(type);
+				} else if(type != null && !"city".equals(type)) {
+					Integer d = Integer.parseInt(type)+1;
+					da.setDiv(d.toString());
+				}
+			}
 			da.setType("init");
 
 			dataList.add(da);

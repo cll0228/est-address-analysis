@@ -23,8 +23,8 @@ public class MapController {
 
     @RequestMapping(value = "/districtcentertude", method = RequestMethod.GET)
     @ResponseBody
-    public List<ShDistrict> getDistrictCenterTude() {
-        List<ShDistrict> shDistricts = mapService.getDistrictCenterTude();
+    public List<ShDistrict> getDistrictCenterTude(@RequestParam(value = "districtId",required = false) Integer districtId) {
+        List<ShDistrict> shDistricts = mapService.getDistrictCenterTude(districtId);
         if (null == shDistricts) {
             return null;
         }
@@ -43,19 +43,20 @@ public class MapController {
 
     @RequestMapping(value = "showtown", method = RequestMethod.GET)
     @ResponseBody
-    public List<Town> showtown(@RequestParam(value = "districtId",required = false) Integer districtId) {
-        List<Town> shDistricts = mapService.showtown(districtId);
+    public List<Town> showtown(@RequestParam(value = "districtId", required = false) Integer districtId,
+            @RequestParam(value = "townId", required = false) Integer townId) {
+        List<Town> shDistricts = mapService.showtown(districtId,townId);
         if (null == shDistricts) {
             return null;
         }
         return shDistricts;
     }
 
-
     @RequestMapping(value = "neighborhood", method = RequestMethod.GET)
     @ResponseBody
-        public List<Neighborhood> neighborhood(@RequestParam(value = "townId",required = false) Integer townId) {
-        List<Neighborhood> shDistricts = mapService.neighborhood(townId);
+    public List<Neighborhood> neighborhood(@RequestParam(value = "townId", required = false) Integer townId,
+                                           @RequestParam(value = "neighborhoodId", required = false) String neighborhoodId) {
+        List<Neighborhood> shDistricts = mapService.neighborhood(townId,neighborhoodId);
         if (null == shDistricts) {
             return null;
         }
@@ -64,8 +65,10 @@ public class MapController {
 
     @RequestMapping(value = "/getResidence", method = RequestMethod.GET)
     @ResponseBody
-    public List<Residence> residence(@RequestParam(value = "neighborhoodId",required = false) String neighborhoodId) {
-        List<Residence> Residence = mapService.residence(neighborhoodId);
+    public List<Residence> residence(
+            @RequestParam(value = "neighborhoodId", required = false) String neighborhoodId,
+            @RequestParam( value = "residenceId", required = false) String residenceId) {
+        List<Residence> Residence = mapService.residence(neighborhoodId,residenceId);
         if (null == Residence) {
             return null;
         }

@@ -10,7 +10,11 @@
             count(a.STD_ADDR_ID) hdUserNum
         FROM
             ocn_address.of_district d
-        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id WHERE d.is_available = 1 GROUP BY a.of_district_id
+        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id WHERE 1=1
+        <if test="districtId != null">
+           AND t.new_district_id = #{districtId}
+        </if>
+        AND d.is_available = 1 GROUP BY a.of_district_id
     </select>
     <select id="getDistrictBoundryInfo" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.ShDistrict">
         SELECT latitude centerLatitude,longitude centerLongitude FROM hsrjop.lianjia_boundary_data WHERE new_district_id  = #{districtId};
@@ -25,9 +29,12 @@
             count(a.STD_ADDR_ID) hdUserNum
         FROM
             ocn_address.of_town t
-        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.town_id = a.of_town_id
+        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.town_id = a.of_town_id WHERE 1 = 1
         <if test="districtId != null">
-            WHERE t.new_district_id = #{districtId}
+            and t.new_district_id = #{districtId}
+        </if>
+        <if test="townId != null">
+         AND   t.town_id = #{townId}
         </if>
         GROUP BY
             a.of_town_id;
@@ -46,6 +53,9 @@
         WHERE 1= 1
         <if test="townId != null">
             AND  t.town_id = #{townId}
+        </if>
+        <if test="neighborhoodId">
+            AND t.neighborhood_id = #{neighborhoodId}
         </if>
         AND t.lng is not null
         GROUP BY
@@ -66,6 +76,9 @@
         WHERE 1=1
         <if test="neighborhoodId != null">
           and  t.of_neighborhood_id = #{neighborhoodId}
+        </if>
+        <if test="residenceId != null">
+            AND  t.id = #{residenceId}
         </if>
         AND t.lon IS NOT NULL and t.of_neighborhood_id is not null
         GROUP BY

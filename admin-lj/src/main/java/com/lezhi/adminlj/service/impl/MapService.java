@@ -21,12 +21,12 @@ public class MapService {
 
     private static List<ShDistrict> shDistricts = null;
 
-    public List<ShDistrict> getDistrictCenterTude() {
+    public List<ShDistrict> getDistrictCenterTude(Integer districtId) {
 
         if (null != shDistricts) {
             return shDistricts;
         }
-        shDistricts = mapMapper.getDistrictCenterTude();
+        shDistricts = mapMapper.getDistrictCenterTude(districtId);
         return shDistricts;
     }
 
@@ -34,15 +34,15 @@ public class MapService {
         return mapMapper.getDistrictBoundryInfo(districtId);
     }
 
-    public List<Town> showtown(Integer districtId) {
-        return mapMapper.showtown(districtId);
+    public List<Town> showtown(Integer districtId,Integer townId) {
+        return mapMapper.showtown(districtId,townId);
     }
 
-    public List<Neighborhood> neighborhood(Integer townId) {
-        return mapMapper.neighborhood(townId);
+    public List<Neighborhood> neighborhood(Integer townId,String neighborhoodId) {
+        return mapMapper.neighborhood(townId,neighborhoodId);
     }
 
-    public List<Residence> residence(String neighborhoodId) {
-        return mapMapper.residence(neighborhoodId);
+    public List<Residence> residence(String neighborhoodId,String residenceId) {
+        return mapMapper.residence(neighborhoodId,residenceId);
     }
 }

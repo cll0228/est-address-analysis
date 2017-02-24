@@ -111,10 +111,11 @@ public class SearchController {
 	public Map<String, Object> searchKeyword(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		Map<String, Object> result = new HashMap<>();
 		ArrayList<DataList> dataList = new ArrayList<DataList>();
-		String dataId = request.getParameter("dataId");
-		String type = request.getParameter("type");
+		String dataId = "undefined".equals(request.getParameter("dataId"))?null:request.getParameter("dataId");
+		String type = "undefined".equals(request.getParameter("type"))?null:request.getParameter("type");
+		String siteType = request.getParameter("siteType");
 		String jdh = null;
-		if(type.contains("\"")) {
+		if(type != null && type.contains("\"")) {
 			jdh = type;
 			type = "1";
 		}
@@ -140,53 +141,39 @@ public class SearchController {
 		paramInfo.setC(c);
 		paramInfo.setDataId(dataId);
 		paramInfo.setType(type);
+		paramInfo.setSiteType(siteType);
 		paramInfo.setJdh(jdh);
-
+		if(type == null){
+			paramInfo.setSiteType(null);
+		}
+		if(dataId != null && dataId.length() == 6 && "juwei".equals(siteType)){
+			paramInfo.setSiteType("alljiedao");
+		}
+		if(dataId != null && dataId.length() == 9 && "xiaoqu".equals(siteType)){
+			paramInfo.setSiteType("alljuwei");
+		}
 		ArrayList<CountParam> countList = new ArrayList<CountParam>();
 		countList = slideNavService.searchKeyword(paramInfo);
 
-		if(type.equals("city")) {
-			result.put("status", "1");
-			result.put("dataList", dataList);
-		} else {
-/*			if(type.equals("0")) {
-				countList = slideNavService.districtCount();
-			} else if(dataId.equals("sh")&&type.equals("1")) {
-				countList = slideNavService.districtCount();
-			} else if(dataId.length()==6&&type.equals("1")) {
-				countList = slideNavService.levelOneCount(dataId);
-			} else if(dataId.equals("2")) {
-
-			} else if(dataId.equals("3")) {
-
-			}*/
-			for (CountParam countParam : countList) {
-				DataList da = new DataList();
-				da.setDataId(countParam.getLevelId().toString());
-				da.setHouseholds(countParam.getHouseholds());
-				da.setProportion(countParam.getProportion());
-				da.setShowName(countParam.getLevelName());
-				da.setType("init");
-
-				dataList.add(da);
+		for (CountParam countParam : countList) {
+			DataList da = new DataList();
+			da.setDataId(countParam.getLevelId().toString());
+			da.setHouseholds(countParam.getHouseholds());
+			da.setProportion(countParam.getProportion());
+			da.setShowName(countParam.getLevelName());
+			if(dataId != null && dataId.equals("sh")) {
+				da.setDiv(type);
+			} else if(type != null) {
+				Integer d = Integer.parseInt(type)+1;
+				da.setDiv(d.toString());
 			}
-    		/*String qupin[] = new String[]{"pudongxinqu","minhang","baoshan","xuhui","putuo","yangpu","changning","songjiang","jiading","huangpu","jingan","zhabei","hongkou","qingpu","fengxian","jinshan","chongming"};
-        	String qu[] = new String[]{"浦东新区1","闵行区1","宝山区1","徐汇区","普陀区","杨浦区","长宁区","松江区","嘉定区","黄浦区","静安区","闸北区","虹口区","青浦区","奉贤区","金山区","崇明区"};
-        	for (int i = 0; i < qupin.length; i++) {
-        		DataList da = new DataList();
-            	da.setDataId(qupin[i]);
-            	da.setHouseholds((int)((Math.random()*9+1)*100000));
-            	da.setProportion(1+(int)(Math.random()*90));
-            	da.setLatitude(31.2080020904541);
-            	da.setLongitude(121.60652923583984);
-            	da.setShowName(qu[i]);
-            	da.setType("init");
+			da.setType("init");
 
-            	dataList.add(da);
-    		}*/
-			result.put("status", "0");
-			result.put("dataList", dataList);
+			dataList.add(da);
 		}
+
+//		result.put("status", "0");
+		result.put("dataList", dataList);
 		return result;
 	}
 }

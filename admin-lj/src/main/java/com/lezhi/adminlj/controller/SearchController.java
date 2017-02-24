@@ -117,7 +117,9 @@ public class SearchController {
 		String jdh = null;
 		if(type != null && type.contains("\"")) {
 			jdh = type;
-			type = "1";
+			dataId = null;
+			type = null;
+			siteType = null;
 		}
 		String keyword = "null".equals(request.getParameter("keyword"))?null:request.getParameter("keyword");
 		String keyId = "null".equals(request.getParameter("keyId"))?null:request.getParameter("keyId");

@@ -168,8 +168,8 @@ Vue.component('searchlist-component', {
             var me = this;
             this.isLoadingList = true;
 //            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
-//            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
-            commonService.ajaxGetBase4('/searchKeyword.do', filters, params, function(res){
+            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
+//            commonService.ajaxGetBase4('/searchKeyword.do', filters, params, function(res){
                 //alert("bbb")
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;

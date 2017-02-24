@@ -14,6 +14,7 @@ public class ParamInfo {
 	private String p;
     private String t;
     private String c;
+    private String jdh;
 	@Override
 	public String toString() {
 		return "ParamInfo [dataId=" + dataId + ", type=" + type + ",keyword=" + keyword + ", keyId="
@@ -100,5 +101,13 @@ public class ParamInfo {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getJdh() {
+		return jdh;
+	}
+
+	public void setJdh(String jdh) {
+		this.jdh = jdh;
 	}
 }

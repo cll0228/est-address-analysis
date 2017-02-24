@@ -113,6 +113,11 @@ public class SearchController {
 		ArrayList<DataList> dataList = new ArrayList<DataList>();
 		String dataId = request.getParameter("dataId");
 		String type = request.getParameter("type");
+		String jdh = null;
+		if(type.contains("\"")) {
+			jdh = type;
+			type = "1";
+		}
 		String keyword = "null".equals(request.getParameter("keyword"))?null:request.getParameter("keyword");
 		String keyId = "null".equals(request.getParameter("keyId"))?null:request.getParameter("keyId");
 		String keyType = "null".equals(request.getParameter("keyType"))?null:request.getParameter("keyType");
@@ -135,6 +140,7 @@ public class SearchController {
 		paramInfo.setC(c);
 		paramInfo.setDataId(dataId);
 		paramInfo.setType(type);
+		paramInfo.setJdh(jdh);
 
 		ArrayList<CountParam> countList = new ArrayList<CountParam>();
 		countList = slideNavService.searchKeyword(paramInfo);

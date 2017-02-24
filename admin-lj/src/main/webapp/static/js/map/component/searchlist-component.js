@@ -176,28 +176,28 @@ Vue.component('searchlist-component', {
                 if(params.keyType == 1){
                     initDistrictInfo(params.keyId);
                 }
-                   if(params.type == 1 ){//显示街道
-                       if("sh" == params.dataId){
-                           initDistrictInfo();
-                       }else {
-                           getTown(params.dataId,null,null,null,"changeZoom");
-                       }
-                   }
-                   if(params.type == 2 ){
-                       getJuWei(params.dataId,null,null,null,"changeZoom");
-                   }
-                   if(params.type == 3){
-                       getResidence(params.dataId,null,null,null,"changeZoom")
-                   }
-                   if(params.keyType == 2){
-                       getTown(null,null,null,params.keyId,"changeZoom");
-                   }
+                if(params.type == "city" || params.type == "sh"){//显示街道
+                    initDistrictInfo();
+                }
+                if(params.type == 1 ){
+                    getTown(params.dataId,null,null,null,"changeZoom");
+                }
+                if(params.type == 2 ){
+                    getJuWei(params.dataId,null,null,null,"changeZoom");
+                }
+                if(params.type == 3){
+                    getResidence(params.dataId,null,null,null,"changeZoom")
+                }
+                if(params.keyType == 2){
+                    getTown(null,null,null,params.keyId,"changeZoom");
+                }
                 if(params.keyType == 3){
                     getJuWei(null,null,null,params.keyId,"changeZoom");
                 }
                 if(params.keyType == 5){
                     getResidence(null,null,null,params.keyId,"changeZoom");
                 }
+
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;
             }.bind(this)).fail(function(){ me.isLoadingList = false; })

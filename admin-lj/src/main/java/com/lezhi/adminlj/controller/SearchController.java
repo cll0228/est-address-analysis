@@ -105,6 +105,8 @@ public class SearchController {
 		return null;
 	}
 
+	public List<DataList> myDataList = new ArrayList<>();
+
 
 	@RequestMapping(value = "searchKeyword", method = RequestMethod.GET)
 	@ResponseBody
@@ -173,7 +175,7 @@ public class SearchController {
 
 			dataList.add(da);
 		}
-
+		myDataList = dataList;
 //		result.put("status", "0");
 		result.put("dataList", dataList);
 		return result;

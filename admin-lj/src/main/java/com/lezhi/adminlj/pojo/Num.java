@@ -6,6 +6,25 @@ package com.lezhi.adminlj.pojo;
 public class Num {
     private Integer hdUserNum;
     private Integer districtId;
+    private String cenLon;
+    private String cenLat;
+
+    public String getCenLat() {
+        return cenLat;
+    }
+
+    public void setCenLat(String cenLat) {
+        this.cenLat = cenLat;
+    }
+
+    public String getCenLon() {
+        return cenLon;
+    }
+
+    public void setCenLon(String cenLon) {
+        this.cenLon = cenLon;
+    }
+
     public Integer getDistrictId() {
         return districtId;
     }

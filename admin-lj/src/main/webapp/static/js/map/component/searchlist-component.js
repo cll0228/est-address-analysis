@@ -2,6 +2,7 @@
  * Created by colin on 16/7/25.
  */
 
+
 Vue.component('searchlist-component', {
     vuex: {
         getters: {
@@ -171,6 +172,15 @@ Vue.component('searchlist-component', {
             commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
 //            commonService.ajaxGetBase4('/searchKeyword.do', filters, params, function(res){
                 //alert("bbb")
+                   if(params.type == 1){//显示街道
+                       getTown(params.dataId,null,null,null,"changeZoom");
+                   }
+                   if(params.type == 2){
+                       getJuWei(params.dataId,null,null,null,"changeZoom");
+                   }
+                   if(params.type == 3){
+                       getResidence(params.dataId,null,null,null,"changeZoom")
+                   }
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;
             }.bind(this)).fail(function(){ me.isLoadingList = false; })

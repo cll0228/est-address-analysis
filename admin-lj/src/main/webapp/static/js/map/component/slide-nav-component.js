@@ -65,7 +65,7 @@ Vue.component('slide-nav-component', {
         <div class="side-bar__level1" id="districtWrap" \
             :style="{display: showLevel2 && \'block\' || \'none\'}" @mouseover="mouseoverLevel(2)" @mouseout="mouseoutLevel()">\
     	<a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel3(d,1)" @mouseover="mouseoverLevel2(d)"\
-                    gahref="{d.dataId}"><label><input type="checkbox" value="{{d.name}}" name="ckb" class="c-filterbox__item-checkbox" :style="{display: isActiveDitie() ? \'inline\' : \'none\'}">{{d.name}}</label></a>\
+                    gahref="{d.dataId}"><label><input type="checkbox" value="{{d.dataId}}" name="ckb" class="c-filterbox__item-checkbox" :style="{display: isActiveDitie() ? \'inline\' : \'none\'}">{{d.name}}</label></a>\
         </div>\
         <div class="side-bar__level2" :class="{\'gio_plate\': isActiveQuyu(), \'gio_stop\': isActiveDitie()}" id="plateWrap" \
                 v-show="showLevel3 && level2Mouseovered.children.length > 0" @mouseover="mouseoverLevel(3)" @mouseout="mouseoutLevel()">\

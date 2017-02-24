@@ -184,17 +184,17 @@
 		a.households / b.levelHouseCount * 100 AS proportion
 		FROM
 		(select count(h.TYPE_NAME) AS households
-		<if test='paramInfo.keyType == "1" or paramInfo.keyType == null or paramInfo.keyType == ""'>
+		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
 			,h.district_name AS levelName,
 			h.of_district_id AS levelId,
 			h.of_district_id
 		</if>
-		<if test='paramInfo.keyType == "2" '>
+		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
 			,h.town_name AS levelName,
 			h.of_town_id AS levelId,
 			h.of_town_id
 		</if>
-		<if test='paramInfo.keyType == "3"'>
+		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
 			,h.neighborhood_name AS levelName,
 			h.of_neighborhood_id AS levelId,
 			h.of_neighborhood_id
@@ -204,93 +204,117 @@
 			h.residence_id AS levelId,
 			h.residence_id
 		</if>
-		<if test='paramInfo.keyType == "5"'>
+		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
 			,h.residence_name AS levelName,
 			h.residence_id AS levelId,
 			h.residence_id
 		</if>
 		FROM
 		(select *
-			from hsrjop.intelligence_hd_addr_info i
-			INNER JOIN hsrjop.of_residence r ON i.residence_id = r.id
-			WHERE 1=1
-			<if test='paramInfo.keyType == "1"'>
-				and i.of_district_id = #{paramInfo.keyId}
-			</if>
-			<if test='paramInfo.keyType == "2"'>
-				and i.of_town_id = #{paramInfo.keyId}
-			</if>
-			<if test='paramInfo.keyType == "3"'>
-				and i.of_neighborhood_id = #{paramInfo.keyId}
-			</if>
-			<if test='paramInfo.keyType == "4"'>
-				and i.residence_addr like "%${paramInfo.keyword}%"
-			</if>
-			<if test='paramInfo.keyType == "5"'>
-				and i.residence_id = #{paramInfo.keyId}
-			</if>
+		from hsrjop.intelligence_hd_addr_info i
+		INNER JOIN hsrjop.of_residence r ON i.residence_id = r.id
+		WHERE 1=1
+		<if test='paramInfo.keyType == "1"'>
+			and i.of_district_id = #{paramInfo.keyId}
+		</if>
+		<if test='paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			and i.of_district_id = #{paramInfo.dataId}
+		</if>
+		<if test='paramInfo.keyType == "2"'>
+			and i.of_town_id = #{paramInfo.keyId}
+		</if>
+		<if test='paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			and i.of_town_id = #{paramInfo.dataId}
+		</if>
+		<if test='paramInfo.keyType == "3"'>
+			and i.of_neighborhood_id = #{paramInfo.keyId}
+		</if>
+		<if test='paramInfo.siteType == "xiaoqu"'>
+			and i.of_neighborhood_id = #{paramInfo.dataId}
+		</if>
+		<if test='paramInfo.keyType == "4"'>
+			and i.residence_addr like "%${paramInfo.keyword}%"
+		</if>
+		<if test='paramInfo.keyType == "5"'>
+			and i.residence_id = #{paramInfo.keyId}
+		</if>
+	<!--	<if test='paramInfo.siteType == "xiaoqu"'>
+			and i.residence_id = #{paramInfo.dataId}
+		</if>-->
 		<!--	<if test='paramInfo.a != null or paramInfo.p != null or paramInfo.t != null or paramInfo.c != null'>
 				and i.residence_id = r.id
 			</if>-->
-			<!-- 用户规模 -->
-			<if test='paramInfo.a == "a1"'>
-				and r.user_count &lt; 100
-			</if>
-			<if test='paramInfo.a == "a2"'>
-				and r.user_count  BETWEEN 100 and 200
-			</if>
-			<if test='paramInfo.a == "a3"'>
-				and r.user_count  BETWEEN 200 and 500
-			</if>
-			<if test='paramInfo.a == "a4"'>
-				and r.user_count &gt;= 500
-			</if>
-			<!-- 小区总户数 -->
-			<!-- 小区均价 -->
-			<if test='paramInfo.p == "p2"'>
-				and r.residence_avg_price &lt; 20000
-			</if>
-			<if test='paramInfo.p == "p3"'>
-				and r.residence_avg_price BETWEEN 20000 and 30000
-			</if>
-			<if test='paramInfo.p == "p4"'>
-				and r.residence_avg_price BETWEEN 30000 and 50000
-			</if>
-			<if test='paramInfo.p == "p5"'>
-				and r.residence_avg_price BETWEEN 50000 and 80000
-			</if>
-			<if test='paramInfo.p == "p6"'>
-				and r.residence_avg_price &gt;= 80000
-			</if>
-			<!-- 小区分类 -->
-			<if test='paramInfo.t == "t1"'>
-				and r.residence_level_id =1
-			</if>
-			<if test='paramInfo.t == "t2"'>
-				and r.residence_level_id =2
-			</if>
-			<if test='paramInfo.t == "t3"'>
-				and r.residence_level_id =3
-			</if>
-			<!-- 小区用户占比 -->
-			<if test='paramInfo.c == "c1"'>
-				and r.residence_rate &lt; 10
-			</if>
-			<if test='paramInfo.c == "c2"'>
-				and r.residence_rate  BETWEEN 10 and 20
-			</if>
-			<if test='paramInfo.c == "c3"'>
-				and r.residence_rate BETWEEN 20 and 30
-			</if>
-			<if test='paramInfo.c == "c4"'>
-				and r.residence_rate BETWEEN 30 and 50
-			</if>
-			<if test='paramInfo.c == "c5"'>
-				and r.residence_rate &gt;= 50
-			</if>
-			<if test='paramInfo.jdh != null'>
-				and i.TYPE_NAME in(#{paramInfo.jdh})
-			</if>
+		<!-- 用户规模 -->
+		<if test='paramInfo.a == "a1"'>
+			and r.user_count &lt; 100
+		</if>
+		<if test='paramInfo.a == "a2"'>
+			and r.user_count  BETWEEN 100 and 200
+		</if>
+		<if test='paramInfo.a == "a3"'>
+			and r.user_count  BETWEEN 200 and 500
+		</if>
+		<if test='paramInfo.a == "a4"'>
+			and r.user_count &gt;= 500
+		</if>
+		<!-- 小区总户数 -->
+		<if test='paramInfo.l == "l500"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id)&lt;500
+		</if>
+		<if test='paramInfo.l == "l1000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) BETWEEN 500 and 1000
+		</if>
+		<if test='paramInfo.l == "l2000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) BETWEEN 1000 and 2000
+		</if>
+		<if test='paramInfo.l == "l3000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) &gt;= 2000
+		</if>
+		<!-- 小区均价 -->
+		<if test='paramInfo.p == "p2"'>
+			and r.residence_avg_price &lt; 20000
+		</if>
+		<if test='paramInfo.p == "p3"'>
+			and r.residence_avg_price BETWEEN 20000 and 30000
+		</if>
+		<if test='paramInfo.p == "p4"'>
+			and r.residence_avg_price BETWEEN 30000 and 50000
+		</if>
+		<if test='paramInfo.p == "p5"'>
+			and r.residence_avg_price BETWEEN 50000 and 80000
+		</if>
+		<if test='paramInfo.p == "p6"'>
+			and r.residence_avg_price &gt;= 80000
+		</if>
+		<!-- 小区分类 -->
+		<if test='paramInfo.t == "t1"'>
+			and r.residence_level_id =1
+		</if>
+		<if test='paramInfo.t == "t2"'>
+			and r.residence_level_id =2
+		</if>
+		<if test='paramInfo.t == "t3"'>
+			and r.residence_level_id =3
+		</if>
+		<!-- 小区用户占比 -->
+		<if test='paramInfo.c == "c1"'>
+			and r.residence_rate &lt; 10
+		</if>
+		<if test='paramInfo.c == "c2"'>
+			and r.residence_rate  BETWEEN 10 and 20
+		</if>
+		<if test='paramInfo.c == "c3"'>
+			and r.residence_rate BETWEEN 20 and 30
+		</if>
+		<if test='paramInfo.c == "c4"'>
+			and r.residence_rate BETWEEN 30 and 50
+		</if>
+		<if test='paramInfo.c == "c5"'>
+			and r.residence_rate &gt;= 50
+		</if>
+		<if test='paramInfo.jdh != null'>
+			and i.TYPE_NAME in(#{paramInfo.jdh})
+		</if>
 		<!--	&lt;!&ndash; 不动产估值 &ndash;&gt;
 			<if test='g == "g300"'>
 				and i.house_estate_price &lt; 300
@@ -333,36 +357,36 @@
 			<if test='f == "f2"'>
 				and i.isadded = 0
 			</if>-->
-				) h
-			GROUP BY
-			<if test='paramInfo.keyType == "1" or paramInfo.keyType == null or paramInfo.keyType == ""'>
-				h.of_district_id
-			</if>
-			<if test='paramInfo.keyType == "2"'>
-				h.of_town_id
-			</if>
-			<if test='paramInfo.keyType == "3"'>
-				h.of_neighborhood_id
-			</if>
-			<if test='paramInfo.keyType == "4"'>
-				h.residence_id
-			</if>
-			<if test='paramInfo.keyType == "5"'>
-				h.residence_id
-			</if>
+		) h
+		GROUP BY
+		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
+			h.of_district_id
+		</if>
+		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			h.of_town_id
+		</if>
+		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			h.of_neighborhood_id
+		</if>
+		<if test='paramInfo.keyType == "4"'>
+			h.residence_id
+		</if>
+		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
+			h.residence_id
+		</if>
 		)a
 		INNER JOIN (
 		SELECT
-		<if test='paramInfo.keyType == "1" or paramInfo.keyType == null or paramInfo.keyType == ""'>
+		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
 			of_district_id,
 			sum(
 			house_count) AS levelHouseCount
 		</if>
-		<if test='paramInfo.keyType == "2"'>
+		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
 			of_town_id,
 			sum(house_count) AS levelHouseCount
 		</if>
-		<if test='paramInfo.keyType == "3"'>
+		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
 			of_neighborhood_id,
 			sum(house_count) AS levelHouseCount
 		</if>
@@ -370,7 +394,7 @@
 			id,
 			sum(house_count) AS levelHouseCount
 		</if>
-		<if test='paramInfo.keyType == "5"'>
+		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
 			id,
 			sum(house_count) AS levelHouseCount
 		</if>
@@ -389,23 +413,46 @@
 		<if test='paramInfo.l == "l3000"'>
 			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id) &gt;= 2000
 		</if>
-		<if test='paramInfo.keyType == "1" or paramInfo.keyType == null or paramInfo.keyType == ""'>
+		<if test='paramInfo.keyType == "1" and paramInfo.siteType != "quyu"'>
 			AND of_district_id IS NOT NULL
 			AND of_district_id = #{paramInfo.keyId}
 			GROUP BY
 			of_district_id
 		</if>
-		<if test='paramInfo.keyType == "2"'>
-			AND of_town_id IS NOT NULL
-			AND of_town_id = #{paramInfo.keyId}
+		<if test='paramInfo.siteType == "quyu"'>
+			AND of_district_id IS NOT NULL
+			GROUP BY
+			of_district_id
+		</if>
+		<if test='paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			AND of_district_id IS NOT NULL
+			AND of_district_id = #{paramInfo.dataId}
 			GROUP BY
 			of_town_id
 		</if>
-		<if test='paramInfo.keyType == "3"'>
+		<if test='paramInfo.keyType == "2" and paramInfo.siteType != "juwei" and paramInfo.siteType != "alljuwei"'>
+			AND of_town_id IS NOT NULL
+			AND of_town_id = #{paramInfo.keyId}
+			GROUP BY
+			of_neighborhood_id
+		</if>
+		<if test='paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			AND of_town_id IS NOT NULL
+			AND of_town_id = #{paramInfo.dataId}
+			GROUP BY
+			of_neighborhood_id
+		</if>
+		<if test='paramInfo.keyType == "3" and paramInfo.siteType != "xiaoqu"'>
 			AND of_neighborhood_id IS NOT NULL
 			AND of_neighborhood_id = #{paramInfo.keyId}
 			GROUP BY
-			of_neighborhood_id
+			id
+		</if>
+		<if test='paramInfo.siteType == "xiaoqu"'>
+			AND of_neighborhood_id IS NOT NULL
+			AND of_neighborhood_id = #{paramInfo.dataId}
+			GROUP BY
+			id
 		</if>
 		<if test='paramInfo.keyType == "4"'>
 			AND id IS NOT NULL
@@ -421,19 +468,19 @@
 		</if>
 		) b
 		ON
-		<if test='paramInfo.keyType == "1" or paramInfo.keyType == null or paramInfo.keyType == ""'>
+		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
 			a.of_district_id = b.of_district_id
 		</if>
-		<if test='paramInfo.keyType == "2"'>
+		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
 			a.of_town_id = b.of_town_id
 		</if>
-		<if test='paramInfo.keyType == "3"'>
+		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
 			a.of_neighborhood_id = b.of_neighborhood_id
 		</if>
 		<if test='paramInfo.keyType == "4"'>
 			a.residence_id = b.id
 		</if>
-		<if test='paramInfo.keyType == "5"'>
+		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
 			a.residence_id = b.id
 		</if>
 

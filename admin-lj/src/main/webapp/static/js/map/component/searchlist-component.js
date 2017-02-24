@@ -94,8 +94,9 @@ Vue.component('searchlist-component', {
         	}
             
             params.siteType = this.searchParams.siteType;
+            filters = commonService.getFilters(this.searchParams);
 //            return commonService.ajaxGetBase2(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
-            return commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
+            return commonService.ajaxGetBase4('/listSearch.do', filters, params, function(res){
             	this.searchResults = this._normalizeSearchResult("All", res);
             	this.setMainInfo("all");
             	this.searchResults = null;

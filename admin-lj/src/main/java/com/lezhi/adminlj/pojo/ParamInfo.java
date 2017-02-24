@@ -6,6 +6,7 @@ package com.lezhi.adminlj.pojo;
 public class ParamInfo {
 	private String dataId;
 	private String type;
+	private String siteType;
 	private String keyword;
 	private String keyId;
 	private String keyType;
@@ -109,5 +110,13 @@ public class ParamInfo {
 
 	public void setJdh(String jdh) {
 		this.jdh = jdh;
+	}
+
+	public String getSiteType() {
+		return siteType;
+	}
+
+	public void setSiteType(String siteType) {
+		this.siteType = siteType;
 	}
 }

@@ -6,11 +6,13 @@
 Vue.component('slide-nav-component', {
     vuex: {
         getters: {
-            siteType: function(state) { return state.searchParams.siteType}
+            siteType: function(state) { return state.searchParams.siteType},
+			div: function(state) { return state.searchParams.div}
         },
         actions: {
             setVisited: actions.setVisited,
             setSiteType: actions.setSiteType,
+            setDiv: actions.setDiv,
             clickLevel1Action: actions.clickLevel1,
             clickLevel2Action: actions.clickLevel2,
             clickLevel3Action: actions.clickLevel3
@@ -165,14 +167,17 @@ Vue.component('slide-nav-component', {
             }
         },
         clickLevel3: function(item,div){		//点击板块
-        	if(div=="1"&&item.name=="全部") {
-        		this.setSiteType(this.mouseoveredSiteType);
-        	} else if((div=="1"&&item.name!="全部")||(div=="2"&&item.name=="全部")) {
-        		this.setSiteType("jiedao");
-        	} else if((div=="2"&&item.name!="全部")||(div=="3"&&item.name=="全部")) {
-        		this.setSiteType("juwei");
-        	} else if(div=="3"&&item.name!="全部") {
-        		this.setSiteType("xiaoqu");
+        	if(item.type!="jidinghe") {
+        		this.div=item.dataId;
+        		if(div=="1"&&item.name=="全部") {
+            		this.setSiteType(this.mouseoveredSiteType);
+            	} else if((div=="1"&&item.name!="全部")||(div=="2"&&item.name=="全部")) {
+            		this.setSiteType("jiedao");
+            	} else if((div=="2"&&item.name!="全部")||(div=="3"&&item.name=="全部")) {
+            		this.setSiteType("juwei");
+            	} else if(div=="3"&&item.name!="全部") {
+            		this.setSiteType("xiaoqu");
+            	}
         	}
         	
         	var str=""; 
@@ -189,11 +194,20 @@ Vue.component('slide-nav-component', {
         			}
         			}) 
         	}
-        	if(str=="") {
-        		this.clickLevel1Action({dataId: item.dataId, type: div});
+        	if(item.type!="jidinghe") {
+        		if(str=="") {
+            		this.clickLevel1Action({dataId: item.dataId, type: div});
+            	} else {
+            		this.clickLevel1Action({dataId: item.dataId, type: str});
+            	}
         	} else {
-        		this.clickLevel1Action({dataId: item.dataId, type: str});
+        		if(str=="") {
+            		this.clickLevel1Action({dataId: this.div, type: div});
+            	} else {
+            		this.clickLevel1Action({dataId: this.div, type: str});
+            	}
         	}
+        	
         	
             
         },

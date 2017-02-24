@@ -313,7 +313,7 @@
 			and r.residence_rate &gt;= 50
 		</if>
 		<if test='paramInfo.jdh != null'>
-			and i.TYPE_NAME in(#{paramInfo.jdh})
+			and i.TYPE_NAME in(${paramInfo.jdh})
 		</if>
 		<!--	&lt;!&ndash; 不动产估值 &ndash;&gt;
 			<if test='g == "g300"'>

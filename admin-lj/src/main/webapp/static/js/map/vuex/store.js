@@ -95,6 +95,7 @@
                 state.searchParams.query = params.keyword;
                 state.searchParams.keyType = params.keyType;
                 state.searchParams.keyId = params.keyId;
+                state.searchParams.type = params.keyType ==1?1:params.keyType == 2?2:params.keyType == 3?3:null
             }else{
                 //清空搜索条件
                 $.extend(state.searchParams, commonService.getInitialState());

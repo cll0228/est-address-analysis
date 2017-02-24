@@ -305,3 +305,10 @@ function reduceMapZoomSize() {
         }
     }
 }
+
+function ifNUll(filters) {
+
+    if(filters.t == null && filters.o == null && filters.c == null && filters.p == null && filters.a == null && filters.l == null && filters.f == null && filters.g == null){
+            return true;
+    }else return false;
+}

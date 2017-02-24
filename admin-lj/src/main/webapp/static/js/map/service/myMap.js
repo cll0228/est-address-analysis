@@ -45,6 +45,7 @@ $(function () {
 
 
 function initDistrictInfo(districtId) {
+    map.clearOverlays();
     //请求区域中心点坐标
     $.ajax({
         type: "get",
@@ -55,7 +56,7 @@ function initDistrictInfo(districtId) {
             $.each(data, function (i, item) {
                 var point_dis_i = new BMap.Point(item.centerLongitude, item.centerLatitude);
                 //添加园圈
-                var html = '<div id="' + item.districtId + '" onclick="getTown(' + item.districtId + ','+item.centerLongitude+','+item.centerLatitude+');" onmouseout="clearOutLine();" onmouseover="getJABoundary('+item.districtId+');" class="district-overlay"><p>' + item.district + '</p><p class="map-overlay__total">' + item.hdUserNum + '户</p></div>';
+                var html = '<div id="' + item.districtId + '" onclick="getTown(' + item.districtId + ','+item.centerLongitude+','+item.centerLatitude+');" onmouseout="clearOutLine();" onmouseover="getJABoundary('+item.districtId+');" class="district-overlay">' + item.district + '<br/>' + item.hdUserNum + '户</p></div>';
                 var anchor = new BMap.Size(-30, -25);
                 var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
                 map.addOverlay(richMarker_i);

@@ -12,7 +12,7 @@
             ocn_address.of_district d
         LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id WHERE 1=1
         <if test="districtId != null">
-           AND t.new_district_id = #{districtId}
+           AND d.district_id = #{districtId}
         </if>
         AND d.is_available = 1 GROUP BY a.of_district_id
     </select>
@@ -42,7 +42,7 @@
         </if>
         AND t.longitude is not null
         GROUP BY
-            a.of_town_id;
+            a.of_town_id HAVING COUNT(a.STD_ADDR_ID) != 0
     </select>
     <select id="neighborhood" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Neighborhood">
         SELECT
@@ -67,7 +67,7 @@
         </if>
         AND t.lng is not null
         GROUP BY
-            a.of_neighborhood_id;
+            a.of_neighborhood_id HAVING COUNT(a.STD_ADDR_ID) != 0
     </select>
     <select id="residence" parameterType="java.lang.String" resultType="com.lezhi.adminlj.pojo.Residence">
       SELECT
@@ -90,6 +90,6 @@
         </if>
         AND t.lon IS NOT NULL and t.of_neighborhood_id is not null
         GROUP BY
-            a.residence_id;
+            a.residence_id HAVING COUNT(a.STD_ADDR_ID) != 0
     </select>
 </mapper>

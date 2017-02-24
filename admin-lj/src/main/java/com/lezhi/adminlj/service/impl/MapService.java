@@ -19,14 +19,9 @@ public class MapService {
     @Autowired
     private MapMapper mapMapper;
 
-    private static List<ShDistrict> shDistricts = null;
 
     public List<ShDistrict> getDistrictCenterTude(Integer districtId) {
-
-        if (null != shDistricts) {
-            return shDistricts;
-        }
-        shDistricts = mapMapper.getDistrictCenterTude(districtId);
+        List<ShDistrict> shDistricts = mapMapper.getDistrictCenterTude(districtId);
         return shDistricts;
     }
 

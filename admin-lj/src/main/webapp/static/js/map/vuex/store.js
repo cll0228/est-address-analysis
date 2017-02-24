@@ -12,6 +12,8 @@
     };
 
     actions.register('setSiteType', 'SET_SITE_TYPE');
+    
+    actions.register('setDiv', 'SET_DIV');
 
     //初始化
     actions.register('initSearchParams', 'INIT_SEARCH_PARAMS');
@@ -64,6 +66,7 @@
             type: null,
             lineId: null,       //只在地铁找房中存在
             stopId: null,       //只在地铁找房中存在
+            div: null, 
 
             s: null     //排序
         }
@@ -77,6 +80,9 @@
         },
         'SET_SITE_TYPE': function(state, siteType){
             state.searchParams.siteType = siteType ? siteType : commonService.SITE_TYPE_QUYU;
+        },
+        'SET_DIV': function(state, div){
+            state.searchParams.div = div;
         },
 
         'DO_SEARCH': function(state, params){

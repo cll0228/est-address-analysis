@@ -119,9 +119,6 @@ public class SearchController {
 		String jdh = null;
 		if(type != null && type.contains("\"")) {
 			jdh = type;
-			dataId = null;
-			type = null;
-			siteType = null;
 		}
 		String keyword = "null".equals(request.getParameter("keyword"))?null:request.getParameter("keyword");
 		String keyId = "null".equals(request.getParameter("keyId"))?null:request.getParameter("keyId");
@@ -156,6 +153,10 @@ public class SearchController {
 		if(dataId != null && dataId.length() == 9 && "xiaoqu".equals(siteType)){
 			paramInfo.setSiteType("alljuwei");
 		}
+		if(keyword == null){
+			paramInfo.setKeyId(null);
+			paramInfo.setKeyType(null);
+		}
 		ArrayList<CountParam> countList = new ArrayList<CountParam>();
 		countList = slideNavService.searchKeyword(paramInfo);
 
@@ -167,8 +168,8 @@ public class SearchController {
 			da.setShowName(countParam.getLevelName());
 			if(dataId != null && dataId.equals("sh")) {
 				da.setDiv(type);
-			} else if(type != null) {
-				Integer d = Integer.parseInt(type)+1;
+			} else if(type != null && !"city".equals(type)) {
+				Integer d = Integer.parseInt(type.replace("\"",""))+1;
 				da.setDiv(d.toString());
 			}
 			da.setType("init");

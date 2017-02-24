@@ -188,9 +188,9 @@ Vue.component('slide-nav-component', {
         		var str=""; 
         		$("[name='ckb']").filter(":checked").each(function(){
         			if(str=="") {
-        				str = "\""+$(this).val()+"\"";
+        				str = "\'"+$(this).val()+"\'";
         			} else {
-        				str+= ",\""+$(this).val()+"\""
+        				str+= ",\'"+$(this).val()+"\'"
         			}
         			}) 
         	}

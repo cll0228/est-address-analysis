@@ -2,7 +2,6 @@
  * Created by colin on 16/7/25.
  */
 
-
 Vue.component('searchlist-component', {
     vuex: {
         getters: {
@@ -79,24 +78,10 @@ Vue.component('searchlist-component', {
             if(params.type=="4") {
             	return;
             }
-            if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {
-            	this.searchParams.siteType = "quyu";
-            	params.siteType = "quyu";
-        	} else if(params.type=="1") {
-        		this.searchParams.siteType = "jiedao";
-        		params.siteType = "jiedao";
-        	} else if(params.type=="2") {
-        		this.searchParams.siteType = "juwei";
-        		params.siteType = "juwei";
-        	} else if(params.type=="3") {
-        		this.searchParams.siteType = "xiaoqu";
-        		params.siteType = "xiaoqu";
-        	}
             
             params.siteType = this.searchParams.siteType;
-            filters = commonService.getFilters(this.searchParams);
 //            return commonService.ajaxGetBase2(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
-            return commonService.ajaxGetBase4('/listSearch.do', filters, params, function(res){
+            return commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
             	this.searchResults = this._normalizeSearchResult("All", res);
             	this.setMainInfo("all");
             	this.searchResults = null;
@@ -169,35 +154,23 @@ Vue.component('searchlist-component', {
 
             var me = this;
             this.isLoadingList = true;
+            if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {
+            	this.searchParams.siteType = "quyu";
+            	params.siteType = "quyu";
+        	} else if(params.type=="1"&&(params.dataId+"").length==6) {
+        		this.searchParams.siteType = "jiedao";
+        		params.siteType = "jiedao";
+        	} else if(params.type=="2") {
+        		this.searchParams.siteType = "juwei";
+        		params.siteType = "juwei";
+        	} else if(params.type=="3") {
+        		this.searchParams.siteType = "xiaoqu";
+        		params.siteType = "xiaoqu";
+        	}
 //            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
 //            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
             commonService.ajaxGetBase4('/searchKeyword.do', filters, params, function(res){
                 //alert("bbb")
-                if(params.keyType == 1){
-                    initDistrictInfo(params.keyId);
-                }
-                   if(params.type == 1 ){//显示街道
-                       if("sh" == params.dataId){
-                           initDistrictInfo();
-                       }else {
-                           getTown(params.dataId,null,null,null,"changeZoom");
-                       }
-                   }
-                   if(params.type == 2 ){
-                       getJuWei(params.dataId,null,null,null,"changeZoom");
-                   }
-                   if(params.type == 3){
-                       getResidence(params.dataId,null,null,null,"changeZoom")
-                   }
-                   if(params.keyType == 2){
-                       getTown(null,null,null,params.keyId,"changeZoom");
-                   }
-                if(params.keyType == 3){
-                    getJuWei(null,null,null,params.keyId,"changeZoom");
-                }
-                if(params.keyType == 5){
-                    getResidence(null,null,null,params.keyId,"changeZoom");
-                }
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;
             }.bind(this)).fail(function(){ me.isLoadingList = false; })

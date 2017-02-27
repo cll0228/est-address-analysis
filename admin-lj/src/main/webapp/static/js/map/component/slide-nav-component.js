@@ -27,8 +27,8 @@ Vue.component('slide-nav-component', {
 //        		var dList = res.data.info[0].district.map(function(d){
                     var normalizedDistrictList = commonService.normalizeItem(d, 'district');
                     normalizedDistrictList.children = commonService.normalizePlateList(d);
-                    for (var k = 1,length = normalizedDistrictList.children.length;k < length; k++) {
-                    	normalizedDistrictList.children[k].children = commonService.normalizeNeighborhoodList(d.townList[k-1]);
+                    for (var k = 1-1,length = normalizedDistrictList.children.length;k < length; k++) {
+                    	normalizedDistrictList.children[k].children = commonService.normalizeNeighborhoodList(d.townList[k]);
                     	}
                     return normalizedDistrictList;
                 });
@@ -61,7 +61,7 @@ Vue.component('slide-nav-component', {
                  @mouseover="mouseoverQuyu()" @mouseout="mouseoutLevel()" @click="clickQuyu()" :class="{\'side-bar__item--active\': isActiveQuyu()}">区县\
         </div></a>\
     	<a href="javascript:;"><div class="side-bar__item side-bar__item-jidinghe" \
-        		 @mouseover="mouseoverDitie()" @mouseout="mouseoutLevel()" @click="clickDitie()" :class="{\'side-bar__item--active\': isActiveDitie()}">机顶盒\
+        		 @mouseover="mouseoverDitie()" @mouseout="mouseoutLevel()" :class="{\'side-bar__item--active\': isActiveDitie()}">机顶盒\
 		</div></a>\
     	<!-- 区县 -->\
         <div class="side-bar__level1" id="districtWrap" \
@@ -69,22 +69,20 @@ Vue.component('slide-nav-component', {
     	<a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel3(d,1)" @mouseover="mouseoverLevel2(d)"\
                     gahref="{d.dataId}"><label><input type="checkbox" value="{{d.dataId}}" name="ckb" class="c-filterbox__item-checkbox" :style="{display: isActiveDitie() ? \'inline\' : \'none\'}">{{d.name}}</label></a>\
         </div>\
-        <div class="side-bar__level2" :class="{\'gio_plate\': isActiveQuyu(), \'gio_stop\': isActiveDitie()}" id="plateWrap" \
+        <div class="side-bar__level2" id="plateWrap" \
                 v-show="showLevel3 && level2Mouseovered.children.length > 0" @mouseover="mouseoverLevel(3)" @mouseout="mouseoutLevel()">\
             <!-- 板块 -->\
             <div class="side-bar__level2-item" v-for="group in level2Mouseovered.children" v-if="!isMouseoverDitie()">\
-                <span class="side-bar__level2-item-letter" v-if="group.firstLetter">{{group.firstLetter}}</span>\
                 <p class="side-bar__level2-item-sublist">\
                     <a href="javascript:;" class="side-bar__level2-item-subitem" gahref="{{group.isAll ? \'group-nolimit\' : group.dataId}}" @mouseover="mouseoverLevel3(group)" @click="clickLevel3(group,2)"\
                          :class="{\'side-bar__level2-item--selected\': level3Selected && level3Selected.dataId == group.dataId}">{{group.name}}</a>\
                 </p>\
             </div>\
         </div>\
-    	<div class="side-bar__level3" :class="{\'gio_plate\': isActiveQuyu(), \'gio_stop\': isActiveDitie()}" id="neighborhoodWrap" \
+    	<div class="side-bar__level3" id="neighborhoodWrap" \
 		        v-show="showLevel4 && level3Mouseovered.children.length > 0" @mouseover="mouseoverLevel(4)" @mouseout="mouseoutLevel()">\
 		    <!-- 板块 -->\
 		    <div class="side-bar__level3-item" v-for="group in level3Mouseovered.children" v-if="!isMouseoverDitie()">\
-		        <span class="side-bar__level3-item-letter" v-if="group.firstLetter">{{group.firstLetter}}</span>\
 		        <p class="side-bar__level3-item-sublist">\
 		            <a href="javascript:;" class="side-bar__level3-item-subitem" gahref="{{group.isAll ? \'group-nolimit\' : group.dataId}}" @click="clickLevel3(group,3)"\
 		                :class="{\'side-bar__level3-item--selected\': level4Selected && level4Selected.dataId == group.dataId}">{{group.name}}</a>\
@@ -106,6 +104,7 @@ Vue.component('slide-nav-component', {
             level3Chidren: null,             //当前区域|地铁线下的板块|地铁站列表
             div: null,						 //当前选择层级
             gdataId: null,						 //dataId，全局
+            gdiv: null,						 //dataId，全局
 
             showLevel1: true,		//站点: 区域|地铁
             showLevel2: false,		//区县|机顶盒
@@ -155,6 +154,21 @@ Vue.component('slide-nav-component', {
             this.level3Mouseovered = item;
             console.log(this.level3Mouseovered);
         },
+      //根据QueryString参数名称获取值
+
+        getQueryStringByName: function(name){
+
+             var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+
+             if(result == null || result.length < 1){
+
+                 return "";
+
+             }
+
+             return result[1];
+
+        },
         clickLevel2: function(item){
             this.level2Selected = item;
             this.setSiteType(this.mouseoveredSiteType);
@@ -181,7 +195,6 @@ Vue.component('slide-nav-component', {
             	}
         	}*/
         	if(item.type!="jidinghe") {
-        		this.div=item.dataId;
         		if(div=="1") {
             		this.setSiteType("jiedao");
             	} else if(div=="2") {
@@ -214,8 +227,11 @@ Vue.component('slide-nav-component', {
             	}
         	} else {
         		if(str=="") {
-            		this.clickLevel1Action({dataId: this.gdataId, type: div});
+            		this.clickLevel1Action({dataId: this.gdataId, type: this.gdiv});
             	} else {
+            			this.div = this.getQueryStringByName("dataId");
+            			this.gdataId = this.div;
+            			this.gdiv = this.getQueryStringByName("type");
             		this.clickLevel1Action({dataId: this.div, type: str});
             	}
         	}

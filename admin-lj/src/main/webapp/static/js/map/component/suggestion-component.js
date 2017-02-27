@@ -81,6 +81,11 @@ Vue.component('suggestion-component', {
                 params.siteType = (selectedItem.type === 'line' || selectedItem.type === 'stop') ? commonService.SITE_TYPE_DITIE : commonService.SITE_TYPE_QUYU;
                 params.keyType = selectedItem.type;
                 params.keyId = selectedItem.id;
+                if(selectedItem.type == 5){
+                    $('.c-filterbox__list').css({display:'none'});
+                } else{
+                    $('.c-filterbox__list').css({display:'block'});
+                }
             }else{                  //直接按回车或点击搜索按钮
                 params.keyword = this.keyword;
                 params.siteType = commonService.SITE_TYPE_QUYU;

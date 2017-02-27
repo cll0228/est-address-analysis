@@ -77,6 +77,7 @@ Vue.component('searchlist-component', {
                     params = commonService.getDefaultRoot();
                 }
             }else{
+                $('.c-filterbox__list').css({display:'block'});
                 if(searchParams.type == null){
                     this.startWith(searchParams.dataId);
                 }

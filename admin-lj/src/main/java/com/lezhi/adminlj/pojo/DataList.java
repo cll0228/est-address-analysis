@@ -13,6 +13,7 @@ public class DataList {
     private Double proportion;
     private String type;
     private String div;
+    private String gdataId;
 	public String getDataId() {
 		return dataId;
 	}
@@ -61,11 +62,18 @@ public class DataList {
 	public void setDiv(String div) {
 		this.div = div;
 	}
+	public String getGdataId() {
+		return gdataId;
+	}
+	public void setGdataId(String gdataId) {
+		this.gdataId = gdataId;
+	}
 	@Override
 	public String toString() {
 		return "DataList [dataId=" + dataId + ", latitude=" + latitude
 				+ ", longitude=" + longitude + ", showName=" + showName
 				+ ", households=" + households + ", proportion=" + proportion
-				+ ", type=" + type + ", div=" + div + "]";
+				+ ", type=" + type + ", div=" + div + ", gdataId=" + gdataId
+				+ "]";
 	}
 }

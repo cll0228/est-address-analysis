@@ -179,6 +179,7 @@ public class SearchController {
 			da.setHouseholds(countParam.getHouseholds());
 			da.setProportion(countParam.getProportion());
 			da.setShowName(countParam.getLevelName());
+			da.setGdataId(dataId);
 			if(type !=null && !type.contains("\'")) {
 				if(dataId != null && dataId.equals("sh")) {
 					da.setDiv(type);

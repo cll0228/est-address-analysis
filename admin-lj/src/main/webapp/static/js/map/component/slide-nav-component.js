@@ -27,8 +27,8 @@ Vue.component('slide-nav-component', {
 //        		var dList = res.data.info[0].district.map(function(d){
                     var normalizedDistrictList = commonService.normalizeItem(d, 'district');
                     normalizedDistrictList.children = commonService.normalizePlateList(d);
-                    for (var k = 1,length = normalizedDistrictList.children.length;k < length; k++) {
-                    	normalizedDistrictList.children[k].children = commonService.normalizeNeighborhoodList(d.townList[k-1]);
+                    for (var k = 1-1,length = normalizedDistrictList.children.length;k < length; k++) {
+                    	normalizedDistrictList.children[k].children = commonService.normalizeNeighborhoodList(d.townList[k]);
                     	}
                     return normalizedDistrictList;
                 });
@@ -69,22 +69,20 @@ Vue.component('slide-nav-component', {
     	<a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel3(d,1)" @mouseover="mouseoverLevel2(d)"\
                     gahref="{d.dataId}"><label><input type="checkbox" value="{{d.dataId}}" name="ckb" class="c-filterbox__item-checkbox" :style="{display: isActiveDitie() ? \'inline\' : \'none\'}">{{d.name}}</label></a>\
         </div>\
-        <div class="side-bar__level2" :class="{\'gio_plate\': isActiveQuyu(), \'gio_stop\': isActiveDitie()}" id="plateWrap" \
+        <div class="side-bar__level2" id="plateWrap" \
                 v-show="showLevel3 && level2Mouseovered.children.length > 0" @mouseover="mouseoverLevel(3)" @mouseout="mouseoutLevel()">\
             <!-- 板块 -->\
             <div class="side-bar__level2-item" v-for="group in level2Mouseovered.children" v-if="!isMouseoverDitie()">\
-                <span class="side-bar__level2-item-letter" v-if="group.firstLetter">{{group.firstLetter}}</span>\
                 <p class="side-bar__level2-item-sublist">\
                     <a href="javascript:;" class="side-bar__level2-item-subitem" gahref="{{group.isAll ? \'group-nolimit\' : group.dataId}}" @mouseover="mouseoverLevel3(group)" @click="clickLevel3(group,2)"\
                          :class="{\'side-bar__level2-item--selected\': level3Selected && level3Selected.dataId == group.dataId}">{{group.name}}</a>\
                 </p>\
             </div>\
         </div>\
-    	<div class="side-bar__level3" :class="{\'gio_plate\': isActiveQuyu(), \'gio_stop\': isActiveDitie()}" id="neighborhoodWrap" \
+    	<div class="side-bar__level3" id="neighborhoodWrap" \
 		        v-show="showLevel4 && level3Mouseovered.children.length > 0" @mouseover="mouseoverLevel(4)" @mouseout="mouseoutLevel()">\
 		    <!-- 板块 -->\
 		    <div class="side-bar__level3-item" v-for="group in level3Mouseovered.children" v-if="!isMouseoverDitie()">\
-		        <span class="side-bar__level3-item-letter" v-if="group.firstLetter">{{group.firstLetter}}</span>\
 		        <p class="side-bar__level3-item-sublist">\
 		            <a href="javascript:;" class="side-bar__level3-item-subitem" gahref="{{group.isAll ? \'group-nolimit\' : group.dataId}}" @click="clickLevel3(group,3)"\
 		                :class="{\'side-bar__level3-item--selected\': level4Selected && level4Selected.dataId == group.dataId}">{{group.name}}</a>\

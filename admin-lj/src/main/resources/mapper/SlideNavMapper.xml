@@ -448,7 +448,7 @@
 			AND of_town_id IS NOT NULL
 			AND of_town_id = #{paramInfo.keyId}
 			GROUP BY
-			of_neighborhood_id
+			of_town_id
 		</if>
 		<if test='paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
 			AND of_town_id IS NOT NULL
@@ -460,7 +460,7 @@
 			AND of_neighborhood_id IS NOT NULL
 			AND of_neighborhood_id = #{paramInfo.keyId}
 			GROUP BY
-			id
+			of_neighborhood_id
 		</if>
 		<if test='paramInfo.siteType == "xiaoqu"'>
 			AND of_neighborhood_id IS NOT NULL

@@ -28,7 +28,7 @@ $(function () {
             map.disableScrollWheelZoom();
             return;
         }
-        if(scale == 18){
+        if(scale == 17){
             map.clearOverlays();
             if(flag == 1)showResidenceInfo();
             return;
@@ -53,6 +53,8 @@ function initDistrictInfo(districtId) {
         data:{"districtId":districtId},
         dataType: "json",
         success: function (data) {
+            var center = new BMap.Point("121.464427", "31.228894");
+            map.centerAndZoom(center, 12);
             $.each(data, function (i, item) {
                 var point_dis_i = new BMap.Point(item.centerLongitude, item.centerLatitude);
                 //添加园圈
@@ -185,7 +187,7 @@ function showResidenceInfo(neighborhoodId,lon,lat,residenceId,ifchangeZoom) {
                 var bus_lat = item.lat;
                 var bus_lon = item.lon;
                 var bus_point_i = new BMap.Point(bus_lon, bus_lat);
-                map.centerAndZoom(bus_point_i, 18);
+                map.centerAndZoom(bus_point_i, 17);
                 var myIcon_i = new BMap.Icon("./static/img/point.png", new BMap.Size(30, 70));
                 var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
 
@@ -272,11 +274,11 @@ function addMapZoomSize() {
             return;
         }
         if(a_zoom == 16){
-            map.setZoom(18);
+            map.setZoom(17);
             map.clearOverlays();
             return;
         }
-        if(a_zoom == 18){
+        if(a_zoom == 17){
             return;
         }
     }
@@ -295,7 +297,7 @@ function reduceMapZoomSize() {
             return;
 
         }
-        if (a_zoom == 18) {
+        if (a_zoom == 17) {
             map.setZoom(16);
             return;
 
@@ -311,4 +313,88 @@ function ifNUll(filters) {
     if(filters.t == null && filters.o == null && filters.c == null && filters.p == null && filters.a == null && filters.l == null && filters.f == null && filters.g == null){
             return true;
     }else return false;
+}
+
+function showMapDistrict(dataList) {
+    map.clearOverlays();
+    var center = new BMap.Point("121.464427", "31.228894");
+    map.centerAndZoom(center, 12);
+    $.each(dataList, function (i, item) {
+        var point_dis_i = new BMap.Point(item.centerLongitude, item.centerLatitude);
+        //添加园圈
+        var html = '<div id="' + item.districtId + '" onclick="getTown(' + item.districtId + ','+item.centerLongitude+','+item.centerLatitude+');" onmouseout="clearOutLine();" onmouseover="getJABoundary('+item.districtId+');" class="district-overlay">' + item.district + '<br/>' + item.hdUserNum + '户</p></div>';
+        var anchor = new BMap.Size(-30, -25);
+        var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
+        map.addOverlay(richMarker_i);
+        var overlayTop = $(richMarker_i._container);
+        overlayTop.css("background", "transparent").addClass('map-overlay');
+    })
+}
+
+function showMapTown(dataList) {
+    map.clearOverlays();
+    $.each(dataList, function (i, item) {
+        cen_lon = item.cenLon;
+        cen_lat = item.cenLat;
+        map.centerAndZoom(new BMap.Point(cen_lon, cen_lat),14);
+        var point_dis_i = new BMap.Point(item.longitude, item.latitude);
+        //添加园圈
+        var html = '<div id="' + item.townId + '" onclick="getJuWei('+item.townId+','+item.longitude+','+item.latitude+');" class="plate-overlay"><p>' + item.townName + '</p><p class="map-overlay__total">' + item.hdUserNum + '户</p></div>';
+        var anchor = new BMap.Size(-30, -25);
+        var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
+        map.addOverlay(richMarker_i);
+        var overlayTop = $(richMarker_i._container);
+        overlayTop.css("background", "transparent").addClass('map-overlay');
+    })
+}
+
+function showMapNeibarHood(dataList) {
+    map.clearOverlays();
+    $.each(dataList, function (i, item) {
+        cen_lon = item.cenLon;
+        cen_lat = item.cenLat;
+        map.centerAndZoom(new BMap.Point(cen_lon, cen_lat),16);
+        var point_dis_i = new BMap.Point(item.lng, item.lat);
+        //添加园圈
+        var html = '<div id="' + item.neighborhoodId + '" onclick="getResidence('+item.neighborhoodId+','+item.lng+','+item.lat+');" class="plate-overlay"><p>' + item.neighborhoodName + '</p><p class="map-overlay__total">' + item.hdUserNum + '户</p></div>';
+        var anchor = new BMap.Size(-30, -25);
+        var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
+        map.addOverlay(richMarker_i);
+        var overlayTop = $(richMarker_i._container);
+        overlayTop.css("background", "transparent").addClass('map-overlay');
+    })
+}
+
+function showMapResidence(dataList) {
+    $.each(dataList, function (i, item) {
+        var bus_lat = item.lat;
+        var bus_lon = item.lon;
+        var bus_point_i = new BMap.Point(bus_lon, bus_lat);
+        map.centerAndZoom(bus_point_i, 17);
+        var myIcon_i = new BMap.Icon("./static/img/point.png", new BMap.Size(30, 70));
+        var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
+
+        //点击事件，显示文本内容
+        var opts_i = {
+            position: bus_point_i,    // 指定文本标注所在的地理位置
+            title: item.residenceName,
+            offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
+        }
+        var infoWindow_i = new BMap.InfoWindow("地址：" + item.residenceAddr+'</br>'+"高清机顶盒用户数："+item.hdUserNum, opts_i);  // 创建信息窗口对象
+        //标签
+        var label_i = new BMap.Label(i+1,{offset:new BMap.Size(7,3)});
+        label_i.setStyle({
+            color: "white",
+            fontSize: "10px",
+            backgroundColor: "0.05",
+            border: "0",
+            fontFamily: "微软雅黑"
+        });
+        marker2_i.setLabel(label_i);
+        //圖標點擊事件
+        marker2_i.addEventListener("mouseover", function () {
+            map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
+        });
+        map.addOverlay(marker2_i);
+    })
 }

@@ -382,34 +382,37 @@
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
 			of_district_id,
 			sum(house_count) AS levelHouseCount,
-			center_lat AS lat,
-			center_lng AS lon
+			od.center_lat AS lat,
+			od.center_lng AS lon
 		</if>
 		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
 			of_town_id,
 			sum(house_count) AS levelHouseCount,
-			latitude AS lat,
-			longitude AS lon
+			ot.latitude AS lat,
+			ot.longitude AS lon
 		</if>
 		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
 			of_neighborhood_id,
 			sum(house_count) AS levelHouseCount,
-			lat AS lat,
-			lng as lon
+			one.lat AS lat,
+			one.lng as lon
 		</if>
 		<if test='paramInfo.keyType == "4"'>
 			id,
 			sum(house_count) AS levelHouseCount,
-			lat,
-			lon
+			re.lat,
+			re.lon
 		</if>
 		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
 			id,
 			sum(house_count) AS levelHouseCount,
-			lat,
-			lon
+			re.lat,
+			re.lon
 		</if>
 		FROM ocn_address.of_residence re
+		left JOIN ocn_address.of_district od on re.of_district_id = od.district_id
+		left JOIN ocn_address.of_town ot on re.of_town_id = ot.town_id
+		left JOIN ocn_address.of_neighborhood one on re.of_neighborhood_id = one.neighborhood_id
 		WHERE 1=1
 		<!-- 小区总户数 -->
 		<if test='paramInfo.l == "l500"'>

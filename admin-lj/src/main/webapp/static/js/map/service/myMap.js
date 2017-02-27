@@ -165,10 +165,9 @@ function showResidenceInfo(neighborhoodId, lon, lat, residenceId, ifchangeZoom) 
                 //点击事件，显示文本内容
                 var opts_i = {
                     position: bus_point_i,    // 指定文本标注所在的地理位置
-                    title: item.residenceName,
                     offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
                 }
-                var infoWindow_i = new BMap.InfoWindow("地址：" + item.residenceAddr + '</br>' + "高清机顶盒用户数：" + item.hdUserNum, opts_i);  // 创建信息窗口对象
+                var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.residenceName + '</br>' + "高清机顶盒用户数：" + item.hdUserNum, opts_i);  // 创建信息窗口对象
                 //标签
                 var label_i = new BMap.Label(i + 1, {offset: new BMap.Size(7, 3)});
                 label_i.setStyle({

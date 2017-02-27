@@ -186,31 +186,23 @@ Vue.component('searchlist-component', {
 //            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
             commonService.ajaxGetBase4('/searchKeyword.do', filters, params, function(res){
                 //alert("bbb")
+                //用户点搜索
+                if(params.keyType == null){
+                    this.startWith(res.dataList[0].dataId);
+                    params.keyType = this.searchParams.type;
+                }
                 if(params.keyType == 1){
-                    initDistrictInfo(params.keyId);
+                    showMapDistrict(res.dataList);
                 }
-                if(params.type == "city" || params.type == "sh"){//显示街道
-                    initDistrictInfo();
+                if(params.keyType == 2 || params.type == 1){
+                    showMapTown(res.dataList);
                 }
-                if(params.type == 1 ){
-                    getTown(params.dataId,null,null,null,"changeZoom");
+                if(params.keyType == 3 || params.type == 2){
+                    showMapNeibarHood(res.dataList);
                 }
-                if(params.type == 2 ){
-                    getJuWei(params.dataId,null,null,null,"changeZoom");
+                if(params.keyType == 4 || params.keyType == 5 || params.type == 3){
+                    showMapResidence(res.dataList)
                 }
-                if(params.type == 3){
-                    getResidence(params.dataId,null,null,null,"changeZoom")
-                }
-                if(params.keyType == 2){
-                    getTown(null,null,null,params.keyId,"changeZoom");
-                }
-                if(params.keyType == 3){
-                    getJuWei(null,null,null,params.keyId,"changeZoom");
-                }
-                if(params.keyType == 5){
-                    getResidence(null,null,null,params.keyId,"changeZoom");
-                }
-
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;
             }.bind(this)).fail(function(){ me.isLoadingList = false; })

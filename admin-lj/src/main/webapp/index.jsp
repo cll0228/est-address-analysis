@@ -198,7 +198,7 @@
 								<span class="search-list__count">占比</span>
 							</li>
 							<li class="search-list__list-item" gahref="{{item.dataId}}" v-for="item in searchResults.list" @click="clickListItem(item)">
-								<span class="search-list__show-name" title="{{item.showName}}" gahref="{{item.dataId}}">{{item.showName}}</span>
+								<span class="search-list__show-name" title="{{item.showName}}" gahref="{{item.dataId}}" onmouseover="showMap('{{item.dataId}}')" onmouseout="hideMap();">{{item.showName}}</span>
 								<span class="search-list__price" gahref="{{item.dataId}}"><span>{{item.households}}户</span></span>
 								<span class="search-list__count" gahref="{{item.dataId}}">{{item.proportion}}%</span>
 							</li>

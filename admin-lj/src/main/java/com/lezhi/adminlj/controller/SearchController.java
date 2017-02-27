@@ -158,7 +158,20 @@ public class SearchController {
 			paramInfo.setKeyType(null);
 		}
 		ArrayList<CountParam> countList = new ArrayList<CountParam>();
-		countList = slideNavService.searchKeyword(paramInfo);
+		if(keyword != null && keyId == null){
+			List<LuceneSearchDto> list = searchIndex(keyword);
+			if(list.size() > 0){
+				for(LuceneSearchDto luceneSearchDto :list){
+					ArrayList<CountParam> everyList = new ArrayList<CountParam>();
+					paramInfo.setKeyId(luceneSearchDto.getId());
+					paramInfo.setKeyType(String.valueOf(luceneSearchDto.getType()));
+					everyList = slideNavService.searchKeyword(paramInfo);
+					countList.addAll(everyList);
+				}
+			}
+		} else {
+			countList = slideNavService.searchKeyword(paramInfo);
+		}
 
 		for (CountParam countParam : countList) {
 			DataList da = new DataList();
@@ -182,5 +195,58 @@ public class SearchController {
 //		result.put("status", "0");
 		result.put("dataList", dataList);
 		return result;
+	}
+
+	public List<LuceneSearchDto> searchIndex(String keyWord) {
+		if (null == houseAddressIndexDirPath)
+			houseAddressIndexDirPath = PropertyUtil.get("/lucene", luceneIndexPathProp);
+		System.out.println(houseAddressIndexDirPath);
+		IndexReader reader = null;
+		try {
+			String[] houseAddressIndexFields = {"name", "addr"};
+			reader = DirectoryReader.open(FSDirectory.open(new File(houseAddressIndexDirPath)));
+			IndexSearcher searcher = new IndexSearcher(reader);
+			MultiFieldQueryParser parser = new MultiFieldQueryParser(houseAddressIndexFields, analyzer);
+			parser.setDefaultOperator(QueryParser.Operator.OR);
+			Query query = parser.parse("\"" + keyWord + "\"");
+			System.out.println("query:" + query.toString());
+			TopDocs hits = searcher.search(query, 10);
+			List<LuceneSearchDto> list = new ArrayList<LuceneSearchDto>();
+			for (ScoreDoc sd : hits.scoreDocs) {
+				Document document = searcher.doc(sd.doc);
+				LuceneSearchDto info = new LuceneSearchDto();
+				if (null != document.get("type")) info.setType(Integer.valueOf(document.get("type")));
+				if (null != document.get("district_id"))
+					info.setDistrict_id(Integer.valueOf(document.get("district_id")));
+				if (null != document.get("district_name")) info.setDistrict_name(String.valueOf(document.get("district_name")));
+				if (null != document.get("town_id")) info.setTown_id(Integer.valueOf(document.get("town_id")));
+				if (null != document.get("town_name")) info.setTown_name(String.valueOf(document.get("town_name")));
+				if (null != document.get("neighborhood_id")) info.setNeighborhood_id(Integer.valueOf(document.get("neighborhood_id")));
+				if (null != document.get("neighborhood_name")) info.setNeighborhood_name(String.valueOf(document.get("neighborhood_name")));
+				if (null != document.get("id")) info.setId(document.get("id"));
+				if (null != document.get("name")) info.setName(String.valueOf(document.get("name")));
+				if (null != document.get("addr")) info.setAddr(String.valueOf(document.get("addr")));
+				if (null != document.get("longitude")) info.setLongitude(Double.valueOf(document.get("longitude")));
+				if (null != document.get("latitude")) info.setLatitude(Double.valueOf(document.get("latitude")));
+				if (null != document.get("center_lng"))
+					info.setCenter_lng(Double.valueOf(document.get("center_lng")));
+				if (null != document.get("center_lat"))
+					info.setCenter_lat(Double.valueOf(document.get("center_lat")));
+				System.out.println(info);
+				list.add(info);
+			}
+			return list;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (null != reader) try {
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }

@@ -45,6 +45,17 @@ Vue.component('searchlist-component', {
             searchResults: null		//头部信息下的列表
         }
     },
+    startWith: function(showDataId){
+        if((showDataId.indexOf("3101") == 0 || showDataId == "310230") && showDataId.length == 6){
+            this.searchParams.type = 1
+        }else if((showDataId.indexOf("3101") == 0 || showDataId.indexOf("310230")) && showDataId.length == 9){
+            this.searchParams.type = 2
+        }else if((showDataId.indexOf("3101") == 0 || showDataId.indexOf("310230")) && showDataId.length == 12){
+            this.searchParams.type = 3
+        } else {
+            this.searchParams.type = 4
+        }
+    },
     methods: {
         displayBreadCrumb: function(){
             var b = this.breadCrumb || [],
@@ -66,6 +77,9 @@ Vue.component('searchlist-component', {
                     params = commonService.getDefaultRoot();
                 }
             }else{
+                if(searchParams.type == null){
+                    this.startWith(searchParams.dataId);
+                }
                 params.type = searchParams.type || 'city';
                 params.dataId =  searchParams.dataId || headerParameters.cityCode;
                 if(searchParams.lineId){

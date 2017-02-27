@@ -106,6 +106,7 @@ Vue.component('slide-nav-component', {
             level3Chidren: null,             //当前区域|地铁线下的板块|地铁站列表
             div: null,						 //当前选择层级
             gdataId: null,						 //dataId，全局
+            gdiv: null,						 //dataId，全局
 
             showLevel1: true,		//站点: 区域|地铁
             showLevel2: false,		//区县|机顶盒
@@ -155,6 +156,21 @@ Vue.component('slide-nav-component', {
             this.level3Mouseovered = item;
             console.log(this.level3Mouseovered);
         },
+      //根据QueryString参数名称获取值
+
+        getQueryStringByName: function(name){
+
+             var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+
+             if(result == null || result.length < 1){
+
+                 return "";
+
+             }
+
+             return result[1];
+
+        },
         clickLevel2: function(item){
             this.level2Selected = item;
             this.setSiteType(this.mouseoveredSiteType);
@@ -181,7 +197,6 @@ Vue.component('slide-nav-component', {
             	}
         	}*/
         	if(item.type!="jidinghe") {
-        		this.div=item.dataId;
         		if(div=="1") {
             		this.setSiteType("jiedao");
             	} else if(div=="2") {
@@ -214,8 +229,11 @@ Vue.component('slide-nav-component', {
             	}
         	} else {
         		if(str=="") {
-            		this.clickLevel1Action({dataId: this.gdataId, type: div});
+            		this.clickLevel1Action({dataId: this.gdataId, type: this.gdiv});
             	} else {
+            			this.div = this.getQueryStringByName("dataId");
+            			this.gdataId = this.div;
+            			this.gdiv = this.getQueryStringByName("type");
             		this.clickLevel1Action({dataId: this.div, type: str});
             	}
         	}

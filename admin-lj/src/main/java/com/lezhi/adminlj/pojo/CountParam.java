@@ -9,6 +9,8 @@ public class CountParam {
     private String levelId;//层级id
     private Integer levelHouseCount;//层级总户数
     private Double proportion;//占比
+	private Double lat;
+	private Double lon;
 	public Integer getHouseholds() {
 		return households;
 	}
@@ -43,6 +45,22 @@ public class CountParam {
 	public String toString() {
 		return "CountParam [households=" + households + ", levelName="
 				+ levelName + ", levelId=" + levelId + ", levelHouseCount="
-				+ levelHouseCount + ", proportion=" + proportion + "]";
+				+ levelHouseCount + ", proportion=" + proportion  + ", lat=" + lat + ", lon=" + lon+ "]";
+	}
+
+	public Double getLat() {
+		return lat;
+	}
+
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public Double getLon() {
+		return lon;
+	}
+
+	public void setLon(Double lon) {
+		this.lon = lon;
 	}
 }

@@ -181,7 +181,9 @@
 	<select id="searchKeyword" resultType="com.lezhi.adminlj.pojo.CountParam">
 		SELECT
 		a.*, b.levelHouseCount,
-		a.households / b.levelHouseCount * 100 AS proportion
+		a.households / b.levelHouseCount * 100 AS proportion,
+		b.lat,
+		b.lon
 		FROM
 		(select count(h.TYPE_NAME) AS households
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
@@ -379,24 +381,33 @@
 		SELECT
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
 			of_district_id,
-			sum(
-			house_count) AS levelHouseCount
+			sum(house_count) AS levelHouseCount,
+			center_lat AS lat,
+			center_lng AS lon
 		</if>
 		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
 			of_town_id,
-			sum(house_count) AS levelHouseCount
+			sum(house_count) AS levelHouseCount,
+			latitude AS lat,
+			longitude AS lon
 		</if>
 		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
 			of_neighborhood_id,
-			sum(house_count) AS levelHouseCount
+			sum(house_count) AS levelHouseCount,
+			lat AS lat,
+			lng as lon
 		</if>
 		<if test='paramInfo.keyType == "4"'>
 			id,
-			sum(house_count) AS levelHouseCount
+			sum(house_count) AS levelHouseCount,
+			lat,
+			lon
 		</if>
 		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
 			id,
-			sum(house_count) AS levelHouseCount
+			sum(house_count) AS levelHouseCount,
+			lat,
+			lon
 		</if>
 		FROM ocn_address.of_residence re
 		WHERE 1=1

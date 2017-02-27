@@ -75,7 +75,8 @@ Vue.component('searchlist-component', {
                     params.stopId = searchParams.stopId;
                 }
             }
-            if(params.type=="4") {
+            if(params.type=="4"||(params.type=="2"&&searchParams.siteType=="xiaoqu")) {
+//            if(params.type=="4") {
             	return;
             }
             if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {

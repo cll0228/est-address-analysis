@@ -67,7 +67,7 @@
             lineId: null,       //只在地铁找房中存在
             stopId: null,       //只在地铁找房中存在
             div: null, 
-
+            gdataId: null, 
             s: null     //排序
         }
     };

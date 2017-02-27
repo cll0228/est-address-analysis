@@ -105,6 +105,7 @@ Vue.component('slide-nav-component', {
             level3Mouseovered: null,         //移上去的街道|地铁线
             level3Chidren: null,             //当前区域|地铁线下的板块|地铁站列表
             div: null,						 //当前选择层级
+            gdataId: null,						 //dataId，全局
 
             showLevel1: true,		//站点: 区域|地铁
             showLevel2: false,		//区县|机顶盒
@@ -205,13 +206,15 @@ Vue.component('slide-nav-component', {
         	}
         	if(item.type!="jidinghe") {
         		if(str=="") {
+        			//在这一行加上div存在this里面。和上面一样存法
+        			this.gdataId = item.dataId;
             		this.clickLevel1Action({dataId: item.dataId, type: div});
             	} else {
             		this.clickLevel1Action({dataId: item.dataId, type: str});
             	}
         	} else {
         		if(str=="") {
-            		this.clickLevel1Action({dataId: this.div, type: div});
+            		this.clickLevel1Action({dataId: this.gdataId, type: div});
             	} else {
             		this.clickLevel1Action({dataId: this.div, type: str});
             	}

@@ -180,7 +180,7 @@ public class SearchController {
 			da.setProportion(countParam.getProportion());
 			da.setShowName(countParam.getLevelName());
 			da.setGdataId(dataId);
-			if(!type.contains("\'")) {
+			if(type !=null && !type.contains("\'")) {
 				if(dataId != null && dataId.equals("sh")) {
 					da.setDiv(type);
 				} else if(type != null && !"city".equals(type)) {
@@ -189,7 +189,8 @@ public class SearchController {
 				}
 			}
 			da.setType("init");
-
+			da.setLatitude(countParam.getLat());
+			da.setLongitude(countParam.getLon());
 			dataList.add(da);
 		}
 		myDataList = dataList;

@@ -28,10 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -158,6 +155,7 @@ public class SearchController {
 			paramInfo.setKeyType(null);
 		}
 		ArrayList<CountParam> countList = new ArrayList<CountParam>();
+		List<String> typeList = new ArrayList<>();
 		if(keyword != null && keyId == null){
 			List<LuceneSearchDto> list = searchIndex(keyword);
 			if(list.size() > 0){
@@ -167,7 +165,9 @@ public class SearchController {
 					paramInfo.setKeyType(String.valueOf(luceneSearchDto.getType()));
 					everyList = slideNavService.searchKeyword(paramInfo);
 					countList.addAll(everyList);
+					typeList.add(String.valueOf(luceneSearchDto.getType()));
 				}
+				typeList = new ArrayList<String>(new HashSet<String>(typeList));
 			}
 		} else {
 			countList = slideNavService.searchKeyword(paramInfo);
@@ -196,6 +196,22 @@ public class SearchController {
 		myDataList = dataList;
 //		result.put("status", "0");
 		result.put("dataList", dataList);
+		if(typeList.size() == 1){
+			if("1".equals(typeList.get(0))){
+				result.put("siteType", "quyu");
+			}
+			if("2".equals(typeList.get(0))){
+				result.put("siteType", "jiedao");
+			}
+			if("3".equals(typeList.get(0))){
+				result.put("siteType", "juwei");
+			}
+			if("4".equals(typeList.get(0)) || "5".equals(typeList.get(0))){
+				result.put("siteType", "xiaoqu");
+			}
+		} else if(typeList.size() > 1) {
+			result.put("siteType", "jieguo");
+		}
 		return result;
 	}
 

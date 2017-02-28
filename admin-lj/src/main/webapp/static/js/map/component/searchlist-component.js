@@ -186,7 +186,21 @@ Vue.component('searchlist-component', {
 //            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
 //            commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
             commonService.ajaxGetBase4('/searchKeyword.do', filters, params, function(res){
-                //alert("bbb")
+                if(res.siteType == "xiaoqu" || res.siteType == "xiaoqu"){
+                    this.searchParams.siteType = "xiaoqu";
+                }
+                if(res.siteType == "quyu"){
+                    this.searchParams.siteType = "quyu";
+                }
+                if(res.siteType == "jiedao"){
+                    this.searchParams.siteType = "jiedao";
+                }
+                if(res.siteType == "juwei"){
+                    this.searchParams.siteType = "juwei";
+                }
+                if(res.siteType == "jieguo"){
+                    this.searchParams.siteType = "jieguo";
+                }
                 //用户点搜索
                 if(params.keyType == null){
                     this.startWith(res.dataList[0].dataId);

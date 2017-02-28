@@ -99,7 +99,7 @@ public class SlideNavController {
 		String t = request.getParameter("t");// 小区特征/小区分类
 		String c = request.getParameter("c");// 小区特征/小区用户占比
 
-    	if(type.equals("city") && isNullString(keyword) && isNullString(a) && isNullString(l) &&
+    	if("city".equals(type) && isNullString(keyword) && isNullString(a) && isNullString(l) &&
 				isNullString(p) && isNullString(t) && isNullString(c)) {
     		result.put("status", "1");
     		result.put("dataList", dataList);

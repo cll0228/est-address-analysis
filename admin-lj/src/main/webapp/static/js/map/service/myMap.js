@@ -24,6 +24,8 @@ $(function () {
     });
     //加載行政區域
     initDistrictInfo();
+    //不能按-
+    $("#szoom").attr("class"," zoom-tool__item icon-minus zoom-tool__item--disabled");
 });
 
 
@@ -59,6 +61,7 @@ function initDistrictInfo(districtId) {
 }
 
 function getTown(districtId, townId) {
+    $("#szoom").attr("class","zoom-tool__item icon-minus");
     showTown(districtId, townId, "chang",null);
 }
 
@@ -162,6 +165,7 @@ function getResidence(neighborhoodId,  residenceId, ifchangeZoom) {
 }
 
 function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
+    $("#bzoom").attr("class","zoom-tool__item icon-plus zoom-tool__item--disabled");
     if(null == center){
         center = map.getCenter();
     }
@@ -258,6 +262,7 @@ function addMapZoomSize() {
     if (com_param) {
         var a_zoom = map.getZoom();
         if (a_zoom == 12) {
+            $("#szoom").attr("class","zoom-tool__item icon-minus");
             map.setZoom(14);
             map.clearOverlays();
             showTown();
@@ -270,6 +275,7 @@ function addMapZoomSize() {
             return;
         }
         if (a_zoom == 16) {
+            $("#bzoom").attr("class","zoom-tool__item icon-plus zoom-tool__item--disabled");
             map.setZoom(18);
             map.clearOverlays();
             showResidenceInfo();
@@ -291,18 +297,18 @@ function reduceMapZoomSize() {
             return;
         }
         if (a_zoom == 14) {
+            $("#szoom").attr("class","zoom-tool__item icon-minus zoom-tool__item--disabled");
             map.clearOverlays();
             map.setZoom(12);
             initDistrictInfo();
             return;
-
         }
         if (a_zoom == 18) {
+            $("#bzoom").attr("class","zoom-tool__item icon-plus");
             map.clearOverlays();
             map.setZoom(16);
             showneighborhood();
             return;
-
         }
         if (a_zoom == 12) {
             return;
@@ -337,6 +343,7 @@ function showMapDistrict(dataList) {
 }
 
 function showMapTown(dataList) {
+    $("#szoom").attr("class","zoom-tool__item icon-minus");
     map.clearOverlays();
     map.disableScrollWheelZoom();
     for(var i=0;i<dataList.length;i++){
@@ -383,6 +390,7 @@ function showMapNeibarHood(dataList) {
 }
 
 function showMapResidence(dataList) {
+    $("#bzoom").attr("class","zoom-tool__item icon-plus zoom-tool__item--disabled");
     map.clearOverlays();
     map.disableScrollWheelZoom();
     for (var i = 0; i < dataList.length; i++) {

@@ -185,7 +185,10 @@
 		b.lat,
 		b.lon
 		FROM
-		(select count(h.TYPE_NAME) AS households
+		(select count(h.TYPE_NAME) AS households,
+		h.district_name AS districtName,
+		h.town_name AS townNname,
+		h.neighborhood_name AS neighborhoodName
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
 			,h.district_name AS levelName,
 			h.of_district_id AS levelId,

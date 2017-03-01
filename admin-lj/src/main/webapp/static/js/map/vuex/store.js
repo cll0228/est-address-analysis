@@ -67,7 +67,12 @@
             lineId: null,       //只在地铁找房中存在
             stopId: null,       //只在地铁找房中存在
             div: null, 
-            gdataId: null, 
+            gdataId: null,
+            showName: null,
+            cityName: null,
+            districtName: null,
+            townNname: null,
+            neighborhoodName: null,
             s: null     //排序
         }
     };

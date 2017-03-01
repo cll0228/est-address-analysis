@@ -111,11 +111,26 @@
 						<h1 class="search-list__main-info">
 							<i class="search-list__position-icon"></i>
 							<div class="search-list__main-show-name" title="{{mainInfo.showName}}">
-								<!-- {{mainInfo.showName}} -->上海
+								<!-- {{searchParams.showName}} -->{{searchParams.showName}}
 								<p class="search-list__breadcrumb">
-									<span v-for="item in displayBreadCrumb">
+									<!-- <span v-for="item in displayBreadCrumb">
 										<a href="javascript:;" @click="clickBreadCrumb(item)" gahref="crumb_{{item.dataId}}" >{{item.showName}}</a>
 										<span class="search-list__gt" v-if="$index != displayBreadCrumb.length - 1">&gt;</span>
+									</span> -->
+									<span v-if="searchParams.siteType == 'jiedao'">
+										{{searchParams.cityName}}
+									</span>
+									<span v-if="searchParams.siteType == 'juwei'">
+										{{searchParams.cityName}}
+										<span class="search-list__gt" v-if="$index != displayBreadCrumb.length - 1">&gt;</span>
+										{{searchParams.districtName}}
+									</span>
+									<span v-if="searchParams.siteType == 'xiaoqu'">
+										{{searchParams.cityName}}
+										<span class="search-list__gt" v-if="$index != displayBreadCrumb.length - 1">&gt;</span>
+										{{searchParams.districtName}}
+										<span class="search-list__gt" v-if="$index != displayBreadCrumb.length - 1">&gt;</span>
+										{{searchParams.townNname}}
 									</span>
 								</p>
 							</div>

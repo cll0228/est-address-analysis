@@ -49,8 +49,10 @@ public class MapController {
     @RequestMapping(value = "showtown", method = RequestMethod.GET)
     @ResponseBody
     public List<Town> showtown(@RequestParam(value = "districtId", required = false) Integer districtId,
-            @RequestParam(value = "townId", required = false) Integer townId) {
-        List<Town> towns = mapService.showtown(districtId, townId);
+            @RequestParam(value = "townId", required = false) Integer townId,
+                               @RequestParam(value = "lng", required = false) String lng,
+                               @RequestParam(value = "lat", required = false) String lat) {
+        List<Town> towns = mapService.showtown(districtId, townId,lng,lat);
         towns = MyUtli.changData1(towns, controller.myDataList);
         if (null == towns) {
             return null;
@@ -61,8 +63,10 @@ public class MapController {
     @RequestMapping(value = "neighborhood", method = RequestMethod.GET)
     @ResponseBody
     public List<Neighborhood> neighborhood(@RequestParam(value = "townId", required = false) Integer townId,
-            @RequestParam(value = "neighborhoodId", required = false) String neighborhoodId) {
-        List<Neighborhood> neighborhoods = mapService.neighborhood(townId, neighborhoodId);
+            @RequestParam(value = "neighborhoodId", required = false) String neighborhoodId,
+                                           @RequestParam(value = "lng", required = false) String lng,
+                                           @RequestParam(value = "lat", required = false) String lat) {
+        List<Neighborhood> neighborhoods = mapService.neighborhood(townId, neighborhoodId,lng,lat);
         neighborhoods = MyUtli.changData2(neighborhoods, controller.myDataList);
         if (null == neighborhoods) {
             return null;
@@ -74,8 +78,9 @@ public class MapController {
     @ResponseBody
     public List<Residence> residence(
             @RequestParam(value = "neighborhoodId", required = false) String neighborhoodId,
-            @RequestParam(value = "residenceId", required = false) String residenceId) {
-        List<Residence> Residence = mapService.residence(neighborhoodId, residenceId);
+            @RequestParam(value = "residenceId", required = false) String residenceId, @RequestParam(value = "lng", required = false) String lng,
+            @RequestParam(value = "lat", required = false) String lat) {
+        List<Residence> Residence = mapService.residence(neighborhoodId, residenceId,lng,lat);
         if (null == Residence) {
             return null;
         }

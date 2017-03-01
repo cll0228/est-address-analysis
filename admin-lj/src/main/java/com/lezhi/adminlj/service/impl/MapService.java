@@ -29,15 +29,15 @@ public class MapService {
         return mapMapper.getDistrictBoundryInfo(districtId);
     }
 
-    public List<Town> showtown(Integer districtId,Integer townId) {
-        return mapMapper.showtown(districtId,townId);
+    public List<Town> showtown(Integer districtId,Integer townId,String lng,String lat) {
+        return mapMapper.showtown(districtId,townId,lng,lat);
     }
 
-    public List<Neighborhood> neighborhood(Integer townId,String neighborhoodId) {
-        return mapMapper.neighborhood(townId,neighborhoodId);
+    public List<Neighborhood> neighborhood(Integer townId,String neighborhoodId,String lng,String lat) {
+        return mapMapper.neighborhood(townId,neighborhoodId,lng,lat);
     }
 
-    public List<Residence> residence(String neighborhoodId,String residenceId) {
-        return mapMapper.residence(neighborhoodId,residenceId);
+    public List<Residence> residence(String neighborhoodId,String residenceId,String lng,String lat) {
+        return mapMapper.residence(neighborhoodId,residenceId,lng,lat);
     }
 }

@@ -21,75 +21,111 @@
     </select>
     <select id="showtown" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Town">
         SELECT
-            t.town_id townId,
-            t.town_name townName,
-            t.district_id districtId,
-            t.latitude latitude,
-            t.longitude longitude,
-            count(a.STD_ADDR_ID) hdUserNum,
-            d.center_lng cenLon,
-            d.center_lat cenLat
+        re.*, count(a.STD_ADDR_ID) hdUserNum,
+        d.center_lng cenLon,
+        d.center_lat cenLat
         FROM
-            ocn_address.of_town t
-        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.town_id = a.of_town_id
-        inner JOIN ocn_address.of_district d ON t.district_id = d.district_id
-        WHERE 1 = 1
-        <if test="districtId != null">
-            and t.new_district_id = #{districtId}
-        </if>
+        hsrjop.intelligence_hd_addr_info a,
+        (
+        SELECT
+        t.town_id townId,
+        t.town_name townName,
+        t.district_id districtId,
+        t.latitude latitude,
+        t.longitude longitude
+        FROM
+        ocn_address.of_town t
+        WHERE 1=1
         <if test="townId != null">
-         AND   t.town_id = #{townId}
+            AND   t.town_id = #{townId}
         </if>
-        AND t.longitude is not null
+        <if test="lng != null and '' != lng">
+             AND  hsrjop.calcDistance(#{lng},#{lat},t.longitude,t.latitude) &lt;8000
+        </if>
+        ) re LEFT JOIN
+        ocn_address.of_district d on d.district_id = re.districtId
+        WHERE
+        a.of_town_id = re.townId
+        AND re.districtId = d.district_id
+        <if test="districtId != null">
+            and d.district_id = #{districtId}
+        </if>
         GROUP BY
-            a.of_town_id HAVING COUNT(a.STD_ADDR_ID) != 0
+        a.of_town_id
+        HAVING
+        COUNT(a.STD_ADDR_ID) != 0
     </select>
     <select id="neighborhood" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Neighborhood">
         SELECT
-            t.neighborhood_id neighborhoodId,
-            t.neighborhood_name neighborhoodName,
-            t.town_id town_id,
-            t.lng lng,
-            t.lat lat,
-            count(a.STD_ADDR_ID) hdUserNum,
-        ot.longitude cenLon,
-        ot.latitude cenLat
+        re.*, count(a.STD_ADDR_ID) hdUserNum,
+        d.longitude cenLon,
+        d.latitude cenLat
         FROM
-            ocn_address.of_neighborhood t
-        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.neighborhood_id = a.of_neighborhood_id
-        LEFT JOIN ocn_address.of_town ot ON ot.town_id = t.town_id
-        WHERE 1= 1
-        <if test="townId != null">
-            AND  t.town_id = #{townId}
-        </if>
-        <if test="neighborhoodId != null and '' != neighborhoodId " >
+        hsrjop.intelligence_hd_addr_info a,
+        (
+        SELECT
+        t.neighborhood_id neighborhoodId,
+        t.neighborhood_name neighborhoodName,
+        t.town_id townId,
+        t.lng lng,
+        t.lat lat
+        FROM
+        ocn_address.of_neighborhood t
+        WHERE
+        1 = 1
+        <if test="neighborhoodId != null and '' != neighborhoodId">
             AND t.neighborhood_id = #{neighborhoodId}
         </if>
-        AND t.lng is not null
+        <if test="lng != null and '' != lng">
+            AND  hsrjop.calcDistance(#{lng},#{lat},t.lng,t.lat) &lt;1500
+        </if>
+        ) re,
+        ocn_address.of_town d
+        WHERE
+        a.of_neighborhood_id = re.neighborhoodId AND a.of_town_id = d.town_id
+        <if test="townId != null and '' != townId">
+            AND re.townId = #{townId}
+        </if>
         GROUP BY
-            a.of_neighborhood_id HAVING COUNT(a.STD_ADDR_ID) != 0
+        a.of_neighborhood_id
+        HAVING
+        COUNT(a.STD_ADDR_ID) != 0
     </select>
     <select id="residence" parameterType="java.lang.String" resultType="com.lezhi.adminlj.pojo.Residence">
-      SELECT
-            t.id residenceId,
-            t.residence_name residenceName,
-            t.of_neighborhood_id neighborhoodId,
-            t.lon lon,
-            t.lat lat,
-            t.residence_addr residenceAddr,
-            count(a.STD_ADDR_ID) hdUserNum
+        SELECT
+        re.*, count(a.STD_ADDR_ID) hdUserNum,
+        n.lng cenLon,
+        n.lat cenLat
         FROM
-            ocn_address.of_residence t
-        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON t.id = a.residence_id
+        hsrjop.intelligence_hd_addr_info a,
+        (
+        SELECT
+        r.id residenceId,
+        r.residence_name residenceName,
+        r.of_neighborhood_id neighborhoodId,
+        r.lon lon,
+        r.lat lat
+        FROM
+        ocn_address.of_residence r
         WHERE 1=1
-        <if test="neighborhoodId != null and '' != neighborhoodId " >
-          and  t.of_neighborhood_id = #{neighborhoodId}
-        </if>
         <if test="residenceId != null and '' != residenceId">
-            AND  t.id = #{residenceId}
+           and r.id = #{residenceId}
         </if>
-        AND t.lon IS NOT NULL and t.of_neighborhood_id is not null
+        <if test="lng != null and '' != lng">
+           and hsrjop.calcDistance (
+            #{lng},
+           #{lat},
+            r.lon,
+            r.lat
+            ) &lt;800
+        </if>
+        ) re ,ocn_address.of_neighborhood n
+        WHERE
+        re.residenceId = a.residence_id and re.neighborhoodId = n.neighborhood_id
+        <if test="neighborhoodId != null and '' != neighborhoodId">
+          and  re.neighborhoodId = #{neighborhoodId}
+        </if>
         GROUP BY
-            a.residence_id HAVING COUNT(a.STD_ADDR_ID) != 0
+        a.residence_id HAVING COUNT(a.STD_ADDR_ID) != 0
     </select>
 </mapper>

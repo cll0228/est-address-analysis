@@ -16,9 +16,9 @@ public interface MapMapper {
 
     List<ShDistrict> getDistrictBoundryInfo(@Param("districtId") Integer districtId);
 
-    List<Town> showtown(@Param("districtId")Integer districtId,@Param("townId")Integer townId);
+    List<Town> showtown(@Param("districtId")Integer districtId,@Param("townId")Integer townId,@Param("lng")String lng,@Param("lat")String lat);
 
-    List<Neighborhood> neighborhood(@Param("townId")Integer townId,@Param("neighborhoodId")String neighborhoodId);
+    List<Neighborhood> neighborhood(@Param("townId")Integer townId,@Param("neighborhoodId")String neighborhoodId,@Param("lng")String lng,@Param("lat")String lat);
 
-    List<Residence> residence(@Param("neighborhoodId")String neighborhoodId,@Param("residenceId")String residenceId);
+    List<Residence> residence(@Param("neighborhoodId")String neighborhoodId,@Param("residenceId")String residenceId,@Param("lng")String lng,@Param("lat")String lat);
 }

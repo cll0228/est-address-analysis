@@ -14,6 +14,11 @@ public class DataList {
     private String type;
     private String div;
     private String gdataId;
+    private String pShowName;
+    private String cityName;
+    private String districtName;
+    private String townNname;
+    private String neighborhoodName;
 	public String getDataId() {
 		return dataId;
 	}
@@ -68,12 +73,44 @@ public class DataList {
 	public void setGdataId(String gdataId) {
 		this.gdataId = gdataId;
 	}
+	public String getpShowName() {
+		return pShowName;
+	}
+	public void setpShowName(String pShowName) {
+		this.pShowName = pShowName;
+	}
+	public String getCityName() {
+		return cityName;
+	}
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+	public String getDistrictName() {
+		return districtName;
+	}
+	public void setDistrictName(String districtName) {
+		this.districtName = districtName;
+	}
+	public String getTownNname() {
+		return townNname;
+	}
+	public void setTownNname(String townNname) {
+		this.townNname = townNname;
+	}
+	public String getNeighborhoodName() {
+		return neighborhoodName;
+	}
+	public void setNeighborhoodName(String neighborhoodName) {
+		this.neighborhoodName = neighborhoodName;
+	}
 	@Override
 	public String toString() {
 		return "DataList [dataId=" + dataId + ", latitude=" + latitude
 				+ ", longitude=" + longitude + ", showName=" + showName
 				+ ", households=" + households + ", proportion=" + proportion
 				+ ", type=" + type + ", div=" + div + ", gdataId=" + gdataId
-				+ "]";
+				+ ", pShowName=" + pShowName + ", cityName=" + cityName
+				+ ", districtName=" + districtName + ", townNname=" + townNname
+				+ ", neighborhoodName=" + neighborhoodName + "]";
 	}
 }

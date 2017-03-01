@@ -113,6 +113,7 @@ public class SearchController {
 		String dataId = "undefined".equals(request.getParameter("dataId"))?null:request.getParameter("dataId");
 		String type = "undefined".equals(request.getParameter("type"))?null:request.getParameter("type");
 		String siteType = request.getParameter("siteType");
+		String showName = null;
 		String jdh = null;
 		if(type != null && type.contains("\'")) {
 			jdh = type;
@@ -172,7 +173,18 @@ public class SearchController {
 		} else {
 			countList = slideNavService.searchKeyword(paramInfo);
 		}
-
+		if(countList.size()>0) {
+			if(siteType.equals("quyu")){
+				showName = "上海市";
+			} else if(siteType.equals("jiedao")) {
+				showName = countList.get(0).getDistrictName();
+			} else if(siteType.equals("juwei")) {
+				showName = countList.get(0).getTownNname();
+			} else if(siteType.equals("xiaoqu")) {
+				showName = countList.get(0).getNeighborhoodName();
+			}
+		}
+		
 		for (CountParam countParam : countList) {
 			DataList da = new DataList();
 			da.setDataId(countParam.getLevelId().toString());
@@ -180,6 +192,11 @@ public class SearchController {
 			da.setProportion(countParam.getProportion());
 			da.setShowName(countParam.getLevelName());
 			da.setGdataId(dataId);
+			da.setpShowName(showName);
+			da.setCityName("上海市");
+			da.setDistrictName(countParam.getDistrictName());
+			da.setTownNname(countParam.getTownNname());
+			da.setNeighborhoodName(countParam.getNeighborhoodName());
 			if(type !=null && !type.contains("\'")) {
 				if(dataId != null && dataId.equals("sh")) {
 					da.setDiv(type);

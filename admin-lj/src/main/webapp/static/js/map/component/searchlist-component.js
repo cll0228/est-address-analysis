@@ -135,7 +135,7 @@ Vue.component('searchlist-component', {
                     limit_count: 2000
                 },
                 filters = commonService.getFilters(this.searchParams);
-
+            this.searchParams.showName="上海市";
             //加载房源列表
             if(currentType === 'village'){
                 this._loadHouseList(dataId, currentType);
@@ -220,6 +220,13 @@ Vue.component('searchlist-component', {
                 }
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;
+                if(res.dataList.length>0) {
+                	this.searchParams.showName=res.dataList[0].pShowName;
+                	this.searchParams.cityName=res.dataList[0].cityName;
+                	this.searchParams.districtName=res.dataList[0].districtName;
+                	this.searchParams.townNname=res.dataList[0].townNname;
+                	this.searchParams.neighborhoodName=res.dataList[0].neighborhoodName;
+                }
             }.bind(this)).fail(function(){ me.isLoadingList = false; })
         },
         mouseoverItem: function(item){      //添加轮廓

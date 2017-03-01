@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -132,6 +132,7 @@
 								<span v-if="searchParams.siteType == 'jiedao'">个街道</span>
 								<span v-if="searchParams.siteType == 'juwei'">个居委</span>
 								<span v-if="searchParams.siteType == 'xiaoqu'">个小区</span>
+								<span v-if="searchParams.siteType == 'jieguo'">个结果</span>
 								<!-- 区域找房 -->
 								<!-- <span v-if="mainInfo.currentType == 'city' && searchParams.siteType === 'quyu'">个行政区</span>
 								<span v-if="mainInfo.currentType == 'district'">个板块</span> -->

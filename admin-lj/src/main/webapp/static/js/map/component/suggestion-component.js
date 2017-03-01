@@ -86,6 +86,18 @@ Vue.component('suggestion-component', {
                 } else{
                     $('.c-filterbox__list').css({display:'block'});
                 }
+                if(selectedItem.type == 5 || selectedItem.type == 4){
+                    params.siteType = "xiaoqu";
+                }
+                if(selectedItem.type == 1){
+                    params.siteType = "quyu";
+                }
+                if(selectedItem.type == 2){
+                    params.siteType = "jiedao";
+                }
+                if(selectedItem.type == 3){
+                    params.siteType = "juwei";
+                }
             }else{                  //直接按回车或点击搜索按钮
                 params.keyword = this.keyword;
                 params.siteType = commonService.SITE_TYPE_QUYU;

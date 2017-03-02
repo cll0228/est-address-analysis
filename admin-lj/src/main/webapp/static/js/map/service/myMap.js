@@ -324,7 +324,9 @@ function ifNUll(filters) {
 }
 
 function showMapDistrict(dataList) {
-    map.clearOverlays();
+    if(null != map){
+        map.clearOverlays();
+    }
     var center = new BMap.Point("121.464427", "31.228894");
     map.centerAndZoom(center, 12);
     map.clearOverlays();
@@ -344,7 +346,9 @@ function showMapDistrict(dataList) {
 
 function showMapTown(dataList) {
     $("#szoom").attr("class","zoom-tool__item icon-minus");
-    map.clearOverlays();
+    if(null != map){
+        map.clearOverlays();
+    }
     map.disableScrollWheelZoom();
     for(var i=0;i<dataList.length;i++){
         var item = dataList[i];
@@ -367,7 +371,9 @@ function showMapTown(dataList) {
 }
 
 function showMapNeibarHood(dataList) {
-    map.clearOverlays();
+    if(null != map){
+        map.clearOverlays();
+    }
     map.disableScrollWheelZoom();
     for (var i = 0; i < dataList.length; i++) {
         var item = dataList[i];
@@ -505,4 +511,7 @@ function ifadd(obj) {
         }
     });
     return flag;
+}
+function clearAllOver() {
+    map.clearOverlays();
 }

@@ -202,6 +202,7 @@ Vue.component('searchlist-component', {
                     this.searchParams.siteType = "jieguo";
                 }
                 //用户点搜索
+                if(res.dataList.length != 0){
                 if(params.keyType == null){
                     this.startWith(res.dataList[0].dataId);
                     params.keyType = this.searchParams.type;
@@ -217,6 +218,9 @@ Vue.component('searchlist-component', {
                 }
                 if(params.keyType == 4 || params.keyType == 5 || params.type == 3){
                     showMapResidence(res.dataList)
+                }
+                }else{
+                    clearAllOver();
                 }
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;

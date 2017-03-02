@@ -2,7 +2,9 @@ package com.lezhi.adminlj.controller;
 
 import com.lezhi.adminlj.pojo.*;
 import com.lezhi.adminlj.service.SlideNavService;
+import com.lezhi.adminlj.util.MyUtli;
 import com.lezhi.adminlj.util.PropertyUtil;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -26,6 +28,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -189,7 +192,7 @@ public class SearchController {
 			DataList da = new DataList();
 			da.setDataId(countParam.getLevelId().toString());
 			da.setHouseholds(countParam.getHouseholds());
-			da.setProportion(countParam.getProportion());
+			da.setProportion(MyUtli.convert(countParam.getProportion()));
 			da.setShowName(countParam.getLevelName());
 			da.setGdataId(dataId);
 			da.setpShowName(showName);

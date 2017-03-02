@@ -20,6 +20,7 @@ import com.lezhi.adminlj.pojo.CountParam;
 import com.lezhi.adminlj.pojo.DataList;
 import com.lezhi.adminlj.pojo.District;
 import com.lezhi.adminlj.service.SlideNavService;
+import com.lezhi.adminlj.util.MyUtli;
 
 
 /**
@@ -59,7 +60,7 @@ public class SlideNavController {
 			DataList da = new DataList();
         	da.setDataId(countParam.getLevelId().toString());
         	da.setHouseholds(countParam.getHouseholds());
-        	da.setProportion(countParam.getProportion());
+        	da.setProportion(MyUtli.convert(countParam.getProportion()));
         	da.setShowName(countParam.getLevelName());
         	da.setDiv("1");
         	da.setType("init");

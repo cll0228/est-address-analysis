@@ -124,6 +124,7 @@ function showneighborhood(townId,  neighborhoodId, ifchangZoom,center) {
     if("chang" == ifchangZoom){
         lat = null;
         lng = null;
+        map.clearOverlays();
         map.setZoom(16);
     }
     $.ajax({
@@ -132,8 +133,7 @@ function showneighborhood(townId,  neighborhoodId, ifchangZoom,center) {
         data: {"townId": townId, "neighborhoodId": neighborhoodId,"lng":lng,"lat":lat},
         success: function (data) {
             if("chang" == ifchangZoom){
-                map.clearOverlays();
-                map.centerAndZoom(new BMap.Point(data[0].cenLon, data[0].cenLat),16);
+                map.centerAndZoom(new BMap.Point(data[0].lng, data[0].lat),16);
             }
             $.each(data, function (i, item) {
                 var point_dis_i = new BMap.Point(item.lng, item.lat);
@@ -182,7 +182,7 @@ function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
         success: function (data) {
             if("chang" == ifchangZoom){
                 map.clearOverlays();
-                map.centerAndZoom(new BMap.Point(data[0].cenLon, data[0].cenLat),18);
+                map.centerAndZoom(new BMap.Point(data[0].lon, data[0].lat),18);
             }
             $.each(data, function (i, item) {
                var bus_point_i = new BMap.Point(item.lon,item.lat);

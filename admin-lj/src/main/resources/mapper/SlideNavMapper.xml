@@ -373,6 +373,7 @@
 			<if test='f == "f2"'>
 				and i.isadded = 0
 			</if>-->
+			GROUP BY i.CUST_ID
 		) h
 		GROUP BY
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>

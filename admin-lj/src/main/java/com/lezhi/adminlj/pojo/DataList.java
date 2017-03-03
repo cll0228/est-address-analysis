@@ -7,6 +7,7 @@ package com.lezhi.adminlj.pojo;
 public class DataList {
     private String dataId;
     private Double latitude;
+	private Integer houseCount;
     private Double longitude;
     private String showName;
     private Integer households;
@@ -19,6 +20,15 @@ public class DataList {
     private String districtName;
     private String townNname;
     private String neighborhoodName;
+
+	public Integer getHouseCount() {
+		return houseCount;
+	}
+
+	public void setHouseCount(Integer houseCount) {
+		this.houseCount = houseCount;
+	}
+
 	public String getDataId() {
 		return dataId;
 	}

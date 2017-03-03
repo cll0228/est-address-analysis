@@ -80,6 +80,7 @@
 		ORDER BY proportion DESC -->
 		SELECT
 			a.*, b.levelHouseCount,
+			b.households,
 			b.levelHouseCount / b.households * 100 AS proportion
 		FROM
 			(

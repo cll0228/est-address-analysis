@@ -7,7 +7,7 @@
             d.district_name district,
             d.center_lng centerLongitude,
             d.center_lat centerLatitude,
-            count(a.STD_ADDR_ID) hdUserNum
+            a.district_house_count hdUserNum
         FROM
             ocn_address.of_district d
         LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id WHERE 1=1
@@ -21,7 +21,7 @@
     </select>
     <select id="showtown" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Town">
         SELECT
-        re.*, count(a.STD_ADDR_ID) hdUserNum,
+        re.*, a.town_house_count hdUserNum,
         d.center_lng cenLon,
         d.center_lat cenLat
         FROM
@@ -57,7 +57,7 @@
     </select>
     <select id="neighborhood" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Neighborhood">
         SELECT
-        re.*, count(a.STD_ADDR_ID) hdUserNum,
+        re.*, a.neighborhood_house_count hdUserNum,
         d.longitude cenLon,
         d.latitude cenLat
         FROM
@@ -95,7 +95,7 @@
         SELECT
         re.*,  a.user_count hdUserNum,
         a.house_count2 houseCount,
-        FORMAT(a.user_count/a.house_count2,2) rate ,
+        FORMAT(a.user_count/a.house_count2*100,2) rate ,
         n.lng cenLon,
         n.lat cenLat
         FROM

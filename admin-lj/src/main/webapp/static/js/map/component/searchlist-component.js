@@ -203,10 +203,10 @@ Vue.component('searchlist-component', {
                 }
                 //用户点搜索
                 if(res.dataList.length != 0){
-                if(params.keyType == null){
-                    this.startWith(res.dataList[0].dataId);
-                    params.keyType = this.searchParams.type;
-                }
+                    if(params.keyType == null && params.type == null){
+                        this.startWith(res.dataList[0].dataId);
+                        params.keyType = this.searchParams.type;
+                    }
                 if(params.keyType == 1){
                     showMapDistrict(res.dataList);
                 }
@@ -216,7 +216,7 @@ Vue.component('searchlist-component', {
                 if(params.keyType == 3 || params.type == 2){
                     showMapNeibarHood(res.dataList);
                 }
-                if(params.keyType == 4 || params.keyType == 5 || params.type == 3){
+                if(params.keyType == 4 || params.keyType == 3 ||params.type == 3){
                     showMapResidence(res.dataList)
                 }
                 }else{

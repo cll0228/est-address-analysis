@@ -15,10 +15,10 @@ $(function () {
         if(zoom == 14){
             showTown(null,null,null,center);
         }
-        if(zoom == 16){
+        if(zoom == 17){
             showneighborhood(null,null,null,center);
         }
-        if(zoom == 18){
+        if(zoom == 19){
             showResidenceInfo(null,null,null,null,center);
         }
     });
@@ -125,7 +125,7 @@ function showneighborhood(townId,  neighborhoodId, ifchangZoom,center) {
         lat = null;
         lng = null;
         map.clearOverlays();
-        map.setZoom(16);
+        map.setZoom(17);
     }
     $.ajax({
         type: "get",
@@ -133,7 +133,7 @@ function showneighborhood(townId,  neighborhoodId, ifchangZoom,center) {
         data: {"townId": townId, "neighborhoodId": neighborhoodId,"lng":lng,"lat":lat},
         success: function (data) {
             if("chang" == ifchangZoom){
-                map.centerAndZoom(new BMap.Point(data[0].lng, data[0].lat),16);
+                map.centerAndZoom(new BMap.Point(data[0].lng, data[0].lat),17);
             }
             $.each(data, function (i, item) {
                 var point_dis_i = new BMap.Point(item.lng, item.lat);
@@ -182,7 +182,7 @@ function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
         success: function (data) {
             if("chang" == ifchangZoom){
                 map.clearOverlays();
-                map.centerAndZoom(new BMap.Point(data[0].lon, data[0].lat),18);
+                map.centerAndZoom(new BMap.Point(data[0].lon, data[0].lat),19);
             }
             $.each(data, function (i, item) {
                var bus_point_i = new BMap.Point(item.lon,item.lat);
@@ -194,16 +194,7 @@ function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
                     position: bus_point_i,    // 指定文本标注所在的地理位置
                     offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
                 }
-                var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.residenceName + '</br>' + "高清+智能总户数：" + item.hdUserNum+'</br>'+"小区总户数："+item.houseCount+'</br>'+"占比："+item.rate, opts_i);  // 创建信息窗口对象
-                //标签
-                var label_i = new BMap.Label(i + 1, {offset: new BMap.Size(7, 3)});
-                label_i.setStyle({
-                    color: "white",
-                    fontSize: "10px",
-                    backgroundColor: "0.05",
-                    border: "0",
-                    fontFamily: "微软雅黑"
-                });
+                var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.residenceName + '</br>' + "高清+智能总户数：" + item.hdUserNum+'</br>'+"小区总户数："+item.houseCount+'</br>'+"占比："+item.rate+'%', opts_i);  // 创建信息窗口对象
                 //圖標點擊事件
                 richMarker_i.addEventListener("mouseover", function () {
                     map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
@@ -269,19 +260,19 @@ function addMapZoomSize() {
             return;
         }
         if (a_zoom == 14) {
-            map.setZoom(16);
+            map.setZoom(17);
             map.clearOverlays();
             showneighborhood();
             return;
         }
-        if (a_zoom == 16) {
+        if (a_zoom == 17) {
             $("#bzoom").attr("class","zoom-tool__item icon-plus zoom-tool__item--disabled");
-            map.setZoom(18);
+            map.setZoom(19);
             map.clearOverlays();
             showResidenceInfo();
             return;
         }
-        if (a_zoom == 18) {
+        if (a_zoom == 19) {
             return;
         }
     }
@@ -290,7 +281,7 @@ function addMapZoomSize() {
 function reduceMapZoomSize() {
     if (com_param) {
         var a_zoom = map.getZoom();
-        if (a_zoom == 16) {
+        if (a_zoom == 17) {
             map.clearOverlays();
             map.setZoom(14);
             showTown();
@@ -303,10 +294,10 @@ function reduceMapZoomSize() {
             initDistrictInfo();
             return;
         }
-        if (a_zoom == 18) {
+        if (a_zoom == 19) {
             $("#bzoom").attr("class","zoom-tool__item icon-plus");
             map.clearOverlays();
-            map.setZoom(16);
+            map.setZoom(17);
             showneighborhood();
             return;
         }
@@ -380,7 +371,7 @@ function showMapNeibarHood(dataList) {
         if (null == item.longitude) continue;
         cen_lon = item.longitude;
         cen_lat = item.latitude;
-        map.centerAndZoom(new BMap.Point(cen_lon, cen_lat), 16);
+        map.centerAndZoom(new BMap.Point(cen_lon, cen_lat), 17);
         var point_dis_i = new BMap.Point(item.longitude, item.latitude);
         //添加园圈
         var html = '<div id="' + item.dataId + '" onclick="getResidence(' + item.dataId + ',' + item.longitude + ',' + item.latitude + ');" class="plate-overlay"><p>' + item.showName + '</p><p class="map-overlay__total">' + item.households + '户</p></div>';
@@ -397,7 +388,9 @@ function showMapNeibarHood(dataList) {
 
 function showMapResidence(dataList) {
     $("#bzoom").attr("class","zoom-tool__item icon-plus zoom-tool__item--disabled");
-    map.clearOverlays();
+    if(null != map){
+        map.clearOverlays();
+    }
     map.disableScrollWheelZoom();
     for (var i = 0; i < dataList.length; i++) {
         var item = dataList[i];
@@ -406,33 +399,24 @@ function showMapResidence(dataList) {
         }
         var bus_lat = item.latitude;
         var bus_lon = item.longitude;
-
-        var bus_point_i = new BMap.Point(bus_lon,item.bus_lat);
+        var bus_p_i = new BMap.Point(bus_lon,bus_lat);
+        map.centerAndZoom(bus_p_i, 19);
         var html = '<div class="estate-overlay__count js_estateOverlayCount">' + item.households + '户</div>';
         var anchor = new BMap.Size(-42, -28);
-        var richMarker_i = new BMapLib.RichMarker(html, bus_point_i, {"anchor": anchor});
+        var rich_i = new BMapLib.RichMarker(html, bus_p_i, {"anchor": anchor});
         //点击事件，显示文本内容
         var opts_i = {
-            position: bus_point_i,    // 指定文本标注所在的地理位置
+            position: bus_p_i,    // 指定文本标注所在的地理位置
             offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
         }
-        var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.showName + '</br>' + "高清+智能总户数：" + item.hdUserNum+'</br>'+"小区总户数："+null+'</br>'+"占比："+null, opts_i);  // 创建信息窗口对象
-        //标签
-        var label_i = new BMap.Label(i + 1, {offset: new BMap.Size(7, 3)});
-        label_i.setStyle({
-            color: "white",
-            fontSize: "10px",
-            backgroundColor: "0.05",
-            border: "0",
-            fontFamily: "微软雅黑"
-        });
+        var infoW_i = new BMap.InfoWindow("小区名称：" + item.showName + '</br>' + "高清+智能总户数：" + item.households+'</br>'+"小区总户数："+item.houseCount+'</br>'+"占比："+item.proportion+'%', opts_i);  // 创建信息窗口对象
         //圖標點擊事件
-        richMarker_i.addEventListener("mouseover", function () {
-            map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
+        rich_i.addEventListener("mouseover", function () {
+            map.openInfoWindow(infoW_i, bus_p_i); //开启信息窗口
         });
-        richMarker_i.Name = item.dataId;
-        if(ifadd(richMarker_i)){
-            map.addOverlay(richMarker_i);
+        rich_i.Name = item.dataId;
+        if(ifadd(rich_i)){
+            map.addOverlay(rich_i);
         }
     }
 }
@@ -481,7 +465,7 @@ function openResidenceInfoWindow(dataId) {
                     position: bus_point_i,    // 指定文本标注所在的地理位置
                     offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
                 }
-                var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.residenceName + '</br>' + "高清机顶盒用户数：" + item.hdUserNum, opts_i);  // 创建信息窗口对象
+                var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.residenceName + '</br>' + "高清+智能总户数：" + item.hdUserNum+'</br>'+"小区总户数："+item.houseCount+'</br>'+"占比："+item.rate+'%', opts_i);  // 创建信息窗口对象
                 //标签
                 var label_i = new BMap.Label(i + 1, {offset: new BMap.Size(7, 3)});
                 label_i.setStyle({

@@ -191,6 +191,7 @@ public class SearchController {
 		for (CountParam countParam : countList) {
 			DataList da = new DataList();
 			da.setDataId(countParam.getLevelId().toString());
+			da.setHouseCount(countParam.getLevelHouseCount());
 			da.setHouseholds(countParam.getHouseholds());
 			da.setProportion(MyUtli.convert(countParam.getProportion()));
 			da.setShowName(countParam.getLevelName());

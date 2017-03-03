@@ -81,7 +81,7 @@
 		SELECT
 			a.*, b.levelHouseCount,
 			b.households,
-			b.levelHouseCount / b.households * 100 AS proportion
+			b.households / b.levelHouseCount * 100 AS proportion
 		FROM
 			(
 				SELECT
@@ -104,8 +104,8 @@
 		INNER JOIN (
 			SELECT
 				d.of_district_id,
-				sum(c.user_count) AS levelHouseCount,
-				sum(c.house_count2) AS households
+				sum(c.user_count) AS households,
+				sum(c.house_count2) AS levelHouseCount
 			FROM
 				hsrjop.of_residence c
 			LEFT JOIN

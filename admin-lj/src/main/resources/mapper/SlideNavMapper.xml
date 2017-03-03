@@ -43,7 +43,7 @@
     </select>
     
     <select id="districtCount" resultType="com.lezhi.adminlj.pojo.CountParam">
-        SELECT
+        <!-- SELECT
 			a.*, b.levelHouseCount,
 			a.households / b.levelHouseCount * 100 AS proportion
 		FROM
@@ -76,6 +76,46 @@
 				of_district_id IS NOT NULL
 			GROUP BY
 				of_district_id
+		) b ON a.of_district_id = b.of_district_id
+		ORDER BY proportion DESC -->
+		SELECT
+			a.*, b.levelHouseCount,
+			b.households,
+			b.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					c.district_name AS levelName,
+					c.center_lng AS lon,
+					c.center_lat AS lat,
+					a.of_district_id AS levelId,
+					a.of_district_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				LEFT JOIN
+					ocn_address.of_district c
+				ON
+					a.of_district_id = c.district_id
+				WHERE
+					district_name IS NOT NULL and district_name!='闸北区'
+				GROUP BY
+					a.of_district_id
+			) a
+		INNER JOIN (
+			SELECT
+				d.of_district_id,
+				sum(c.user_count) AS households,
+				sum(c.house_count2) AS levelHouseCount
+			FROM
+				hsrjop.of_residence c
+			LEFT JOIN
+				ocn_address.of_residence d
+			ON
+				c.id=d.id
+			WHERE
+				d.of_district_id IS NOT NULL
+			GROUP BY
+				d.of_district_id
 		) b ON a.of_district_id = b.of_district_id
 		ORDER BY proportion DESC
     </select>

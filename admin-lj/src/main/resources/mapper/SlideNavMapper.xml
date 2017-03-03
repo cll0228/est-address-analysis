@@ -220,8 +220,12 @@
 			h.residence_id
 		</if>
 		FROM
-		(select *
+		(select i.TYPE_NAME,i.of_district_id,od.district_name,i.of_town_id,ot.town_name,i.of_neighborhood_id,
+			ne.neighborhood_name,i.residence_id,i.residence_name
 		from hsrjop.intelligence_hd_addr_info i
+		LEFT JOIN ocn_address.of_district od on i.of_district_id = od.district_id
+		LEFT JOIN ocn_address.of_town ot on i.of_town_id = ot.town_id
+		LEFT JOIN ocn_address.of_neighborhood ne on i.of_neighborhood_id = ne.neighborhood_id
 		INNER JOIN hsrjop.of_residence r ON i.residence_id = r.id
 		WHERE 1=1
 		<if test='paramInfo.keyType == "1"'>

@@ -48,7 +48,7 @@ Vue.component('slide-nav-component', {
                 var result = [];
                 
 /*                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 5, name: '标清'});*/
-                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 4, name: '高清'});
+//                result.unshift({firstLetter: null, type: 'jidinghe', dataId: 4, name: '高清'});
                 result.unshift({firstLetter: null, type: 'jidinghe', dataId: 3, name: '高清+EOC'});
                 result.unshift({firstLetter: null, type: 'jidinghe', dataId: 2, name: '智能1000'});
                 result.unshift({firstLetter: null, type: 'jidinghe', dataId: 1, name: '智能2000'});
@@ -67,7 +67,7 @@ Vue.component('slide-nav-component', {
         <div class="side-bar__level1" id="districtWrap" \
             :style="{display: showLevel2 && \'block\' || \'none\'}" @mouseover="mouseoverLevel(2)" @mouseout="mouseoutLevel()">\
     	<a href="javascript:;" class="side-bar__level1-item" v-for="d in datasource" @click="clickLevel3(d,1)" @mouseover="mouseoverLevel2(d)"\
-                    gahref="{d.dataId}"><label><input type="checkbox" value="{{d.dataId}}" name="ckb" class="c-filterbox__item-checkbox" :style="{display: isActiveDitie() ? \'inline\' : \'none\'}">{{d.name}}</label></a>\
+                    gahref="{d.dataId}"><label><input type="checkbox" checked="true" value="{{d.dataId}}" name="ckb" class="c-filterbox__item-checkbox" :style="{display: isActiveDitie() ? \'inline\' : \'none\'}">{{d.name}}</label></a>\
         </div>\
         <div class="side-bar__level2" id="plateWrap" \
                 v-show="showLevel3 && level2Mouseovered.children.length > 0" @mouseover="mouseoverLevel(3)" @mouseout="mouseoutLevel()">\

@@ -50,11 +50,15 @@
 			(
 				SELECT
 					count(a.TYPE_NAME) AS households,
-					a.district_name AS levelName,
+					c.district_name AS levelName,
 					a.of_district_id AS levelId,
 					a.of_district_id
 				FROM
 					hsrjop.intelligence_hd_addr_info a
+				LEFT JOIN
+					ocn_address.of_district c
+				ON
+					a.of_district_id = c.district_id
 				WHERE
 					district_name IS NOT NULL
 				GROUP BY
@@ -71,6 +75,7 @@
 			GROUP BY
 				of_district_id
 		) b ON a.of_district_id = b.of_district_id
+		ORDER BY proportion DESC
     </select>
     
     <select id="levelOneCount" resultType="com.lezhi.adminlj.pojo.CountParam">

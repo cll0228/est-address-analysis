@@ -62,7 +62,7 @@
 				ON
 					a.of_district_id = c.district_id
 				WHERE
-					district_name IS NOT NULL
+					district_name IS NOT NULL and district_name!='闸北区'
 				GROUP BY
 					a.of_district_id
 			) a

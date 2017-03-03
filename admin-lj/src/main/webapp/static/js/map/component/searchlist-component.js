@@ -73,6 +73,13 @@ Vue.component('searchlist-component', {
             if(searchParams.query){
                 if(commonService.getIsDidSearch()){		//选择过查询关键字
                     params = { query: searchParams.query };
+                    if(searchParams.keyType==5){
+                        this.searchParams.o = null;
+                        this.searchParams.c = null;
+                        this.searchParams.p = null;
+                        this.searchParams.a = null;
+                        this.searchParams.l = null;
+                    }
                 }else{		//没有选择过查询关键字: 从二手房列表中跳过来, 自动提示下拉.  并把搜索范围定位到市的层级
                     params = commonService.getDefaultRoot();
                 }

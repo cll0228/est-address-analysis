@@ -552,6 +552,6 @@
 		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
 			a.residence_id = b.id
 		</if>
-
+		ORDER BY proportion DESC
 	</select>
 </mapper>

@@ -186,14 +186,15 @@ function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
             }
             $.each(data, function (i, item) {
                var bus_point_i = new BMap.Point(item.lon,item.lat);
-                var myIcon_i = new BMap.Icon("./static/img/point.png", new BMap.Size(30, 70));
-                var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
+                var html = '<div class="estate-overlay__count js_estateOverlayCount">' + item.hdUserNum + '户</div>';
+                var anchor = new BMap.Size(-42, -28);
+                var richMarker_i = new BMapLib.RichMarker(html, bus_point_i, {"anchor": anchor});
                 //点击事件，显示文本内容
                 var opts_i = {
                     position: bus_point_i,    // 指定文本标注所在的地理位置
                     offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
                 }
-                var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.residenceName + '</br>' + "高清机顶盒用户数：" + item.hdUserNum, opts_i);  // 创建信息窗口对象
+                var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.residenceName + '</br>' + "高清+智能总户数：" + item.hdUserNum+'</br>'+"小区总户数："+item.houseCount+'</br>'+"占比："+item.rate, opts_i);  // 创建信息窗口对象
                 //标签
                 var label_i = new BMap.Label(i + 1, {offset: new BMap.Size(7, 3)});
                 label_i.setStyle({
@@ -203,14 +204,13 @@ function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
                     border: "0",
                     fontFamily: "微软雅黑"
                 });
-                marker2_i.setLabel(label_i);
                 //圖標點擊事件
-                marker2_i.addEventListener("mouseover", function () {
+                richMarker_i.addEventListener("mouseover", function () {
                     map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
                 });
-                marker2_i.Name = item.residenceId;
-                if(ifadd(marker2_i)){
-                    map.addOverlay(marker2_i);
+                richMarker_i.Name = item.residenceId;
+                if(ifadd(richMarker_i)){
+                    map.addOverlay(richMarker_i);
                 }
             })
         },
@@ -406,16 +406,17 @@ function showMapResidence(dataList) {
         }
         var bus_lat = item.latitude;
         var bus_lon = item.longitude;
-        var bus_point_i = new BMap.Point(bus_lon, bus_lat);
-        map.centerAndZoom(bus_point_i, 18);
-        var myIcon_i = new BMap.Icon("./static/img/point.png", new BMap.Size(30, 70));
-        var marker2_i = new BMap.Marker(bus_point_i, {icon: myIcon_i});  // 创建标注
+
+        var bus_point_i = new BMap.Point(bus_lon,item.bus_lat);
+        var html = '<div class="estate-overlay__count js_estateOverlayCount">' + item.households + '户</div>';
+        var anchor = new BMap.Size(-42, -28);
+        var richMarker_i = new BMapLib.RichMarker(html, bus_point_i, {"anchor": anchor});
         //点击事件，显示文本内容
         var opts_i = {
             position: bus_point_i,    // 指定文本标注所在的地理位置
             offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
         }
-        var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.showName + '</br>' + "高清机顶盒用户数：" + item.households, opts_i);  // 创建信息窗口对象
+        var infoWindow_i = new BMap.InfoWindow("小区名称：" + item.showName + '</br>' + "高清+智能总户数：" + item.hdUserNum+'</br>'+"小区总户数："+null+'</br>'+"占比："+null, opts_i);  // 创建信息窗口对象
         //标签
         var label_i = new BMap.Label(i + 1, {offset: new BMap.Size(7, 3)});
         label_i.setStyle({
@@ -425,14 +426,13 @@ function showMapResidence(dataList) {
             border: "0",
             fontFamily: "微软雅黑"
         });
-        marker2_i.setLabel(label_i);
         //圖標點擊事件
-        marker2_i.addEventListener("mouseover", function () {
+        richMarker_i.addEventListener("mouseover", function () {
             map.openInfoWindow(infoWindow_i, bus_point_i); //开启信息窗口
         });
-        marker2_i.Name = item.dataId;
-        if(ifadd(marker2_i)){
-            map.addOverlay(marker2_i);
+        richMarker_i.Name = item.dataId;
+        if(ifadd(richMarker_i)){
+            map.addOverlay(richMarker_i);
         }
     }
 }

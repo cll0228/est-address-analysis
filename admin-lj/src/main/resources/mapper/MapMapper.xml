@@ -93,11 +93,13 @@
     </select>
     <select id="residence" parameterType="java.lang.String" resultType="com.lezhi.adminlj.pojo.Residence">
         SELECT
-        re.*, count(a.STD_ADDR_ID) hdUserNum,
+        re.*,  a.user_count hdUserNum,
+        a.house_count2 houseCount,
+        FORMAT(a.user_count/a.house_count2,2) rate ,
         n.lng cenLon,
         n.lat cenLat
         FROM
-        hsrjop.intelligence_hd_addr_info a,
+        hsrjop.of_residence a,
         (
         SELECT
         r.id residenceId,
@@ -121,11 +123,11 @@
         </if>
         ) re ,ocn_address.of_neighborhood n
         WHERE
-        re.residenceId = a.residence_id and re.neighborhoodId = n.neighborhood_id
+        re.residenceId = a.id and re.neighborhoodId = n.neighborhood_id
         <if test="neighborhoodId != null and '' != neighborhoodId">
           and  re.neighborhoodId = #{neighborhoodId}
         </if>
         GROUP BY
-        a.residence_id HAVING COUNT(a.STD_ADDR_ID) != 0
+        a.id HAVING a.user_count != 0
     </select>
 </mapper>

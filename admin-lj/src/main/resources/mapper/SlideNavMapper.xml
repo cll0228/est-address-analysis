@@ -51,6 +51,8 @@
 				SELECT
 					count(a.TYPE_NAME) AS households,
 					c.district_name AS levelName,
+					c.center_lng AS lon,
+					c.center_lat AS lat,
 					a.of_district_id AS levelId,
 					a.of_district_id
 				FROM

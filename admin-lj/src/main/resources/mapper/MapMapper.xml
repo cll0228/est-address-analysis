@@ -127,6 +127,6 @@
           and  re.neighborhoodId = #{neighborhoodId}
         </if>
         GROUP BY
-        a.id HAVING a.user_count != 0
+        a.id
     </select>
 </mapper>

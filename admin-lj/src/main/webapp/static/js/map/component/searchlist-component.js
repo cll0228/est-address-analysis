@@ -205,13 +205,16 @@ Vue.component('searchlist-component', {
                     this.searchParams.siteType = "jieguo";
                 }
                 //用户点搜索
+                if( null == params.keyword ){
+                    params.keyType = null;
+                }
                 if(res.dataList.length != 0){
                     if(params.keyType == null && params.type == null){
                         this.startWith(res.dataList[0].dataId);
                         params.keyType = this.searchParams.type;
                     }
                 if(params.keyType == 1){
-                    showMapDistrict(res.dataList);
+                    showMapDistrict_dl(res.dataList);
                 }
                 if(params.keyType == 2 || params.type == 1){
                     showMapTown(res.dataList);
@@ -219,7 +222,7 @@ Vue.component('searchlist-component', {
                 if(params.keyType == 3 || params.type == 2){
                     showMapNeibarHood(res.dataList);
                 }
-                if(params.keyType == 4 || params.keyType == 3 ||params.type == 3){
+                if(params.keyType == 4 || params.keyType == 5 ||params.type == 3){
                     showMapResidence(res.dataList)
                 }
                 }else{

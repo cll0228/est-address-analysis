@@ -314,7 +314,7 @@ function ifNUll(filters) {
     } else return false;
 }
 
-function showMapDistrict(dataList) {
+function showMapDistrict_dl(dataList) {
     if(null != map){
         map.clearOverlays();
     }
@@ -512,4 +512,5 @@ function showMapDistrict(dataList) {
         var overlayTop = $(richMarker_i._container);
         overlayTop.css("background", "transparent").addClass('map-overlay');
     }
+    com_param = true;
 }

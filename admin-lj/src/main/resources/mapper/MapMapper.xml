@@ -7,7 +7,7 @@
             d.district_name district,
             d.center_lng centerLongitude,
             d.center_lat centerLatitude,
-            a.district_house_count hdUserNum
+        count(a.PROD_INST_ID) hdUserNum
         FROM
             ocn_address.of_district d
         LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id WHERE 1=1
@@ -21,11 +21,12 @@
     </select>
     <select id="showtown" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Town">
         SELECT
-        re.*, a.town_house_count hdUserNum,
+        re.*,
         d.center_lng cenLon,
-        d.center_lat cenLat
+        d.center_lat cenLat,
+        sum(a.user_count) hdUserNum
         FROM
-        hsrjop.intelligence_hd_addr_info a,
+        hsrjop.of_residence a LEFT JOIN ocn_address.of_residence res on a.id = res.id,
         (
         SELECT
         t.town_id townId,
@@ -45,23 +46,22 @@
         ) re LEFT JOIN
         ocn_address.of_district d on d.district_id = re.districtId
         WHERE
-        a.of_town_id = re.townId
+        res.of_town_id = re.townId
         AND re.districtId = d.district_id
         <if test="districtId != null">
             and d.district_id = #{districtId}
         </if>
         GROUP BY
-        a.of_town_id
-        HAVING
-        COUNT(a.STD_ADDR_ID) != 0
+        res.of_town_id
     </select>
     <select id="neighborhood" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Neighborhood">
         SELECT
-        re.*, a.neighborhood_house_count hdUserNum,
+        re.*,
         d.longitude cenLon,
-        d.latitude cenLat
+        d.latitude cenLat,
+        sum(a.user_count) hdUserNum
         FROM
-        hsrjop.intelligence_hd_addr_info a,
+        hsrjop.of_residence a LEFT JOIN ocn_address.of_residence res on a.id = res.id,
         (
         SELECT
         t.neighborhood_id neighborhoodId,
@@ -82,14 +82,13 @@
         ) re,
         ocn_address.of_town d
         WHERE
-        a.of_neighborhood_id = re.neighborhoodId AND a.of_town_id = d.town_id
+        res.of_neighborhood_id = re.neighborhoodId AND res.of_town_id = d.town_id
         <if test="townId != null and '' != townId">
             AND re.townId = #{townId}
         </if>
         GROUP BY
-        a.of_neighborhood_id
-        HAVING
-        COUNT(a.STD_ADDR_ID) != 0
+        res.of_neighborhood_id
+
     </select>
     <select id="residence" parameterType="java.lang.String" resultType="com.lezhi.adminlj.pojo.Residence">
         SELECT

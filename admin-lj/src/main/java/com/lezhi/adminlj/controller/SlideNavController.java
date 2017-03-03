@@ -62,6 +62,8 @@ public class SlideNavController {
         	da.setHouseholds(countParam.getHouseholds());
         	da.setProportion(MyUtli.convert(countParam.getProportion()));
         	da.setShowName(countParam.getLevelName());
+        	da.setLongitude(countParam.getLon());
+        	da.setLatitude(countParam.getLat());
         	da.setDiv("1");
         	da.setType("init");
         	

@@ -23,7 +23,7 @@ $(function () {
         }
     });
     //加載行政區域
-    initDistrictInfo();
+   // initDistrictInfo();
     //不能按-
     $("#szoom").attr("class"," zoom-tool__item icon-minus zoom-tool__item--disabled");
 });
@@ -498,4 +498,18 @@ function ifadd(obj) {
 }
 function clearAllOver() {
     map.clearOverlays();
+}
+
+function showMapDistrict(dataList) {
+    for(var i = 0;i<dataList.length;i++){
+        var item = dataList[i];
+        var point_dis_i = new BMap.Point(item.longitude, item.latitude);
+        //添加园圈
+        var html = '<div id="' + item.dataId + '" onclick="getTown(' + item.dataId + ');" onmouseout="clearOutLine();" onmouseover="getJABoundary(' + item.dataId + ');" class="district-overlay">' + item.showName + '<br/>' + item.households + '户</p></div>';
+        var anchor = new BMap.Size(-30, -25);
+        var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
+        map.addOverlay(richMarker_i);
+        var overlayTop = $(richMarker_i._container);
+        overlayTop.css("background", "transparent").addClass('map-overlay');
+    }
 }

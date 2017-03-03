@@ -314,19 +314,19 @@
 		</if>
 		<!-- 小区用户占比 -->
 		<if test='paramInfo.c == "c1"'>
-			and r.residence_rate &lt; 10
+			and r.residence_rate &lt; 0.1
 		</if>
 		<if test='paramInfo.c == "c2"'>
-			and r.residence_rate  BETWEEN 10 and 20
+			and r.residence_rate  BETWEEN 0.1 and 0.2
 		</if>
 		<if test='paramInfo.c == "c3"'>
-			and r.residence_rate BETWEEN 20 and 30
+			and r.residence_rate BETWEEN 0.2 and 0.3
 		</if>
 		<if test='paramInfo.c == "c4"'>
-			and r.residence_rate BETWEEN 30 and 50
+			and r.residence_rate BETWEEN 0.3 and 0.5
 		</if>
 		<if test='paramInfo.c == "c5"'>
-			and r.residence_rate &gt;= 50
+			and r.residence_rate &gt;= 0.5
 		</if>
 		<if test='paramInfo.jdh != null'>
 			and i.TYPE_NAME in(${paramInfo.jdh})
@@ -373,6 +373,7 @@
 			<if test='f == "f2"'>
 				and i.isadded = 0
 			</if>-->
+			GROUP BY i.CUST_ID
 		) h
 		GROUP BY
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>

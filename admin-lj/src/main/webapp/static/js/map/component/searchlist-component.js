@@ -146,6 +146,9 @@ Vue.component('searchlist-component', {
             this.isLoadingList = true;
 //            commonService.ajaxGetBase(commonService.getListMapResultUrl(this.houseType), filters, params, function(res){
             commonService.ajaxGetBase2('/list.do', null, null, function(res){
+                if(res.dataList.length != 0){
+                    showMapDistrict(res.dataList);
+                }
                 //alert("aaa")
             	if(this.searchParams.siteType==null) {
             		this.searchParams.siteType="quyu";

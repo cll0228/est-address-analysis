@@ -35,13 +35,14 @@ import java.util.List;
  */
 public class IndexGenerator {
     String luceneIndexPathProp = "Lucene.Index.FilePath";
+//    String luceneIndexPathProp = "/lucene/index";
     String houseAddressIndexDirPath;
     Analyzer analyzer = new IKAnalyzer();
     Connection conn;
 
     @Test
     public void testSearchIndex() {
-        searchIndex("武东路28");
+        searchIndex("永业公寓");
     }
 
     @Test
@@ -107,29 +108,31 @@ public class IndexGenerator {
 
     public ResultSet getResult() throws Exception {
         Statement stmt = conn.createStatement();
-        String sql = "SELECT CONVERT (1, signed) AS type,NULL district_id,NULL district_name,NULL town_id,NULL town_name,NULL neighborhood_id\n" +
-                ",NULL neighborhood_name,district_id AS id,district_name AS name,NULL AS addr,NULL longitude,NULL latitude,center_lng,center_lat\n" +
+        String sql ="SELECT CONVERT (1, signed) AS type, NULL district_id, NULL district_name, NULL town_id, NULL town_name, NULL neighborhood_id,\n" +
+                "NULL neighborhood_name, district_id AS id, district_name AS name, NULL AS addr, NULL longitude, NULL latitude, center_lng, center_lat\n" +
                 "FROM of_district\n" +
                 "UNION ALL\n" +
-                "SELECT CONVERT (2, signed) AS type,d.district_id,d.district_name,NULL town_id,NULL town_name,NULL neighborhood_id,NULL neighborhood_name\n" +
-                ",t.town_id AS id,t.town_name AS name,NULL AS addr,NULL longitude,NULL latitude,t.longitude center_lng,t.latitude center_lat\n" +
-                "FROM of_district d,of_town t\n" +
-                "WHERE d.district_id = t.district_id\n" +
+                "SELECT CONVERT (2, signed) AS type, d.district_id, d.district_name, NULL town_id, NULL town_name, NULL neighborhood_id, NULL neighborhood_name,\n" +
+                "t.town_id AS id, t.town_name AS name, NULL AS addr, NULL longitude, NULL latitude, t.longitude center_lng, t.latitude center_lat\n" +
+                "FROM of_district d\n" +
+                "LEFT JOIN of_town t ON d.district_id = t.district_id\n" +
                 "UNION ALL\n" +
-                "SELECT CONVERT (3, signed) AS type,d.district_id,d.district_name,t.town_id,t.town_name,NULL neighborhood_id,NULL neighborhood_name\n" +
-                ",n.neighborhood_id AS id,n.neighborhood_name as name,n.neighborhood_addr AS addr,n.lng AS longitude,n.lat AS latitude\n" +
-                ",NULL center_lng,NULL center_lat\n" +
-                "FROM of_neighborhood n,of_town t,of_district d\n" +
-                "WHERE n.town_id = t.town_id AND n.district_id = d.district_id\n" +
+                "SELECT CONVERT (3, signed) AS type, d.district_id, d.district_name, t.town_id, t.town_name, NULL neighborhood_id, NULL neighborhood_name,\n" +
+                "n.neighborhood_id AS id, n.neighborhood_name AS name, n.neighborhood_addr AS addr, n.lng AS longitude, n.lat AS latitude, NULL center_lng, NULL center_lat\n" +
+                "FROM of_neighborhood n\n" +
+                "LEFT JOIN of_town t ON n.town_id = t.town_id\n" +
+                "LEFT JOIN of_district d ON n.district_id = d.district_id\n" +
                 "UNION ALL\n" +
-                "SELECT CONVERT (4, signed) AS type,NULL district_id,NULL district_name,NULL town_id,NULL town_name,NULL neighborhood_id\n" +
-                ",NULL neighborhood_name,r.id AS id,r.road_name AS name,NULL addr,NULL longitude,NULL latitude,NULL center_lng,NULL center_lat\n" +
+                "SELECT CONVERT (4, signed) AS type, NULL district_id, NULL district_name, NULL town_id, NULL town_name, NULL neighborhood_id, NULL neighborhood_name,\n" +
+                "r.id AS id, r.road_name AS name, NULL addr, NULL longitude, NULL latitude, NULL center_lng, NULL center_lat\n" +
                 "FROM of_std_road r\n" +
                 "UNION ALL\n" +
-                "SELECT CONVERT (5, signed) AS type,d.district_id,d.district_name,t.town_id,t.town_name,n.neighborhood_id,n.neighborhood_name\n" +
-                ",r.id AS id,r.residence_name as name,r.residence_addr AS addr,r.lon AS longitude,r.lat AS latitude,NULL center_lng,NULL center_lat\n" +
-                "FROM of_residence r,of_town t,of_district d,of_neighborhood n\n" +
-                "WHERE r.of_town_id = t.town_id AND r.of_district_id = d.district_id AND r.of_neighborhood_id = n.neighborhood_id";
+                "SELECT CONVERT (5, signed) AS type, d.district_id, d.district_name, t.town_id, t.town_name, n.neighborhood_id, n.neighborhood_name, r.id AS id,\n" +
+                "r.residence_name AS name, r.residence_addr AS addr, r.lon AS longitude, r.lat AS latitude, NULL center_lng, NULL center_lat\n" +
+                "FROM of_residence r\n" +
+                "LEFT JOIN of_town t ON r.of_town_id = t.town_id\n" +
+                "LEFT JOIN of_district d ON r.of_district_id = d.district_id\n" +
+                "LEFT JOIN of_neighborhood n ON r.of_neighborhood_id = n.neighborhood_id";
         ResultSet rs = stmt.executeQuery(sql);
         return rs;
     }

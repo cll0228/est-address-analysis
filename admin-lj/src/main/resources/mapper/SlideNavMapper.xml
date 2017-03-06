@@ -435,105 +435,111 @@
 		INNER JOIN (
 		SELECT
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
-			of_district_id,
-			sum(house_count) AS levelHouseCount,
+			re.of_district_id,
+			sum(c.user_count) AS households,
+			sum(c.house_count2) AS levelHouseCount,
 			od.center_lat AS lat,
 			od.center_lng AS lon
 		</if>
 		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
-			of_town_id,
-			sum(house_count) AS levelHouseCount,
+			re.of_town_id,
+			sum(c.user_count) AS households,
+			sum(c.house_count2) AS levelHouseCount,
 			ot.latitude AS lat,
 			ot.longitude AS lon
 		</if>
 		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
-			of_neighborhood_id,
-			sum(house_count) AS levelHouseCount,
+			re.of_neighborhood_id,
+			sum(c.user_count) AS households,
+			sum(c.house_count2) AS levelHouseCount,
 			one.lat AS lat,
 			one.lng as lon
 		</if>
 		<if test='paramInfo.keyType == "4"'>
-			id,
-			sum(house_count) AS levelHouseCount,
+			re.id,
+			sum(c.user_count) AS households,
+			sum(c.house_count2) AS levelHouseCount,
 			re.lat,
 			re.lon
 		</if>
 		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
-			id,
-			sum(house_count) AS levelHouseCount,
+			re.id,
+			sum(c.user_count) AS households,
+			sum(c.house_count2) AS levelHouseCount,
 			re.lat,
 			re.lon
 		</if>
-		FROM ocn_address.of_residence re
+		FROM hsrjop.of_residence c
+		LEFT JOIN ocn_address.of_residence re ON c.id = re.id
 		left JOIN ocn_address.of_district od on re.of_district_id = od.district_id
 		left JOIN ocn_address.of_town ot on re.of_town_id = ot.town_id
 		left JOIN ocn_address.of_neighborhood one on re.of_neighborhood_id = one.neighborhood_id
 		WHERE 1=1
 		<!-- 小区总户数 -->
 		<if test='paramInfo.l == "l500"'>
-			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id)&lt;500
+			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id)&lt;500
 		</if>
 		<if test='paramInfo.l == "l1000"'>
-			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id) BETWEEN 500 and 1000
+			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id) BETWEEN 500 and 1000
 		</if>
 		<if test='paramInfo.l == "l2000"'>
-			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id) BETWEEN 1000 and 2000
+			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id) BETWEEN 1000 and 2000
 		</if>
 		<if test='paramInfo.l == "l3000"'>
-			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id) &gt;= 2000
+			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id) &gt;= 2000
 		</if>
 		<if test='paramInfo.keyType == "1" and paramInfo.siteType != "quyu"'>
-			AND of_district_id IS NOT NULL
-			AND of_district_id = #{paramInfo.keyId}
+			AND re.of_district_id IS NOT NULL
+			AND re.of_district_id = #{paramInfo.keyId}
 			GROUP BY
-			of_district_id
+			re.of_district_id
 		</if>
 		<if test='paramInfo.siteType == "quyu"'>
-			AND of_district_id IS NOT NULL
+			AND re.of_district_id IS NOT NULL
 			GROUP BY
-			of_district_id
+			re.of_district_id
 		</if>
 		<if test='paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
-			AND of_district_id IS NOT NULL
-			AND of_district_id = #{paramInfo.dataId}
+			AND re.of_district_id IS NOT NULL
+			AND re.of_district_id = #{paramInfo.dataId}
 			GROUP BY
-			of_town_id
+			re.of_town_id
 		</if>
 		<if test='paramInfo.keyType == "2" and paramInfo.siteType != "juwei" and paramInfo.siteType != "alljuwei"'>
-			AND of_town_id IS NOT NULL
-			AND of_town_id = #{paramInfo.keyId}
+			AND re.of_town_id IS NOT NULL
+			AND re.of_town_id = #{paramInfo.keyId}
 			GROUP BY
-			of_town_id
+			re.of_town_id
 		</if>
 		<if test='paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
-			AND of_town_id IS NOT NULL
-			AND of_town_id = #{paramInfo.dataId}
+			AND re.of_town_id IS NOT NULL
+			AND re.of_town_id = #{paramInfo.dataId}
 			GROUP BY
-			of_neighborhood_id
+			re.of_neighborhood_id
 		</if>
 		<if test='paramInfo.keyType == "3" and paramInfo.siteType != "xiaoqu"'>
-			AND of_neighborhood_id IS NOT NULL
-			AND of_neighborhood_id = #{paramInfo.keyId}
+			AND re.of_neighborhood_id IS NOT NULL
+			AND re.of_neighborhood_id = #{paramInfo.keyId}
 			GROUP BY
-			of_neighborhood_id
+			re.of_neighborhood_id
 		</if>
 		<if test='paramInfo.siteType == "xiaoqu"'>
-			AND of_neighborhood_id IS NOT NULL
-			AND of_neighborhood_id = #{paramInfo.dataId}
+			AND re.of_neighborhood_id IS NOT NULL
+			AND re.of_neighborhood_id = #{paramInfo.dataId}
 			GROUP BY
-			id
+			c.id
 		</if>
 		<if test='paramInfo.keyType == "4"'>
-			AND id IS NOT NULL
-			AND residence_addr like "%${paramInfo.keyword}%"
+			AND re.id IS NOT NULL
+			AND re.residence_addr like "%${paramInfo.keyword}%"
 			GROUP BY
-			id
+			c.id
 		</if>
 		<if test='paramInfo.keyType == "5"'>
-			AND id IS NOT NULL
-			AND id = #{paramInfo.keyId}
+			AND re.id IS NOT NULL
+			AND c.id = #{paramInfo.keyId}
 			GROUP BY
-			id
+			c.id
 		</if>
 		) b
 		ON

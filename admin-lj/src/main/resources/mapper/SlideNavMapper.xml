@@ -43,7 +43,7 @@
     </select>
     
     <select id="districtCount" resultType="com.lezhi.adminlj.pojo.CountParam">
-        <!-- SELECT
+        SELECT
 			a.*, b.levelHouseCount,
 			a.households / b.levelHouseCount * 100 AS proportion
 		FROM
@@ -77,8 +77,8 @@
 			GROUP BY
 				of_district_id
 		) b ON a.of_district_id = b.of_district_id
-		ORDER BY proportion DESC -->
-		SELECT
+		ORDER BY proportion DESC
+		<!-- SELECT
 			a.*, b.levelHouseCount,
 			b.households,
 			b.households / b.levelHouseCount * 100 AS proportion
@@ -117,7 +117,7 @@
 			GROUP BY
 				d.of_district_id
 		) b ON a.of_district_id = b.of_district_id
-		ORDER BY proportion DESC
+		ORDER BY proportion DESC -->
     </select>
     
     <select id="levelOneCount" resultType="com.lezhi.adminlj.pojo.CountParam">

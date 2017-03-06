@@ -27,7 +27,7 @@
 				publichost : '',
 				statichost : 'http://localhost',
 				apihost : 'http://soa.dooioo.com',
-				quxianhost : 'http://localhost:9568/',
+				quxianhost : 'http://localhost:8080/admin-lj',
 				cityCode : 'sh',
 				cityName: '上海',
 				cityCoordinate : {//城市中心坐标

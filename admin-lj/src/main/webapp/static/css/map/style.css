@@ -231,7 +231,7 @@ body a:hover {
     border: 1px solid #babdc2;
     padding: 0 20px 0 8px; }
     .c-filterbox__selector-text {
-      width: 80px;
+      width: 100px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap; }

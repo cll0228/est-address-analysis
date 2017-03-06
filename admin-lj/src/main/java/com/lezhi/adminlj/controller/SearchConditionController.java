@@ -35,11 +35,11 @@ public class SearchConditionController {
         condition.setResidenceScale(residenceScale);
 
         List<Common> residenceAvg = new ArrayList<>();
-        residenceAvg.add(new Common("p", "2万以下", "p2", "1"));
-        residenceAvg.add(new Common("p", "2-3万", "p3", "2"));
-        residenceAvg.add(new Common("p", "3-5万", "p4", "3"));
-        residenceAvg.add(new Common("p", "5-8万", "p5", "4"));
-        residenceAvg.add(new Common("p", "8万以上", "p8", "45"));
+        residenceAvg.add(new Common("p", "3万以下", "p2", "1"));
+        residenceAvg.add(new Common("p", "3-5万", "p3", "2"));
+        residenceAvg.add(new Common("p", "5-8万", "p4", "3"));
+        residenceAvg.add(new Common("p", "8-10万", "p5", "4"));
+        residenceAvg.add(new Common("p", "10万以上", "p8", "45"));
         condition.setResidenceAvg(residenceAvg);
 
         List<Common> residenceKind = new ArrayList<>();

@@ -372,7 +372,7 @@ function showMapTown(dataList) {
         map.centerAndZoom(new BMap.Point(cen_lon, cen_lat), 14);
         var point_dis_i = new BMap.Point(item.longitude, item.latitude);
         //添加园圈
-        var html = '<div id="' + item.dataId + '" onclick="getJuWei(' + item.dataId + ',' + item.longitude + ',' + item.latitude + ');" class="plate-overlay"><p>' + item.showName + '</p><p class="map-overlay__total">' + item.households + '户</p></div>';
+        var html = '<div id="' + item.dataId + '" onclick="getJuWei(' + item.dataId + ');" class="plate-overlay"><p>' + item.showName + '</p><p class="map-overlay__total">' + item.households + '户</p></div>';
         var anchor = new BMap.Size(-30, -25);
         var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
         richMarker_i.Name = item.dataId;
@@ -398,7 +398,7 @@ function showMapNeibarHood(dataList) {
         map.centerAndZoom(new BMap.Point(cen_lon, cen_lat), 17);
         var point_dis_i = new BMap.Point(item.longitude, item.latitude);
         //添加园圈
-        var html = '<div id="' + item.dataId + '" onclick="getResidence(' + item.dataId + ',' + item.longitude + ',' + item.latitude + ');" class="plate-overlay"><p>' + item.showName + '</p><p class="map-overlay__total">' + item.households + '户</p></div>';
+        var html = '<div id="' + item.dataId + '" onclick="getResidence(' + item.dataId + ');" class="plate-overlay"><p>' + item.showName + '</p><p class="map-overlay__total">' + item.households + '户</p></div>';
         var anchor = new BMap.Size(-30, -25);
         var richMarker_i = new BMapLib.RichMarker(html, point_dis_i, {"anchor": anchor});
         richMarker_i.Name = item.dataId;

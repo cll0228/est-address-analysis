@@ -72,7 +72,7 @@
         FROM
         ocn_address.of_neighborhood t
         WHERE
-        r.lng != ''
+        t.lng != ''
         <if test="neighborhoodId != null and '' != neighborhoodId">
             AND t.neighborhood_id = #{neighborhoodId}
         </if>
@@ -122,7 +122,7 @@
         </if>
         ) re ,ocn_address.of_neighborhood n
         WHERE
-        re.residenceId = a.id and re.neighborhoodId = n.neighborhood_id
+        re.residenceId = a.id /*and re.neighborhoodId = n.neighborhood_id*/
         <if test="neighborhoodId != null and '' != neighborhoodId">
           and  re.neighborhoodId = #{neighborhoodId}
         </if>

@@ -220,10 +220,13 @@ Vue.component('searchlist-component', {
                         this.startWith(res.dataList[0].dataId);
                         params.keyType = this.searchParams.type;
                     }
-                if(params.keyType == 1){
+                if("sh" == params.dataId && 1 == params.type){
                     showMapDistrict_dl(res.dataList);
                 }
-                if(params.keyType == 2 || params.type == 1){
+                if(params.keyType == 1 ){
+                    showMapDistrict_dl(res.dataList);
+                }
+                if(params.keyType == 2 || (params.type == 1 && params.dataId != "sh" )){
                     showMapTown(res.dataList);
                 }
                 if(params.keyType == 3 || params.type == 2){

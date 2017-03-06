@@ -115,8 +115,9 @@ Vue.component('searchlist-component', {
         		params.siteType = "xiaoqu";
         	}
             params.siteType = this.searchParams.siteType;
+            var s_filters = commonService.getFilters(this.searchParams);
 //            return commonService.ajaxGetBase2(commonService.getBaseInfoUrl(this.houseType), null, params, function(res){
-            return commonService.ajaxGetBase4('/listSearch.do', null, params, function(res){
+            return commonService.ajaxGetBase4('/listSearch.do', s_filters, params, function(res){
             	this.searchResults = this._normalizeSearchResult("All", res);
             	this.setMainInfo("all");
             	this.searchResults = null;

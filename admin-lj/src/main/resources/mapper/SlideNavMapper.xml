@@ -272,10 +272,10 @@
 		INNER JOIN hsrjop.of_residence r ON i.residence_id = r.id
 		WHERE 1=1
 		<if test='paramInfo.keyType == "1"'>
-			and i.of_district_id = #{paramInfo.keyId}
+			and i.of_district_id = #{paramInfo.keyId} and od.is_available = 1
 		</if>
 		<if test='paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
-			and i.of_district_id = #{paramInfo.dataId}
+			and i.of_district_id = #{paramInfo.dataId} and od.is_available = 1
 		</if>
 		<if test='paramInfo.keyType == "2"'>
 			and i.of_town_id = #{paramInfo.keyId}
@@ -489,18 +489,18 @@
 			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id) &gt;= 2000
 		</if>
 		<if test='paramInfo.keyType == "1" and paramInfo.siteType != "quyu"'>
-			AND re.of_district_id IS NOT NULL
+			AND re.of_district_id IS NOT NULL  AND od.is_available = 1
 			AND re.of_district_id = #{paramInfo.keyId}
 			GROUP BY
 			re.of_district_id
 		</if>
 		<if test='paramInfo.siteType == "quyu"'>
-			AND re.of_district_id IS NOT NULL
+			AND re.of_district_id IS NOT NULL  AND od.is_available = 1
 			GROUP BY
 			re.of_district_id
 		</if>
 		<if test='paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
-			AND re.of_district_id IS NOT NULL
+			AND re.of_district_id IS NOT NULL AND od.is_available = 1
 			AND re.of_district_id = #{paramInfo.dataId}
 			GROUP BY
 			re.of_town_id

@@ -333,6 +333,7 @@ function showMapDistrict_yh(dataList) {
         var overlayTop = $(richMarker_i._container);
         overlayTop.css("background", "transparent").addClass('map-overlay');
     }
+    $("#bzoom").attr("class","zoom-tool__item icon-plus");
 }
 
 function showMapDistrict_dl(dataList) {
@@ -354,6 +355,7 @@ function showMapDistrict_dl(dataList) {
         var overlayTop = $(richMarker_i._container);
         overlayTop.css("background", "transparent").addClass('map-overlay');
     }
+    $("#bzoom").attr("class","zoom-tool__item icon-plus");
 }
 
 function showMapTown(dataList) {
@@ -380,6 +382,7 @@ function showMapTown(dataList) {
             overlayTop.css("background", "transparent").addClass('map-overlay');
         }
     }
+    $("#bzoom").attr("class","zoom-tool__item icon-plus");
 }
 
 function showMapNeibarHood(dataList) {
@@ -405,6 +408,7 @@ function showMapNeibarHood(dataList) {
             overlayTop.css("background", "transparent").addClass('map-overlay');
         }
     }
+    $("#bzoom").attr("class","zoom-tool__item icon-plus");
 }
 
 function showMapResidence(dataList) {

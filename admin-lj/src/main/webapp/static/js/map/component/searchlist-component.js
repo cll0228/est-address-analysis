@@ -224,7 +224,7 @@ Vue.component('searchlist-component', {
                     showMapDistrict_dl(res.dataList);
                 }
                 if(params.keyType == 1 ){
-                    showMapDistrict_dl(res.dataList);
+                    showMapDistrict_yh(res.dataList);
                 }
                 if(params.keyType == 2 || (params.type == 1 && params.dataId != "sh" )){
                     showMapTown(res.dataList);

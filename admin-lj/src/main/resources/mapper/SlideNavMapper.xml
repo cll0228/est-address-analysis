@@ -228,27 +228,26 @@
 	<select id="searchKeyword" resultType="com.lezhi.adminlj.pojo.CountParam">
 		SELECT
 		a.*, b.levelHouseCount,
-		b.households,
-		b.households / b.levelHouseCount * 100 AS proportion,
+		a.households / b.levelHouseCount * 100 AS proportion,
 		b.lat,
 		b.lon
 		FROM
-		(select
-		h.district_name AS districtName,
-		h.town_name AS townNname,
-		h.neighborhood_name AS neighborhoodName
+		(select sum(h.user_count) AS households,
+		od.district_name AS districtName,
+		ot.town_name AS townNname,
+		ne.neighborhood_name AS neighborhoodName
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
-			,h.district_name AS levelName,
+			,od.district_name AS levelName,
 			h.of_district_id AS levelId,
 			h.of_district_id
 		</if>
 		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
-			,h.town_name AS levelName,
+			,ot.town_name AS levelName,
 			h.of_town_id AS levelId,
 			h.of_town_id
 		</if>
 		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
-			,h.neighborhood_name AS levelName,
+			,ne.neighborhood_name AS levelName,
 			h.of_neighborhood_id AS levelId,
 			h.of_neighborhood_id
 		</if>
@@ -263,19 +262,16 @@
 			h.residence_id
 		</if>
 		FROM
-		(select i.of_district_id,od.district_name,i.of_town_id,ot.town_name,i.of_neighborhood_id,
-			ne.neighborhood_name,i.residence_id,i.residence_name
-		from hsrjop.intelligence_hd_addr_info i
-		LEFT JOIN ocn_address.of_district od on i.of_district_id = od.district_id
-		LEFT JOIN ocn_address.of_town ot on i.of_town_id = ot.town_id
-		LEFT JOIN ocn_address.of_neighborhood ne on i.of_neighborhood_id = ne.neighborhood_id
-		INNER JOIN hsrjop.of_residence r ON i.residence_id = r.id
+		(select r.user_count,i.of_district_id,i.of_town_id,i.of_neighborhood_id,
+			r.id,i.residence_name
+		from hsrjop.of_residence r
+		INNER JOIN hsrjop.intelligence_hd_addr_info i ON i.residence_id = r.id
 		WHERE 1=1
 		<if test='paramInfo.keyType == "1"'>
-			and i.of_district_id = #{paramInfo.keyId} and od.is_available = 1
+			and i.of_district_id = #{paramInfo.keyId}
 		</if>
 		<if test='paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
-			and i.of_district_id = #{paramInfo.dataId} and od.is_available = 1
+			and i.of_district_id = #{paramInfo.dataId}
 		</if>
 		<if test='paramInfo.keyType == "2"'>
 			and i.of_town_id = #{paramInfo.keyId}
@@ -293,7 +289,7 @@
 			and i.residence_addr like "%${paramInfo.keyword}%"
 		</if>
 		<if test='paramInfo.keyType == "5"'>
-			and i.residence_id = #{paramInfo.keyId}
+			and i.id = #{paramInfo.keyId}
 		</if>
 	<!--	<if test='paramInfo.siteType == "xiaoqu"'>
 			and i.residence_id = #{paramInfo.dataId}
@@ -316,16 +312,16 @@
 		</if>
 		<!-- 小区总户数 -->
 		<if test='paramInfo.l == "l500"'>
-			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id)&lt;500
+			and (select sum(res.house_count2) from hsrjop.of_residence res where res.id = i.id)&lt;500
 		</if>
 		<if test='paramInfo.l == "l1000"'>
-			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) BETWEEN 500 and 1000
+			and (select sum(res.house_count2) from hsrjop.of_residence res where res.id = i.id) BETWEEN 500 and 1000
 		</if>
 		<if test='paramInfo.l == "l2000"'>
-			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) BETWEEN 1000 and 2000
+			and (select sum(res.house_count2) from hsrjop.of_residence res where res.id = i.id) BETWEEN 1000 and 2000
 		</if>
 		<if test='paramInfo.l == "l3000"'>
-			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) &gt;= 2000
+			and (select sum(res.house_count2) from hsrjop.of_residence res where res.id = i.id) &gt;= 2000
 		</if>
 		<!-- 小区均价 -->
 		<if test='paramInfo.p == "p2"'>
@@ -414,23 +410,26 @@
 			<if test='f == "f2"'>
 				and i.isadded = 0
 			</if>-->
-		) h
 		GROUP BY
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
-			h.of_district_id
+			i.of_district_id,r.id
 		</if>
 		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
-			h.of_town_id
+			i.of_town_id,r.id
 		</if>
 		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
-			h.of_neighborhood_id
+			i.of_neighborhood_id,r.id
 		</if>
 		<if test='paramInfo.keyType == "4"'>
-			h.residence_id
+			r.id
 		</if>
 		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
-			h.residence_id
+			r.id
 		</if>
+		) h
+		LEFT JOIN ocn_address.of_district od on h.of_district_id = od.district_id  and od.is_available = 1
+		LEFT JOIN ocn_address.of_town ot on h.of_town_id = ot.town_id
+		LEFT JOIN ocn_address.of_neighborhood ne on h.of_neighborhood_id = ne.neighborhood_id
 		)a
 		INNER JOIN (
 		SELECT
@@ -477,16 +476,16 @@
 		WHERE 1=1
 		<!-- 小区总户数 -->
 		<if test='paramInfo.l == "l500"'>
-			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id)&lt;500
+			and (select sum(res.house_count2) from hsrjop.of_residence res where res.id = c.id)&lt;500
 		</if>
 		<if test='paramInfo.l == "l1000"'>
-			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id) BETWEEN 500 and 1000
+			and (select sum(res.house_count2) from hsrjop.of_residence res where res.id = c.id) BETWEEN 500 and 1000
 		</if>
 		<if test='paramInfo.l == "l2000"'>
-			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id) BETWEEN 1000 and 2000
+			and (select sum(res.house_count2) from hsrjop.of_residence res where res.id = c.id) BETWEEN 1000 and 2000
 		</if>
 		<if test='paramInfo.l == "l3000"'>
-			and (select sum(c.house_count2) from hsrjop.of_residence res where res.id = c.id) &gt;= 2000
+			and (select sum(res.house_count2) from hsrjop.of_residence res where res.id = c.id) &gt;= 2000
 		</if>
 		<if test='paramInfo.keyType == "1" and paramInfo.siteType != "quyu"'>
 			AND re.of_district_id IS NOT NULL  AND od.is_available = 1

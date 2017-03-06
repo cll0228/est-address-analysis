@@ -422,7 +422,7 @@ function showMapResidence(dataList) {
         var bus_lon = item.longitude;
         var bus_p_i = new BMap.Point(bus_lon,bus_lat);
         map.centerAndZoom(bus_p_i, 19);
-        var html = '<div class="estate-overlay__count js_estateOverlayCount">' + item.households + '户</div>';
+        var html = '<div class="estate-overlay__count js_estateOverlayCount" onmouseover="openResidenceInfoWindow('+item.dataId+');">' + item.households + '户</div>';
         var anchor = new BMap.Size(-42, -28);
         var rich_i = new BMapLib.RichMarker(html, bus_p_i, {"anchor": anchor});
         //点击事件，显示文本内容
@@ -431,10 +431,6 @@ function showMapResidence(dataList) {
             offset: new BMap.Size(7, -25, 30, 30)    //设置文本偏移量 右  下
         }
         var infoW_i = new BMap.InfoWindow("小区名称：" + item.showName + '</br>' + "高清+智能总户数：" + item.households+'</br>'+"小区总户数："+item.houseCount+'</br>'+"占比："+item.proportion+'%', opts_i);  // 创建信息窗口对象
-        //圖標點擊事件
-        rich_i.addEventListener("mouseover", function () {
-            map.openInfoWindow(infoW_i, bus_p_i); //开启信息窗口
-        });
         rich_i.Name = item.dataId;
         if(ifadd(rich_i)){
             map.addOverlay(rich_i);

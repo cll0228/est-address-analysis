@@ -52,7 +52,7 @@
             and d.district_id = #{districtId}
         </if>
         GROUP BY
-        res.of_town_id
+        res.of_town_id HAVING hdUserNum  != 0
     </select>
     <select id="neighborhood" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Neighborhood">
         SELECT
@@ -87,7 +87,7 @@
             AND re.townId = #{townId}
         </if>
         GROUP BY
-        res.of_neighborhood_id
+        res.of_neighborhood_id HAVING hdUserNum != 0
 
     </select>
     <select id="residence" parameterType="java.lang.String" resultType="com.lezhi.adminlj.pojo.Residence">
@@ -127,6 +127,6 @@
           and  re.neighborhoodId = #{neighborhoodId}
         </if>
         GROUP BY
-        a.id
+        a.id HAVING hdUserNum != 0
     </select>
 </mapper>

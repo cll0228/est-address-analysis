@@ -36,7 +36,7 @@
         t.longitude longitude
         FROM
         ocn_address.of_town t
-        WHERE 1=1
+        WHERE t.latitude != ''
         <if test="townId != null">
             AND   t.town_id = #{townId}
         </if>
@@ -72,7 +72,7 @@
         FROM
         ocn_address.of_neighborhood t
         WHERE
-        1 = 1
+        r.lng != ''
         <if test="neighborhoodId != null and '' != neighborhoodId">
             AND t.neighborhood_id = #{neighborhoodId}
         </if>
@@ -108,7 +108,7 @@
         r.lat lat
         FROM
         ocn_address.of_residence r
-        WHERE 1=1
+        WHERE r.lon != ''
         <if test="residenceId != null and '' != residenceId">
            and r.id = #{residenceId}
         </if>

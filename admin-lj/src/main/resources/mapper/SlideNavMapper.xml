@@ -228,6 +228,7 @@
 	<select id="searchKeyword" resultType="com.lezhi.adminlj.pojo.CountParam">
 		SELECT
 		a.*, b.levelHouseCount,
+		b.households,
 		b.households / b.levelHouseCount * 100 AS proportion,
 		b.lat,
 		b.lon

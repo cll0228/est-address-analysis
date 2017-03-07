@@ -49,7 +49,7 @@
 		FROM
 			(
 				SELECT
-					count(a.TYPE_NAME) AS households,
+					count(a.STD_ADDR_ID) AS households,
 					c.district_name AS levelName,
 					c.center_lng AS lon,
 					c.center_lat AS lat,
@@ -62,7 +62,8 @@
 				ON
 					a.of_district_id = c.district_id
 				WHERE
-					district_name IS NOT NULL and district_name!='闸北区'
+					a.RN = 1
+				AND district_name IS NOT NULL and district_name!='闸北区'
 				GROUP BY
 					a.of_district_id
 			) a
@@ -127,13 +128,14 @@
 		FROM
 			(
 				SELECT
-					count(a.TYPE_NAME) AS households,
+					count(a.STD_ADDR_ID) AS households,
 					a.town_name AS levelName,
 					a.of_town_id AS levelId,
 					a.of_town_id
 				FROM
 					hsrjop.intelligence_hd_addr_info a
 				WHERE
+					a.RN = 1 AND
 					district_name IS NOT NULL
 				AND 
 					a.of_district_id = #{districtId}
@@ -162,13 +164,13 @@
 		FROM
 			(
 				SELECT
-					count(a.TYPE_NAME) AS households,
+					count(a.STD_ADDR_ID) AS households,
 					a.neighborhood_name AS levelName,
 					a.of_neighborhood_id AS levelId,
 					a.of_neighborhood_id
 				FROM
 					hsrjop.intelligence_hd_addr_info a
-				WHERE
+				WHERE a.RN = 1 AND
 					district_name IS NOT NULL
 				AND 
 					a.of_town_id = #{townId}
@@ -197,13 +199,13 @@
 		FROM
 			(
 				SELECT
-					count(a.TYPE_NAME) AS households,
+					count(a.STD_ADDR_ID) AS households,
 					a.residence_name AS levelName,
 					a.residence_id AS levelId,
 					a.residence_id
 				FROM
 					hsrjop.intelligence_hd_addr_info a
-				WHERE
+				WHERE a.RN = 1 AND
 					district_name IS NOT NULL
 				AND 
 					a.of_neighborhood_id = #{neighborhoodId}
@@ -232,7 +234,7 @@
 		b.lat,
 		b.lon
 		FROM
-		(select count(h.TYPE_NAME) AS households,
+		(select count(h.STD_ADDR_ID) AS households,
 		h.district_name AS districtName,
 		h.town_name AS townNname,
 		h.neighborhood_name AS neighborhoodName
@@ -262,14 +264,14 @@
 			h.residence_id
 		</if>
 		FROM
-		(select i.TYPE_NAME,i.of_district_id,od.district_name,i.of_town_id,ot.town_name,i.of_neighborhood_id,
+		(select i.STD_ADDR_ID,i.of_district_id,od.district_name,i.of_town_id,ot.town_name,i.of_neighborhood_id,
 		ne.neighborhood_name,i.residence_id,i.residence_name
 		from hsrjop.intelligence_hd_addr_info i
 		LEFT JOIN ocn_address.of_district od on i.of_district_id = od.district_id AND od.is_available = 1
 		LEFT JOIN ocn_address.of_town ot on i.of_town_id = ot.town_id
 		LEFT JOIN ocn_address.of_neighborhood ne on i.of_neighborhood_id = ne.neighborhood_id
 		INNER JOIN hsrjop.of_residence r ON i.residence_id = r.id
-		WHERE 1=1
+		WHERE i.RN = 1
 		<if test='paramInfo.keyType == "1"'>
 			and i.of_district_id = #{paramInfo.keyId}
 		</if>
@@ -413,7 +415,6 @@
 			<if test='f == "f2"'>
 				and i.isadded = 0
 			</if>-->
--- 		GROUP BY i.CUST_ID
 		) h
 		GROUP BY
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>

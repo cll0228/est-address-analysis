@@ -334,6 +334,7 @@ function showMapDistrict_yh(dataList) {
         overlayTop.css("background", "transparent").addClass('map-overlay');
     }
     $("#bzoom").attr("class","zoom-tool__item icon-plus");
+    $("#szoom").attr("class","zoom-tool__item icon-minus zoom-tool__item--disabled");
 }
 
 function showMapDistrict_dl(dataList) {
@@ -356,6 +357,7 @@ function showMapDistrict_dl(dataList) {
         overlayTop.css("background", "transparent").addClass('map-overlay');
     }
     $("#bzoom").attr("class","zoom-tool__item icon-plus");
+    $("#szoom").attr("class","zoom-tool__item icon-minus zoom-tool__item--disabled");
 }
 
 function showMapTown(dataList) {
@@ -522,6 +524,9 @@ function clearAllOver() {
 }
 
 function showMapDistrict(dataList) {
+    if(null != map){
+        map.clearOverlays();
+    }
     for(var i = 0;i<dataList.length;i++){
         var item = dataList[i];
         var point_dis_i = new BMap.Point(item.longitude, item.latitude);

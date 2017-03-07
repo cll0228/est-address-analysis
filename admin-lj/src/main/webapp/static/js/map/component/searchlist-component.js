@@ -217,23 +217,23 @@ Vue.component('searchlist-component', {
                     params.keyType = null;
                 }
                 if(res.dataList.length != 0){
-                    if(params.keyType == null && params.type == null){
+                    if("sh" != params.dataId){
                         this.startWith(res.dataList[0].dataId);
                         params.keyType = this.searchParams.type;
                     }
-                if("sh" == params.dataId && 1 == params.type){
+                if("sh" == params.dataId){
                     showMapDistrict_dl(res.dataList);
                 }
                 if(params.keyType == 1 ){
                     showMapDistrict_yh(res.dataList);
                 }
-                if(params.keyType == 2 || (params.type == 1 && params.dataId != "sh" )){
+                if(params.keyType == 2 ){
                     showMapTown(res.dataList);
                 }
-                if(params.keyType == 3 || params.type == 2){
+                if(params.keyType == 3 ){
                     showMapNeibarHood(res.dataList);
                 }
-                if(params.keyType == 4 || params.keyType == 5 ||params.type == 3){
+                if(params.keyType == 4 || params.keyType == 5 ){
                     showMapResidence(res.dataList)
                 }
                 }else{

@@ -53,6 +53,20 @@ Vue.component('searchlist-component', {
                 return item && item.showName && i < (len - 1);
             });
         },
+        //根据QueryString参数名称获取值
+        getQueryStringByName: function(name){
+
+             var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+
+             if(result == null || result.length < 1){
+
+                 return "";
+
+             }
+
+             return result[1];
+
+        },
         startWith: function(showDataId){
             if((showDataId.indexOf("3101") == 0 || showDataId == "310230") && showDataId.length == 6){
                 this.searchParams.type = 1
@@ -99,6 +113,10 @@ Vue.component('searchlist-component', {
             }
             if(params.type=="4"||(params.type=="2"&&searchParams.siteType=="xiaoqu")) {
 //            if(params.type=="4") {
+            	if(params.type=="4") {
+            		params.dataId = this.getQueryStringByName("dataId");
+            		params.type = 3;
+            	}
             	return;
             }
             if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {

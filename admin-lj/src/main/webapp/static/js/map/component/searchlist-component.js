@@ -216,24 +216,25 @@ Vue.component('searchlist-component', {
                 if( null == params.keyword ){
                     params.keyType = null;
                 }
+
+                var type = null;
                 if(res.dataList.length != 0){
                     if("sh" != params.dataId){
-                        this.startWith(res.dataList[0].dataId);
-                        params.keyType = this.searchParams.type;
+                        type = getType(res.dataList[0].dataId);
                     }
                 if("sh" == params.dataId){
                     showMapDistrict_dl(res.dataList);
                 }
-                if(params.keyType == 1 ){
+                if(type == 1 ){
                     showMapDistrict_yh(res.dataList);
                 }
-                if(params.keyType == 2 ){
+                if(type == 2 ){
                     showMapTown(res.dataList);
                 }
-                if(params.keyType == 3 ){
+                if(type == 3 ){
                     showMapNeibarHood(res.dataList);
                 }
-                if(params.keyType == 4 || params.keyType == 5 ){
+                if(type == 4 || params.keyType == 5 ){
                     showMapResidence(res.dataList)
                 }
                 }else{

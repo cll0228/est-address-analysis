@@ -540,3 +540,15 @@ function showMapDistrict(dataList) {
     }
     com_param = true;
 }
+
+function getType(showDataId) {
+    if ((showDataId.indexOf("3101") == 0 || showDataId == "310230") && showDataId.length == 6) {
+        return 1
+    } else if ((showDataId.indexOf("3101") == 0 || showDataId.indexOf("310230")) && showDataId.length == 9) {
+        return 2
+    } else if ((showDataId.indexOf("3101") == 0 || showDataId.indexOf("310230")) && showDataId.length == 12) {
+        return 3
+    } else {
+        return 4
+    }
+}

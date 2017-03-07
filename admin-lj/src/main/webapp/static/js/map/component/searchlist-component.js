@@ -114,8 +114,8 @@ Vue.component('searchlist-component', {
             if(params.type=="4"||(params.type=="2"&&searchParams.siteType=="xiaoqu")) {
 //            if(params.type=="4") {
             	if(params.type=="4") {
-            		params.dataId = this.getQueryStringByName("dataId");
-            		params.type = 3;
+                    this.searchParams.dataId = this.getQueryStringByName("dataId");
+                    this.searchParams.type = 3;
             	}
             	return;
             }

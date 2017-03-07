@@ -209,9 +209,9 @@
 							</li> -->
 							<ul v-if="!searchResults.isHouseList">
 							<li class="search-list__list-item">
-								<span class="search-list__show-name" title="区域">区域</span>
-								<span class="search-list__show-name-title"><span>户数</span></span>
-								<span class="search-list__count">占比</span>
+								<span class="search-list__show-name">区域</span>
+								<span class="search-list__show-name-title" title="使用智能机顶盒，高清机顶盒+EOC设备的用户数量"><span>户数</span></span>
+								<span class="search-list__count" title="用户数量/小区总住户数量">占比</span>
 							</li>
 							<li class="search-list__list-item" gahref="{{item.dataId}}" v-for="item in searchResults.list" @click="clickListItem(item)">
 								<span class="search-list__show-name" title="{{item.showName}}" gahref="{{item.dataId}}" onmouseover="showMap('{{item.dataId}}')" onmouseout="hideMap();">{{item.showName}}</span>

@@ -136,7 +136,7 @@
 					hsrjop.intelligence_hd_addr_info a
 				WHERE
 					a.RN = 1 AND
-					district_name IS NOT NULL
+					district_name IS NOT NULL and district_name!='闸北区'
 				AND 
 					a.of_district_id = #{districtId}
 				GROUP BY
@@ -171,7 +171,7 @@
 				FROM
 					hsrjop.intelligence_hd_addr_info a
 				WHERE a.RN = 1 AND
-					district_name IS NOT NULL
+					district_name IS NOT NULL and district_name!='闸北区'
 				AND 
 					a.of_town_id = #{townId}
 				GROUP BY
@@ -206,7 +206,7 @@
 				FROM
 					hsrjop.intelligence_hd_addr_info a
 				WHERE a.RN = 1 AND
-					district_name IS NOT NULL
+					district_name IS NOT NULL and district_name!='闸北区'
 				AND 
 					a.of_neighborhood_id = #{neighborhoodId}
 				GROUP BY

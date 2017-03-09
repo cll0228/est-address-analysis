@@ -234,22 +234,22 @@
 		b.lat,
 		b.lon
 		FROM
-		(select count(h.STD_ADDR_ID) AS households,
-		h.district_name AS districtName,
-		h.town_name AS townNname,
-		h.neighborhood_name AS neighborhoodName
+		(select count(h.STD_ADDR_ID) AS households
+		,od.district_name AS districtName
+		,ot.town_name AS townNname
+		,ne.neighborhood_name AS neighborhoodName
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
-			,h.district_name AS levelName,
+			,od.district_name AS levelName,
 			h.of_district_id AS levelId,
 			h.of_district_id
 		</if>
 		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
-			,h.town_name AS levelName,
+			,ot.town_name AS levelName,
 			h.of_town_id AS levelId,
 			h.of_town_id
 		</if>
 		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
-			,h.neighborhood_name AS levelName,
+			,ne.neighborhood_name AS levelName,
 			h.of_neighborhood_id AS levelId,
 			h.of_neighborhood_id
 		</if>
@@ -264,12 +264,9 @@
 			h.residence_id
 		</if>
 		FROM
-		(select i.STD_ADDR_ID,i.of_district_id,od.district_name,i.of_town_id,ot.town_name,i.of_neighborhood_id,
-		ne.neighborhood_name,i.residence_id,i.residence_name
+		(select i.STD_ADDR_ID,i.of_district_id,i.of_town_id,i.of_neighborhood_id,
+		i.residence_id,i.residence_name
 		from hsrjop.intelligence_hd_addr_info i
-		LEFT JOIN ocn_address.of_district od on i.of_district_id = od.district_id AND od.is_available = 1
-		LEFT JOIN ocn_address.of_town ot on i.of_town_id = ot.town_id
-		LEFT JOIN ocn_address.of_neighborhood ne on i.of_neighborhood_id = ne.neighborhood_id
 		INNER JOIN hsrjop.of_residence r ON i.residence_id = r.id
 		WHERE i.RN = 1
 		<if test='paramInfo.keyType == "1"'>
@@ -416,6 +413,9 @@
 				and i.isadded = 0
 			</if>-->
 		) h
+		LEFT JOIN ocn_address.of_district od on h.of_district_id = od.district_id AND od.is_available = 1
+		LEFT JOIN ocn_address.of_town ot on h.of_town_id = ot.town_id
+		LEFT JOIN ocn_address.of_neighborhood ne on h.of_neighborhood_id = ne.neighborhood_id
 		GROUP BY
 		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
 			h.of_district_id

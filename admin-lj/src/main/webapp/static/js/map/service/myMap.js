@@ -527,6 +527,8 @@ function showMapDistrict(dataList) {
     if(null != map){
         map.clearOverlays();
     }
+    var center = new BMap.Point("121.464427", "31.228894");
+    map.centerAndZoom(center, 12);
     for(var i = 0;i<dataList.length;i++){
         var item = dataList[i];
         var point_dis_i = new BMap.Point(item.longitude, item.latitude);

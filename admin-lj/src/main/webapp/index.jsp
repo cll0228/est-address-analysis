@@ -54,7 +54,7 @@
 			<!-- 头部 -->
 			<div class="map-header" id="headerWrap">
 				<!-- logo  -->
-				<a class="map-header__logo" href="" style="background:none" gahref="header_logo">海上人家运营平台</a>
+				<a class="map-header__logo" href="http://localhost:8080${ctx}" style="background:none" gahref="header_logo">海上人家运营平台</a>
 
 				<!-- 自动完成搜索 -->
 				<switch-channel-component house-type="ershoufang"></switch-channel-component>

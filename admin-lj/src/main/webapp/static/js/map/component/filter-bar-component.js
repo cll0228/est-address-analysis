@@ -18,7 +18,7 @@ Vue.component('filter-bar-component', {
                             <svg><use xlink:href="./static/css/map/map-icon.svg#icon-close"></use></svg>\
                             </a>\
                         </span>\
-                        <a href="javascript:;" @click="clearAllCondition" onclick="initDistrictInfo();" class="filter-bar__clear-filter" gahref="tooltip_filters_empty">\
+                        <a href="javascript:;" @click="clearAllCondition" class="filter-bar__clear-filter" gahref="tooltip_filters_empty">\
                             <svg><use xlink:href="./static/css/map/map-icon.svg#icon-delete"></use></svg>\
                             <span style="text-decoration: underline;">清空</span>\
                         </a>\

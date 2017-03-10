@@ -1,0 +1,31 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+    <symbol id="icon-ditie" viewBox="0 0 20 20">
+        <path d="M17.2,0H2.8C1.8,0,1,0.8,1,1.8V11v1v4.2c0,1,0.8,1.8,1.8,1.8H4v0.5C4,19.3,4.7,20,5.5,20S7,19.3,7,18.5V18
+            h6v0.5c0,0.8,0.7,1.5,1.5,1.5s1.5-0.7,1.5-1.5V18h1.2c1,0,1.8-0.8,1.8-1.8V12v-1V1.8C19,0.8,18.2,0,17.2,0z M5.5,16
+            C4.7,16,4,15.3,4,14.5S4.7,13,5.5,13S7,13.7,7,14.5S6.3,16,5.5,16z M14.5,16c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5
+            s1.5,0.7,1.5,1.5S15.3,16,14.5,16z M18,11H2V1.8C2,1.3,2.3,1,2.8,1h14.5C17.7,1,18,1.3,18,1.8V11z"></path>
+    </symbol>
+
+    <symbol id="icon-close" x="0px" y="0px" viewBox="0 0 14 14" >
+        <polygon points="13.3,0 7,6.3 0.7,0 0,0.7 6.3,7 0,13.3 0.7,14 7,7.7 13.3,14 14,13.3 7.7,7 14,0.7 "/>
+    </symbol>
+
+    <symbol id="icon-delete" x="0px" y="0px" viewBox="0 0 14 14">
+        <path d="M4.5,1h5C9.8,1,10,0.8,10,0.5C10,0.2,9.8,0,9.5,0h-5C4.2,0,4,0.2,4,0.5C4,0.8,4.2,1,4.5,1z
+            M13.5,2h-13C0.2,2,0,2.2,0,2.5C0,2.8,0.2,3,0.5,3h13C13.8,3,14,2.8,14,2.5C14,2.2,13.8,2,13.5,2z M11,13H3V4H2v10h10V4h-1V13z
+            M5,4v8h1V4H5z M8,4v8h1V4H8z"/>
+    </symbol>
+
+    <symbol id="icon-ajax-loading" x="0px" y="0px" viewBox="0 0 100 20">
+        <circle cx="10" cy="50" r="0" stroke="none" fill="#009de8">
+            <animate attributeName="r" values="0;10;0" keyTimes="0;.5;1" begin="0s" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="40" cy="50" r="0" stroke="none" fill="#009de8">
+            <animate attributeName="r" values="0;10;0" keyTimes="0;.5;1" begin=".2s" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="80" cy="50" r="0" stroke="none" fill="#009de8">
+            <animate attributeName="r" values="0;10;0" keyTimes="0;.5;1" begin=".5s" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+    </symbol>
+</svg>

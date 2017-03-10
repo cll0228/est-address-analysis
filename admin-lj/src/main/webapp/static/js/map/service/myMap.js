@@ -166,6 +166,7 @@ function getResidence(neighborhoodId,  residenceId, ifchangeZoom) {
 
 function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
     $("#bzoom").attr("class","zoom-tool__item icon-plus zoom-tool__item--disabled");
+    $("#szoom").attr("class","zoom-tool__item icon-minus");
     if(null == center){
         center = map.getCenter();
     }
@@ -210,6 +211,7 @@ function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
         },
         complete: function () {
             com_param = true;
+            openResidenceInfoWindow(residenceId);
         }
     });
 
@@ -471,6 +473,9 @@ function getIdType(showDataId) {
 }
 
 function openResidenceInfoWindow(dataId) {
+    if(myMapFlag == 0){
+        return;
+    }
     $.ajax({
         type: "get",
         url: "./getResidence.do",
@@ -508,6 +513,7 @@ function openResidenceInfoWindow(dataId) {
             com_param = true;
         }
     });
+    myMapFlag = 0
 }
 
 function ifadd(obj) {
@@ -554,3 +560,5 @@ function getType(showDataId) {
         return 4
     }
 }
+
+var myMapFlag = 0;

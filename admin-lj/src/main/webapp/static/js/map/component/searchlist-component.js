@@ -111,13 +111,18 @@ Vue.component('searchlist-component', {
                     params.stopId = searchParams.stopId;
                 }
             }
-            if(params.type=="4"||(params.type=="2"&&searchParams.siteType=="xiaoqu")) {
+            if((params.type=="4" && searchParams.keyId  && searchParams.siteType != "jieguo")||(params.type=="2"&&searchParams.siteType=="xiaoqu")) {
 //            if(params.type=="4") {
             	if(params.type=="4") {
                     this.searchParams.dataId = this.getQueryStringByName("dataId");
                     this.searchParams.type = 3;
             	}
             	return;
+            }
+            if(params.type=="4" && searchParams.siteType == "jieguo"){
+                myMapFlag = 1;
+                showResidenceInfo(null,  searchParams.dataId, "chang",null);
+                return;
             }
             if(params.type=="0"||params.type=="city"||(params.type=="1"&&params.dataId=="sh")) {
             	this.searchParams.siteType = "quyu";
@@ -235,28 +240,33 @@ Vue.component('searchlist-component', {
                     params.keyType = null;
                 }
 
-                var type = null;
-                if(res.dataList.length != 0){
-                    if("sh" != params.dataId){
-                        type = getType(res.dataList[0].dataId);
+                if(null != params.keyId){
+                    myMapFlag = 1;
+                    var type = null;
+                    if(res.dataList.length != 0){
+                        if("sh" != params.dataId){
+                            type = getType(res.dataList[0].dataId);
+                        }
+                    if("sh" == params.dataId){
+                        showMapDistrict_dl(res.dataList);
                     }
-                if("sh" == params.dataId){
-                    showMapDistrict_dl(res.dataList);
-                }
-                if(type == 1 ){
-                    showMapDistrict_yh(res.dataList);
-                }
-                if(type == 2 ){
-                    showMapTown(res.dataList);
-                }
-                if(type == 3 ){
-                    showMapNeibarHood(res.dataList);
-                }
-                if(type == 4 || params.keyType == 5 ){
-                    showMapResidence(res.dataList)
-                }
-                }else{
-                    clearAllOver();
+                    if(type == 1 ){
+                        showMapDistrict_yh(res.dataList);
+                    }
+                    if(type == 2 ){
+                        showMapTown(res.dataList);
+                    }
+                    if(type == 3 ){
+                        showMapNeibarHood(res.dataList);
+                    }
+                    if(type == 4 || params.keyType == 5 ){
+                        showMapResidence(res.dataList)
+                    }
+                    }else{
+                        clearAllOver();
+                    }
+                }else {
+                    myMapFlag = 0;
                 }
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;

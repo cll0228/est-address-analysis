@@ -208,14 +208,18 @@ Vue.component('slide-nav-component', {
         	if(this.isActiveQuyu()) {
         		this.mouseoutLevel();
         	} else if(this.isActiveDitie()){
-        		var str=""; 
-        		$("[name='ckb']").filter(":checked").each(function(){
-        			if(str=="") {
-        				str = "\'"+$(this).val()+"\'";
-        			} else {
-        				str+= ",\'"+$(this).val()+"\'"
-        			}
-        			}) 
+        		var str="";
+        		if($("[name='ckb']").filter(":checked").size()!=0) {
+        			$("[name='ckb']").filter(":checked").each(function(){
+            			if(str=="") {
+            				str = "\'"+$(this).val()+"\'";
+            			} else {
+            				str+= ",\'"+$(this).val()+"\'"
+            			}
+            		}) 
+        		} else {
+        			str = "6";
+        		}
         	}
         	if(item.type!="jidinghe") {
         		if(str=="") {

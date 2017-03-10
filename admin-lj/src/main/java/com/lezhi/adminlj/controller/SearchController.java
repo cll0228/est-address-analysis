@@ -118,6 +118,10 @@ public class SearchController {
 		String siteType = request.getParameter("siteType");
 		String showName = null;
 		String jdh = null;
+		if("6".equals(type)) {
+			result.put("dataList", dataList);
+			return result;
+		}
 		if(type != null && type.contains("\'")) {
 			jdh = type;
 		}

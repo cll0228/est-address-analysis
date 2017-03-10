@@ -111,7 +111,7 @@ Vue.component('searchlist-component', {
                     params.stopId = searchParams.stopId;
                 }
             }
-            if((params.type=="4" && searchParams.keyId  && searchParams.siteType != "jieguo")||(params.type=="2"&&searchParams.siteType=="xiaoqu")) {
+            if((params.type=="4" && searchParams.siteType != "jieguo")||(params.type=="2"&&searchParams.siteType=="xiaoqu")) {
 //            if(params.type=="4") {
             	if(params.type=="4") {
                     this.searchParams.dataId = this.getQueryStringByName("dataId");
@@ -240,7 +240,7 @@ Vue.component('searchlist-component', {
                     params.keyType = null;
                 }
 
-                if(null != params.keyId){
+                if(null != params.keyId || null != params.dataId){
                     myMapFlag = 1;
                     var type = null;
                     if(res.dataList.length != 0){
@@ -267,6 +267,7 @@ Vue.component('searchlist-component', {
                     }
                 }else {
                     myMapFlag = 0;
+                    //点击搜索按钮后，加载小区信息单不改变层级
                 }
                 this.searchResults = this._normalizeSearchResult(currentType, res);
                 this.isLoadingList = false;

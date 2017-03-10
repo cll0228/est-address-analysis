@@ -211,7 +211,6 @@ function showResidenceInfo(neighborhoodId, residenceId, ifchangZoom,center) {
         },
         complete: function () {
             com_param = true;
-            openResidenceInfoWindow(residenceId);
         }
     });
 
@@ -513,7 +512,6 @@ function openResidenceInfoWindow(dataId) {
             com_param = true;
         }
     });
-    myMapFlag = 0
 }
 
 function ifadd(obj) {

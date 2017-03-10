@@ -42,7 +42,7 @@ public class IndexGenerator {
 
     @Test
     public void testSearchIndex() {
-        searchIndex("永业公寓");
+        searchIndex("控江");
     }
 
     @Test
@@ -122,6 +122,7 @@ public class IndexGenerator {
                 "FROM of_neighborhood n\n" +
                 "LEFT JOIN of_town t ON n.town_id = t.town_id\n" +
                 "LEFT JOIN of_district d ON n.district_id = d.district_id\n" +
+                "WHERE n.neighborhood_addr IS NOT NULL\n" +
                 "UNION ALL\n" +
                 "SELECT CONVERT (4, signed) AS type, NULL district_id, NULL district_name, NULL town_id, NULL town_name, NULL neighborhood_id, NULL neighborhood_name,\n" +
                 "r.id AS id, r.road_name AS name, NULL addr, NULL longitude, NULL latitude, NULL center_lng, NULL center_lat\n" +
@@ -132,7 +133,8 @@ public class IndexGenerator {
                 "FROM of_residence r\n" +
                 "LEFT JOIN of_town t ON r.of_town_id = t.town_id\n" +
                 "LEFT JOIN of_district d ON r.of_district_id = d.district_id\n" +
-                "LEFT JOIN of_neighborhood n ON r.of_neighborhood_id = n.neighborhood_id";
+                "LEFT JOIN of_neighborhood n ON r.of_neighborhood_id = n.neighborhood_id\n" +
+                "WHERE r.residence_name IS NOT NULL AND r.residence_addr IS NOT NULL";
         ResultSet rs = stmt.executeQuery(sql);
         return rs;
     }
@@ -150,18 +152,18 @@ public class IndexGenerator {
             parser.setDefaultOperator(QueryParser.Operator.OR);
             Query query = parser.parse("\"" + keyWord + "\"");
             System.out.println("query:" + query.toString());
-            TopDocs hits = searcher.search(query, 10);
+            TopDocs hits = searcher.search(query, 20);
             List<LuceneSearchDto> list = new ArrayList<LuceneSearchDto>();
             for (ScoreDoc sd : hits.scoreDocs) {
                 Document document = searcher.doc(sd.doc);
                 LuceneSearchDto info = new LuceneSearchDto();
                 if (null != document.get("type")) info.setType(Integer.valueOf(document.get("type")));
                 if (null != document.get("district_id"))
-                    info.setDistrict_id(Integer.valueOf(document.get("district_id")));
+                    info.setDistrict_id(String.valueOf(document.get("district_id")));
                 if (null != document.get("district_name")) info.setDistrict_name(String.valueOf(document.get("district_name")));
-                if (null != document.get("town_id")) info.setTown_id(Integer.valueOf(document.get("town_id")));
+                if (null != document.get("town_id")) info.setTown_id(String.valueOf(document.get("town_id")));
                 if (null != document.get("town_name")) info.setTown_name(String.valueOf(document.get("town_name")));
-                if (null != document.get("neighborhood_id")) info.setNeighborhood_id(Integer.valueOf(document.get("neighborhood_id")));
+                if (null != document.get("neighborhood_id")) info.setNeighborhood_id(String.valueOf(document.get("neighborhood_id")));
                 if (null != document.get("neighborhood_name")) info.setNeighborhood_name(String.valueOf(document.get("neighborhood_name")));
                 if (null != document.get("id")) info.setId(document.get("id"));
                 if (null != document.get("name")) info.setName(String.valueOf(document.get("name")));

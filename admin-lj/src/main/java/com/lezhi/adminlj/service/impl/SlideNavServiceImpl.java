@@ -1,7 +1,9 @@
 package com.lezhi.adminlj.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.lezhi.adminlj.pojo.LuceneSearchDto;
 import com.lezhi.adminlj.pojo.ParamInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,5 +49,8 @@ public class SlideNavServiceImpl implements SlideNavService {
 	public ArrayList<CountParam> searchKeyword(ParamInfo paramInfo){
 		return slideNavMapper.searchKeyword(paramInfo);
 	}
-
+	@Override
+	public List<LuceneSearchDto> searchKey(String keyWord){
+		return slideNavMapper.searchKey(keyWord);
+	}
 }

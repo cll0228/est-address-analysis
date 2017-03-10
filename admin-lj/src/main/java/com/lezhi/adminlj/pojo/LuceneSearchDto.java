@@ -5,11 +5,11 @@ package com.lezhi.adminlj.pojo;
  */
 public class LuceneSearchDto {
     private int type;  // 目标类型：1区县、2街道、3居委、4道路、5小区
-    private int district_id;  // 查询街道、小区、居委时有值，对应的区县id
+    private String district_id;  // 查询街道、小区、居委时有值，对应的区县id
     private String district_name;  // 查询街道、小区、居委时有值，对应的区县
-    private int town_id;  // 查询小区、居委时有值，对应的街道id
+    private String town_id;  // 查询小区、居委时有值，对应的街道id
     private String town_name;  // 查询小区、居委时有值，对应的街道
-    private int neighborhood_id;  // 查询小区时有值，对应的居委id
+    private String neighborhood_id;  // 查询小区时有值，对应的居委id
     private String neighborhood_name;  // 查询小区时有值，对应的居委
     private String id;  // 目标ID，查询区县、街道、小区、居委、道路时有值
     private String name;  // 目标名称，查询区县、街道、小区、居委、道路时有值
@@ -48,11 +48,11 @@ public class LuceneSearchDto {
         this.type = type;
     }
 
-    public int getDistrict_id() {
+    public String getDistrict_id() {
         return district_id;
     }
 
-    public void setDistrict_id(int district_id) {
+    public void setDistrict_id(String district_id) {
         this.district_id = district_id;
     }
 
@@ -104,11 +104,11 @@ public class LuceneSearchDto {
         this.district_name = district_name;
     }
 
-    public int getTown_id() {
+    public String getTown_id() {
         return town_id;
     }
 
-    public void setTown_id(int town_id) {
+    public void setTown_id(String town_id) {
         this.town_id = town_id;
     }
 
@@ -120,11 +120,11 @@ public class LuceneSearchDto {
         this.town_name = town_name;
     }
 
-    public int getNeighborhood_id() {
+    public String getNeighborhood_id() {
         return neighborhood_id;
     }
 
-    public void setNeighborhood_id(int neighborhood_id) {
+    public void setNeighborhood_id(String neighborhood_id) {
         this.neighborhood_id = neighborhood_id;
     }
 

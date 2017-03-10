@@ -1,7 +1,9 @@
 package com.lezhi.adminlj.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.lezhi.adminlj.pojo.LuceneSearchDto;
 import com.lezhi.adminlj.pojo.ParamInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,4 +26,6 @@ public interface SlideNavService {
 	ArrayList<CountParam> levelThreeCount(String neighborhoodId);
 
 	ArrayList<CountParam> searchKeyword(ParamInfo paramInfo);
+
+	List<LuceneSearchDto> searchKey(String keyWord);
 }

@@ -191,7 +191,41 @@
 				of_neighborhood_id
 		) b ON a.of_neighborhood_id = b.of_neighborhood_id
     </select>
-    
+
+    <select id="searchKey" resultType="com.lezhi.adminlj.pojo.LuceneSearchDto">
+		SELECT CONVERT (1, signed) AS type, NULL district_id, NULL district_name, NULL town_id, NULL town_name, NULL neighborhood_id,
+			NULL neighborhood_name, district_id AS id, district_name AS name, NULL AS addr, NULL longitude, NULL latitude, center_lng, center_lat
+		FROM of_district
+		where district_name LIKE "%${keyWord}%"
+		UNION ALL
+		SELECT CONVERT (2, signed) AS type, d.district_id, d.district_name, NULL town_id, NULL town_name, NULL neighborhood_id, NULL neighborhood_name,
+			t.town_id AS id, t.town_name AS name, NULL AS addr, NULL longitude, NULL latitude, t.longitude center_lng, t.latitude center_lat
+		FROM of_town t
+		LEFT JOIN of_district d ON d.district_id = t.district_id
+			where t.town_name LIKE "%${keyWord}%"
+		UNION ALL
+		SELECT CONVERT (3, signed) AS type, d.district_id, d.district_name, t.town_id, t.town_name, NULL neighborhood_id, NULL neighborhood_name,
+			n.neighborhood_id AS id, n.neighborhood_name AS name, n.neighborhood_addr AS addr, n.lng AS longitude, n.lat AS latitude, NULL center_lng, NULL center_lat
+		FROM of_neighborhood n
+		LEFT JOIN of_town t ON n.town_id = t.town_id
+		LEFT JOIN of_district d ON n.district_id = d.district_id
+			where n.neighborhood_name LIKE "%${keyWord}%"
+		UNION ALL
+		SELECT CONVERT (4, signed) AS type, NULL district_id, NULL district_name, NULL town_id, NULL town_name, NULL neighborhood_id, NULL neighborhood_name,
+			r.id AS id, r.road_name AS name, NULL addr, NULL longitude, NULL latitude, NULL center_lng, NULL center_lat
+		FROM of_std_road r
+		where r.road_name LIKE "%${keyWord}%"
+		UNION ALL
+		SELECT CONVERT (5, signed) AS type, d.district_id, d.district_name, t.town_id, t.town_name, n.neighborhood_id, n.neighborhood_name, r.id AS id,
+			r.residence_name AS name, r.residence_addr AS addr, r.lon AS longitude, r.lat AS latitude, NULL center_lng, NULL center_lat
+		FROM of_residence r
+		LEFT JOIN of_town t ON r.of_town_id = t.town_id
+		LEFT JOIN of_district d ON r.of_district_id = d.district_id
+		LEFT JOIN of_neighborhood n ON r.of_neighborhood_id = n.neighborhood_id
+		where r.residence_name LIKE "%${keyWord}%" OR r.residence_addr LIKE "%${keyWord}%"
+		LIMIT 10
+	</select>
+
     <select id="levelThreeCount" resultType="com.lezhi.adminlj.pojo.CountParam">
         SELECT
 			a.*, b.levelHouseCount,

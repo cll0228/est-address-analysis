@@ -71,11 +71,11 @@ public class SearchController {
 				LuceneSearchDto info = new LuceneSearchDto();
 				if (null != document.get("type")) info.setType(Integer.valueOf(document.get("type")));
 				if (null != document.get("district_id"))
-					info.setDistrict_id(Integer.valueOf(document.get("district_id")));
+					info.setDistrict_id(String.valueOf(document.get("district_id")));
 				if (null != document.get("district_name")) info.setDistrict_name(String.valueOf(document.get("district_name")));
-				if (null != document.get("town_id")) info.setTown_id(Integer.valueOf(document.get("town_id")));
+				if (null != document.get("town_id")) info.setTown_id(String.valueOf(document.get("town_id")));
 				if (null != document.get("town_name")) info.setTown_name(String.valueOf(document.get("town_name")));
-				if (null != document.get("neighborhood_id")) info.setNeighborhood_id(Integer.valueOf(document.get("neighborhood_id")));
+				if (null != document.get("neighborhood_id")) info.setNeighborhood_id(String.valueOf(document.get("neighborhood_id")));
 				if (null != document.get("neighborhood_name")) info.setNeighborhood_name(String.valueOf(document.get("neighborhood_name")));
 				if (null != document.get("id")) info.setId(document.get("id"));
 				if (null != document.get("name")) info.setName(String.valueOf(document.get("name")));
@@ -103,6 +103,16 @@ public class SearchController {
 			}
 		}
 		return null;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "searchKey", method = RequestMethod.GET)
+	public Map<String, Object> searchKey(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> result = new HashMap<>();
+		String keyWord = String.valueOf(request.getParameter("keyword"));
+		List<LuceneSearchDto> list = slideNavService.searchKey(keyWord);
+		result.put("list", list);
+		return result;
 	}
 
 	public List<DataList> myDataList = new ArrayList<>();
@@ -165,7 +175,8 @@ public class SearchController {
 		ArrayList<CountParam> countList = new ArrayList<CountParam>();
 		List<String> typeList = new ArrayList<>();
 		if(keyword != null && keyId == null){
-			List<LuceneSearchDto> list = searchIndex(keyword);
+//			List<LuceneSearchDto> list = searchIndex(keyword);
+			List<LuceneSearchDto> list = slideNavService.searchKey(keyword);
 			if(list.size() > 0){
 				for(LuceneSearchDto luceneSearchDto :list){
 					ArrayList<CountParam> everyList = new ArrayList<CountParam>();
@@ -260,11 +271,11 @@ public class SearchController {
 				LuceneSearchDto info = new LuceneSearchDto();
 				if (null != document.get("type")) info.setType(Integer.valueOf(document.get("type")));
 				if (null != document.get("district_id"))
-					info.setDistrict_id(Integer.valueOf(document.get("district_id")));
+					info.setDistrict_id(String.valueOf(document.get("district_id")));
 				if (null != document.get("district_name")) info.setDistrict_name(String.valueOf(document.get("district_name")));
-				if (null != document.get("town_id")) info.setTown_id(Integer.valueOf(document.get("town_id")));
+				if (null != document.get("town_id")) info.setTown_id(String.valueOf(document.get("town_id")));
 				if (null != document.get("town_name")) info.setTown_name(String.valueOf(document.get("town_name")));
-				if (null != document.get("neighborhood_id")) info.setNeighborhood_id(Integer.valueOf(document.get("neighborhood_id")));
+				if (null != document.get("neighborhood_id")) info.setNeighborhood_id(String.valueOf(document.get("neighborhood_id")));
 				if (null != document.get("neighborhood_name")) info.setNeighborhood_name(String.valueOf(document.get("neighborhood_name")));
 				if (null != document.get("id")) info.setId(document.get("id"));
 				if (null != document.get("name")) info.setName(String.valueOf(document.get("name")));

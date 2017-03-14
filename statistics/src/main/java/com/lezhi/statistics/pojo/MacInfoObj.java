@@ -4,21 +4,30 @@ package com.lezhi.statistics.pojo;
  * Created by wangyh on 2017/3/13.
  */
 public class MacInfoObj {
-	private String mac;//机顶盒mac地址
-	private Integer residenceId;//机顶盒所在小区ID
-	private String residenceName;//机顶盒所在小区名称
-	private Integer buildingId;//机顶盒所在楼栋ID
-	private String buildingNo;//机顶盒所在楼栋号
-	private Double lat;//坐标latitude
-	private Double lon;//坐标longitude
-	private String district;//区县
-	private Integer districtId;//区县ID
-	private String block;//板块
-	private Integer blockId;//板块ID
-	private String serialNo;//机顶盒编号
-	private String resCode;//机顶盒型号
-	private String resName;//机顶盒名称
-	private String resCategory;//机顶盒类别
+	private Integer id;// 主键ID
+	private String mac;// 机顶盒mac地址
+	private Integer residenceId;// 机顶盒所在小区ID
+	private String residenceName;// 机顶盒所在小区名称
+	private Integer buildingId;// 机顶盒所在楼栋ID
+	private String buildingNo;// 机顶盒所在楼栋号
+	private Double lat;// 坐标latitude
+	private Double lon;// 坐标longitude
+	private String district;// 区县
+	private Integer districtId;// 区县ID
+	private String block;// 板块
+	private Integer blockId;// 板块ID
+	private String serialNo;// 机顶盒编号
+	private String resCode;// 机顶盒型号
+	private String resName;// 机顶盒名称
+	private String resCategory;// 机顶盒类别
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getMac() {
 		return mac;
@@ -142,12 +151,13 @@ public class MacInfoObj {
 
 	@Override
 	public String toString() {
-		return "MacInfoObj [mac=" + mac + ", residenceId=" + residenceId
-				+ ", residenceName=" + residenceName + ", buildingId="
-				+ buildingId + ", buildingNo=" + buildingNo + ", lat=" + lat
-				+ ", lon=" + lon + ", district=" + district + ", districtId="
-				+ districtId + ", block=" + block + ", blockId=" + blockId
-				+ ", serialNo=" + serialNo + ", resCode=" + resCode
-				+ ", resName=" + resName + ", resCategory=" + resCategory + "]";
+		return "MacInfoObj [id=" + id + ", mac=" + mac + ", residenceId="
+				+ residenceId + ", residenceName=" + residenceName
+				+ ", buildingId=" + buildingId + ", buildingNo=" + buildingNo
+				+ ", lat=" + lat + ", lon=" + lon + ", district=" + district
+				+ ", districtId=" + districtId + ", block=" + block
+				+ ", blockId=" + blockId + ", serialNo=" + serialNo
+				+ ", resCode=" + resCode + ", resName=" + resName
+				+ ", resCategory=" + resCategory + "]";
 	}
-	}
+}

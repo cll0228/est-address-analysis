@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lezhi.statistics.pojo.MacInfoObj;
 import com.lezhi.statistics.service.MacService;
@@ -32,6 +33,7 @@ public class MacController {
 	 * @return
 	 */
 	@RequestMapping(value = "list", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String, Object> loginSubmit(
 			@RequestParam(value = "districtId", required = false) Integer districtId,
 			@RequestParam(value = "blockId", required = false) Integer blockId,
@@ -55,14 +57,17 @@ public class MacController {
 		int defaultPageNo = 1;
 		//默认每页大小
 		int defaultPageSize = 20;
-		if(pageSize>0) {
+		if(pageSize!=null && pageSize>0) {
 			defaultPageSize = pageSize;
 		}
-		if(pageNo>0) {
-			defaultPageNo = pageNo*defaultPageSize;
-			if(pageNo==1) {
-				isFirstPage = true;
-			}
+		if(pageNo!=null && pageNo>1) {
+			defaultPageNo = (pageNo-1)*defaultPageSize;
+		}
+		if(pageNo==1) {
+			isFirstPage = true;
+		}
+		if(defaultPageNo==1) {
+			defaultPageNo = 0;
 		}
 		//判断优先级
 		if(districtId!=null||blockId!=null||residenceId!=null) {
@@ -89,12 +94,13 @@ public class MacController {
 		}
 		//根据条件查询记录
 		List<MacInfoObj> macInfoList = macService.getMacInfoList(type, id, defaultPageNo, defaultPageSize);
-		if(macInfoList!=null) {
+		if(macInfoList!=null&&macInfoList.size()>0) {
 			realPageSize = macInfoList.size();
 			//查询总记录数计算总页数等信息
 			totalCount = macService.totalCount(type, id);
-			totalPageCount = totalCount/pageSize;
-			if(pageNo==totalPageCount) {
+			int mod = totalCount%defaultPageSize;
+			totalPageCount = mod>0?(totalCount/defaultPageSize)+1:(totalCount/defaultPageSize);
+			if(pageNo!=null && pageNo==totalPageCount) {
 				isLastPage = true;
 			}
 		} else {

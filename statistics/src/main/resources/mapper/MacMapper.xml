@@ -60,13 +60,13 @@
         </if>
         WHERE
         <if test="type == 1">
-            id = #{id}
+        	district_id = #{id}
         </if>
         <if test="type == 2">
             town_id = #{id}
         </if>
         <if test="type == 3">
-            district_id = #{id}
+            id = #{id}
         </if>
     </select>
     

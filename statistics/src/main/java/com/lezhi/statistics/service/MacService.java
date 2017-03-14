@@ -15,11 +15,42 @@ import com.lezhi.statistics.pojo.MacInfoObj;
 public class MacService {
 	@Autowired
 	private MacMapper macMapper;
-
+	
+	/**
+	 * 根据行政区获取机顶盒列表
+	 * @param type
+	 * @param id
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	public List<MacInfoObj> getMacInfoList(Integer type, Integer id,
-			Integer start, Integer end) {
+			Integer start, Integer size) {
 		List<MacInfoObj> macInfoList = macMapper.getMacInfoList(type, id,
-				start, end);
+				start, size);
 		return macInfoList;
+	}
+	
+	/**
+	 * 校验id是否存在
+	 * 1区县（districtId）2板块（blockId）3小区（residenceId）
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	public Integer checkId(Integer type, Integer id) {
+		Integer count = macMapper.checkId(type, id);
+		return count;
+	}
+	
+	/**
+	 * 查询满足条件下总共有多少条数据
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	public Integer totalCount(Integer type, Integer id) {
+		Integer count = macMapper.totalCount(type, id);
+		return count;
 	}
 }

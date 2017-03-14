@@ -12,5 +12,9 @@ import com.lezhi.statistics.pojo.MacInfoObj;
 public interface MacMapper {
 	List<MacInfoObj> getMacInfoList(@Param("type") Integer type,
 			@Param("id") Integer id, @Param("start") Integer start,
-			@Param("end") Integer end);
+			@Param("size") Integer size);
+
+	Integer checkId(@Param("type") Integer type, @Param("id") Integer id);
+	
+	Integer totalCount(@Param("type") Integer type, @Param("id") Integer id);
 }

@@ -44,7 +44,7 @@
 
     <!-- 作用: 把mybatis自己实例化的mapper(dao)加入到spring工厂中 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.lezhi.adminlj.mapper"/>
+        <property name="basePackage" value="com.lezhi.statistics.mapper"/>
         <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
     </bean>
 

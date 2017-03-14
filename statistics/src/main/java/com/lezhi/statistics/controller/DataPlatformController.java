@@ -1,24 +1,24 @@
 package com.lezhi.statistics.controller;
 
-import com.lezhi.statistics.pojo.MacVisitHistoryInfo;
-import com.lezhi.statistics.pojo.ReturnObj;
-import com.lezhi.statistics.service.DataPlatformService;
-import org.apache.commons.lang3.StringUtils;
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lezhi.statistics.pojo.MacVisitHistoryInfo;
+import com.lezhi.statistics.pojo.ReturnObj;
+import com.lezhi.statistics.service.DataPlatformService;
 
 /**
  * Created by Cuill on 2017/3/13. 数据平台
  */
 @Controller
-@RequestMapping(value = "mac")
+@RequestMapping
 public class DataPlatformController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class DataPlatformController {
      * @param residenceId
      * @return
      */
-    @RequestMapping(value = "visit/history")
+    @RequestMapping(value = "mac/visit/history",method = RequestMethod.GET)
     @ResponseBody
     private ReturnObj vistHis(@RequestParam(value = "channelNo") String channelNo,
             @RequestParam(value = "startTime", required = false) Long startTime,
@@ -50,9 +50,10 @@ public class DataPlatformController {
             return new ReturnObj("failed", new ArrayList<MacVisitHistoryInfo>(), "必填参数不能为空");
         }
         if (null == span) {
-            span = new Date().getTime();
+            span = System.currentTimeMillis() / 1000;// unix时间戳
         }
-        ReturnObj obj =  dataPlatformService.vistHis();
-        return null;
+        return dataPlatformService.vistHis(channelNo, startTime, span, districtId, blockId, residenceId,
+                pageNo, pageSize);
+
     }
 }

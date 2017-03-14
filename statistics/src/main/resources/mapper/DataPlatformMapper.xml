@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lezhi.statistics.mapper.DataPlatformMapper">
+    <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
+        SELECT mac, pv, begin_time firstVisitTime, end_time lastVisitTime, total_top totalTop FROM
+        `channel_visit_summary` WHERE 1=1
+        <if test="null != channelNo and '' != channelNo">
+            channel_no = #{channelNo}
+        </if>
+        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %h:%i:%s') &lt; begin_time AND
+        FROM_UNIXTIME(#{startTime+span},'%Y-%m-%d %h:%i:%s') &gt; end_time
+        <if test="null != residenceId and '' != residenceId">
+            AND residence_id = #{residenceId}
+        </if>
+        <if test="null != blockId and '' != blockId">
+            AND block_id= #{blockId}
+        </if>
+        <if test="null != districtId and '' != districtId">
+            AND district_id = #{districtId}
+        </if>
+    </select>
+</mapper>

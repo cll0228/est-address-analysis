@@ -101,7 +101,7 @@ public class ListPageUtil<T> {
         Integer[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         List<Integer> list = Arrays.asList(array);
 
-        ListPageUtil<Integer> listPageUtil = new ListPageUtil<Integer>(list,4, 5);
+        ListPageUtil<Integer> listPageUtil = new ListPageUtil<Integer>(list,3, 5);
         List<Integer> pagedList = listPageUtil.getPagedList();
         System.out.println(pagedList);
     }

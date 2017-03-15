@@ -87,4 +87,21 @@
         </if>
     </select>
     
+    <select id="getMacInfo" resultMap="BaseResultMap">
+        SELECT
+			a.*, b.district_name district,
+			c.town_name block,
+			d.residence_name,
+			e.building_no
+		FROM
+			statistics.mac_info a
+		LEFT JOIN ocn_address.of_district b ON a.district_id = b.district_id
+		LEFT JOIN ocn_address.of_town c ON a.block_id = c.town_id
+		LEFT JOIN ocn_address.of_residence d ON a.residence_id = d.id
+		LEFT JOIN ocn_address.of_building e ON a.building_id = e.id
+		WHERE
+			a.mac = #{mac}
+		LIMIT 0,1
+    </select>
+    
 </mapper>

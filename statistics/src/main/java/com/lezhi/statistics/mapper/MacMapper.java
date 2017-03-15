@@ -17,4 +17,6 @@ public interface MacMapper {
 	Integer checkId(@Param("type") Integer type, @Param("id") Integer id);
 	
 	Integer totalCount(@Param("type") Integer type, @Param("id") Integer id);
+	
+	MacInfoObj getMacInfo(@Param("mac") String mac);
 }

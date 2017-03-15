@@ -37,9 +37,9 @@ public class DataPlatformController {
      */
     @RequestMapping(value = "mac/visit/history",method = RequestMethod.GET)
     @ResponseBody
-    private ReturnObj vistHis(@RequestParam(value = "channelNo") String channelNo,
+    private ReturnObj vistHis(@RequestParam(value = "channelNo",required = false) String channelNo,
             @RequestParam(value = "startTime", required = false) Long startTime,
-            @RequestParam(value = "span") Long span,
+            @RequestParam(value = "span",required = false) Long span,
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
             @RequestParam(value = "residenceId", required = false) Integer residenceId,
@@ -52,6 +52,10 @@ public class DataPlatformController {
         if (null == span) {
             span = System.currentTimeMillis() / 1000;// unix时间戳
         }
+        if(null == pageNo){
+            pageNo = 1;
+        }
+
         return dataPlatformService.vistHis(channelNo, startTime, span, districtId, blockId, residenceId,
                 pageNo, pageSize);
 

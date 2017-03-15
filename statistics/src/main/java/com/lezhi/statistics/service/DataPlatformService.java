@@ -33,12 +33,17 @@ public class DataPlatformService {
         }
         List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, startTime, span,
                 districtId, blockId, residenceId);
+        if(null == infos || infos.size() ==0){
+
+        }
+
         // 分页
         ReturnObj obj = new ReturnObj();
         ListPageUtil<MacVisitHistoryInfo> listPageUtil = new ListPageUtil<>(infos, pageNo, pageSize);
         List<MacVisitHistoryInfo> pagedList = listPageUtil.getPagedList();
-        obj.setObj(pagedList);
+        obj.setHistories(pagedList);
         obj.setStatus("success");
+        obj.setErrMsg("");
         // 分页信息
         if (pageNo == 1) {// 是否第一页
             obj.setFirstPage(true);
@@ -55,7 +60,7 @@ public class DataPlatformService {
         }
         obj.setPageNo(pageNo);
         obj.setPageSize(totalPage);
-        obj.setRealPageSize(totalPage);
+        obj.setRealPageSize(pagedList.size());
         return obj;
     }
 }

@@ -2,13 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lezhi.statistics.mapper.DataPlatformMapper">
     <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
-        SELECT mac, pv, begin_time firstVisitTime, end_time lastVisitTime, total_top totalTop FROM
+        SELECT mac, pv, unix_timestamp(begin_time) firstVisitTime,
+        unix_timestamp(end_time) lastVisitTime, total_top totalTop FROM
         `channel_visit_summary` WHERE 1=1
         <if test="null != channelNo and '' != channelNo">
-            channel_no = #{channelNo}
+           AND channel_no = #{channelNo}
         </if>
-        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %h:%i:%s') &lt; begin_time AND
-        FROM_UNIXTIME(#{startTime+span},'%Y-%m-%d %h:%i:%s') &gt; end_time
+        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %h:%i:%s') &lt;= begin_time AND
+        FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %h:%i:%s') &gt;= end_time
         <if test="null != residenceId and '' != residenceId">
             AND residence_id = #{residenceId}
         </if>

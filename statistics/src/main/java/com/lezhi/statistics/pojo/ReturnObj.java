@@ -6,13 +6,13 @@ package com.lezhi.statistics.pojo;
 public class ReturnObj extends PageResult {
     private String status;
 
-    private Object obj;
+    private Object histories;
 
     private String errMsg;
 
     public ReturnObj(String status, Object obj, String errMsg) {
         this.status = status;
-        this.obj = obj;
+        this.histories = obj;
         this.errMsg = errMsg;
     }
 
@@ -27,12 +27,12 @@ public class ReturnObj extends PageResult {
         this.status = status;
     }
 
-    public Object getObj() {
-        return obj;
+    public Object getHistories() {
+        return histories;
     }
 
-    public void setObj(Object obj) {
-        this.obj = obj;
+    public void setHistories(Object histories) {
+        this.histories = histories;
     }
 
     public String getErrMsg() {

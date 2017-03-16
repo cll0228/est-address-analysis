@@ -20,4 +20,19 @@
             AND district_id = #{districtId}
         </if>
     </select>
+    <select id="realtime" resultType="com.lezhi.statistics.pojo.RealTimeSummaryObj">
+        SELECT  * FROM
+        <if test="residenceId != null and '' != residenceId">
+            real_time_channel${channelNo}_residence WHERE residence_id = #{residenceId} AND period = #{period}
+        </if>
+        <if test="blockId != null and '' != blockId">
+            real_time_channel${channelNo}_block WHERE block_id = #{blockId} AND period = #{period}
+        </if>
+        <if test="districtId != null and '' != districtId">
+            real_time_channel${channelNo}_district WHERE district_id = #{districtId} AND period = #{period}
+        </if>
+        <if test="residenceId == null and blockId == null and districtId == null">
+            real_time_channel${channelNo}_district WHERE period = #{period}
+        </if>
+    </select>
 </mapper>

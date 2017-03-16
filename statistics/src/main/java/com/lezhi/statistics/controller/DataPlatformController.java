@@ -1,8 +1,8 @@
 package com.lezhi.statistics.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 
+import com.lezhi.statistics.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lezhi.statistics.pojo.MacVisitHistoryInfo;
-import com.lezhi.statistics.pojo.ReturnObj;
 import com.lezhi.statistics.service.DataPlatformService;
 
 /**
@@ -35,11 +33,11 @@ public class DataPlatformController {
      * @param residenceId
      * @return
      */
-    @RequestMapping(value = "mac/visit/history",method = RequestMethod.GET)
+    @RequestMapping(value = "mac/visit/history", method = RequestMethod.GET)
     @ResponseBody
-    private ReturnObj vistHis(@RequestParam(value = "channelNo",required = false) String channelNo,
+    private MacVisit vistHis(@RequestParam(value = "channelNo") String channelNo,
             @RequestParam(value = "startTime", required = false) Long startTime,
-            @RequestParam(value = "span",required = false) Long span,
+            @RequestParam(value = "span") Long span,
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
             @RequestParam(value = "residenceId", required = false) Integer residenceId,
@@ -47,12 +45,12 @@ public class DataPlatformController {
             @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         if (null == channelNo || "".equals(channelNo) || null == span) {
             // 提示必填参数不能为空
-            return new ReturnObj("failed", new ArrayList<MacVisitHistoryInfo>(), "必填参数不能为空");
+            return new MacVisit("failed", new ArrayList<MacVisit>(), "必填参数不能为空");
         }
         if (null == span) {
             span = System.currentTimeMillis() / 1000;// unix时间戳
         }
-        if(null == pageNo){
+        if (null == pageNo) {
             pageNo = 1;
         }
 
@@ -60,4 +58,18 @@ public class DataPlatformController {
                 pageNo, pageSize);
 
     }
+
+    @RequestMapping(value = "realtime/summary", method = RequestMethod.GET)
+    @ResponseBody
+    public RealTimeSummary realtime(@RequestParam(value = "channelNo") String channelNo,
+            @RequestParam(value = "period") Long period,
+            @RequestParam(value = "districtId", required = false) Integer districtId,
+            @RequestParam(value = "blockId", required = false) Integer blockId,
+            @RequestParam(value = "residenceId", required = false) Integer residenceId) {
+        if (period != 60 && period != 300 && period != 900) {
+            return new RealTimeSummary("failed", new ArrayList<RealTimeSummaryObj>(), "参数不正确");
+        }
+        return dataPlatformService.realtime(channelNo, period, districtId, blockId, residenceId);
+    }
+
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lezhi.statistics.mapper.SummaryMapper">
+	<resultMap id="BaseResultMap" type="com.lezhi.statistics.pojo.DistrictSummaryInfo">
+        <id column="district_id" property="districtId" jdbcType="INTEGER"/>
+        <result column="district_name" property="districtName" jdbcType="VARCHAR"/>
+        <result column="lon" property="lon" jdbcType="DOUBLE"/>
+        <result column="lat" property="lat" jdbcType="DOUBLE"/>
+        <result column="uv" property="uv" jdbcType="INTEGER"/>
+        <result column="pv" property="pv" jdbcType="INTEGER"/>
+        <result column="nv" property="nv" jdbcType="INTEGER"/>
+        <result column="avg_top" property="avgTop" jdbcType="BIGINT"/>
+    </resultMap>
+    <select id="getDistrictSummaryList"  resultMap="BaseResultMap">
+    	SELECT
+			c.pv,
+			c.uv,
+			d.nv,
+			c.district_id,
+			c.district_name,
+			c.lon,
+			c.lat,
+			c.avgTop / c.uv avg_top
+		FROM
+			(
+				SELECT
+					SUM(a.pv) pv,
+					COUNT(DISTINCT a.mac) uv,
+					a.district_id,
+					b.district_name,
+					b.center_lng lon,
+					b.center_lat lat,
+					SUM(a.avg_top) avgTop
+				FROM
+					statistics.channel_visit_summary a
+				LEFT JOIN ocn_address.of_district b ON a.district_id = b.district_id
+				WHERE
+					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %h:%i:%s')
+				AND a.end_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %h:%i:%s')
+				<if test="null != channelNo and '' != channelNo">
+		           AND a.channel_no = #{channelNo}
+		        </if>
+				GROUP BY
+					a.district_id
+			) c
+		LEFT JOIN (
+			SELECT
+				COUNT(mac) nv,
+				a.district_id
+			FROM
+				statistics.channel_visit_summary a
+			WHERE
+				a.mac NOT IN (
+					SELECT
+						b.mac
+					FROM
+						statistics.new_visitor b
+				)
+			AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %h:%i:%s')
+				AND a.end_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %h:%i:%s')
+			<if test="null != channelNo and '' != channelNo">
+		           AND a.channel_no = #{channelNo}
+		        </if>
+			GROUP BY
+				a.district_id
+		) d ON c.district_id = d.district_id
+    </select>
+</mapper>

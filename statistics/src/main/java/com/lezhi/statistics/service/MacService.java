@@ -53,4 +53,14 @@ public class MacService {
 		Integer count = macMapper.totalCount(type, id);
 		return count;
 	}
+	
+	/**
+	 * 根据mac地址查询机顶盒信息，如果有多条则取第一条
+	 * @param mac
+	 * @return
+	 */
+	public MacInfoObj getMacInfo(String mac) {
+		MacInfoObj macInfo = macMapper.getMacInfo(mac);
+		return macInfo;
+	}
 }

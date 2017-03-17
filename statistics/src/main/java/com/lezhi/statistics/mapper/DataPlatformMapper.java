@@ -13,9 +13,9 @@ public interface DataPlatformMapper {
     List<MacVisitHistoryInfo> selectVistHis(@Param("channelNo") String channelNo,
             @Param("startTime") Long startTime, @Param("span") Long span,
             @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
-            @Param("residenceId") Integer residenceId);
+            @Param("residenceId") Integer residenceId) throws Exception;;
 
     RealTimeSummaryObj realtime(@Param("channelNo") String channelNo, @Param("period") Long period,
             @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
-            @Param("residenceId") Integer residenceId);
+            @Param("residenceId") Integer residenceId) throws Exception;
 }

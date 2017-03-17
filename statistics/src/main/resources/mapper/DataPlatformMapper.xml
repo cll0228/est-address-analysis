@@ -6,7 +6,7 @@
         unix_timestamp(end_time) lastVisitTime, total_top totalTop FROM
         `channel_visit_summary` WHERE 1=1
         <if test="null != channelNo and '' != channelNo">
-           AND channel_no = #{channelNo}
+            AND channel_no = #{channelNo}
         </if>
         AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %h:%i:%s') &lt;= begin_time AND
         FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %h:%i:%s') &gt;= end_time
@@ -21,7 +21,7 @@
         </if>
     </select>
     <select id="realtime" resultType="com.lezhi.statistics.pojo.RealTimeSummaryObj">
-        SELECT  * FROM
+        SELECT sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time) refreshTime FROM
         <if test="residenceId != null and '' != residenceId">
             real_time_channel${channelNo}_residence WHERE residence_id = #{residenceId} AND period = #{period}
         </if>

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.lezhi.statistics.pojo.MacInfoObj;
 
 /**
- * Created by wangyh on 2017/3/13.
+ * Created by wangyh on 2017/3/15.
  */
 public interface MacMapper {
 	List<MacInfoObj> getMacInfoList(@Param("type") Integer type,

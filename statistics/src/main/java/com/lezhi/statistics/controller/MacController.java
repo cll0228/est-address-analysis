@@ -21,10 +21,12 @@ import com.lezhi.statistics.service.MacService;
 @Controller
 @RequestMapping("/mac/")
 public class MacController {
-	@Autowired MacService macService;
-	
+	@Autowired
+	MacService macService;
+
 	/**
 	 * 根据行政区获取机顶盒列表
+	 * 
 	 * @param districtId
 	 * @param blockId
 	 * @param residenceId
@@ -43,64 +45,66 @@ public class MacController {
 		Map<String, Object> result = new HashMap<>();
 		int type = -1;
 		int id = -1;
-		//实际返回记录数
+		// 实际返回记录数
 		int realPageSize = -1;
-		//总页数
+		// 总页数
 		int totalPageCount = -1;
-		//总记录数
+		// 总记录数
 		int totalCount = -1;
-		//是否第一页
+		// 是否第一页
 		boolean isFirstPage = false;
-		//是否最后页
+		// 是否最后页
 		boolean isLastPage = false;
-		//默认页码
+		// 默认页码
 		int defaultPageNo = 1;
-		//默认每页大小
+		// 默认每页大小
 		int defaultPageSize = 20;
-		if(pageSize!=null && pageSize>0) {
+		if (pageSize != null && pageSize > 0) {
 			defaultPageSize = pageSize;
 		}
-		if(pageNo!=null && pageNo>1) {
-			defaultPageNo = (pageNo-1)*defaultPageSize;
+		if (pageNo != null && pageNo > 1) {
+			defaultPageNo = (pageNo - 1) * defaultPageSize;
 		}
-		if(pageNo==1) {
+		if (pageNo == 1) {
 			isFirstPage = true;
 		}
-		if(defaultPageNo==1) {
+		if (defaultPageNo == 1) {
 			defaultPageNo = 0;
 		}
-		//判断优先级
-		if(districtId!=null||blockId!=null||residenceId!=null) {
-			if(residenceId!=null) {
+		// 判断优先级
+		if (districtId != null || blockId != null || residenceId != null) {
+			if (residenceId != null) {
 				type = 3;
 				id = residenceId;
-			} else if(blockId!=null) {
+			} else if (blockId != null) {
 				type = 2;
 				id = blockId;
-			} else if(districtId!=null) {
+			} else if (districtId != null) {
 				type = 1;
 				id = districtId;
 			}
 		}
-		//验证id是否存在
-		if(id!=-1) {
+		// 验证id是否存在
+		if (id != -1) {
 			int count = macService.checkId(type, id);
-			if(count<=0) {
+			if (count <= 0) {
 				result.put("status", "failed");
 				result.put("datalist", new ArrayList<MacInfoObj>());
 				result.put("errMsg", "id验证失败");
 				return result;
 			}
 		}
-		//根据条件查询记录
-		List<MacInfoObj> macInfoList = macService.getMacInfoList(type, id, defaultPageNo, defaultPageSize);
-		if(macInfoList!=null&&macInfoList.size()>0) {
+		// 根据条件查询记录
+		List<MacInfoObj> macInfoList = macService.getMacInfoList(type, id,
+				defaultPageNo, defaultPageSize);
+		if (macInfoList != null && macInfoList.size() > 0) {
 			realPageSize = macInfoList.size();
-			//查询总记录数计算总页数等信息
+			// 查询总记录数计算总页数等信息
 			totalCount = macService.totalCount(type, id);
-			int mod = totalCount%defaultPageSize;
-			totalPageCount = mod>0?(totalCount/defaultPageSize)+1:(totalCount/defaultPageSize);
-			if(pageNo!=null && pageNo==totalPageCount) {
+			int mod = totalCount % defaultPageSize;
+			totalPageCount = mod > 0 ? (totalCount / defaultPageSize) + 1
+					: (totalCount / defaultPageSize);
+			if (pageNo != null && pageNo == totalPageCount) {
 				isLastPage = true;
 			}
 		} else {
@@ -109,7 +113,7 @@ public class MacController {
 			result.put("errMsg", "未找到记录");
 			return result;
 		}
-		//封装返回对象
+		// 封装返回对象
 		result.put("status", "success");
 		result.put("datalist", macInfoList);
 		result.put("errMsg", "");
@@ -121,9 +125,10 @@ public class MacController {
 		result.put("isLastPage", isLastPage);
 		return result;
 	}
-	
+
 	/**
 	 * 根据mac地址查询机顶盒信息
+	 * 
 	 * @param mac
 	 * @return
 	 */
@@ -133,13 +138,13 @@ public class MacController {
 			@RequestParam(value = "mac", required = true) String mac) {
 		Map<String, Object> result = new HashMap<>();
 		MacInfoObj macInfo = macService.getMacInfo(mac);
-		if(macInfo==null) {
+		if (macInfo == null) {
 			result.put("status", "failed");
 			result.put("macInfo", null);
 			result.put("errMsg", "未找到记录");
 			return result;
 		}
-		//封装返回对象
+		// 封装返回对象
 		result.put("macInfo", macInfo);
 		result.put("status", "success");
 		result.put("errMsg", "");

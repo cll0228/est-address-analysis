@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lezhi.statistics.mapper.SummaryMapper;
+import com.lezhi.statistics.pojo.BlockSummaryInfo;
 import com.lezhi.statistics.pojo.DistrictSummaryInfo;
 
 /**
@@ -19,5 +20,10 @@ public class SummaryService {
 	public List<DistrictSummaryInfo> getDistrictSummaryList(String channelNo,
 			Long startTime, Long endTime){
 		return summaryMapper.getDistrictSummaryList(channelNo, startTime, endTime);
+	}
+	
+	public List<BlockSummaryInfo> getBlockSummaryList(String channelNo,
+			Long startTime, Long endTime, Integer districtId){
+		return summaryMapper.getBlockSummaryList(channelNo, startTime, endTime, districtId);
 	}
 }

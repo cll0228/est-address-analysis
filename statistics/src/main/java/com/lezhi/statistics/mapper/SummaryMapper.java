@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.lezhi.statistics.pojo.BlockSummaryInfo;
 import com.lezhi.statistics.pojo.DistrictSummaryInfo;
 
 /**
@@ -13,5 +14,10 @@ public interface SummaryMapper {
 	List<DistrictSummaryInfo> getDistrictSummaryList(
 			@Param("channelNo") String channelNo,
 			@Param("startTime") Long startTime, @Param("endTime") Long endTime);
+
+	List<BlockSummaryInfo> getBlockSummaryList(
+			@Param("channelNo") String channelNo,
+			@Param("startTime") Long startTime, @Param("endTime") Long endTime,
+			@Param("districtId") Integer districtId);
 
 }

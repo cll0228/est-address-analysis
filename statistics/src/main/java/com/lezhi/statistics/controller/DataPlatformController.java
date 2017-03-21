@@ -2,7 +2,6 @@ package com.lezhi.statistics.controller;
 
 import java.util.ArrayList;
 
-import com.lezhi.statistics.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.service.DataPlatformService;
 
 /**
@@ -70,6 +70,22 @@ public class DataPlatformController {
             return new RealTimeSummary("failed", new ArrayList<RealTimeSummaryObj>(), "参数不正确");
         }
         return dataPlatformService.realtime(channelNo, period, districtId, blockId, residenceId);
+    }
+
+    @RequestMapping(value = "trend", method = RequestMethod.GET)
+    @ResponseBody
+    public Trend trend(@RequestParam(value = "channelNo", required = false) String channelNo,
+            @RequestParam(value = "startTime", required = false) Long startTime,
+            @RequestParam(value = "contrastiveStartTime", required = false) Long contrastiveStartTime,
+            @RequestParam(value = "span") Long span, @RequestParam(value = "scale") Long scale,
+            @RequestParam(value = "districtId", required = false) Integer districtId,
+            @RequestParam(value = "blockId", required = false) Integer blockId,
+            @RequestParam(value = "residenceId", required = false) Integer residenceId) {
+        if (null == span || null == scale) {
+            return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
+        }
+        return dataPlatformService.trend(channelNo, startTime, contrastiveStartTime, span, scale, districtId,
+                blockId, residenceId);
     }
 
 }

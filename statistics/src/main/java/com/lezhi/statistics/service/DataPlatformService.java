@@ -2,12 +2,14 @@ package com.lezhi.statistics.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import com.lezhi.statistics.pojo.*;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lezhi.statistics.mapper.DataPlatformMapper;
+import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.util.ListPageUtil;
 
 /**
@@ -88,5 +90,38 @@ public class DataPlatformService {
         summary.setErrMsg("");
         summary.setStatus("success");
         return summary;
+    }
+
+    public Trend trend(String channelNo, Long startTime, Long contrastiveStartTime, Long span, Long scale,
+            Integer districtId, Integer blockId, Integer residenceId) {
+        if (null == startTime) {
+            startTime = System.currentTimeMillis() / 1000;// unix时间戳
+        }
+        if (null != residenceId) {
+            districtId = null;
+            blockId = null;
+        } else if (null == residenceId && null != blockId) {
+            districtId = null;
+        }
+        Map<String, Object> map = new HashedMap();
+        // 本周期走势数据节点
+        List<TrendObj> current = dataPlatformMapper.current(channelNo, startTime, span, scale, districtId,
+                blockId, residenceId);
+        if (null == current) {
+            map.put("current", new ArrayList<>());
+        } else
+            map.put("current", current.toArray());
+
+        // 对比周期走势数据节点
+        if(null == contrastiveStartTime){
+            contrastiveStartTime = startTime - span;
+        }
+        List<TrendObj> contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime, span,
+                scale, districtId, blockId, residenceId);
+        if (null == contrastive) {
+            map.put("contrastive", new ArrayList<>());
+        } else
+            map.put("contrastive", contrastive.toArray());
+        return new Trend("success", map, "");
     }
 }

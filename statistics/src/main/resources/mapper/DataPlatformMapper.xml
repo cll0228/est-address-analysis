@@ -8,8 +8,8 @@
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
-        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %h:%i:%s') &lt;= begin_time AND
-        FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %h:%i:%s') &gt;= end_time
+        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
+        FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
         <if test="null != residenceId and '' != residenceId">
             AND residence_id = #{residenceId}
         </if>
@@ -34,5 +34,100 @@
         <if test="residenceId == null and blockId == null and districtId == null">
             real_time_channel${channelNo}_district WHERE period = #{period}
         </if>
+    </select>
+    <select id="current" resultType="com.lezhi.statistics.pojo.TrendObj">
+        SELECT * FROM
+        <choose>
+        <when test="scale > 3600000">
+            <if test="null != residenceId and '' != residenceId">
+                realtime_trend_60m_residence WHERE residence_id = #{residenceId}
+                <if test="null != channelNo and '' != channelNo">
+                   AND channel_no = #{channelNo}
+                </if>
+            </if>
+            <if test="null != blockId and '' != blockId">
+                realtime_trend_60m_block WHERE block_id = #{blockId}
+                <if test="null != channelNo and '' != channelNo">
+                    AND channel_no = #{channelNo}
+                </if>
+            </if>
+            <if test="null != districtId and '' != districtId">
+                realtime_trend_60m_district WHERE district_id = #{districtId}
+                <if test="null != channelNo and '' != channelNo">
+                    AND channel_no = #{channelNo}
+                </if>
+            </if>
+        </when>
+        <otherwise>
+            <if test="null != residenceId and '' != residenceId">
+                realtime_trend_24h_residence WHERE residence_id = #{residenceId}
+                <if test="null != channelNo and '' != channelNo">
+                    AND channel_no = #{channelNo}
+                </if>
+            </if>
+            <if test="null != blockId and '' != blockId">
+                realtime_trend_24h_block WHERE block_id = #{blockId}
+                <if test="null != channelNo and '' != channelNo">
+                    AND channel_no = #{channelNo}
+                </if>
+            </if>
+            <if test="null != districtId and '' != districtId">
+                realtime_trend_24h_district WHERE district_id = #{districtId}
+                <if test="null != channelNo and '' != channelNo">
+                    AND channel_no = #{channelNo}
+                </if>
+            </if>
+        </otherwise>
+        </choose>
+        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
+        FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+    </select>
+
+    <select id="contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
+        SELECT * FROM
+        <choose>
+            <when test="scale > 3600000">
+                <if test="null != residenceId and '' != residenceId">
+                    realtime_trend_60m_residence WHERE residence_id = #{residenceId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != blockId and '' != blockId">
+                    realtime_trend_60m_block WHERE block_id = #{blockId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != districtId and '' != districtId">
+                    realtime_trend_60m_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+            </when>
+            <otherwise>
+                <if test="null != residenceId and '' != residenceId">
+                    realtime_trend_24h_residence WHERE residence_id = #{residenceId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != blockId and '' != blockId">
+                    realtime_trend_24h_block WHERE block_id = #{blockId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != districtId and '' != districtId">
+                    realtime_trend_24h_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+            </otherwise>
+        </choose>
+        AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
+        FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
     </select>
 </mapper>

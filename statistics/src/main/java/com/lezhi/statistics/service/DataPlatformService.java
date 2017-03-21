@@ -22,10 +22,6 @@ public class DataPlatformService {
     @Autowired
     private DataPlatformMapper dataPlatformMapper;
 
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis() / 1000);
-    }
-
     public MacVisit vistHis(String channelNo, Long startTime, Long span, Integer districtId, Integer blockId,
             Integer residenceId, Integer pageNo, Integer pageSize) {
         if (null != residenceId) {
@@ -124,4 +120,5 @@ public class DataPlatformService {
             map.put("contrastive", contrastive.toArray());
         return new Trend("success", map, "");
     }
+
 }

@@ -81,6 +81,7 @@
         </choose>
         AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
         FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+        GROUP BY begin_time DESC
     </select>
 
     <select id="contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
@@ -129,5 +130,6 @@
         </choose>
         AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
         FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+        GROUP BY begin_time DESC
     </select>
 </mapper>

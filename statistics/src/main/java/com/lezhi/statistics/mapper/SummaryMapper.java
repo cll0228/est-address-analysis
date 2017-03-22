@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.lezhi.statistics.pojo.BlockSummaryInfo;
 import com.lezhi.statistics.pojo.DistrictSummaryInfo;
+import com.lezhi.statistics.pojo.ResidenceSummaryInfo;
 
 /**
  * Created by wangyh on 2017/3/13.
@@ -19,5 +20,15 @@ public interface SummaryMapper {
 			@Param("channelNo") String channelNo,
 			@Param("startTime") Long startTime, @Param("endTime") Long endTime,
 			@Param("districtId") Integer districtId);
+
+	List<ResidenceSummaryInfo> getResidenceSummaryList(
+			@Param("channelNo") String channelNo,
+			@Param("startTime") Long startTime, @Param("endTime") Long endTime,
+			@Param("blockId") Integer blockId,
+			@Param("start") Integer start, @Param("size") Integer size);
+
+	Integer totalCount(@Param("channelNo") String channelNo,
+			@Param("startTime") Long startTime, @Param("endTime") Long endTime,
+			@Param("blockId") Integer blockId);
 
 }

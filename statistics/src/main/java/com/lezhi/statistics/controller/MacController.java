@@ -65,7 +65,7 @@ public class MacController {
 		if (pageNo != null && pageNo > 1) {
 			defaultPageNo = (pageNo - 1) * defaultPageSize;
 		}
-		if (pageNo == 1) {
+		if (pageNo == null || pageNo == 1) {
 			isFirstPage = true;
 		}
 		if (defaultPageNo == 1) {
@@ -104,6 +104,9 @@ public class MacController {
 			int mod = totalCount % defaultPageSize;
 			totalPageCount = mod > 0 ? (totalCount / defaultPageSize) + 1
 					: (totalCount / defaultPageSize);
+			if(totalPageCount == 1) {
+				pageNo = totalPageCount;
+			}
 			if (pageNo != null && pageNo == totalPageCount) {
 				isLastPage = true;
 			}

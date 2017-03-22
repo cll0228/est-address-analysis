@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.lezhi.statistics.pojo.ChannelSummaryObj;
 import com.lezhi.statistics.pojo.MacVisitHistoryInfo;
 import com.lezhi.statistics.pojo.RealTimeSummaryObj;
 import com.lezhi.statistics.pojo.TrendObj;
@@ -29,4 +30,6 @@ public interface DataPlatformMapper {
                                @Param("span") Long span, @Param("scale") Long scale, @Param("districtId") Integer districtId,
                                @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
 
+    List<ChannelSummaryObj> summary(@Param("channelNo") String channelNo, @Param("startTime") Long startTime,
+            @Param("span") Long span);
 }

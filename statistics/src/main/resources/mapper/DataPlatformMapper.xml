@@ -132,4 +132,48 @@
         FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
         GROUP BY begin_time DESC
     </select>
+    <select id="summary" resultType="com.lezhi.statistics.pojo.ChannelSummaryObj">
+        SELECT
+        c.channel_no channelNo,
+        c.pv pv,
+        d.nv nv,
+        c.uv uv
+        FROM
+        (
+        SELECT
+        a.channel_no,
+        SUM(a.pv) pv,
+        COUNT(DISTINCT a.mac) uv
+        FROM
+        statistics.channel_visit_summary a
+        WHERE
+        a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
+        GROUP BY
+        a.channel_no
+        ) c,
+        (
+        SELECT
+        COUNT(mac) nv,
+        channel_no
+        FROM
+        statistics.channel_visit_summary a
+        WHERE
+        a.mac NOT IN (
+        SELECT
+        b.mac
+        FROM
+        statistics.new_visitor b
+        )
+        AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+				AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
+        GROUP BY
+        a.channel_no
+        ) d
+        WHERE
+        c.channel_no = d.channel_no
+        <if test="null != channelNo and '' != channelNo">
+            AND c.channel_no = #{channelNo}
+        </if>
+    </select>
 </mapper>

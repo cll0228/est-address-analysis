@@ -53,6 +53,9 @@ public class DataPlatformController {
         if (null == pageNo) {
             pageNo = 1;
         }
+        if (null == pageSize || pageSize <= 0) {
+            pageSize = 20;
+        }
 
         return dataPlatformService.vistHis(channelNo, startTime, span, districtId, blockId, residenceId,
                 pageNo, pageSize);
@@ -86,6 +89,24 @@ public class DataPlatformController {
         }
         return dataPlatformService.trend(channelNo, startTime, contrastiveStartTime, span, scale, districtId,
                 blockId, residenceId);
+    }
+
+    @RequestMapping(value = "channel/summary", method = RequestMethod.GET)
+    @ResponseBody
+    public Summary summary(@RequestParam(value = "channelNo", required = false) String channelNo,
+            @RequestParam(value = "startTime", required = false) Long startTime,
+            @RequestParam(value = "span") Long span, @RequestParam(value = "pageNo",required = false) Integer pageNo,
+            @RequestParam(value = "pageSize",required = false) Integer pageSize) {
+        if (null == span) {
+            return new Summary("failed", new ArrayList<ChannelSummaryObj>(), "参数不正确");
+        }
+        if (null == pageNo || pageNo <= 0) {
+            pageNo = 1;
+        }
+        if (null == pageSize || pageSize <= 0) {
+            pageSize = 20;
+        }
+        return dataPlatformService.summary(channelNo, startTime, span, pageNo, pageSize);
     }
 
 }

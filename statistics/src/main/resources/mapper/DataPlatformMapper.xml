@@ -36,9 +36,14 @@
         </if>
     </select>
     <select id="current" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT * FROM
+        SELECT 	begin_time timeBegin,
+        end_time timeEnd,
+        uv,
+        pv,
+        nv,
+        avg_top avgTop FROM
         <choose>
-        <when test="scale > 3600000">
+        <when test="scale = 60000">
             <if test="null != residenceId and '' != residenceId">
                 realtime_trend_60m_residence WHERE residence_id = #{residenceId}
                 <if test="null != channelNo and '' != channelNo">
@@ -84,10 +89,69 @@
         GROUP BY begin_time DESC
     </select>
 
-    <select id="contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT * FROM
+    <select id="his_current" resultType="com.lezhi.statistics.pojo.TrendObj">
+        SELECT 	begin_time timeBegin,
+        end_time timeEnd,
+        uv,
+        pv,
+        nv,
+        avg_top avgTop FROM
         <choose>
-            <when test="scale > 3600000">
+            <when test="scale = 3600000">
+                <if test="null != residenceId and '' != residenceId">
+                    his_trend_hour_residence WHERE residence_id = #{residenceId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != blockId and '' != blockId">
+                    his_trend_hour_block WHERE block_id = #{blockId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != districtId and '' != districtId">
+                    his_trend_hour_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+            </when>
+            <otherwise>
+                <if test="null != residenceId and '' != residenceId">
+                    his_trend_day_residence WHERE residence_id = #{residenceId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != blockId and '' != blockId">
+                    his_trend_day_block WHERE block_id = #{blockId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != districtId and '' != districtId">
+                    his_trend_day_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+            </otherwise>
+        </choose>
+        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
+        FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+        GROUP BY begin_time DESC
+    </select>
+
+    <select id="contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
+        SELECT 	begin_time timeBegin,
+        end_time timeEnd,
+        uv,
+        pv,
+        nv,
+        avg_top avgTop FROM
+        <choose>
+            <when test="scale = 60000">
                 <if test="null != residenceId and '' != residenceId">
                     realtime_trend_60m_residence WHERE residence_id = #{residenceId}
                     <if test="null != channelNo and '' != channelNo">
@@ -132,6 +196,61 @@
         FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
         GROUP BY begin_time DESC
     </select>
+
+    <select id="his_contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
+        SELECT 	begin_time timeBegin,
+        end_time timeEnd,
+        uv,
+        pv,
+        nv,
+        avg_top avgTop FROM
+        <choose>
+            <when test="scale = 3600000">
+                <if test="null != residenceId and '' != residenceId">
+                    his_trend_hour_residence WHERE residence_id = #{residenceId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != blockId and '' != blockId">
+                    his_trend_hour_block WHERE block_id = #{blockId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != districtId and '' != districtId">
+                    his_trend_hour_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+            </when>
+            <otherwise>
+                <if test="null != residenceId and '' != residenceId">
+                    his_trend_day_residence WHERE residence_id = #{residenceId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != blockId and '' != blockId">
+                    his_trend_day_block WHERE block_id = #{blockId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null != districtId and '' != districtId">
+                    his_trend_day_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+            </otherwise>
+        </choose>
+        AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
+        FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+        GROUP BY begin_time DESC
+    </select>
+
     <select id="summary" resultType="com.lezhi.statistics.pojo.ChannelSummaryObj">
         SELECT
         c.channel_no channelNo,

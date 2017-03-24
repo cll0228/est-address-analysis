@@ -32,4 +32,13 @@ public interface DataPlatformMapper {
 
     List<ChannelSummaryObj> summary(@Param("channelNo") String channelNo, @Param("startTime") Long startTime,
             @Param("span") Long span);
+
+    List<TrendObj> his_current(@Param("channelNo") String channelNo, @Param("startTime") Long startTime,
+                               @Param("span") Long span, @Param("scale") Long scale, @Param("districtId") Integer districtId,
+                               @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
+
+    List<TrendObj> his_contrastive(@Param("channelNo") String channelNo, @Param("contrastiveStartTime") Long contrastiveStartTime,
+                                   @Param("span") Long span, @Param("scale") Long scale, @Param("districtId") Integer districtId,
+                                   @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
+
 }

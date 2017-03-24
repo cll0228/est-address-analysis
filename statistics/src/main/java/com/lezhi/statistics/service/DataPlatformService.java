@@ -90,9 +90,6 @@ public class DataPlatformService {
 
     public Trend trend(String channelNo, Long startTime, Long contrastiveStartTime, Long span, Long scale,
             Integer districtId, Integer blockId, Integer residenceId) {
-        if (null == startTime) {
-            startTime = System.currentTimeMillis() / 1000;// unix时间戳
-        }
         if (null != residenceId) {
             districtId = null;
             blockId = null;
@@ -100,20 +97,40 @@ public class DataPlatformService {
             districtId = null;
         }
         Map<String, Object> map = new HashedMap();
+        List<TrendObj> current = null;
+        List<TrendObj> contrastive = null;
+        if (null == startTime) {// 当前走势 包括分钟 和 小时 两种刻度
+            if (scale == 3600000 * 24) {// 天刻度
+                return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
+            }
+            startTime = System.currentTimeMillis() / 1000;
+            current = dataPlatformMapper.current(channelNo, startTime, span, scale, districtId, blockId,
+                    residenceId);
+            // 对比周期走势数据节点
+            if (null == contrastiveStartTime) {
+                contrastiveStartTime = startTime - span;
+            }
+            contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime, span, scale,
+                    districtId, blockId, residenceId);
+        } else {
+            // 非当前走势
+            if (scale == 60000) {
+                return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
+            }
+            current = dataPlatformMapper.his_current(channelNo, startTime, span, scale, districtId, blockId,
+                    residenceId);
+            if (null == contrastiveStartTime) {
+                contrastiveStartTime = startTime - span;
+            }
+            contrastive = dataPlatformMapper.his_contrastive(channelNo, contrastiveStartTime, span, scale,
+                    districtId, blockId, residenceId);
+        }
         // 本周期走势数据节点
-        List<TrendObj> current = dataPlatformMapper.current(channelNo, startTime, span, scale, districtId,
-                blockId, residenceId);
         if (null == current) {
             map.put("current", new ArrayList<>());
         } else
             map.put("current", current.toArray());
 
-        // 对比周期走势数据节点
-        if(null == contrastiveStartTime){
-            contrastiveStartTime = startTime - span;
-        }
-        List<TrendObj> contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime, span,
-                scale, districtId, blockId, residenceId);
         if (null == contrastive) {
             map.put("contrastive", new ArrayList<>());
         } else

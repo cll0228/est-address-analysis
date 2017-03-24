@@ -106,19 +106,19 @@
     <select id="getMacVisitLog" resultType="com.lezhi.statistics.pojo.MacVisitLogInfo">
         SELECT
 		  a.mac,a.district_id as districtId,a.block_id as blockId,a.residence_id as residenceId
-		  ,unix_timestamp(a.create_time) time,b.b.district_name as districtName,c.block_name as blockName
+		  ,unix_timestamp(a.create_time) time,b.district_name as districtName,c.block_name as blockName
 		  ,d.residence_name as residenceName
 		FROM
 			statistics.mac_visit_log a
 		LEFT JOIN ocn_address.of_district b ON a.district_id = b.district_id
 		LEFT JOIN df_estate_db_v2.sh_block c ON a.block_id = c.block_id
 		LEFT JOIN ocn_address.of_residence d ON a.residence_id = d.id
-		where 1=1
+		WHERE 1=1
 		<if test="mac != null and channelNo != ''">
-            a.mac = #{mac}
+            AND a.mac = #{mac}
         </if>
         <if test="null != channelNo and '' != channelNo">
-            a.channel_no = #{channelNo}
+            AND a.channel_no = #{channelNo}
         </if>
         AND a.create_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
         AND a.create_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')

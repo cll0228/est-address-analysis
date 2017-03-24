@@ -26,6 +26,7 @@ public class MacService {
 	 * @param type
 	 * @param id
 	 * @param start
+	 * @param end
 	 * @return
 	 */
 	public List<MacInfoObj> getMacInfoList(Integer type, Integer id,
@@ -103,17 +104,17 @@ public class MacService {
 		obj.setErrMsg("");
 		// 分页信息
 		if (pageNo == 1) {// 是否第一页
-			obj.setFirstPage(true);
+			obj.setIsFirstPage(true);
 		} else {
-			obj.setFirstPage(false);
+			obj.setIsFirstPage(false);
 		}
 		// 是否最后一页
 		int totalPage = listPageUtil.getTotalPage();
 		obj.setTotalPageCount(totalPage);
 		if (pageNo == totalPage) {
-			obj.setLastPage(true);
+			obj.setIsLastPage(true);
 		} else {
-			obj.setLastPage(false);
+			obj.setIsLastPage(false);
 		}
 		obj.setPageNo(pageNo);
 		obj.setPageSize(pageSize);

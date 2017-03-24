@@ -48,19 +48,19 @@ public class PageResult {
         this.totalPageCount = totalPageCount;
     }
 
-    public boolean isFirstPage() {
+    public boolean getIsFirstPage() {
         return isFirstPage;
     }
 
-    public void setFirstPage(boolean firstPage) {
-        isFirstPage = firstPage;
+    public void setIsFirstPage(boolean isFirstPage) {
+        this.isFirstPage = isFirstPage;
     }
 
-    public boolean isLastPage() {
+    public boolean getIsLastPage() {
         return isLastPage;
     }
 
-    public void setLastPage(boolean lastPage) {
-        isLastPage = lastPage;
+    public void setIsLastPage(boolean isLastPage) {
+        this.isLastPage = isLastPage;
     }
 }

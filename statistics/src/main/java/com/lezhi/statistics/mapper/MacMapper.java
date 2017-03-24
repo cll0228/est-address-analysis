@@ -2,6 +2,7 @@ package com.lezhi.statistics.mapper;
 
 import java.util.List;
 
+import com.lezhi.statistics.pojo.MacVisitLogInfo;
 import org.apache.ibatis.annotations.Param;
 
 import com.lezhi.statistics.pojo.MacInfoObj;
@@ -19,4 +20,9 @@ public interface MacMapper {
 	Integer totalCount(@Param("type") Integer type, @Param("id") Integer id);
 	
 	MacInfoObj getMacInfo(@Param("mac") String mac);
+
+	List<MacVisitLogInfo> getMacVisitLog(@Param("mac")String mac, @Param("channelNo") String channelNo,
+										 @Param("startTime") Long startTime, @Param("endTime") Long endTime,
+										 @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
+										 @Param("residenceId") Integer residenceId);
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lezhi.statistics.pojo.MacVisit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -152,5 +153,31 @@ public class MacController {
 		result.put("status", "success");
 		result.put("errMsg", "");
 		return result;
+	}
+
+	/**
+	 * 根据mac地址查询机顶盒信息
+	 *
+	 * @param mac
+	 * @return
+	 */
+	@RequestMapping(value = "visit/log", method = RequestMethod.POST)
+	@ResponseBody
+	public MacVisit getMacVisitLog(
+			@RequestParam(value = "mac", required = true) String mac
+			,@RequestParam(value = "channelNo", required = false) String channelNo
+			,@RequestParam(value = "startTime", required = false) Long startTime
+			,@RequestParam(value = "span", required = true) Long span
+			,@RequestParam(value = "districtId", required = false) Integer districtId
+			,@RequestParam(value = "blockId", required = false) Integer blockId
+			,@RequestParam(value = "residenceId", required = false) Integer residenceId
+			,@RequestParam(value = "pageNo", required = false) Integer pageNo
+			,@RequestParam(value = "pageSize", required = false) Integer pageSize) {
+		if (null == channelNo || "".equals(channelNo) || null == span) {
+			// 提示必填参数不能为空
+			return new MacVisit("failed", new ArrayList<MacVisit>(), "必填参数不能为空");
+		}
+		Map<String, Object> result = new HashMap<>();
+		return macService.getMacVisitLog(mac,channelNo,startTime,span,districtId,blockId,residenceId,pageNo,pageSize);
 	}
 }

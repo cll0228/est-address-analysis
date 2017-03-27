@@ -21,7 +21,7 @@
         </if>
         AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
         FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
-        GROUP mac
+        GROUP BY mac
     </select>
 
     <select id="realtime" resultType="com.lezhi.statistics.pojo.RealTimeSummaryObj">

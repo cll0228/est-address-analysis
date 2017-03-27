@@ -75,7 +75,7 @@
 						b.mac
 					FROM
 						statistics.new_visitor b
-					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
 					<if test="null != channelNo and '' != channelNo">
 				        AND b.channel_no = #{channelNo}
 				    </if>
@@ -134,7 +134,7 @@
 						b.mac
 					FROM
 						statistics.new_visitor b
-					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
 					<if test="null != channelNo and '' != channelNo">
 				        AND b.channel_no = #{channelNo}
 				    </if>
@@ -194,7 +194,7 @@
 						b.mac
 					FROM
 						statistics.new_visitor b
-					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
 					<if test="null != channelNo and '' != channelNo">
 				        AND b.channel_no = #{channelNo}
 				    </if>

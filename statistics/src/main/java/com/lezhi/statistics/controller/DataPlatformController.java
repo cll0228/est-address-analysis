@@ -33,7 +33,7 @@ public class DataPlatformController {
      * @param residenceId
      * @return
      */
-    @RequestMapping(value = "mac/visit/history", method = RequestMethod.GET)
+    @RequestMapping(value = "mac/visit/history")
     @ResponseBody
     private MacVisit vistHis(@RequestParam(value = "channelNo") String channelNo,
             @RequestParam(value = "startTime", required = false) Long startTime,
@@ -62,7 +62,7 @@ public class DataPlatformController {
 
     }
 
-    @RequestMapping(value = "realtime/summary", method = RequestMethod.GET)
+    @RequestMapping(value = "realtime/summary")
     @ResponseBody
     public RealTimeSummary realtime(@RequestParam(value = "channelNo") String channelNo,
             @RequestParam(value = "period") Long period,
@@ -75,7 +75,7 @@ public class DataPlatformController {
         return dataPlatformService.realtime(channelNo, period, districtId, blockId, residenceId);
     }
 
-    @RequestMapping(value = "trend", method = RequestMethod.GET)
+    @RequestMapping(value = "trend")
     @ResponseBody
     public Trend trend(@RequestParam(value = "channelNo", required = false) String channelNo,
             @RequestParam(value = "startTime", required = false) Long startTime,
@@ -91,7 +91,7 @@ public class DataPlatformController {
                 blockId, residenceId);
     }
 
-    @RequestMapping(value = "channel/summary", method = RequestMethod.GET)
+    @RequestMapping(value = "channel/summary")
     @ResponseBody
     public Summary summary(@RequestParam(value = "channelNo", required = false) String channelNo,
             @RequestParam(value = "startTime", required = false) Long startTime,

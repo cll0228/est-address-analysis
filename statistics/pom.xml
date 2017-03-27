@@ -285,6 +285,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>statistics</finalName>
         <plugins>
 
             <plugin>

@@ -35,7 +35,7 @@ public class MacController {
 	 * @param pageSize
 	 * @return
 	 */
-	@RequestMapping(value = "list", method = RequestMethod.POST)
+	@RequestMapping(value = "list")
 	@ResponseBody
 	public Map<String, Object> getMacInfoList(
 			@RequestParam(value = "districtId", required = false) Integer districtId,
@@ -136,7 +136,7 @@ public class MacController {
 	 * @param mac
 	 * @return
 	 */
-	@RequestMapping(value = "detail", method = RequestMethod.POST)
+	@RequestMapping(value = "detail")
 	@ResponseBody
 	public Map<String, Object> getMacInfoByMac(
 			@RequestParam(value = "mac", required = true) String mac) {

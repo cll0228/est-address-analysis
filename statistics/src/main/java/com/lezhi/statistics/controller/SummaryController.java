@@ -38,7 +38,7 @@ public class SummaryController {
 	 *            统计区间跨度，单位ms
 	 * @return
 	 */
-	@RequestMapping(value = "district", method = RequestMethod.POST)
+	@RequestMapping(value = "district")
 	@ResponseBody
 	public Map<String, Object> getMacInfoByMac(
 			@RequestParam(value = "channelNo", required = false) String channelNo,
@@ -80,7 +80,7 @@ public class SummaryController {
 	 *            统计区间跨度，单位ms
 	 * @return
 	 */
-	@RequestMapping(value = "block", method = RequestMethod.POST)
+	@RequestMapping(value = "block")
 	@ResponseBody
 	public Map<String, Object> getMacInfoByDistrict(
 			@RequestParam(value = "channelNo", required = false) String channelNo,
@@ -123,7 +123,7 @@ public class SummaryController {
 	 *            统计区间跨度，单位ms
 	 * @return
 	 */
-	@RequestMapping(value = "residence", method = RequestMethod.POST)
+	@RequestMapping(value = "residence")
 	@ResponseBody
 	public Map<String, Object> getMacInfoByBlock(
 			@RequestParam(value = "channelNo", required = false) String channelNo,

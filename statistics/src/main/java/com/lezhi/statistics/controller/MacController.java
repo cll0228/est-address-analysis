@@ -161,7 +161,7 @@ public class MacController {
 	 * @param mac
 	 * @return
 	 */
-	@RequestMapping(value = "visit/log", method = RequestMethod.POST)
+	@RequestMapping(value = "visit/log")
 	@ResponseBody
 	public MacVisit getMacVisitLog(
 			@RequestParam(value = "mac", required = true) String mac

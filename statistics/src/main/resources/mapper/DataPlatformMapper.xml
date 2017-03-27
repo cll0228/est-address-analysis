@@ -2,24 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lezhi.statistics.mapper.DataPlatformMapper">
     <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
-        SELECT mac, pv, unix_timestamp(begin_time) firstVisitTime,
-        unix_timestamp(end_time) lastVisitTime, total_top totalTop FROM
-        `channel_visit_summary` WHERE 1=1
+        SELECT mac, sum(pv) pv, unix_timestamp(begin_time) firstVisitTime,
+        unix_timestamp(end_time) lastVisitTime, sum(total_top) totalTop FROM
+        <if test="null != residenceId and '' != residenceId">
+            channel_visit_summary_residence WHERE residence_id = #{residenceId}
+        </if>
+        <if test="null != blockId and '' != blockId">
+            channel_visit_summary_block WHERE block_id= #{blockId}
+        </if>
+        <if test="null != districtId and '' != districtId">
+            channel_visit_summary_district WHERE district_id = #{districtId}
+        </if>
+        <if test="null == districtId and null == blockId and null == residenceId">
+            channel_visit_summary_district WHERE 1= 1
+        </if>
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
         AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
         FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
-        <if test="null != residenceId and '' != residenceId">
-            AND residence_id = #{residenceId}
-        </if>
-        <if test="null != blockId and '' != blockId">
-            AND block_id= #{blockId}
-        </if>
-        <if test="null != districtId and '' != districtId">
-            AND district_id = #{districtId}
-        </if>
+        GROUP BY mac
     </select>
+
     <select id="realtime" resultType="com.lezhi.statistics.pojo.RealTimeSummaryObj">
         SELECT sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time) refreshTime FROM
         <if test="residenceId != null and '' != residenceId">
@@ -35,6 +39,7 @@
             real_time_channel${channelNo}_district WHERE period = #{period}
         </if>
     </select>
+
     <select id="current" resultType="com.lezhi.statistics.pojo.TrendObj">
         SELECT 	begin_time timeBegin,
         end_time timeEnd,
@@ -62,6 +67,12 @@
                     AND channel_no = #{channelNo}
                 </if>
             </if>
+            <if test="null == districtId and null == blockId and null == residenceId">
+                realtime_trend_60m_district WHERE 1=1
+                <if test="null != channelNo and '' != channelNo">
+                    AND channel_no = #{channelNo}
+                </if>
+            </if>
         </when>
         <otherwise>
             <if test="null != residenceId and '' != residenceId">
@@ -77,6 +88,12 @@
                 </if>
             </if>
             <if test="null != districtId and '' != districtId">
+                realtime_trend_24h_district WHERE district_id = #{districtId}
+                <if test="null != channelNo and '' != channelNo">
+                    AND channel_no = #{channelNo}
+                </if>
+            </if>
+            <if test="null == districtId and null == blockId and null == residenceId">
                 realtime_trend_24h_district WHERE district_id = #{districtId}
                 <if test="null != channelNo and '' != channelNo">
                     AND channel_no = #{channelNo}
@@ -116,6 +133,12 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
+                <if test="null == districtId and null == blockId and null == residenceId">
+                    his_trend_hour_district WHERE 1=1
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -132,6 +155,12 @@
                 </if>
                 <if test="null != districtId and '' != districtId">
                     his_trend_day_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null == districtId and null == blockId and null == residenceId">
+                    his_trend_day_district WHERE 1=1
                     <if test="null != channelNo and '' != channelNo">
                         AND channel_no = #{channelNo}
                     </if>
@@ -170,6 +199,12 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
+                <if test="null == districtId and null == blockId and null == residenceId">
+                    realtime_trend_60m_district WHERE 1=1
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -186,6 +221,12 @@
                 </if>
                 <if test="null != districtId and '' != districtId">
                     realtime_trend_24h_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null == districtId and null == blockId and null == residenceId">
+                    realtime_trend_24h_district WHERE 1=1
                     <if test="null != channelNo and '' != channelNo">
                         AND channel_no = #{channelNo}
                     </if>
@@ -224,6 +265,12 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
+                <if test="null == districtId and null == blockId and null == residenceId">
+                    his_trend_hour_district WHERE 1=1
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -240,6 +287,12 @@
                 </if>
                 <if test="null != districtId and '' != districtId">
                     his_trend_day_district WHERE district_id = #{districtId}
+                    <if test="null != channelNo and '' != channelNo">
+                        AND channel_no = #{channelNo}
+                    </if>
+                </if>
+                <if test="null == districtId and null == blockId and null == residenceId">
+                    his_trend_day_district WHERE 1=1
                     <if test="null != channelNo and '' != channelNo">
                         AND channel_no = #{channelNo}
                     </if>
@@ -276,7 +329,7 @@
         COUNT(mac) nv,
         channel_no
         FROM
-        statistics.channel_visit_summary a
+        statistics.channel_visit_summary_district a
         WHERE
         a.mac NOT IN (
         SELECT
@@ -295,4 +348,124 @@
             AND c.channel_no = #{channelNo}
         </if>
     </select>
+
+    <insert id="inert" parameterType="java.util.Map">
+        INSERT INTO statistics.realtime_trend_24h_${type} (
+        `channel_no`,
+        `begin_time`,
+        `end_time`,
+        `uv`,
+        `pv`,
+        `nv`,
+        `avg_top`,
+        <if test="type == 'block'">
+            `block_id`
+        </if>
+        <if test="type == 'district'">
+            `district_id`
+        </if>
+        <if test="type == 'residence'">
+            `residence_id`
+        </if>
+        )
+        VALUES
+        (
+        #{Map.channelNo},
+        #{Map.beginTime},
+        #{Map.endTime},
+        #{Map.uv},
+        #{Map.pv},
+        #{Map.nv},
+        #{Map.avgTop},
+        <if test="type == 'block'">
+            #{Map.blockId}
+        </if>
+        <if test="type == 'district'">
+            #{Map.districtId}
+        </if>
+        <if test="type == 'residence'">
+            #{Map.residenceId}
+        </if>
+        );
+    </insert>
+
+    <insert id="inert_trend">
+        INSERT INTO statistics.realtime_trend_60m_${type} (
+        `channel_no`,
+        `begin_time`,
+        `end_time`,
+        `uv`,
+        `pv`,
+        `nv`,
+        `avg_top`,
+        <if test="type == 'block'">
+            `block_id`
+        </if>
+        <if test="type == 'district'">
+            `district_id`
+        </if>
+        <if test="type == 'residence'">
+            `residence_id`
+        </if>
+        )
+        VALUES
+        (
+        #{Map.channelNo},
+        #{Map.beginTime},
+        #{Map.endTime},
+        #{Map.uv},
+        #{Map.pv},
+        #{Map.nv},
+        #{Map.avgTop},
+        <if test="type == 'block'">
+            #{Map.blockId}
+        </if>
+        <if test="type == 'district'">
+            #{Map.districtId}
+        </if>
+        <if test="type == 'residence'">
+            #{Map.residenceId}
+        </if>
+        )
+    </insert>
+
+    <insert id="inert_trend_day" parameterType="java.util.Map">
+        INSERT INTO statistics.his_trend_day_${type} (
+        `channel_no`,
+        `begin_time`,
+        `end_time`,
+        `uv`,
+        `pv`,
+        `nv`,
+        `avg_top`,
+        <if test="type == 'block'">
+            `block_id`
+        </if>
+        <if test="type == 'district'">
+            `district_id`
+        </if>
+        <if test="type == 'residence'">
+            `residence_id`
+        </if>
+        )
+        VALUES
+        (
+        #{Map.channelNo},
+        #{Map.beginTime},
+        #{Map.endTime},
+        #{Map.uv},
+        #{Map.pv},
+        #{Map.nv},
+        #{Map.avgTop},
+        <if test="type == 'block'">
+            #{Map.blockId}
+        </if>
+        <if test="type == 'district'">
+            #{Map.districtId}
+        </if>
+        <if test="type == 'residence'">
+            #{Map.residenceId}
+        </if>
+        )
+    </insert>
 </mapper>

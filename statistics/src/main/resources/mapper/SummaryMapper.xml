@@ -50,9 +50,9 @@
 					b.district_name,
 					b.center_lng lon,
 					b.center_lat lat,
-					SUM(a.avg_top) avgTop
+					SUM(a.total_top) avgTop
 				FROM
-					statistics.channel_visit_summary a
+					statistics.channel_visit_summary_district a
 				LEFT JOIN ocn_address.of_district b ON a.district_id = b.district_id
 				WHERE
 					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
@@ -68,13 +68,17 @@
 				COUNT(mac) nv,
 				a.district_id
 			FROM
-				statistics.channel_visit_summary a
+				statistics.channel_visit_summary_district a
 			WHERE
 				a.mac NOT IN (
 					SELECT
 						b.mac
 					FROM
 						statistics.new_visitor b
+					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+					<if test="null != channelNo and '' != channelNo">
+				        AND b.channel_no = #{channelNo}
+				    </if>
 				)
 			AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
 			AND a.end_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
@@ -104,9 +108,9 @@
 					b.block_name,
 					b.center_lon lon,
 					b.center_lat lat,
-					SUM(a.avg_top) avgTop
+					SUM(a.total_top) avgTop
 				FROM
-					statistics.channel_visit_summary a
+					statistics.channel_visit_summary_block a
 				LEFT JOIN df_estate_db_v2.sh_block b ON a.block_id = b.block_id
 				WHERE
 					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
@@ -123,13 +127,17 @@
 				COUNT(mac) nv,
 				a.block_id
 			FROM
-				statistics.channel_visit_summary a
+				statistics.channel_visit_summary_block a
 			WHERE
 				a.mac NOT IN (
 					SELECT
 						b.mac
 					FROM
 						statistics.new_visitor b
+					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+					<if test="null != channelNo and '' != channelNo">
+				        AND b.channel_no = #{channelNo}
+				    </if>
 				)
 			AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
 			AND a.end_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
@@ -160,9 +168,9 @@
 					b.residence_name,
 					b.lon,
 					b.lat,
-					SUM(a.avg_top) avgTop
+					SUM(a.total_top) avgTop
 				FROM
-					statistics.channel_visit_summary a
+					statistics.channel_visit_summary_residence a
 				LEFT JOIN ocn_address.of_residence b ON a.residence_id = b.id
 				WHERE
 					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
@@ -179,13 +187,17 @@
 				COUNT(mac) nv,
 				a.residence_id
 			FROM
-				statistics.channel_visit_summary a
+				statistics.channel_visit_summary_residence a
 			WHERE
 				a.mac NOT IN (
 					SELECT
 						b.mac
 					FROM
 						statistics.new_visitor b
+					WHERE b.first_visit_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+					<if test="null != channelNo and '' != channelNo">
+				        AND b.channel_no = #{channelNo}
+				    </if>
 				)
 			AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
 			AND a.end_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
@@ -210,7 +222,7 @@
 					b.residence_name,
 					b.lon,
 					b.lat,
-					SUM(a.avg_top) avgTop
+					SUM(a.total_top) avgTop
 				FROM
 					statistics.channel_visit_summary a
 				LEFT JOIN ocn_address.of_residence b ON a.residence_id = b.id

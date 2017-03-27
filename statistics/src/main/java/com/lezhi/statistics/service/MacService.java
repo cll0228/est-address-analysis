@@ -91,6 +91,12 @@ public class MacService {
 			start = System.currentTimeMillis()/1000 - span;
 			end = System.currentTimeMillis()/1000;
 		}
+		if (null == pageNo) {
+			pageNo = 1;
+		}
+		if (null == pageSize || pageSize <= 0) {
+			pageSize = 20;
+		}
 		List<MacVisitLogInfo> macInfoList = macMapper.getMacVisitLog(mac,channelNo,start,end,districtId,blockId,residenceId);
 		if (null == macInfoList || macInfoList.size() == 0) {
 			return new MacVisit("success", new ArrayList<MacVisit>(), "");

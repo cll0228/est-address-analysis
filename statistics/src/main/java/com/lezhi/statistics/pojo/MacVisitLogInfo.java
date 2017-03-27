@@ -5,6 +5,7 @@ package com.lezhi.statistics.pojo;
  */
 public class MacVisitLogInfo {
 	private String mac;// 机顶盒mac地址
+	private String channelNo;// 频道号
 	private Integer districtId;// 区县ID
 	private String districtName;// 区县
 	private Integer blockId;// 板块ID
@@ -77,10 +78,19 @@ public class MacVisitLogInfo {
 		this.time = time;
 	}
 
+	public String getChannelNo() {
+		return channelNo;
+	}
+
+	public void setChannelNo(String channelNo) {
+		this.channelNo = channelNo;
+	}
+
 	@Override
 	public String toString() {
-		return "MacInfoObj [mac=" + mac + ",districtId=" + districtId + ",districtName=" + districtName
-				+", blockId=" + blockId + ",  blockName=" + blockName + ", residenceId="+ residenceId
+		return "MacInfoObj [mac=" + mac + ",channelNo=" + channelNo + ",districtId=" + districtId + ","
+				+ "districtName=" + districtName+", blockId=" + blockId + ",  blockName=" + blockName
+				+ ", residenceId="+ residenceId
 				+", residenceName=" + residenceName +", time="+ time +"]";
 	}
 }

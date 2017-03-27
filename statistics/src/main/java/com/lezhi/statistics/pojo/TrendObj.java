@@ -8,7 +8,7 @@ public class TrendObj {
     private Long timeEnd;
     private Integer uv;
     private Integer pv;
-    private Integer nu;
+    private Integer nv;
     private Long avgTop;
 
     public Long getTimeBegin() {
@@ -43,12 +43,12 @@ public class TrendObj {
         this.pv = pv;
     }
 
-    public Integer getNu() {
-        return nu;
+    public Integer getNv() {
+        return nv;
     }
 
-    public void setNu(Integer nu) {
-        this.nu = nu;
+    public void setNv(Integer nv) {
+        this.nv = nv;
     }
 
     public Long getAvgTop() {

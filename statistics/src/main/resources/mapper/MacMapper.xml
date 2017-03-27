@@ -105,7 +105,7 @@
 
     <select id="getMacVisitLog" resultType="com.lezhi.statistics.pojo.MacVisitLogInfo">
         SELECT
-		  a.mac,a.district_id as districtId,a.block_id as blockId,a.residence_id as residenceId
+		  a.mac,a.channel_no as channelNo,a.district_id as districtId,a.block_id as blockId,a.residence_id as residenceId
 		  ,unix_timestamp(a.create_time) time,b.district_name as districtName,c.block_name as blockName
 		  ,d.residence_name as residenceName
 		FROM

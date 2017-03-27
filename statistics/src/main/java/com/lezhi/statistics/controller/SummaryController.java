@@ -8,13 +8,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lezhi.statistics.pojo.BlockSummaryInfo;
 import com.lezhi.statistics.pojo.DistrictSummaryInfo;
-import com.lezhi.statistics.pojo.MacInfoObj;
 import com.lezhi.statistics.pojo.ResidenceSummaryInfo;
 import com.lezhi.statistics.service.SummaryService;
 

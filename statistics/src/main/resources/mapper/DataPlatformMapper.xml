@@ -317,7 +317,7 @@
         SUM(a.pv) pv,
         COUNT(DISTINCT a.mac) uv
         FROM
-        statistics.channel_visit_summary a
+        statistics.channel_visit_summary_district a
         WHERE
         a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
         AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')

@@ -62,6 +62,15 @@ public class DataPlatformController {
 
     }
 
+    /**
+     * 3.	实时概况
+     * @param channelNo
+     * @param period
+     * @param districtId
+     * @param blockId
+     * @param residenceId
+     * @return
+     */
     @RequestMapping(value = "realtime/summary")
     @ResponseBody
     public RealTimeSummary realtime(@RequestParam(value = "channelNo") String channelNo,
@@ -75,6 +84,18 @@ public class DataPlatformController {
         return dataPlatformService.realtime(channelNo, period, districtId, blockId, residenceId);
     }
 
+    /**
+     * 走势统计(4)
+     * @param channelNo
+     * @param startTime
+     * @param contrastiveStartTime
+     * @param span
+     * @param scale
+     * @param districtId
+     * @param blockId
+     * @param residenceId
+     * @return
+     */
     @RequestMapping(value = "trend")
     @ResponseBody
     public Trend trend(@RequestParam(value = "channelNo", required = false) String channelNo,
@@ -91,6 +112,15 @@ public class DataPlatformController {
                 blockId, residenceId);
     }
 
+    /**
+     * 9.	频道访问量统计
+     * @param channelNo
+     * @param startTime
+     * @param span
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @RequestMapping(value = "channel/summary")
     @ResponseBody
     public Summary summary(@RequestParam(value = "channelNo", required = false) String channelNo,
@@ -105,6 +135,9 @@ public class DataPlatformController {
         }
         if (null == pageSize || pageSize <= 0) {
             pageSize = 20;
+        }
+        if(null == startTime){
+            startTime = System.currentTimeMillis()/1000;
         }
         return dataPlatformService.summary(channelNo, startTime, span, pageNo, pageSize);
     }

@@ -1,6 +1,5 @@
 package com.lezhi.statistics.pojo;
 
-import java.util.Date;
 
 /**
  * Created by wangyh on 2017/3/28.
@@ -12,9 +11,11 @@ public class LogGeneratorDistrict {
 	private String mac;
 	private String session;
 	private Integer pv;
-	private Date beginTime;
-	private Date endTime;
+	private String beginTime;
+	private String endTime;
 	private Long totalTop;
+	private Long begin;
+	private Long end;
 	public Integer getId() {
 		return id;
 	}
@@ -51,16 +52,16 @@ public class LogGeneratorDistrict {
 	public void setPv(Integer pv) {
 		this.pv = pv;
 	}
-	public Date getBeginTime() {
+	public String getBeginTime() {
 		return beginTime;
 	}
-	public void setBeginTime(Date beginTime) {
+	public void setBeginTime(String beginTime) {
 		this.beginTime = beginTime;
 	}
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 	public Long getTotalTop() {
@@ -69,11 +70,24 @@ public class LogGeneratorDistrict {
 	public void setTotalTop(Long totalTop) {
 		this.totalTop = totalTop;
 	}
+	public Long getBegin() {
+		return begin;
+	}
+	public void setBegin(Long begin) {
+		this.begin = begin;
+	}
+	public Long getEnd() {
+		return end;
+	}
+	public void setEnd(Long end) {
+		this.end = end;
+	}
 	@Override
 	public String toString() {
 		return "LogGeneratorDistrict [id=" + id + ", districtId=" + districtId
 				+ ", channelNo=" + channelNo + ", mac=" + mac + ", session="
 				+ session + ", pv=" + pv + ", beginTime=" + beginTime
-				+ ", endTime=" + endTime + ", totalTop=" + totalTop + "]";
+				+ ", endTime=" + endTime + ", totalTop=" + totalTop
+				+ ", begin=" + begin + ", end=" + end + "]";
 	}
 }

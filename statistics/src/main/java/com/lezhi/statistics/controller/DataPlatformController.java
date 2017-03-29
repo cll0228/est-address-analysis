@@ -44,7 +44,7 @@ public class DataPlatformController {
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
             @RequestParam(value = "residenceId", required = false) Integer residenceId) {
-        if (period != 60 && period != 300 && period != 900) {
+        if (period != 60 * 1000 && period != 300 * 1000 && period != 900 * 1000) {
             return new RealTimeSummary("failed", new ArrayList<RealTimeSummaryObj>(), "参数不正确");
         }
         if(null == channelNo){
@@ -158,5 +158,4 @@ public class DataPlatformController {
         span = 86400L;// 仅支持24小时
         return dataPlatformService.summary(channelNo, startTime, span, pageNo, pageSize);
     }
-
 }

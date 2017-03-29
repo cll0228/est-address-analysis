@@ -108,6 +108,7 @@ public class MacService {
 		obj.setHistories(pagedList);
 		obj.setStatus("success");
 		obj.setErrMsg("");
+		obj.setTotalCount(macInfoList.size());
 		// 分页信息
 		if (pageNo == 1) {// 是否第一页
 			obj.setIsFirstPage(true);

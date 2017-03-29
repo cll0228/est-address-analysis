@@ -173,7 +173,7 @@ public class MacController {
 			,@RequestParam(value = "residenceId", required = false) Integer residenceId
 			,@RequestParam(value = "pageNo", required = false) Integer pageNo
 			,@RequestParam(value = "pageSize", required = false) Integer pageSize) {
-		if (null == mac || "".equals(mac) || null == span) {
+		if (null == span) {
 			// 提示必填参数不能为空
 			return new MacVisit("failed", new ArrayList<MacVisit>(), "必填参数不能为空");
 		}

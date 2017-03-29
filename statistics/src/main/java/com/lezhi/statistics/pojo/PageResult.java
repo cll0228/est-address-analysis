@@ -12,6 +12,8 @@ public class PageResult {
 
     private Integer totalPageCount; // 分页参数，总页码
 
+    private Integer  totalCount; // 分页参数，总记录数
+
     private boolean isFirstPage; // 分页参数，是否第一页
 
     private boolean isLastPage;// 分页参数，是否最后页
@@ -62,5 +64,13 @@ public class PageResult {
 
     public void setIsLastPage(boolean isLastPage) {
         this.isLastPage = isLastPage;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 }

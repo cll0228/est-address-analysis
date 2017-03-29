@@ -55,9 +55,27 @@ public class PropertyUtil {
         date = calendar.getTime();  
         return sm.format(date);  
     }
+
+    public static String getStartMinute(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, -1);
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+        date = calendar.getTime();
+        return sm.format(date);
+    }
+
+    public static String getEndMinute(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, -1);
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:mm:59");
+        date = calendar.getTime();
+        return sm.format(date);
+    }
     
     public static void main(String[] args) {
     	
     	System.out.println(getBeforeDay(new Date()));
-	}
+    }
 }

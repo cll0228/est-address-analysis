@@ -8,6 +8,16 @@ public class MacVisitHistoryInfo {
 
     private Integer pv;// 期间访问量
 
+    private Integer channelNo;
+
+    public Integer getChannelNo() {
+        return channelNo;
+    }
+
+    public void setChannelNo(Integer channelNo) {
+        this.channelNo = channelNo;
+    }
+
     private Long firstVisitTime;// 期间首次访问时间。 unix time, 单位ms
 
     private Long lastVisitTime;// 期间最后访问时间。 unix time, 单位ms

@@ -37,7 +37,7 @@ public class DataPlatformController {
      */
     @RequestMapping(value = "realtime/summary")
     @ResponseBody
-    public RealTimeSummary realtime(@RequestParam(value = "channelNo") String channelNo,
+    public RealTimeSummary realtime(@RequestParam(value = "channelNo",required = false) String channelNo,
             @RequestParam(value = "period") Long period,
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,

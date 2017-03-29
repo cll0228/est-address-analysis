@@ -1,4 +1,4 @@
-package com.lezhi.statistics.util;
+package com.of.tests;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

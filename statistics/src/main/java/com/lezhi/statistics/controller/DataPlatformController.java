@@ -37,13 +37,16 @@ public class DataPlatformController {
      */
     @RequestMapping(value = "realtime/summary")
     @ResponseBody
-    public RealTimeSummary realtime(@RequestParam(value = "channelNo") String channelNo,
+    public RealTimeSummary realtime(@RequestParam(value = "channelNo",required = false) String channelNo,
             @RequestParam(value = "period") Long period,
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
             @RequestParam(value = "residenceId", required = false) Integer residenceId) {
         if (period != 60 && period != 300 && period != 900) {
             return new RealTimeSummary("failed", new ArrayList<RealTimeSummaryObj>(), "参数不正确");
+        }
+        if(null == channelNo){
+            channelNo = "all";
         }
         return dataPlatformService.realtime(channelNo, period, districtId, blockId, residenceId);
     }

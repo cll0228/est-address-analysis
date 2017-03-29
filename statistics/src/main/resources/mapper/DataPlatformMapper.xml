@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lezhi.statistics.mapper.DataPlatformMapper">
     <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
-        SELECT mac, sum(pv) pv, unix_timestamp(begin_time) firstVisitTime,
+        SELECT mac, channel_no channelNo, sum(pv) pv, unix_timestamp(begin_time) firstVisitTime,
         unix_timestamp(end_time) lastVisitTime, sum(total_top) totalTop FROM
         <if test="null != residenceId and '' != residenceId">
             channel_visit_summary_residence WHERE residence_id = #{residenceId}
@@ -19,8 +19,8 @@
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
-        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-        FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+        AND a.end_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND a.start_time &gt;= FROM_UNIXTIME(${startTime-span},'%Y-%m-%d %H:%i:%s')
         GROUP BY mac
     </select>
 
@@ -337,8 +337,8 @@
         FROM
         statistics.new_visitor b
         )
-        AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-				AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+				AND a.start_time &gt;= FROM_UNIXTIME(${startTime-span},'%Y-%m-%d %H:%i:%s')
         GROUP BY
         a.channel_no
         ) d
@@ -468,4 +468,65 @@
         </if>
         )
     </insert>
+
+    <select id="selectLog" resultType="com.lezhi.statistics.pojo.Log">
+      /*  SELECT
+        *
+        FROM
+        `api_logs_shfctv`
+        WHERE
+        `timestamp` &lt;= STR_TO_DATE(NOW(), '%Y-%m-%d %H:%i:%s')
+        AND `timestamp` &gt;= DATE_ADD(
+        STR_TO_DATE(
+        NOW(),
+        '%Y-%m-%d %H:%i:%s'
+        ),
+        INTERVAL -1 HOUR) ORDER BY `timestamp` asc;
+      */
+        SELECT * FROM `api_logs_shfctv` WHERE `timestamp` &gt;= '2017-03-14 00:00:00' AND `timestamp` &lt;= '2017-03-14 01:00:00' ORDER BY `timestamp` asc;;
+    </select>
+    <select id="selectLogBySession" resultType="com.lezhi.statistics.pojo.Log"
+            parameterType="com.lezhi.statistics.pojo.Log">
+      SELECT * FROM api_logs_shfctv WHERE session = #{log.session} AND timestamp  &lt; #{log.timestamp} AND timestamp &gt;  DATE_ADD(
+        STR_TO_DATE(
+         #{log.timestamp},
+        '%Y-%m-%d %H:%i:%s'
+        ),
+    </select>
+    <select id="selectUv" resultType="java.lang.Integer" parameterType="com.lezhi.statistics.pojo.Log">
+        SELECT count(id) from api_logs_shfctv WHERE channel = #{log.channel} AND `timestamp` &lt;= STR_TO_DATE(NOW(), '%Y-%m-%d %H:%i:%s')
+        AND `timestamp` &gt;= DATE_ADD(
+        STR_TO_DATE(
+        NOW(),
+        '%Y-%m-%d %H:%i:%s'
+        ),
+        INTERVAL -1 HOUR)
+    </select>
+    <select id="selectNv" resultType="java.lang.Integer" parameterType="com.lezhi.statistics.pojo.Log">
+        SELECT count(DISTINCT mac) from api_logs_shfctv WHERE channel = #{log.channel} AND `timestamp` &lt;= STR_TO_DATE(NOW(), '%Y-%m-%d %H:%i:%s')
+        AND `timestamp` &gt;= DATE_ADD(
+        STR_TO_DATE(
+        NOW(),
+        '%Y-%m-%d %H:%i:%s'
+        ),
+        INTERVAL -1 HOUR)
+    </select>
+    <select id="selectPv" resultType="java.lang.String" parameterType="com.lezhi.statistics.pojo.Log">
+        SELECT
+        mac
+        FROM
+        `api_logs_shfctv`
+        WHERE
+        channel = #{log.channel}
+       AND `timestamp` &lt;= STR_TO_DATE(NOW(), '%Y-%m-%d %H:%i:%s')
+        AND `timestamp` &gt;= DATE_ADD(
+        STR_TO_DATE(
+        NOW(),
+        '%Y-%m-%d %H:%i:%s'
+        ),
+        INTERVAL -1 HOUR)
+        AND mac NOT IN (SELECT mac FROM new_visitor)
+        GROUP BY
+        mac
+    </select>
 </mapper>

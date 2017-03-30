@@ -85,11 +85,11 @@ public class MacService {
 		Long start = 0L;
 		Long end = 0L;
 		if(startTime!=null&&!"".equals(startTime)) {
-			start = startTime - span;
-			end = startTime;
+			end = startTime + span;
+			start = startTime;
 		} else {
-			start = System.currentTimeMillis()/1000 - span;
-			end = System.currentTimeMillis()/1000;
+			end = System.currentTimeMillis()/1000 + span;
+			start = System.currentTimeMillis()/1000;
 		}
 		if (null == pageNo) {
 			pageNo = 1;

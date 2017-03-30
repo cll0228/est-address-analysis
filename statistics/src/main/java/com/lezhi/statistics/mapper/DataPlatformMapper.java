@@ -1,13 +1,11 @@
 package com.lezhi.statistics.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.lezhi.statistics.pojo.ChannelSummaryObj;
-import com.lezhi.statistics.pojo.MacVisitHistoryInfo;
-import com.lezhi.statistics.pojo.RealTimeSummaryObj;
-import com.lezhi.statistics.pojo.TrendObj;
+import com.lezhi.statistics.pojo.*;
 
 /**
  * Created by Cuill on 2017/3/14.
@@ -41,4 +39,32 @@ public interface DataPlatformMapper {
                                    @Param("span") Long span, @Param("scale") Long scale, @Param("districtId") Integer districtId,
                                    @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
 
+    void inert(@Param("Map") Map<String, Object> Map, @Param("type") String type);
+
+    void inert_trend(@Param("Map") Map<String, Object> Map, @Param("type") String type);
+
+    void inert_trend_day(@Param("Map") Map<String, Object> Map, @Param("type") String type);
+
+    List<Log> selectLog(@Param("startTime")Long startTime,@Param("endTime")Long endTime);
+
+    List<Log> selectLogBySession(@Param("log") Log log,@Param("startTime")Long startTime,@Param("endTime")Long endTime);
+
+    Integer selectUv(@Param("log")Log log,@Param("startTime")Long startTime,@Param("endTime")Long endTime);
+
+    Integer selectNv(@Param("log")Log log,@Param("startTime")Long startTime,@Param("endTime")Long endTime);
+
+    List<String> selectPv(@Param("log")Log log,@Param("startTime")Long startTime,@Param("endTime")Long endTime);
+
+    Integer selectDistrictId(@Param("log")Log log);
+
+    List<Log> selectSameSession(@Param("log")Log log);
+
+    Integer selectBlockId(@Param("log")Log log);
+
+    Integer selectResidenceId(@Param("log")Log log);
+
+    List<Log> selectTimeBySameMacAndSession(@Param("log")Log log,@Param("startTime") Long startTime);
+
+    void saveDis(@Param("his") HisTrendInfo his,@Param("type") String type);
 }
+

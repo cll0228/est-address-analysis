@@ -19,8 +19,8 @@
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
-        AND a.end_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.start_time &gt;= FROM_UNIXTIME(${startTime-span},'%Y-%m-%d %H:%i:%s')
+        AND a.start_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY mac
     </select>
 
@@ -319,8 +319,8 @@
         FROM
         statistics.channel_visit_summary_district a
         WHERE 1=1
-        AND a.end_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.begin_time &gt;= FROM_UNIXTIME(${startTime-span},'%Y-%m-%d %H:%i:%s')
+        AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY
         a.channel_no
         ) c,
@@ -337,8 +337,8 @@
         FROM
         statistics.new_visitor b
         )
-        AND a.end_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.begin_time &gt;= FROM_UNIXTIME(${startTime-span},'%Y-%m-%d %H:%i:%s')
+        AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY
         a.channel_no
         ) d

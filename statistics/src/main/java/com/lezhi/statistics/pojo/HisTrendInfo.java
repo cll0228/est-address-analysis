@@ -7,7 +7,25 @@ public class HisTrendInfo extends TrendObj{
     private Integer districtId;
     private Integer blockId;
     private Integer id;
+    private Integer residenceId;
     private Integer channelNo;
+    private Long totalTop;
+
+    public Long getTotalTop() {
+        return totalTop;
+    }
+
+    public void setTotalTop(Long totalTop) {
+        this.totalTop = totalTop;
+    }
+
+    public Integer getResidenceId() {
+        return residenceId;
+    }
+
+    public void setResidenceId(Integer residenceId) {
+        this.residenceId = residenceId;
+    }
 
     public Integer getDistrictId() {
         return districtId;

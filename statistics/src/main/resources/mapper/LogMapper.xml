@@ -56,6 +56,34 @@
 			a.`session`
     </select>
     
+    <select id="getResidenceResult" resultType="com.lezhi.statistics.pojo.LogGeneratorResidence">
+       SELECT
+			a.channel channelNo,
+			a.mac,
+			a.`session`,
+			(
+				unix_timestamp(MAX(a.timestamp)) - unix_timestamp(MIN(a.timestamp))
+			) * 10 totalTop,
+			unix_timestamp(MIN(a.timestamp))
+		begin
+			,
+			unix_timestamp(MAX(a.timestamp))
+		end,
+		 b.block_id blockId,
+		 b.residence_id residenceId,
+		 count(a.mac) pv
+		FROM
+			statistics.api_logs_shfctv a
+		INNER JOIN statistics.mac_info b ON a.mac = b.mac
+		WHERE
+			a.`timestamp` &gt;= #{startTime}
+		AND a.`timestamp` &lt;= #{endTime}
+		GROUP BY
+			a.mac,
+			a.channel,
+			a.`session`
+    </select>
+    
     <select id="getSpanResult" resultType="com.lezhi.statistics.pojo.LogGeneratorCountSpan">
         SELECT
 			COUNT(*) count,
@@ -107,6 +135,28 @@
 			#{logGeneratorBlock.beginTime},
 			#{logGeneratorBlock.endTime},
 			#{logGeneratorBlock.totalTop})
+    </insert>
+    
+    <insert id="insertSummaryResidence">
+        INSERT INTO statistics.channel_visit_summary_residence (
+			block_id,
+			residence_id,
+			channel_no,
+			mac,
+			pv,
+			begin_time,
+			end_time,
+			total_top
+		)
+		VALUES
+			(#{logGeneratorResidence.blockId},
+			#{logGeneratorResidence.residenceId},
+			#{logGeneratorResidence.channelNo},
+			#{logGeneratorResidence.mac},
+			#{logGeneratorResidence.pv},
+			#{logGeneratorResidence.beginTime},
+			#{logGeneratorResidence.endTime},
+			#{logGeneratorResidence.totalTop})
     </insert>
     
 </mapper>

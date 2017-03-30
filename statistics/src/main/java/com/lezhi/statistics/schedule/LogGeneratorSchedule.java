@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.lezhi.statistics.pojo.LogGeneratorBlock;
 import com.lezhi.statistics.pojo.LogGeneratorDistrict;
+import com.lezhi.statistics.pojo.LogGeneratorResidence;
 import com.lezhi.statistics.service.LogService;
 import com.lezhi.statistics.util.PropertyUtil;
 
@@ -79,11 +80,11 @@ public class LogGeneratorSchedule {
 	@Scheduled(cron = "${log.block}")
 	public void logBlock() throws Exception {
 		List<LogGeneratorBlock> logList = new ArrayList<LogGeneratorBlock>();
-		/*String startTime = PropertyUtil.getStartHour(new Date()); 
-		String endTime = PropertyUtil.getEndHour(new Date());*/
+		String startTime = PropertyUtil.getStartHour(new Date()); 
+		String endTime = PropertyUtil.getEndHour(new Date());
 		 
-		String startTime = "2017-03-14 00:00:00";
-		String endTime = "2017-03-14 00:59:59";
+		/*String startTime = "2017-03-14 00:00:00";
+		String endTime = "2017-03-14 00:59:59";*/
 
 		logList = logService.getBlockResult(startTime, endTime);
 		
@@ -121,6 +122,54 @@ public class LogGeneratorSchedule {
 			logGeneratorBlock.setBeginTime(startTime);
 			logGeneratorBlock.setEndTime(endTime);
 			logService.insertSummaryBlock(logGeneratorBlock);
+		}
+	}
+	
+	@Scheduled(cron = "${log.residence}")
+	public void logResidence() throws Exception {
+		List<LogGeneratorResidence> logList = new ArrayList<LogGeneratorResidence>();
+		String startTime = PropertyUtil.getStartHour(new Date()); 
+		String endTime = PropertyUtil.getEndHour(new Date());
+		 
+		/*String startTime = "2017-03-14 00:00:00";
+		String endTime = "2017-03-14 00:59:59";*/
+
+		logList = logService.getResidenceResult(startTime, endTime);
+		
+		Map<String, LogGeneratorResidence> map = new HashMap<String, LogGeneratorResidence>();
+		for (LogGeneratorResidence logGeneratorBlock : logList) {
+			if (map.get(logGeneratorBlock.getMac()
+					+ logGeneratorBlock.getChannelNo()) == null) {
+				map.put(logGeneratorBlock.getMac()
+						+ logGeneratorBlock.getChannelNo(),
+						logGeneratorBlock);
+			} else if (map.get(logGeneratorBlock.getMac()
+					+ logGeneratorBlock.getChannelNo()) != null) {
+				LogGeneratorResidence temp = new LogGeneratorResidence();
+				temp = map.get(logGeneratorBlock.getMac()
+						+ logGeneratorBlock.getChannelNo());
+				logGeneratorBlock.setPv(logGeneratorBlock.getPv()
+						+ temp.getPv());
+				logGeneratorBlock.setTotalTop(logGeneratorBlock
+						.getTotalTop() + temp.getTotalTop());
+				map.remove(logGeneratorBlock.getMac()
+						+ logGeneratorBlock.getChannelNo());
+				map.put(logGeneratorBlock.getMac()
+						+ logGeneratorBlock.getChannelNo(),
+						logGeneratorBlock);
+			}
+		}
+		Set<?> set = map.entrySet();
+		Iterator<?> iterator = set.iterator();
+		while (iterator.hasNext()) {
+			Entry<?, ?> mapentry = (Entry<?, ?>) iterator.next();
+			System.out.println(mapentry.getKey() + "/"
+					+ mapentry.getValue().toString());
+			LogGeneratorResidence logGeneratorResidence = (LogGeneratorResidence) mapentry
+					.getValue();
+			logGeneratorResidence.setBeginTime(startTime);
+			logGeneratorResidence.setEndTime(endTime);
+			logService.insertSummaryResidence(logGeneratorResidence);
 		}
 	}
 }

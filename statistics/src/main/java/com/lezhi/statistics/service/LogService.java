@@ -9,6 +9,7 @@ import com.lezhi.statistics.mapper.LogMapper;
 import com.lezhi.statistics.pojo.LogGeneratorBlock;
 import com.lezhi.statistics.pojo.LogGeneratorCountSpan;
 import com.lezhi.statistics.pojo.LogGeneratorDistrict;
+import com.lezhi.statistics.pojo.LogGeneratorResidence;
 
 /**
  * Created by wangyh on 2017/3/29.
@@ -52,6 +53,23 @@ public class LogService {
 		return logList;
 	}
 	
+	/**
+	 * 根据开始和结束时间查询小区log记录
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<LogGeneratorResidence> getResidenceResult(String startTime, String endTime) {
+		List<LogGeneratorResidence> logList = logMapper.getResidenceResult(startTime, endTime);
+		for (LogGeneratorResidence logGeneratorResidence : logList) {
+			LogGeneratorCountSpan countSpan = getSpanResult(startTime, logGeneratorResidence.getSession());
+			if (countSpan!=null&&countSpan.getCount()>0) {
+				logGeneratorResidence.setTotalTop((logGeneratorResidence.getEnd()-countSpan.getSpanTime())*10);;
+			}
+		}
+		return logList;
+	}
+	
 	public LogGeneratorCountSpan getSpanResult(String startTime, String session) {
 		LogGeneratorCountSpan countSpan = logMapper.getSpanResult(startTime, session);
 		return countSpan;
@@ -65,6 +83,8 @@ public class LogService {
 		logMapper.insertSummaryBlock(logGeneratorBlock);
 	}
 	
-	
+	public void insertSummaryResidence(LogGeneratorResidence logGeneratorResidence) {
+		logMapper.insertSummaryResidence(logGeneratorResidence);
+	}
 	
 }

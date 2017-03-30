@@ -165,7 +165,7 @@ public class MacController {
 	@RequestMapping(value = "visit/log")
 	@ResponseBody
 	public MacVisit getMacVisitLog(
-			@RequestParam(value = "mac", required = true) String mac
+			@RequestParam(value = "mac", required = false) String mac
 			,@RequestParam(value = "channelNo", required = false) String channelNo
 			,@RequestParam(value = "startTime", required = false) Long startTime
 			,@RequestParam(value = "span", required = true) Long span

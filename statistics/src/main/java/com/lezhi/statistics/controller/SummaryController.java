@@ -23,7 +23,7 @@ import com.lezhi.statistics.service.SummaryService;
 @RequestMapping("/summary/")
 public class SummaryController {
 	@Autowired
-	SummaryService summaryService;
+	private SummaryService summaryService;
 
 	/**
 	 * 按时间段统计各区县概况，结果以区为单位显示数据

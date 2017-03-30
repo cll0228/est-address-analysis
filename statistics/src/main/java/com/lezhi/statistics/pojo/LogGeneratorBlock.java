@@ -2,10 +2,11 @@ package com.lezhi.statistics.pojo;
 
 
 /**
- * Created by wangyh on 2017/3/28.
+ * Created by wangyh on 2017/3/30.
  */
-public class LogGeneratorDistrict {
+public class LogGeneratorBlock {
 	private Integer id;
+	private Integer blockId;
 	private Integer districtId;
 	private String channelNo;
 	private String mac;
@@ -21,6 +22,12 @@ public class LogGeneratorDistrict {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public Integer getBlockId() {
+		return blockId;
+	}
+	public void setBlockId(Integer blockId) {
+		this.blockId = blockId;
 	}
 	public Integer getDistrictId() {
 		return districtId;
@@ -84,10 +91,11 @@ public class LogGeneratorDistrict {
 	}
 	@Override
 	public String toString() {
-		return "LogGeneratorDistrict [id=" + id + ", districtId=" + districtId
-				+ ", channelNo=" + channelNo + ", mac=" + mac + ", session="
-				+ session + ", pv=" + pv + ", beginTime=" + beginTime
-				+ ", endTime=" + endTime + ", totalTop=" + totalTop
-				+ ", begin=" + begin + ", end=" + end + "]";
+		return "LogGeneratorBlock [id=" + id + ", blockId=" + blockId
+				+ ", districtId=" + districtId + ", channelNo=" + channelNo
+				+ ", mac=" + mac + ", session=" + session + ", pv=" + pv
+				+ ", beginTime=" + beginTime + ", endTime=" + endTime
+				+ ", totalTop=" + totalTop + ", begin=" + begin + ", end="
+				+ end + "]";
 	}
 }

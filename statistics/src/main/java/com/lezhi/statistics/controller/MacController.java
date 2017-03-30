@@ -23,7 +23,7 @@ import com.lezhi.statistics.service.MacService;
 @RequestMapping("/mac/")
 public class MacController {
 	@Autowired
-	MacService macService;
+	private MacService macService;
 
 	/**
 	 * 根据行政区获取机顶盒列表
@@ -67,6 +67,7 @@ public class MacController {
 			defaultPageNo = (pageNo - 1) * defaultPageSize;
 		}
 		if (pageNo == null || pageNo == 1) {
+			pageNo = 1;
 			isFirstPage = true;
 		}
 		if (defaultPageNo == 1) {

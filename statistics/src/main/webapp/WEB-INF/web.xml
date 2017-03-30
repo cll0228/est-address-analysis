@@ -34,6 +34,23 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
+    <!-- <filter>
+	     <filter-name>IndexFilter</filter-name>
+	     <filter-class>com.lezhi.statistics.filter.IndexFilter</filter-class>
+        <init-param>
+            <param-name>exclude</param-name>
+            <param-value>/assessPage.jsp</param-value>
+        </init-param>
+	 </filter>
+	 <filter-mapping>
+	     <filter-name>IndexFilter</filter-name>
+	     <url-pattern>/*</url-pattern>
+	     <dispatcher>REQUEST</dispatcher> 没有配置dispatcher就是默认request方式的
+	     <dispatcher>FORWARD</dispatcher>
+	     <dispatcher>ERROR</dispatcher>
+	     <dispatcher>INCLUDE</dispatcher>
+	 </filter-mapping> -->
+    
     <!--LoginFilter-->
     <!-- <filter>    
         <filter-name>sessionFilter</filter-name>    

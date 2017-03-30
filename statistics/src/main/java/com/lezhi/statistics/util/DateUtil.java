@@ -14,7 +14,7 @@ import com.lezhi.statistics.mapper.DataPlatformMapper;
 /**
  * Created by Cuill on 2017/3/27.
  */
-public class InsertTestDataUtil {
+public class DateUtil {
 
     static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:00:00 ");
 

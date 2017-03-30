@@ -12,6 +12,33 @@ public class Log {
     private String mac;
     private Date timeStamp;
     private String session;
+    private Integer districtId;
+    private Integer blockId;
+    private Integer residenceId;
+
+    public Integer getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(Integer districtId) {
+        this.districtId = districtId;
+    }
+
+    public Integer getBlockId() {
+        return blockId;
+    }
+
+    public void setBlockId(Integer blockId) {
+        this.blockId = blockId;
+    }
+
+    public Integer getResidenceId() {
+        return residenceId;
+    }
+
+    public void setResidenceId(Integer residenceId) {
+        this.residenceId = residenceId;
+    }
 
     public Integer getLogId() {
         return logId;

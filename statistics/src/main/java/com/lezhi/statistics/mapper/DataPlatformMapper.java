@@ -49,11 +49,14 @@ public interface DataPlatformMapper {
 
     List<Log> selectLogBySession(@Param("log") Log log,@Param("startTime")Long startTime,@Param("endTime")Long endTime);
 
-    Integer selectUv(@Param("log")Log log,@Param("startTime")Long startTime,@Param("endTime")Long endTime);
+    Integer selectUv(@Param("log") Log log, @Param("startTime") Long startTime,
+            @Param("endTime") Long endTime, @Param("type") String type);
 
-    Integer selectNv(@Param("log")Log log,@Param("startTime")Long startTime,@Param("endTime")Long endTime);
+    Integer selectNv(@Param("log") Log log, @Param("startTime") Long startTime,
+            @Param("endTime") Long endTime, @Param("type") String type);
 
-    List<String> selectPv(@Param("log")Log log,@Param("startTime")Long startTime,@Param("endTime")Long endTime);
+    List<String> selectPv(@Param("log") Log log, @Param("startTime") Long startTime,
+            @Param("endTime") Long endTime, @Param("type") String type);
 
     Integer selectDistrictId(@Param("log")Log log);
 

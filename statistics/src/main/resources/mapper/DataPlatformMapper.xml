@@ -471,14 +471,28 @@
 
     <select id="selectLog" resultType="com.lezhi.statistics.pojo.Log">
         SELECT
-        channel ,mac,MAX(`timestamp`) timeStamp,`session`
+            log.channel,
+            log.mac,
+            MAX(log.timestamp) TIMESTAMP,
+            log.session,
+            m.district_id districtId,
+            m.block_id blockId,
+            m.residence_id residenceId
         FROM
-        `api_logs_shfctv_01`
+	    `api_logs_shfctv_01` log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
-        `timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
-        AND `timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') GROUP BY mac,`session` ORDER BY `timestamp` desc
+        log.timestamp &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
+        AND log.timestamp &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') GROUP BY log.mac,log.`session` ORDER BY log.`timestamp` desc
 
-       /* SELECT channel ,mac,MAX(`timestamp`) timeStamp,`session` FROM `api_logs_shfctv_01`
+       /* SELECT log.channel,
+            log.mac,
+            MAX(log.timestamp) TIMESTAMP,
+            log.session,
+            m.district_id,
+        m.block_id,
+        m.residence_id
+        FROM
+	`api_logs_shfctv_01` log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE `timestamp` &gt;= '2017-03-14 00:00:00' AND `timestamp` &lt;= '2017-03-14 01:00:00' GROUP BY mac,`session` ORDER BY `timestamp` desc;*/
     </select>
     <select id="selectLogBySession" resultType="com.lezhi.statistics.pojo.Log">
@@ -487,25 +501,87 @@
        INTERVAL -2 HOUR)
     </select>
     <select id="selectUv" resultType="java.lang.Integer" parameterType="com.lezhi.statistics.pojo.Log">
-        SELECT count(log_id) from api_logs_shfctv_01 WHERE channel = #{log.channel} AND `timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
-        AND `timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
+        SELECT count(log_id) from (SELECT
+        log.log_id,
+        log.channel,
+        log.mac,
+        log.timestamp TIMESTAMP,
+        log.session,
+        m.district_id districtId,
+        m.block_id blockId,
+        m.residence_id residenceId
+        FROM
+        api_logs_shfctv_01 log LEFT JOIN mac_info m ON log.mac = m.mac
+        WHERE
+        log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
+        AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp WHERE temp.channel = #{log.channel}
+        <if test="type == 'district'">
+            AND temp.districtId = #{log.districtId}
+        </if>
+        <if test="type == 'block'">
+            AND temp.blockId = #{log.blockId}
+        </if>
+        <if test="type == 'residence'">
+            AND temp.residenceId = #{log.residenceId}
+        </if>
     </select>
     <select id="selectNv" resultType="java.lang.Integer" parameterType="com.lezhi.statistics.pojo.Log">
-        SELECT count(DISTINCT mac) from api_logs_shfctv_01 WHERE channel = #{log.channel} AND `timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
-        AND `timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
+         SELECT count(DISTINCT temp.mac) from (SELECT
+        log.log_id,
+        log.channel,
+        log.mac,
+        log.timestamp TIMESTAMP,
+        log.session,
+        m.district_id districtId,
+        m.block_id blockId,
+        m.residence_id residenceId
+        FROM
+        api_logs_shfctv_01 log LEFT JOIN mac_info m ON log.mac = m.mac
+        WHERE
+        log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
+        AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp WHERE temp.channel = #{log.channel}
+        <if test="type == 'district'">
+            AND temp.districtId = #{log.districtId}
+        </if>
+        <if test="type == 'block'">
+            AND temp.blockId = #{log.blockId}
+        </if>
+        <if test="type == 'residence'">
+            AND temp.residenceId = #{log.residenceId}
+        </if>
     </select>
     <select id="selectPv" resultType="java.lang.String" parameterType="com.lezhi.statistics.pojo.Log">
         SELECT
-        mac
+        temp.mac
         FROM
-        `api_logs_shfctv_01`
+       (SELECT
+        log.log_id,
+        log.channel,
+        log.mac,
+        log.timestamp TIMESTAMP,
+        log.session,
+        m.district_id districtId,
+        m.block_id blockId,
+        m.residence_id residenceId
+        FROM
+        api_logs_shfctv_01 log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
-        channel = #{log.channel}
-       AND `timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
-        AND `timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
-        AND mac NOT IN (SELECT mac FROM new_visitor)
+        log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
+        AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp
+        WHERE
+        temp.channel = #{log.channel}
+        <if test="type == 'district'">
+            AND temp.districtId = #{log.districtId}
+        </if>
+        <if test="type == 'block'">
+            AND temp.blockId = #{log.blockId}
+        </if>
+        <if test="type == 'residence'">
+            AND temp.residenceId = #{log.residenceId}
+        </if>
+        AND temp.mac NOT IN (SELECT mac FROM new_visitor)
         GROUP BY
-        mac
+        temp.mac
     </select>
     <select id="selectDistrictId" parameterType="com.lezhi.statistics.pojo.Log" resultType="java.lang.Integer">
         SELECT district_id  FROM `mac_info` WHERE mac = #{log.mac};

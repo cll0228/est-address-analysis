@@ -28,6 +28,34 @@
 			a.`session`
     </select>
     
+    <select id="getBlockResult" resultType="com.lezhi.statistics.pojo.LogGeneratorBlock">
+       SELECT
+			a.channel channelNo,
+			a.mac,
+			a.`session`,
+			(
+				unix_timestamp(MAX(a.timestamp)) - unix_timestamp(MIN(a.timestamp))
+			) * 10 totalTop,
+			unix_timestamp(MIN(a.timestamp))
+		begin
+			,
+			unix_timestamp(MAX(a.timestamp))
+		end,
+		 b.district_id districtId,
+		 b.block_id blockId,
+		 count(a.mac) pv
+		FROM
+			statistics.api_logs_shfctv a
+		INNER JOIN statistics.mac_info b ON a.mac = b.mac
+		WHERE
+			a.`timestamp` &gt;= #{startTime}
+		AND a.`timestamp` &lt;= #{endTime}
+		GROUP BY
+			a.mac,
+			a.channel,
+			a.`session`
+    </select>
+    
     <select id="getSpanResult" resultType="com.lezhi.statistics.pojo.LogGeneratorCountSpan">
         SELECT
 			COUNT(*) count,
@@ -57,6 +85,28 @@
 			#{logGeneratorDistrict.beginTime},
 			#{logGeneratorDistrict.endTime},
 			#{logGeneratorDistrict.totalTop})
+    </insert>
+    
+    <insert id="insertSummaryBlock">
+        INSERT INTO statistics.channel_visit_summary_block (
+			block_id,
+			district_id,
+			channel_no,
+			mac,
+			pv,
+			begin_time,
+			end_time,
+			total_top
+		)
+		VALUES
+			(#{logGeneratorBlock.blockId},
+			#{logGeneratorBlock.districtId},
+			#{logGeneratorBlock.channelNo},
+			#{logGeneratorBlock.mac},
+			#{logGeneratorBlock.pv},
+			#{logGeneratorBlock.beginTime},
+			#{logGeneratorBlock.endTime},
+			#{logGeneratorBlock.totalTop})
     </insert>
     
 </mapper>

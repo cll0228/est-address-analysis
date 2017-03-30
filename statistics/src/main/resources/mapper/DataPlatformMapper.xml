@@ -19,8 +19,8 @@
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
-        AND a.end_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.start_time &gt;= FROM_UNIXTIME(${startTime-span},'%Y-%m-%d %H:%i:%s')
+        AND a.start_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY mac
     </select>
 
@@ -318,8 +318,8 @@
         COUNT(DISTINCT a.mac) uv
         FROM
         statistics.channel_visit_summary_district a
-        WHERE
-        a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        WHERE 1=1
+        AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
         AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY
         a.channel_no
@@ -337,8 +337,8 @@
         FROM
         statistics.new_visitor b
         )
-        AND a.end_time &lt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-				AND a.start_time &gt;= FROM_UNIXTIME(${startTime-span},'%Y-%m-%d %H:%i:%s')
+        AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY
         a.channel_no
         ) d
@@ -470,63 +470,109 @@
     </insert>
 
     <select id="selectLog" resultType="com.lezhi.statistics.pojo.Log">
-      /*  SELECT
-        *
+        SELECT
+        channel ,mac,MAX(`timestamp`) timeStamp,`session`
         FROM
-        `api_logs_shfctv`
+        `api_logs_shfctv_01`
         WHERE
-        `timestamp` &lt;= STR_TO_DATE(NOW(), '%Y-%m-%d %H:%i:%s')
-        AND `timestamp` &gt;= DATE_ADD(
-        STR_TO_DATE(
-        NOW(),
-        '%Y-%m-%d %H:%i:%s'
-        ),
-        INTERVAL -1 HOUR) ORDER BY `timestamp` asc;
-      */
-        SELECT * FROM `api_logs_shfctv` WHERE `timestamp` &gt;= '2017-03-14 00:00:00' AND `timestamp` &lt;= '2017-03-14 01:00:00' ORDER BY `timestamp` asc;;
+        `timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
+        AND `timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') GROUP BY mac,`session` ORDER BY `timestamp` desc
+
+       /* SELECT channel ,mac,MAX(`timestamp`) timeStamp,`session` FROM `api_logs_shfctv_01`
+        WHERE `timestamp` &gt;= '2017-03-14 00:00:00' AND `timestamp` &lt;= '2017-03-14 01:00:00' GROUP BY mac,`session` ORDER BY `timestamp` desc;*/
     </select>
-    <select id="selectLogBySession" resultType="com.lezhi.statistics.pojo.Log"
-            parameterType="com.lezhi.statistics.pojo.Log">
-      SELECT * FROM api_logs_shfctv WHERE session = #{log.session} AND timestamp  &lt; #{log.timestamp} AND timestamp &gt;  DATE_ADD(
-        STR_TO_DATE(
-         #{log.timestamp},
-        '%Y-%m-%d %H:%i:%s'
-        ),
+    <select id="selectLogBySession" resultType="com.lezhi.statistics.pojo.Log">
+      SELECT log_id logId,channel,mac,`timestamp` timeStamp,session FROM api_logs_shfctv_01 WHERE session = #{log.session} AND timestamp  &lt; #{log.timeStamp} AND timestamp &gt;
+       DATE_ADD(#{log.timeStamp},
+       INTERVAL -2 HOUR)
     </select>
     <select id="selectUv" resultType="java.lang.Integer" parameterType="com.lezhi.statistics.pojo.Log">
-        SELECT count(id) from api_logs_shfctv WHERE channel = #{log.channel} AND `timestamp` &lt;= STR_TO_DATE(NOW(), '%Y-%m-%d %H:%i:%s')
-        AND `timestamp` &gt;= DATE_ADD(
-        STR_TO_DATE(
-        NOW(),
-        '%Y-%m-%d %H:%i:%s'
-        ),
-        INTERVAL -1 HOUR)
+        SELECT count(log_id) from api_logs_shfctv_01 WHERE channel = #{log.channel} AND `timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
+        AND `timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
     </select>
     <select id="selectNv" resultType="java.lang.Integer" parameterType="com.lezhi.statistics.pojo.Log">
-        SELECT count(DISTINCT mac) from api_logs_shfctv WHERE channel = #{log.channel} AND `timestamp` &lt;= STR_TO_DATE(NOW(), '%Y-%m-%d %H:%i:%s')
-        AND `timestamp` &gt;= DATE_ADD(
-        STR_TO_DATE(
-        NOW(),
-        '%Y-%m-%d %H:%i:%s'
-        ),
-        INTERVAL -1 HOUR)
+        SELECT count(DISTINCT mac) from api_logs_shfctv_01 WHERE channel = #{log.channel} AND `timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
+        AND `timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
     </select>
     <select id="selectPv" resultType="java.lang.String" parameterType="com.lezhi.statistics.pojo.Log">
         SELECT
         mac
         FROM
-        `api_logs_shfctv`
+        `api_logs_shfctv_01`
         WHERE
         channel = #{log.channel}
-       AND `timestamp` &lt;= STR_TO_DATE(NOW(), '%Y-%m-%d %H:%i:%s')
-        AND `timestamp` &gt;= DATE_ADD(
-        STR_TO_DATE(
-        NOW(),
-        '%Y-%m-%d %H:%i:%s'
-        ),
-        INTERVAL -1 HOUR)
+       AND `timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
+        AND `timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
         AND mac NOT IN (SELECT mac FROM new_visitor)
         GROUP BY
         mac
     </select>
+    <select id="selectDistrictId" parameterType="com.lezhi.statistics.pojo.Log" resultType="java.lang.Integer">
+        SELECT district_id  FROM `mac_info` WHERE mac = #{log.mac};
+    </select>
+
+    <select id="selectSameSession" resultType="com.lezhi.statistics.pojo.Log">
+       SELECT log_id logId,channel,mac,`timestamp` timeStamp,session FROM api_logs_shfctv_01 WHERE timestamp  &gt; #{log.timestamp} AND mac = #{log.mac}
+      and channel = #{log.channle} AND  session = #{log.session}  ORDER BY `timestamp` DESC
+</select>
+    <select id="selectBlockId" resultType="java.lang.Integer">
+        SELECT block_id from mac_info WHERE  mac = #{log.mac}
+    </select>
+    <select id="selectResidenceId" resultType="java.lang.Integer">
+        select residence_id from mac_info WHERE mac = #{log.mac}
+    </select>
+    <select id="selectTimeBySameMacAndSession" resultType="com.lezhi.statistics.pojo.Log">
+        SELECT
+        log_id logId,
+        channel,
+        mac,
+        min(`timestamp`) TIMESTAMP,
+        SESSION
+        FROM
+        api_logs_shfctv_01
+        WHERE
+        TIMESTAMP &lt; #{log.timeStamp} AND `timestamp`  &gt;  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
+        AND mac = #{log.mac}
+        AND channel = #{log.channel} AND  session = #{log.session}
+    </select>
+    <insert id="saveDis" parameterType="com.lezhi.statistics.pojo.HisTrendInfo">
+        INSERT INTO `statistics`.his_trend_hour_${type} (
+        `channel_no`,
+        `begin_time`,
+        `end_time`,
+        `uv`,
+        `pv`,
+        `nv`,
+        `avg_top`,
+        <if test="type == 'district'">
+            `district_id`
+        </if>
+        <if test="type == 'block'">
+            block_id
+        </if>
+        <if test="type == 'residence'">
+            residence_id
+        </if>
+        )
+        VALUES
+        (
+        #{his.channelNo},
+        from_unixtime(#{his.timeBegin}),
+        from_unixtime(#{his.timeEnd}),
+        #{his.uv},
+        #{his.pv},
+        #{his.nv},
+        #{his.totalTop}/#{his.uv},
+        <if test="type == 'district'">
+            #{his.districtId}
+        </if>
+        <if test="type == 'block'">
+            #{his.blockId}
+        </if>
+        <if test="type == 'residence'">
+            #{his.residenceId}
+        </if>
+
+        )
+    </insert>
 </mapper>

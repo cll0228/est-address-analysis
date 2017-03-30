@@ -109,7 +109,7 @@ public class DataPlatformController {
         if (null == startTime) {
             startTime = format3.parse(format3.format(new Date())).getTime() / 1000;
         } else {
-            startTime = DateUtils.truncate(new Date(startTime * 1000), Calendar.DAY_OF_MONTH).getTime()
+            startTime = DateUtils.truncate(new Date(startTime ), Calendar.DAY_OF_MONTH).getTime()
                     / 1000;
         }
         span = 86400L;// 仅支持24小时
@@ -152,7 +152,7 @@ public class DataPlatformController {
         if (null == startTime) {
             startTime = format3.parse(format3.format(new Date())).getTime() / 1000;
         } else {
-            startTime = DateUtils.truncate(new Date(startTime * 1000), Calendar.DAY_OF_MONTH).getTime()
+            startTime = DateUtils.truncate(new Date(startTime), Calendar.DAY_OF_MONTH).getTime()
                     / 1000;
         }
         span = 86400L;// 仅支持24小时

@@ -69,5 +69,7 @@ public interface DataPlatformMapper {
     List<Log> selectTimeBySameMacAndSession(@Param("log")Log log,@Param("startTime") Long startTime);
 
     void saveDis(@Param("his") HisTrendInfo his,@Param("type") String type);
+
+    void saveDis_day(@Param("his") HisTrendInfo his,@Param("type") String type);
 }
 

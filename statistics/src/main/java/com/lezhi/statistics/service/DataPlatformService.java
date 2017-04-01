@@ -1,9 +1,9 @@
 package com.lezhi.statistics.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import com.lezhi.statistics.util.PropertyUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ public class DataPlatformService {
 
     @Autowired
     private DataPlatformMapper dataPlatformMapper;
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public MacVisit vistHis(String channelNo, Long startTime, Long span, Integer districtId, Integer blockId,
             Integer residenceId, Integer pageNo, Integer pageSize) {
@@ -168,5 +169,38 @@ public class DataPlatformService {
         obj.setPageSize(pageSize);
         obj.setRealPageSize(pagedList.size());
         return obj;
+    }
+
+    public void updateRealTimeTrendInfoByMinute() {
+        Date date = new Date();
+        String startTime = PropertyUtil.getStartMinute(date);
+        String endTime = PropertyUtil.getEndMinute(date);
+        // 更新区县实时统计数据
+        dataPlatformMapper.updateRealTimeTrendInfoByMinuteBlock(startTime, endTime);
+        // 更新板块实时统计数据
+        dataPlatformMapper.updateRealTimeTrendInfoByMinuteDistrict(startTime, endTime);
+        // 更新小区实时统计数据
+        dataPlatformMapper.updateRealTimeTrendInfoByMinuteResidence(startTime, endTime);
+        // 一个小时前时间
+        String stime = PropertyUtil.getBeforeHour(date);
+        // 删除一个小时前数据
+        dataPlatformMapper.deleteRealTimeTrendInfoByMinute(stime);
+
+    }
+
+    public void updateRealTimeTrendInfoByHour() {
+        Date date = new Date();
+        String startTime = PropertyUtil.getStartHour(date);
+        String endTime = PropertyUtil.getEndHour(date);
+        // 更新区县实时统计数据
+        dataPlatformMapper.updateRealTimeTrendInfoByHourBlock(startTime, endTime);
+        // 更新板块实时统计数据
+        dataPlatformMapper.updateRealTimeTrendInfoByHourDistrict(startTime, endTime);
+        // 更新小区实时统计数据
+        dataPlatformMapper.updateRealTimeTrendInfoByHourResidence(startTime, endTime);
+        // 一天前时间
+        String stime = PropertyUtil.getLastDay(date);
+        // 删除一天前数据
+        dataPlatformMapper.deleteRealTimeTrendInfoByHour(stime);
     }
 }

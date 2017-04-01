@@ -1,8 +1,11 @@
 package com.lezhi.statistics.schedule;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
+import com.lezhi.statistics.pojo.NewVisitorInfo;
+import com.lezhi.statistics.util.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -61,5 +64,21 @@ public class HisHourSchedule {
             e.printStackTrace();
         }
 
+    }
+
+    @Scheduled(cron = "${visitor.new}")
+    public void newVisitor() throws Exception {
+        Date date = new Date();
+        String startTime = PropertyUtil.getStartMinute(date);
+        // 扫描new visitor
+        List<NewVisitorInfo> newVisitorInfos = dataPlatformMapper.getApiLogsInfo();
+        if(newVisitorInfos.size() == 0){
+            // 获取并写入日志表所有新的独立访客首次访问信息
+            dataPlatformMapper.inertAllNewVistor(startTime);
+        } else {
+            String lastVisitTime = newVisitorInfos.get(newVisitorInfos.size()-1).getFirstVisitTime();
+            String mac = newVisitorInfos.get(newVisitorInfos.size()-1).getMac();
+            dataPlatformMapper.inertNewVistor(lastVisitTime, mac);
+        }
     }
 }

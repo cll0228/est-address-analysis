@@ -50,6 +50,10 @@ public class DataPlatformController {
         if(null == channelNo){
             channelNo = "all";
         }
+        // 走势统计-当前(小时)
+        dataPlatformService.updateRealTimeTrendInfoByMinute();
+        // 走势统计-当前（天）
+        dataPlatformService.updateRealTimeTrendInfoByHour();
         return dataPlatformService.realtime(channelNo, period, districtId, blockId, residenceId);
     }
 
@@ -158,4 +162,5 @@ public class DataPlatformController {
         span = 86400L;// 仅支持24小时
         return dataPlatformService.summary(channelNo, startTime, span, pageNo, pageSize);
     }
+
 }

@@ -32,7 +32,7 @@ public class PropertyUtil {
     public static String getStartHour(Date date) {  
         Calendar calendar = Calendar.getInstance();  
         calendar.setTime(date);  
-        calendar.add(Calendar.DAY_OF_MONTH, 0);  
+        calendar.add(Calendar.DAY_OF_MONTH, 0);
         SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:00:00");
         date = calendar.getTime();  
         return sm.format(date);  
@@ -46,6 +46,15 @@ public class PropertyUtil {
         date = calendar.getTime();  
         return sm.format(date);  
     }
+
+    public static String getBeforeHour(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, -1);
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+        date = calendar.getTime();
+        return sm.format(date);
+    }
     
     public static String getBeforeDay(Date date) {  
     	Calendar calendar = Calendar.getInstance();  
@@ -54,6 +63,15 @@ public class PropertyUtil {
         SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd 23:00:00");
         date = calendar.getTime();  
         return sm.format(date);  
+    }
+
+    public static String getLastDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd HH:00:00");
+        date = calendar.getTime();
+        return sm.format(date);
     }
 
     public static String getStartMinute(Date date) {

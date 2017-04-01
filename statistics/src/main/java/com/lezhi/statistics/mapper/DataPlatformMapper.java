@@ -71,5 +71,26 @@ public interface DataPlatformMapper {
     void saveDis(@Param("his") HisTrendInfo his,@Param("type") String type);
 
     void saveDis_day(@Param("his") HisTrendInfo his,@Param("type") String type);
+    void updateRealTimeTrendInfoByMinuteBlock(@Param("startTime")String startTime, @Param("endTime")String endTime);
+
+    void updateRealTimeTrendInfoByMinuteDistrict(@Param("startTime")String startTime, @Param("endTime")String endTime);
+
+    void updateRealTimeTrendInfoByMinuteResidence(@Param("startTime")String startTime, @Param("endTime")String endTime);
+
+    void deleteRealTimeTrendInfoByMinute(@Param("stime")String stime);
+
+    void updateRealTimeTrendInfoByHourBlock(@Param("startTime")String startTime, @Param("endTime")String endTime);
+
+    void updateRealTimeTrendInfoByHourDistrict(@Param("startTime")String startTime, @Param("endTime")String endTime);
+
+    void updateRealTimeTrendInfoByHourResidence(@Param("startTime")String startTime, @Param("endTime")String endTime);
+
+    void deleteRealTimeTrendInfoByHour(@Param("stime")String stime);
+
+    List<NewVisitorInfo> getApiLogsInfo();
+
+    void inertAllNewVistor(@Param("startTime")String startTime);
+
+    void inertNewVistor(@Param("lastVisitTime")String lastVisitTime, @Param("mac")String mac);
 }
 

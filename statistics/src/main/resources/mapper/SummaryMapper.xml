@@ -224,12 +224,11 @@
 					b.lat,
 					SUM(a.total_top) avgTop
 				FROM
-					statistics.channel_visit_summary a
+					statistics.channel_visit_summary_residence a
 				LEFT JOIN ocn_address.of_residence b ON a.residence_id = b.id
 				WHERE
 					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
 				AND a.end_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
-				AND a.block_id = #{blockId}
 				<if test="null != channelNo and '' != channelNo">
 		           AND a.channel_no = #{channelNo}
 		        </if>

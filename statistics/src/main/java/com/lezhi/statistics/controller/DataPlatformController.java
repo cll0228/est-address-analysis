@@ -50,10 +50,6 @@ public class DataPlatformController {
         if(null == channelNo){
             channelNo = "all";
         }
-        // 走势统计-当前(小时)
-        dataPlatformService.updateRealTimeTrendInfoByMinute();
-        // 走势统计-当前（天）
-        dataPlatformService.updateRealTimeTrendInfoByHour();
         return dataPlatformService.realtime(channelNo, period, districtId, blockId, residenceId);
     }
 
@@ -80,6 +76,14 @@ public class DataPlatformController {
             @RequestParam(value = "residenceId", required = false) Integer residenceId) {
         if (null == span || null == scale) {
             return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
+        }
+        // 走势统计-当前(小时)
+        if (scale == 3600000) {
+            dataPlatformService.updateRealTimeTrendInfoByMinute();
+        }
+        // 走势统计-当前（天）
+        if (scale == 3600000 * 24){
+            dataPlatformService.updateRealTimeTrendInfoByHour();
         }
         return dataPlatformService.trend(channelNo, startTime, contrastiveStartTime, span, scale, districtId,
                 blockId, residenceId);

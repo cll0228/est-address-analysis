@@ -29,6 +29,8 @@ public class HisHourSchedule {
 
     static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 
+    static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+
     // 计算走势统计-历史 按小时
     @Scheduled(cron = "0 0 * * * ?")
     public void method() {
@@ -36,16 +38,16 @@ public class HisHourSchedule {
         Long startTime = null;
         Long endTime = null;
         try {
-            startTime = format.parse(DateUtil.reduce1Hour(format.format(new Date()), -1)).getTime() / 1000;// 秒单位
-            // Long startTime = 1489420800L;
-            System.out.println("当前开始时间startTime= " + format.format(new Date(startTime * 1000)));
+            startTime = format1.parse(DateUtil.reduce1Hour(format1.format(new Date()), -1)).getTime() / 1000;// 秒单位
+//              startTime = 1489420800L;
+            System.out.println("当前开始时间startTime= " + format1.format(new Date(startTime * 1000)));
             // 当前计算结束时间
-            endTime = format.parse(DateUtil.reduce1Second(format.format(new Date()))).getTime() / 1000;
-            // Long endTime = 1489424399L;
+            endTime = format1.parse(DateUtil.reduce1Second(format1.format(new Date()))).getTime() / 1000;
+//              endTime = 1489424399L;
         } catch (Exception e) {
             System.out.println("获取时间失败time = " + new Date());
         }
-        System.out.println("当前统计结束时间endTime=" + format.format(new Date(endTime * 1000)));
+        System.out.println("当前统计结束时间endTime=" + format1.format(new Date(endTime * 1000)));
 
         // 当前时间段内日志
         List<Log> logs = dataPlatformMapper.selectLog(startTime, endTime);
@@ -84,13 +86,13 @@ public class HisHourSchedule {
         Long startTime = null;
         Long endTime = null;
         try {
-            startTime = format.parse(DateUtil.updateDay(format.format(new Date()), -1)).getTime() / 1000;// 秒单位
-            System.out.println("当前开始时间startTime= " + format.format(new Date(startTime * 1000)));
-            // Long startTime = 1489420800L;
+//            startTime = format.parse(DateUtil.updateDay(format.format(new Date()), -1)).getTime() / 1000;// 秒单位
+            System.out.println("当前开始时间startTime= " + format1.format(new Date(startTime * 1000)));
+              startTime = 1489420800L;
             // 当前计算结束时间
-            endTime = format.parse(DateUtil.reduce1Second(format.format(new Date()))).getTime() / 1000;
-            System.out.println("当前统计结束时间endTime=" + format.format(new Date(endTime * 1000)));
-            // Long endTime = 1489507199L;
+//            endTime = format.parse(DateUtil.reduce1Second(format.format(new Date()))).getTime() / 1000;
+            System.out.println("当前统计结束时间endTime=" + format1.format(new Date(endTime * 1000)));
+              endTime = 1489507199L;
         } catch (Exception e) {
             System.out.println("解析日期失败！");
         }

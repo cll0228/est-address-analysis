@@ -78,11 +78,11 @@ public class DataPlatformController {
             return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
         }
         // 走势统计-当前(小时)
-        if (scale == 3600000) {
+        if (span == 3600000) {
             dataPlatformService.updateRealTimeTrendInfoByMinute();
         }
         // 走势统计-当前（天）
-        if (scale == 3600000 * 24){
+        if (span == 3600000 * 24){
             dataPlatformService.updateRealTimeTrendInfoByHour();
         }
         return dataPlatformService.trend(channelNo, startTime, contrastiveStartTime, span, scale, districtId,

@@ -1,10 +1,9 @@
 package com.lezhi.statistics.util;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -37,6 +36,27 @@ public class DateUtil {
 
     public static void main(String[] args) throws Exception {
         his_trend_day();
+
+        int span = 30 * 60000;// 间隔 ms
+        List<Time> times = new ArrayList<>();
+        Long start = null;
+        Long last;// 临界点访问时间
+        Long temp = null;
+        for (int i = 0; i < times.size(); i++) {
+            // 第一次
+            if (null == start) {
+                start = times.get(i).getTime();// 转换ms
+                temp = start + span;
+            } else {
+                if (times.get(i).getTime() > temp) {
+                    last = times.get(i - 1).getTime();
+                    // 打印
+                    System.out.println(new Date(start) + "  " + new Date(last) + "  " + (last - start));
+                    start = null;
+                }
+            }
+
+        }
     }
 
     /**

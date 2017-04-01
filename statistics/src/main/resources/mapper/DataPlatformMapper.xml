@@ -648,7 +648,45 @@
         <if test="type == 'residence'">
             #{his.residenceId}
         </if>
-
+        )
+    </insert>
+    <insert id="saveDis_day" parameterType="com.lezhi.statistics.pojo.HisTrendInfo">
+        INSERT INTO `statistics`.his_trend_day_${type} (
+        `channel_no`,
+        `begin_time`,
+        `end_time`,
+        `uv`,
+        `pv`,
+        `nv`,
+        `avg_top`,
+        <if test="type == 'district'">
+            `district_id`
+        </if>
+        <if test="type == 'block'">
+            block_id
+        </if>
+        <if test="type == 'residence'">
+            residence_id
+        </if>
+        )
+        VALUES
+        (
+        #{his.channelNo},
+        from_unixtime(#{his.timeBegin}),
+        from_unixtime(#{his.timeEnd}),
+        #{his.uv},
+        #{his.pv},
+        #{his.nv},
+        #{his.totalTop}/#{his.uv},
+        <if test="type == 'district'">
+            #{his.districtId}
+        </if>
+        <if test="type == 'block'">
+            #{his.blockId}
+        </if>
+        <if test="type == 'residence'">
+            #{his.residenceId}
+        </if>
         )
     </insert>
 

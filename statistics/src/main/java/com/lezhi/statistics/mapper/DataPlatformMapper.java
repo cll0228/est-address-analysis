@@ -69,6 +69,8 @@ public interface DataPlatformMapper {
     List<Log> selectTimeBySameMacAndSession(@Param("log")Log log,@Param("startTime") Long startTime);
 
     void saveDis(@Param("his") HisTrendInfo his,@Param("type") String type);
+
+    void saveDis_day(@Param("his") HisTrendInfo his,@Param("type") String type);
     void updateRealTimeTrendInfoByMinuteBlock(@Param("startTime")String startTime, @Param("endTime")String endTime);
 
     void updateRealTimeTrendInfoByMinuteDistrict(@Param("startTime")String startTime, @Param("endTime")String endTime);

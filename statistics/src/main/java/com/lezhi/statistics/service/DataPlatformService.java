@@ -91,6 +91,7 @@ public class DataPlatformService {
 
     public Trend trend(String channelNo, Long startTime, Long contrastiveStartTime, Long span, Long scale,
             Integer districtId, Integer blockId, Integer residenceId) {
+        span = span / 1000;
         if (null != residenceId) {
             districtId = null;
             blockId = null;
@@ -114,6 +115,7 @@ public class DataPlatformService {
             contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime, span, scale,
                     districtId, blockId, residenceId);
         } else {
+            startTime = startTime / 1000;
             // 非当前走势
             if (scale == 60000) {
                 return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");

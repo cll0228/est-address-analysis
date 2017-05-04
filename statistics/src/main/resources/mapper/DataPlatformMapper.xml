@@ -3,7 +3,7 @@
 <mapper namespace="com.lezhi.statistics.mapper.DataPlatformMapper">
     <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
         SELECT mac, channel_no channelNo, sum(pv) pv, unix_timestamp(begin_time) firstVisitTime,
-        unix_timestamp(end_time) lastVisitTime, sum(total_top) totalTop FROM
+        unix_timestamp(end_time)*1000 lastVisitTime, sum(total_top) totalTop FROM
         <if test="null != residenceId and '' != residenceId">
             channel_visit_summary_residence WHERE residence_id = #{residenceId}
         </if>
@@ -25,7 +25,7 @@
     </select>
 
     <select id="realtime" resultType="com.lezhi.statistics.pojo.RealTimeSummaryObj">
-        SELECT sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time) refreshTime FROM
+        SELECT sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time)*1000 refreshTime FROM
         <if test="residenceId != null and '' != residenceId">
             real_time_channel${channelNo}_residence WHERE residence_id = #{residenceId} AND period = #{period}
         </if>
@@ -41,8 +41,8 @@
     </select>
 
     <select id="current" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	begin_time timeBegin,
-        end_time timeEnd,
+        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
+        unix_timestamp(end_time)*1000 timeEnd,
         uv,
         pv,
         nv,
@@ -107,8 +107,8 @@
     </select>
 
     <select id="his_current" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	begin_time timeBegin,
-        end_time timeEnd,
+        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
+        unix_timestamp(end_time)*1000 timeEnd,
         uv,
         pv,
         nv,
@@ -173,8 +173,8 @@
     </select>
 
     <select id="contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	begin_time timeBegin,
-        end_time timeEnd,
+        SELECT unix_timestamp(begin_time)*1000 timeBegin,
+        unix_timestamp(end_time)*1000 timeEnd,
         uv,
         pv,
         nv,
@@ -239,8 +239,8 @@
     </select>
 
     <select id="his_contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	begin_time timeBegin,
-        end_time timeEnd,
+        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
+        unix_timestamp(end_time)*1000 timeEnd,
         uv,
         pv,
         nv,

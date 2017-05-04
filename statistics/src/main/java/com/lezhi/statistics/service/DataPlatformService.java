@@ -57,6 +57,7 @@ public class DataPlatformService {
         // 是否最后一页
         int totalPage = listPageUtil.getTotalPage();
         obj.setTotalPageCount(totalPage);
+        obj.setTotalCount(infos.size());
         if (pageNo == totalPage) {
             obj.setIsLastPage(true);
         } else {
@@ -162,6 +163,7 @@ public class DataPlatformService {
         // 是否最后一页
         int totalPage = listPageUtil.getTotalPage();
         obj.setTotalPageCount(totalPage);
+        obj.setTotalCount(summaryObjs.size());
         if (pageNo == totalPage) {
             obj.setIsLastPage(true);
         } else {

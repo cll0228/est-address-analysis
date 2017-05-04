@@ -693,7 +693,7 @@
     <insert id="updateRealTimeTrendInfoByMinuteBlock">
         INSERT INTO statistics.realtime_trend_60m_block
         (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,block_id)
-        SELECT NULL,a.channel,${startTime},${endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.block_id
+        SELECT NULL,a.channel,'${startTime}','${endTime}',count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.block_id
         FROM statistics.api_logs_shfctv a
         INNER JOIN statistics.mac_info b ON a.mac = b.mac
         LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
@@ -704,7 +704,7 @@
     <insert id="updateRealTimeTrendInfoByMinuteDistrict">
         INSERT INTO statistics.realtime_trend_60m_district
         (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,district_id)
-        SELECT NULL,a.channel,${startTime},${endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.district_id
+        SELECT NULL,a.channel,'${startTime}','${endTime}',count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.district_id
         FROM statistics.api_logs_shfctv a
         INNER JOIN statistics.mac_info b ON a.mac = b.mac
         LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
@@ -715,7 +715,7 @@
     <insert id="updateRealTimeTrendInfoByMinuteResidence">
         INSERT INTO statistics.realtime_trend_60m_residence
         (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,residence_id)
-        SELECT NULL,a.channel,${startTime},${endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.residence_id
+        SELECT NULL,a.channel,'${startTime}','${endTime}',count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.residence_id
         FROM statistics.api_logs_shfctv a
         INNER JOIN statistics.mac_info b ON a.mac = b.mac
         LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
@@ -732,7 +732,7 @@
     <insert id="updateRealTimeTrendInfoByHourBlock">
         INSERT INTO statistics.realtime_trend_24h_block
         (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,block_id)
-        SELECT NULL,a.channel,${startTime},${endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.block_id
+        SELECT NULL,a.channel,'${startTime}','${endTime}',count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.block_id
         FROM statistics.api_logs_shfctv a
         INNER JOIN statistics.mac_info b ON a.mac = b.mac
         LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
@@ -743,7 +743,7 @@
     <insert id="updateRealTimeTrendInfoByHourDistrict">
         INSERT INTO statistics.realtime_trend_24h_district
         (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,district_id)
-        SELECT NULL,a.channel,${startTime},${endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.district_id
+        SELECT NULL,a.channel,'${startTime}','${endTime}',count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.district_id
         FROM statistics.api_logs_shfctv a
         INNER JOIN statistics.mac_info b ON a.mac = b.mac
         LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
@@ -754,7 +754,7 @@
     <insert id="updateRealTimeTrendInfoByHourResidence">
         INSERT INTO statistics.realtime_trend_24h_residence
         (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,residence_id)
-        SELECT NULL,a.channel,${startTime},${endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.residence_id
+        SELECT NULL,a.channel,'${startTime}','${endTime}',count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.residence_id
         FROM statistics.api_logs_shfctv a
         INNER JOIN statistics.mac_info b ON a.mac = b.mac
         LEFT JOIN statistics.new_visitor c ON b.mac = c.mac

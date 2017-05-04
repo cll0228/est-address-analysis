@@ -118,6 +118,7 @@ public class MacService {
 		// 是否最后一页
 		int totalPage = listPageUtil.getTotalPage();
 		obj.setTotalPageCount(totalPage);
+		obj.setTotalCount(macInfoList.size());
 		if (pageNo == totalPage) {
 			obj.setIsLastPage(true);
 		} else {

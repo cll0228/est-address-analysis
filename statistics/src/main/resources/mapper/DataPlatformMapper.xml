@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lezhi.statistics.mapper.DataPlatformMapper">
     <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
-        SELECT mac, channel_no channelNo, sum(pv) pv, unix_timestamp(begin_time) firstVisitTime,
+        SELECT mac, channel_no channelNo, sum(pv) pv, unix_timestamp(begin_time)*1000 firstVisitTime,
         unix_timestamp(end_time)*1000 lastVisitTime, sum(total_top) totalTop FROM
         <if test="null != residenceId and '' != residenceId">
             channel_visit_summary_residence WHERE residence_id = #{residenceId}
@@ -19,8 +19,8 @@
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
-        AND a.start_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
+        AND begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY mac
     </select>
 
@@ -773,7 +773,7 @@
     </select>
 
     <insert id="inertAllNewVistor">
-        INSERT INTO statistics.new_vistor
+        INSERT INTO statistics.new_visitor
         (id,channel_no,mac,first_visit_time)
         SELECT NULL,channel,mac,timestamp
         FROM statistics.api_logs_shfctv
@@ -782,7 +782,7 @@
     </insert>
 
     <insert id="inertNewVistor">
-        INSERT INTO statistics.new_vistor
+        INSERT INTO statistics.new_visitor
         (id,channel_no,mac,first_visit_time)
         SELECT NULL,a.channel,a.mac,a.timestamp
         FROM statistics.api_logs_shfctv a

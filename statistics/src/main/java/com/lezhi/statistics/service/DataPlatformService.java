@@ -1,9 +1,11 @@
 package com.lezhi.statistics.service;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import com.lezhi.statistics.util.PropertyUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.lezhi.statistics.mapper.DataPlatformMapper;
 import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.util.ListPageUtil;
+import com.lezhi.statistics.util.PropertyUtil;
 
 /**
  * Created by Cuill on 2017/3/13.
@@ -31,13 +34,9 @@ public class DataPlatformService {
         } else if (null == residenceId && null != blockId) {
             districtId = null;
         }
-        List<MacVisitHistoryInfo> infos = null;
-        try {
-            infos = dataPlatformMapper.selectVistHis(channelNo, startTime, span, districtId, blockId,
+        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, startTime, span,
+                districtId, blockId,
                     residenceId);
-        } catch (Exception e) {
-            return new MacVisit("success", new ArrayList<MacVisit>(), "");
-        }
         if (null == infos || infos.size() == 0) {
             return new MacVisit("success", new ArrayList<MacVisit>(), "");
         }
@@ -77,12 +76,11 @@ public class DataPlatformService {
         } else if (null == residenceId && null != blockId) {
             districtId = null;
         }
-        RealTimeSummaryObj obj = null;
-        try {
-            obj = dataPlatformMapper.realtime(channelNo, period, districtId, blockId, residenceId);
-        } catch (Exception e) {
+        RealTimeSummaryObj obj = dataPlatformMapper.realtime(channelNo, period, districtId, blockId,
+                residenceId);
+        if (null == obj)
             return new RealTimeSummary("success", null, "");
-        }
+
         RealTimeSummary summary = new RealTimeSummary();
         summary.setRealtimeSummary(obj);
         summary.setErrMsg("");

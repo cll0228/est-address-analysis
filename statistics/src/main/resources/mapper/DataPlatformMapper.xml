@@ -4,18 +4,21 @@
     <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
         SELECT mac, channel_no channelNo, sum(pv) pv, unix_timestamp(begin_time)*1000 firstVisitTime,
         unix_timestamp(end_time)*1000 lastVisitTime, sum(total_top) totalTop FROM
-        <if test="null != residenceId and '' != residenceId">
+        <choose>
+
+        <when test="null != residenceId and '' != residenceId">
             channel_visit_summary_residence WHERE residence_id = #{residenceId}
-        </if>
-        <if test="null != blockId and '' != blockId">
+        </when>
+        <when test="null != blockId and '' != blockId">
             channel_visit_summary_block WHERE block_id= #{blockId}
-        </if>
-        <if test="null != districtId and '' != districtId">
+        </when>
+        <when test="null != districtId and '' != districtId">
             channel_visit_summary_district WHERE district_id = #{districtId}
-        </if>
-        <if test="null == districtId and null == blockId and null == residenceId">
+        </when>
+        <otherwise>
             channel_visit_summary_district WHERE 1= 1
-        </if>
+        </otherwise>
+        </choose>
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
@@ -773,7 +776,7 @@
     </select>
 
     <insert id="inertAllNewVistor">
-        INSERT INTO statistics.new_visitor
+        INSERT INTO new_visitor
         (id,channel_no,mac,first_visit_time)
         SELECT NULL,channel,mac,timestamp
         FROM statistics.api_logs_shfctv
@@ -782,7 +785,7 @@
     </insert>
 
     <insert id="inertNewVistor">
-        INSERT INTO statistics.new_visitor
+        INSERT INTO new_visitor
         (id,channel_no,mac,first_visit_time)
         SELECT NULL,a.channel,a.mac,a.timestamp
         FROM statistics.api_logs_shfctv a

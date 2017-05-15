@@ -73,7 +73,7 @@ public class DataPlatformController {
             @RequestParam(value = "span") Long span, @RequestParam(value = "scale") Long scale,
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
-            @RequestParam(value = "residenceId", required = false) Integer residenceId) {
+            @RequestParam(value = "residenceId", required = false) Integer residenceId) throws Exception{
         if (null == span || null == scale) {
             return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
         }

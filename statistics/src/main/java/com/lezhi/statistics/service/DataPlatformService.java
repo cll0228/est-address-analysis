@@ -1,5 +1,6 @@
 package com.lezhi.statistics.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -173,35 +174,56 @@ public class DataPlatformService {
         return obj;
     }
 
-    public void updateRealTimeTrendInfoByMinute() {
+    public void updateRealTimeTrendInfoByMinute() throws Exception{
         Date date = new Date();
-        String startTime = PropertyUtil.getStartMinute(date);
-        String endTime = PropertyUtil.getEndMinute(date);
-        // 更新区县实时统计数据
-        dataPlatformMapper.updateRealTimeTrendInfoByMinuteBlock(startTime, endTime);
-        // 更新板块实时统计数据
-        dataPlatformMapper.updateRealTimeTrendInfoByMinuteDistrict(startTime, endTime);
-        // 更新小区实时统计数据
-        dataPlatformMapper.updateRealTimeTrendInfoByMinuteResidence(startTime, endTime);
         // 一个小时前时间
         String stime = PropertyUtil.getBeforeHour(date);
+        Date startDate = null;
+        String startTime = null;
+        String endTime = null;
+        for(int i = 0;i < 60;i++){
+            if(i == 0){
+                startTime = stime;
+            } else {
+                startTime = PropertyUtil.getNextMinute(startDate);
+            }
+            startDate = df.parse(startTime);
+            endTime = PropertyUtil.getEndMinute(startDate);
+            // 更新区县实时统计数据
+            dataPlatformMapper.updateRealTimeTrendInfoByMinuteBlock(startTime, endTime);
+            // 更新板块实时统计数据
+            dataPlatformMapper.updateRealTimeTrendInfoByMinuteDistrict(startTime, endTime);
+            // 更新小区实时统计数据
+            dataPlatformMapper.updateRealTimeTrendInfoByMinuteResidence(startTime, endTime);
+        }
         // 删除一个小时前数据
         dataPlatformMapper.deleteRealTimeTrendInfoByMinute(stime);
 
     }
 
-    public void updateRealTimeTrendInfoByHour() {
+    public void updateRealTimeTrendInfoByHour() throws Exception{
         Date date = new Date();
-        String startTime = PropertyUtil.getStartHour(date);
-        String endTime = PropertyUtil.getEndHour(date);
-        // 更新区县实时统计数据
-        dataPlatformMapper.updateRealTimeTrendInfoByHourBlock(startTime, endTime);
-        // 更新板块实时统计数据
-        dataPlatformMapper.updateRealTimeTrendInfoByHourDistrict(startTime, endTime);
-        // 更新小区实时统计数据
-        dataPlatformMapper.updateRealTimeTrendInfoByHourResidence(startTime, endTime);
         // 一天前时间
         String stime = PropertyUtil.getLastDay(date);
+        Date startDate = null;
+        String startTime = null;
+        String endTime = null;
+        for(int i = 0;i < 24;i++) {
+            if (i == 0) {
+                startTime = stime;
+            } else {
+                startTime = PropertyUtil.getNextHour(startDate);
+            }
+            startDate = df.parse(startTime);
+            endTime = PropertyUtil.getEndHour(startDate);
+            System.out.println("stime="+startTime + ", "+"etime="+endTime);
+            // 更新区县实时统计数据
+            dataPlatformMapper.updateRealTimeTrendInfoByHourBlock(startTime, endTime);
+            // 更新板块实时统计数据
+            dataPlatformMapper.updateRealTimeTrendInfoByHourDistrict(startTime, endTime);
+            // 更新小区实时统计数据
+            dataPlatformMapper.updateRealTimeTrendInfoByHourResidence(startTime, endTime);
+        }
         // 删除一天前数据
         dataPlatformMapper.deleteRealTimeTrendInfoByHour(stime);
     }

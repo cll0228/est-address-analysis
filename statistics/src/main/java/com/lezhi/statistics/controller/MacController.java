@@ -126,6 +126,7 @@ public class MacController {
 		result.put("pageSize", defaultPageSize);
 		result.put("realPageSize", realPageSize);
 		result.put("totalPageCount", totalPageCount);
+		result.put("totalCount", totalCount);
 		result.put("isFirstPage", isFirstPage);
 		result.put("isLastPage", isLastPage);
 		return result;

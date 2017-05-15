@@ -26,7 +26,7 @@ public class SummaryController {
 	private SummaryService summaryService;
 
 	/**
-	 * 按时间段统计各区县概况，结果以区为单位显示数据
+	 * 5. 按时间段统计各区县概况，结果以区为单位显示数据
 	 * 
 	 * @param channelNo
 	 *            频道号，不做存在检验
@@ -68,7 +68,7 @@ public class SummaryController {
 	}
 	
 	/**
-	 * 按时间段统计各区县概况，结果以区为单位显示数据
+	 * 6. 按时间段统计各板块概况，结果以区为单位显示数据
 	 * 
 	 * @param channelNo
 	 *            频道号，不做存在检验
@@ -111,7 +111,7 @@ public class SummaryController {
 	}
 	
 	/**
-	 * 按时间段统计小区概况，结果以小区为单位显示数据
+	 * 7. 按时间段统计小区概况，结果以小区为单位显示数据
 	 * 
 	 * @param channelNo
 	 *            频道号，不做存在检验
@@ -195,6 +195,7 @@ public class SummaryController {
 		result.put("pageSize", defaultPageSize);
 		result.put("realPageSize", realPageSize);
 		result.put("totalPageCount", totalPageCount);
+		result.put("totalCount", totalCount);
 		result.put("isFirstPage", isFirstPage);
 		result.put("isLastPage", isLastPage);
 		return result;

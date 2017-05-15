@@ -2,30 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lezhi.statistics.mapper.DataPlatformMapper">
     <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
-        SELECT mac, channel_no channelNo, sum(pv) pv, unix_timestamp(begin_time) firstVisitTime,
-        unix_timestamp(end_time) lastVisitTime, sum(total_top) totalTop FROM
-        <if test="null != residenceId and '' != residenceId">
+        SELECT mac, channel_no channelNo, sum(pv) pv, unix_timestamp(begin_time)*1000 firstVisitTime,
+        unix_timestamp(end_time)*1000 lastVisitTime, sum(total_top) totalTop FROM
+        <choose>
+
+        <when test="null != residenceId and '' != residenceId">
             channel_visit_summary_residence WHERE residence_id = #{residenceId}
-        </if>
-        <if test="null != blockId and '' != blockId">
+        </when>
+        <when test="null != blockId and '' != blockId">
             channel_visit_summary_block WHERE block_id= #{blockId}
-        </if>
-        <if test="null != districtId and '' != districtId">
+        </when>
+        <when test="null != districtId and '' != districtId">
             channel_visit_summary_district WHERE district_id = #{districtId}
-        </if>
-        <if test="null == districtId and null == blockId and null == residenceId">
+        </when>
+        <otherwise>
             channel_visit_summary_district WHERE 1= 1
-        </if>
+        </otherwise>
+        </choose>
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
-        AND a.start_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
+        AND begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        AND end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY mac
     </select>
 
     <select id="realtime" resultType="com.lezhi.statistics.pojo.RealTimeSummaryObj">
-        SELECT sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time) refreshTime FROM
+        SELECT sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time)*1000 refreshTime FROM
         <if test="residenceId != null and '' != residenceId">
             real_time_channel${channelNo}_residence WHERE residence_id = #{residenceId} AND period = #{period}
         </if>
@@ -41,8 +44,8 @@
     </select>
 
     <select id="current" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	begin_time timeBegin,
-        end_time timeEnd,
+        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
+        unix_timestamp(end_time)*1000 timeEnd,
         uv,
         pv,
         nv,
@@ -107,8 +110,8 @@
     </select>
 
     <select id="his_current" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	begin_time timeBegin,
-        end_time timeEnd,
+        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
+        unix_timestamp(end_time)*1000 timeEnd,
         uv,
         pv,
         nv,
@@ -173,8 +176,8 @@
     </select>
 
     <select id="contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	begin_time timeBegin,
-        end_time timeEnd,
+        SELECT unix_timestamp(begin_time)*1000 timeBegin,
+        unix_timestamp(end_time)*1000 timeEnd,
         uv,
         pv,
         nv,
@@ -239,8 +242,8 @@
     </select>
 
     <select id="his_contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	begin_time timeBegin,
-        end_time timeEnd,
+        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
+        unix_timestamp(end_time)*1000 timeEnd,
         uv,
         pv,
         nv,

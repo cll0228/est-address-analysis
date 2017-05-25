@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.lezhi.statistics.mock.CommonMockService;
+import com.lezhi.statistics.util.EnvUtil;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,9 @@ public class DataPlatformController {
 
     @Autowired
     private DataPlatformService dataPlatformService;
+
+    @Autowired
+    private CommonMockService commonMockService;
 
     static SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 
@@ -112,6 +117,10 @@ public class DataPlatformController {
             @RequestParam(value = "residenceId", required = false) Integer residenceId,
             @RequestParam(value = "pageNo", required = false) Integer pageNo,
             @RequestParam(value = "pageSize", required = false) Integer pageSize) throws ParseException {
+
+        if (EnvUtil.isMockMode()) {
+            return commonMockService.getMacVisitChannelHistoryInfo();
+        }
         if (null == span) {
             // 提示必填参数不能为空
             return new MacVisit("failed", new ArrayList<MacVisit>(), "必填参数不能为空");

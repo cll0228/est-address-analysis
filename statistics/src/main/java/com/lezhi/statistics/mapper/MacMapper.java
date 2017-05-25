@@ -21,6 +21,17 @@ public interface MacMapper {
 	
 	MacInfoObj getMacInfo(@Param("mac") String mac);
 
+	/**
+	 *
+	 * @param mac
+	 * @param channelNo
+	 * @param startTime 单位秒
+	 * @param endTime 单位秒
+	 * @param districtId
+	 * @param blockId
+	 * @param residenceId
+	 * @return
+	 */
 	List<MacVisitLogInfo> getMacVisitLog(@Param("mac")String mac, @Param("channelNo") String channelNo,
 										 @Param("startTime") Long startTime, @Param("endTime") Long endTime,
 										 @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,

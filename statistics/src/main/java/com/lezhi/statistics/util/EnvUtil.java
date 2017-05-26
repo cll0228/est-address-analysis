@@ -5,7 +5,7 @@ package com.lezhi.statistics.util;
  */
 public class EnvUtil {
 
-    private static final boolean MOCK_MODE = true; // System.getProperty("mock_mode") != null;
+    private static final boolean MOCK_MODE = "true".equals(System.getProperty("mock_mode"));
 
     public static boolean isMockMode() {
         return MOCK_MODE;

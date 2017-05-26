@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lezhi.statistics.mock.CommonMockService;
 import com.lezhi.statistics.pojo.MacVisit;
+import com.lezhi.statistics.util.EnvUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,8 @@ import com.lezhi.statistics.service.MacService;
 public class MacController {
 	@Autowired
 	private MacService macService;
+	@Autowired
+	private CommonMockService commonMockService;
 
 	/**
 	 * 根据行政区获取机顶盒列表
@@ -175,6 +179,9 @@ public class MacController {
 			,@RequestParam(value = "residenceId", required = false) Integer residenceId
 			,@RequestParam(value = "pageNo", required = false) Integer pageNo
 			,@RequestParam(value = "pageSize", required = false) Integer pageSize) {
+		if (EnvUtil.isMockMode()) {
+			return commonMockService.getMacVisitLogInfo();
+		}
 		if (null == span) {
 			// 提示必填参数不能为空
 			return new MacVisit("failed", new ArrayList<MacVisit>(), "必填参数不能为空");

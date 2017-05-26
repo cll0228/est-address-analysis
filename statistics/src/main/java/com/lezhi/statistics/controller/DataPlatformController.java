@@ -159,6 +159,9 @@ public class DataPlatformController {
             @RequestParam(value = "startTime", required = false) Long startTime,
             @RequestParam(value = "span") Long span, @RequestParam(value = "pageNo",required = false) Integer pageNo,
             @RequestParam(value = "pageSize", required = false) Integer pageSize) throws ParseException {
+        if (EnvUtil.isMockMode()) {
+            return commonMockService.getChannelVisitSummaryInfo();
+        }
         if (null == span) {
             return new Summary("failed", new ArrayList<ChannelSummaryObj>(), "参数不正确");
         }

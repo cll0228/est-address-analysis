@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lezhi.statistics.mock.CommonMockService;
 import com.lezhi.statistics.pojo.BlockSummaryInfo;
 import com.lezhi.statistics.pojo.DistrictSummaryInfo;
 import com.lezhi.statistics.pojo.ResidenceSummaryInfo;
 import com.lezhi.statistics.service.SummaryService;
+import com.lezhi.statistics.util.EnvUtil;
 
 /**
  * Created by wangyh on 2017/3/15.
@@ -25,6 +27,8 @@ public class SummaryController {
 	@Autowired
 	private SummaryService summaryService;
 
+	@Autowired
+    private CommonMockService commonMockService;
 	/**
 	 * 5. 按时间段统计各区县概况，结果以区为单位显示数据
 	 * 
@@ -42,18 +46,16 @@ public class SummaryController {
 			@RequestParam(value = "channelNo", required = false) String channelNo,
 			@RequestParam(value = "startTime", required = false) Long startTime,
 			@RequestParam(value = "span", required = true) Long span) {
+		if (EnvUtil.isMockMode()) {
+            return commonMockService.getMacInfoByMac();
+        }
 		Map<String, Object> result = new HashMap<>();
-		Long start = 0L;
-		Long end = 0L;
-		if(startTime!=null&&!"".equals(startTime)) {
-			start = startTime - span;
-			end = startTime;
-		} else {
-			start = System.currentTimeMillis()/1000 - span;
-			end = System.currentTimeMillis()/1000;
+
+		if(startTime==null) {
+			startTime = System.currentTimeMillis() - span;
 		}
 		List<DistrictSummaryInfo> summaryInfoList = summaryService
-				.getDistrictSummaryList(channelNo, start, end);
+				.getDistrictSummaryList(channelNo, startTime, span);
 		if (summaryInfoList == null||summaryInfoList.size()==0) {
 			result.put("status", "failed");
 			result.put("summaries", new ArrayList<DistrictSummaryInfo>());
@@ -83,20 +85,17 @@ public class SummaryController {
 	public Map<String, Object> getMacInfoByDistrict(
 			@RequestParam(value = "channelNo", required = false) String channelNo,
 			@RequestParam(value = "startTime", required = false) Long startTime,
-			@RequestParam(value = "span", required = true) Long span,
+			@RequestParam(value = "span", required = true) long span,
 			@RequestParam(value = "districtId", required = true) Integer districtId) {
+		if (EnvUtil.isMockMode()) {
+            return commonMockService.getMacInfoByDistrict();
+        }
 		Map<String, Object> result = new HashMap<>();
-		Long start = 0L;
-		Long end = 0L;
-		if(startTime!=null&&!"".equals(startTime)) {
-			start = startTime - span;
-			end = startTime;
-		} else {
-			start = System.currentTimeMillis()/1000 - span;
-			end = System.currentTimeMillis()/1000;
+		if(startTime==null) {
+			startTime = System.currentTimeMillis() - span;
 		}
 		List<BlockSummaryInfo> summaryInfoList = summaryService
-				.getBlockSummaryList(channelNo, start, end, districtId);
+				.getBlockSummaryList(channelNo, startTime, span, districtId);
 		if (summaryInfoList == null||summaryInfoList.size()==0) {
 			result.put("status", "failed");
 			result.put("summaries", new ArrayList<DistrictSummaryInfo>());
@@ -126,13 +125,14 @@ public class SummaryController {
 	public Map<String, Object> getMacInfoByBlock(
 			@RequestParam(value = "channelNo", required = false) String channelNo,
 			@RequestParam(value = "startTime", required = false) Long startTime,
-			@RequestParam(value = "span", required = true) Long span,
+			@RequestParam(value = "span", required = true) long span,
 			@RequestParam(value = "blockId", required = true) Integer blockId,
 			@RequestParam(value = "pageNo", required = false) Integer pageNo,
 			@RequestParam(value = "pageSize", required = false) Integer pageSize) {
+		if (EnvUtil.isMockMode()) {
+            return commonMockService.getMacInfoByBlock();
+        }
 		Map<String, Object> result = new HashMap<>();
-		Long start = 0L;
-		Long end = 0L;
 		// 实际返回记录数
 		int realPageSize = -1;
 		// 总页数
@@ -159,19 +159,15 @@ public class SummaryController {
 		if (defaultPageNo == 1) {
 			defaultPageNo = 0;
 		}
-		if(startTime!=null&&!"".equals(startTime)) {
-			start = startTime - span;
-			end = startTime;
-		} else {
-			start = System.currentTimeMillis()/1000 - span;
-			end = System.currentTimeMillis()/1000;
+		if(startTime == null) {
+			startTime = System.currentTimeMillis() - span;
 		}
 		List<ResidenceSummaryInfo> residenceInfoList = summaryService
-				.getResidenceSummaryList(channelNo, start, end, blockId, defaultPageNo, defaultPageSize);
+				.getResidenceSummaryList(channelNo, startTime, span, blockId, defaultPageNo, defaultPageSize);
 		if (residenceInfoList != null && residenceInfoList.size() > 0) {
 			realPageSize = residenceInfoList.size();
 			// 查询总记录数计算总页数等信息
-			totalCount = summaryService.totalCount(channelNo, start, end, blockId);
+			totalCount = summaryService.totalCount(channelNo, startTime, span, blockId);
 			int mod = totalCount % defaultPageSize;
 			totalPageCount = mod > 0 ? (totalCount / defaultPageSize) + 1
 					: (totalCount / defaultPageSize);

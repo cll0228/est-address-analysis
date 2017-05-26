@@ -26,7 +26,6 @@ public class MacService {
 	 * @param type
 	 * @param id
 	 * @param start
-	 * @param end
 	 * @return
 	 */
 	public List<MacInfoObj> getMacInfoList(Integer type, Integer id,
@@ -74,23 +73,22 @@ public class MacService {
 	 * @param mac,channelNo..
 	 * @return
 	 */
-	public MacVisit getMacVisitLog(String mac, String channelNo, Long startTime, Long span, Integer districtId,
+	public MacVisit getMacVisitLog(String mac, String channelNo, Long startTime, long span, Integer districtId,
 									 Integer blockId, Integer residenceId,Integer pageNo, Integer pageSize) {
 		if (null != residenceId) {
 			districtId = null;
 			blockId = null;
-		} else if (null == residenceId && null != blockId) {
+		} else if (null != blockId) {
 			districtId = null;
 		}
-		Long start = 0L;
-		Long end = 0L;
-		if(startTime!=null&&!"".equals(startTime)) {
-			end = startTime + span;
-			start = startTime;
-		} else {
-			end = System.currentTimeMillis()/1000 + span;
-			start = System.currentTimeMillis()/1000;
+
+		if (startTime == null || startTime <= 0) {
+			startTime = System.currentTimeMillis() - span;
 		}
+
+		long start = startTime / 1000;
+		long end = (startTime + span) / 1000;
+
 		if (null == pageNo) {
 			pageNo = 1;
 		}

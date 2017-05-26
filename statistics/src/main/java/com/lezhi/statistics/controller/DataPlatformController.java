@@ -49,6 +49,10 @@ public class DataPlatformController {
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
             @RequestParam(value = "residenceId", required = false) Integer residenceId) {
+        if (EnvUtil.isMockMode()) {
+            return commonMockService.getRealTime();
+        }
+
         if (period != 60 * 1000 && period != 300 * 1000 && period != 900 * 1000) {
             return new RealTimeSummary("failed", new ArrayList<RealTimeSummaryObj>(), "参数不正确");
         }
@@ -79,6 +83,9 @@ public class DataPlatformController {
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
             @RequestParam(value = "residenceId", required = false) Integer residenceId) throws Exception{
+        if (EnvUtil.isMockMode()) {
+            return commonMockService.trend();
+        }
         if (null == span || null == scale) {
             return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
         }
@@ -125,13 +132,10 @@ public class DataPlatformController {
             // 提示必填参数不能为空
             return new MacVisit("failed", new ArrayList<MacVisit>(), "必填参数不能为空");
         }
+        span = 86400000L;// 仅支持24小时
         if (null == startTime) {
-            startTime = format3.parse(format3.format(new Date())).getTime() / 1000;
-        } else {
-            startTime = DateUtils.truncate(new Date(startTime ), Calendar.DAY_OF_MONTH).getTime()
-                    / 1000;
+            startTime = System.currentTimeMillis() - span;
         }
-        span = 86400L;// 仅支持24小时
         if (null == pageNo) {
             pageNo = 1;
         }
@@ -171,13 +175,12 @@ public class DataPlatformController {
         if (null == pageSize || pageSize <= 0) {
             pageSize = 20;
         }
+
+        span = 86400000L;// 仅支持24小时
         if (null == startTime) {
-            startTime = format3.parse(format3.format(new Date())).getTime() / 1000;
-        } else {
-            startTime = DateUtils.truncate(new Date(startTime), Calendar.DAY_OF_MONTH).getTime()
-                    / 1000;
+            startTime = System.currentTimeMillis() - span;
         }
-        span = 86400L;// 仅支持24小时
+
         return dataPlatformService.summary(channelNo, startTime, span, pageNo, pageSize);
     }
 

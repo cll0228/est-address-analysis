@@ -27,7 +27,7 @@ public class DataPlatformService {
     private DataPlatformMapper dataPlatformMapper;
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public MacVisit vistHis(String channelNo, Long startTime, Long span, Integer districtId, Integer blockId,
+    public MacVisit vistHis(String channelNo, long startTime, long span, Integer districtId, Integer blockId,
             Integer residenceId, Integer pageNo, Integer pageSize) {
         if (null != residenceId) {
             districtId = null;
@@ -35,7 +35,7 @@ public class DataPlatformService {
         } else if (null == residenceId && null != blockId) {
             districtId = null;
         }
-        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, startTime, span,
+        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, startTime / 1000, span / 1000,
                 districtId, blockId,
                     residenceId);
         if (null == infos || infos.size() == 0) {
@@ -89,9 +89,8 @@ public class DataPlatformService {
         return summary;
     }
 
-    public Trend trend(String channelNo, Long startTime, Long contrastiveStartTime, Long span, Long scale,
+    public Trend trend(String channelNo, Long startTime, Long contrastiveStartTime, final long span, Long scale,
             Integer districtId, Integer blockId, Integer residenceId) {
-        span = span / 1000;
         if (null != residenceId) {
             districtId = null;
             blockId = null;
@@ -101,31 +100,33 @@ public class DataPlatformService {
         Map<String, Object> map = new HashedMap();
         List<TrendObj> current = null;
         List<TrendObj> contrastive = null;
-        if (null == startTime) {// 当前走势 包括分钟 和 小时 两种刻度
+
+        boolean isRealTime = false;
+
+        if (null == startTime) {
             if (scale == 3600000 * 24) {// 天刻度
                 return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
             }
-            startTime = System.currentTimeMillis() / 1000;
-            current = dataPlatformMapper.current(channelNo, startTime, span, scale, districtId, blockId,
-                    residenceId);
-            // 对比周期走势数据节点
-            if (null == contrastiveStartTime) {
-                contrastiveStartTime = startTime - span;
-            }
-            contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime, span, scale,
-                    districtId, blockId, residenceId);
+            startTime = System.currentTimeMillis() - span;
+            isRealTime = true;
         } else {
-            startTime = startTime / 1000;
-            // 非当前走势
             if (scale == 60000) {
                 return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
             }
-            current = dataPlatformMapper.his_current(channelNo, startTime, span, scale, districtId, blockId,
+        }
+        if (null == contrastiveStartTime) {
+            contrastiveStartTime = startTime - span;
+        }
+
+        if (isRealTime) {// 当前走势 包括分钟 和 小时 两种刻度
+            current = dataPlatformMapper.current(channelNo, startTime / 1000, span / 1000, scale, districtId, blockId,
                     residenceId);
-            if (null == contrastiveStartTime) {
-                contrastiveStartTime = startTime - span;
-            }
-            contrastive = dataPlatformMapper.his_contrastive(channelNo, contrastiveStartTime, span, scale,
+            contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime / 1000, span / 1000, scale,
+                    districtId, blockId, residenceId);
+        } else {
+            current = dataPlatformMapper.his_current(channelNo, startTime / 1000, span / 1000, scale, districtId, blockId,
+                    residenceId);
+            contrastive = dataPlatformMapper.his_contrastive(channelNo, contrastiveStartTime / 1000, span / 1000, scale,
                     districtId, blockId, residenceId);
         }
         // 本周期走势数据节点
@@ -141,8 +142,8 @@ public class DataPlatformService {
         return new Trend("success", map, "");
     }
 
-    public Summary summary(String channelNo, Long startTime, Long span, Integer pageNo, Integer pageSize) {
-        List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, startTime, span);
+    public Summary summary(String channelNo, long startTime, long span, Integer pageNo, Integer pageSize) {
+        List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, startTime / 1000, span / 1000);
         if(null == summaryObjs || summaryObjs.size() == 0){
             return new Summary("Success", new ArrayList<ChannelSummaryObj>(), "");
         }

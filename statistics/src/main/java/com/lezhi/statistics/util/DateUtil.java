@@ -19,9 +19,9 @@ public class DateUtil {
 
     static SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd 00:00:00 ");
 
-    static SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:00 ");
+    public static SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:00 ");
 
-    static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+    public static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
 
     static Calendar calendar = Calendar.getInstance();
 
@@ -127,6 +127,7 @@ public class DateUtil {
         return format1.format(calendar.getTime());
     }
 
+    //减去一分钟
     public static String update1Min(String time, Integer min) throws ParseException {
         Date parse = format1.parse(time);
         calendar.setTime(parse);

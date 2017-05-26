@@ -129,12 +129,10 @@ public class CommonMockService {
     }
 
     public String getRandomString(String[] args){
-        int len = args.length;//获取数组长度给变量len
-        Random random = new Random();//创建随机对象
-        int arrIdx = random.nextInt(len-1);//随机数组索引，nextInt(len-1)表示随机整数[0,(len-1)]之间的值
-        return args[arrIdx];//获取数组值
-        // TODO
-        return null;
+        int len = args.length;
+        Random random = new Random();
+        int arrIdx = random.nextInt(len-1);
+        return args[arrIdx];
     }
 
     public Map<String, Object> getMacInfoByMac() {

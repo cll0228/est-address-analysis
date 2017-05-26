@@ -49,6 +49,10 @@ public class DataPlatformController {
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
             @RequestParam(value = "residenceId", required = false) Integer residenceId) {
+        if (EnvUtil.isMockMode()) {
+            return commonMockService.getRealTime();
+        }
+
         if (period != 60 * 1000 && period != 300 * 1000 && period != 900 * 1000) {
             return new RealTimeSummary("failed", new ArrayList<RealTimeSummaryObj>(), "参数不正确");
         }
@@ -79,6 +83,9 @@ public class DataPlatformController {
             @RequestParam(value = "districtId", required = false) Integer districtId,
             @RequestParam(value = "blockId", required = false) Integer blockId,
             @RequestParam(value = "residenceId", required = false) Integer residenceId) throws Exception{
+        if (EnvUtil.isMockMode()) {
+            return commonMockService.trend();
+        }
         if (null == span || null == scale) {
             return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
         }

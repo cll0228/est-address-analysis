@@ -52,7 +52,7 @@ public class DataPlatformController {
         if (EnvUtil.isMockMode()) {
             return commonMockService.getRealTime();
         }
-
+        // 1分钟，5分钟，15分钟
         if (period != 60 * 1000 && period != 300 * 1000 && period != 900 * 1000) {
             return new RealTimeSummary("failed", new ArrayList<RealTimeSummaryObj>(), "参数不正确");
         }

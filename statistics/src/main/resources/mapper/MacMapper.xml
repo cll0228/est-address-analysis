@@ -109,7 +109,7 @@
 		  ,unix_timestamp(a.create_time) time,b.district_name as districtName,c.block_name as blockName
 		  ,d.residence_name as residenceName
 		FROM
-			statistics.mac_visit_log a
+			mac_visit_log a
 		LEFT JOIN ocn_address.of_district b ON a.district_id = b.district_id
 		LEFT JOIN df_estate_db_v2.sh_block c ON a.block_id = c.block_id
 		LEFT JOIN ocn_address.of_residence d ON a.residence_id = d.id
@@ -131,5 +131,6 @@
         <if test="null != districtId and '' != districtId">
             AND a.district_id = #{districtId}
         </if>
+        order by create_time desc
     </select>
 </mapper>

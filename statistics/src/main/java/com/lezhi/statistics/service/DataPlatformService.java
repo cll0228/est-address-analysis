@@ -74,7 +74,7 @@ public class DataPlatformService {
         if (null != residenceId) {
             districtId = null;
             blockId = null;
-        } else if (null == residenceId && null != blockId) {
+        } else if (null != blockId) {
             districtId = null;
         }
         RealTimeSummaryObj obj = dataPlatformMapper.realtime(channelNo, period, districtId, blockId,

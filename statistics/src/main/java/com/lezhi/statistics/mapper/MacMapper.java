@@ -1,11 +1,10 @@
 package com.lezhi.statistics.mapper;
 
-import java.util.List;
-
+import com.lezhi.statistics.pojo.MacInfoObj;
 import com.lezhi.statistics.pojo.MacVisitLogInfo;
 import org.apache.ibatis.annotations.Param;
 
-import com.lezhi.statistics.pojo.MacInfoObj;
+import java.util.List;
 
 /**
  * Created by wangyh on 2017/3/15.

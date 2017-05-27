@@ -1,19 +1,19 @@
 package com.lezhi.statistics.pojo;
 
 /**
- * Created by Cuill on 2017/3/13.
+ * Created by Colin Yan on 2017/5/27.
  */
-public class StateInfo extends PageResult {
+public class CommonResult {
     private String status;
 
     private String errMsg;
 
-    public StateInfo(String status, String errMsg) {
+    public CommonResult(String status, String errMsg) {
         this.status = status;
         this.errMsg = errMsg;
     }
 
-    public StateInfo() {
+    public CommonResult() {
     }
 
     public String getStatus() {

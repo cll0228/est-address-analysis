@@ -1,12 +1,11 @@
 package com.lezhi.statistics.mock;
 
-import java.text.ParseException;
-import java.util.*;
-
-import org.springframework.stereotype.Service;
-
 import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.util.DateUtil;
+import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * Created by Colin Yan on 2017/5/25.
@@ -19,8 +18,8 @@ public class CommonMockService {
     static String[] macs = {"00196843AC57","00196843AC75","00196843A637","00196843AD2F","00196843AD5B","0019684375FB","00196843ADBD"};
     static String[] channels = {"993","998","999","994","995","996","997"};
 
-    public MacVisit getMacVisitChannelHistoryInfo() {
-        MacVisit obj = new MacVisit();
+    public HistoryListResult<MacVisitHistoryInfo> getMacVisitChannelHistoryInfo() {
+        HistoryListResult<MacVisitHistoryInfo> obj = new HistoryListResult<>();
         List<MacVisitHistoryInfo> pagedList = new ArrayList<>();
         for(int i=0;i<macs.length;i++){
             int pv = new Random().nextInt(1000) + 1;
@@ -48,8 +47,8 @@ public class CommonMockService {
         return obj;
     }
 
-    public Summary getChannelVisitSummaryInfo() {
-        Summary obj = new Summary();
+    public SummaryResult getChannelVisitSummaryInfo() {
+        SummaryResult obj = new SummaryResult();
         List<ChannelSummaryObj> summaryObjs = new ArrayList<>();
         for(int i=0;i<channels.length;i++) {
             int uv = new Random().nextInt(1000) + 1;
@@ -75,8 +74,8 @@ public class CommonMockService {
         return obj;
     }
 
-    public MacVisit getMacVisitLogInfo() {
-        MacVisit obj = new MacVisit();
+    public HistoryListResult<MacVisitLogInfo> getMacVisitLogInfo() {
+        HistoryListResult<MacVisitLogInfo> obj = new HistoryListResult<>();
         List<MacVisitLogInfo> macInfoList = new ArrayList<>();
 		MacVisitLogInfo macVisitLogInfo = new MacVisitLogInfo();
 		macVisitLogInfo.setMac(getRandomString(macs));
@@ -219,8 +218,8 @@ public class CommonMockService {
 
     public Map<String, Object> getMacInfoByMac() {
     	Map<String, Object> result = new HashMap<>();
-    	List<DistrictSummaryInfo> summaryInfoList = new ArrayList<DistrictSummaryInfo>();
-    	DistrictSummaryInfo d1 = new DistrictSummaryInfo();
+    	List<SummaryInfo> summaryInfoList = new ArrayList<SummaryInfo>();
+    	SummaryInfo d1 = new SummaryInfo();
     	d1.setAvgTop(88016L);
     	d1.setDistrictId(310109);
     	d1.setDistrictName("虹口区");
@@ -230,7 +229,7 @@ public class CommonMockService {
     	d1.setPv((int)(Math.random()*90+10));
     	d1.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d1);
-    	DistrictSummaryInfo d2 = new DistrictSummaryInfo();
+    	SummaryInfo d2 = new SummaryInfo();
     	d2.setAvgTop(79876L);
     	d2.setDistrictId(310115);
     	d2.setDistrictName("浦东新区");
@@ -240,7 +239,7 @@ public class CommonMockService {
     	d2.setPv((int)(Math.random()*90+10));
     	d2.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d2);
-    	DistrictSummaryInfo d3 = new DistrictSummaryInfo();
+    	SummaryInfo d3 = new SummaryInfo();
     	d3.setAvgTop(87321L);
     	d3.setDistrictId(310110);
     	d3.setDistrictName("杨浦区");
@@ -250,7 +249,7 @@ public class CommonMockService {
     	d3.setPv((int)(Math.random()*90+10));
     	d3.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d3);
-    	DistrictSummaryInfo d4 = new DistrictSummaryInfo();
+    	SummaryInfo d4 = new SummaryInfo();
     	d4.setAvgTop(96231L);
     	d4.setDistrictId(310105);
     	d4.setDistrictName("长宁区");
@@ -260,7 +259,7 @@ public class CommonMockService {
     	d4.setPv((int)(Math.random()*90+10));
     	d4.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d4);
-    	DistrictSummaryInfo d5 = new DistrictSummaryInfo();
+    	SummaryInfo d5 = new SummaryInfo();
     	d5.setAvgTop(69876L);
     	d5.setDistrictId(310107);
     	d5.setDistrictName("普陀区");
@@ -279,8 +278,8 @@ public class CommonMockService {
 
     public Map<String, Object> getMacInfoByDistrict() {
     	Map<String, Object> result = new HashMap<>();
-    	List<BlockSummaryInfo> summaryInfoList = new ArrayList<BlockSummaryInfo>();
-    	BlockSummaryInfo d1 = new BlockSummaryInfo();
+    	List<SummaryInfo> summaryInfoList = new ArrayList<SummaryInfo>();
+    	SummaryInfo d1 = new SummaryInfo();
     	d1.setAvgTop(86769L);
     	d1.setBlockId(96);
     	d1.setBlockName("鞍山");
@@ -290,7 +289,7 @@ public class CommonMockService {
     	d1.setPv((int)(Math.random()*90+10));
     	d1.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d1);
-    	BlockSummaryInfo d2 = new BlockSummaryInfo();
+    	SummaryInfo d2 = new SummaryInfo();
     	d2.setAvgTop(89572L);
     	d2.setBlockId(97);
     	d2.setBlockName("东外滩");
@@ -300,7 +299,7 @@ public class CommonMockService {
     	d2.setPv((int)(Math.random()*90+10));
     	d2.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d2);
-    	BlockSummaryInfo d3 = new BlockSummaryInfo();
+    	SummaryInfo d3 = new SummaryInfo();
     	d3.setAvgTop(80932L);
     	d3.setBlockId(98);
     	d3.setBlockName("黄兴公园");
@@ -310,7 +309,7 @@ public class CommonMockService {
     	d3.setPv((int)(Math.random()*90+10));
     	d3.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d3);
-    	BlockSummaryInfo d4 = new BlockSummaryInfo();
+    	SummaryInfo d4 = new SummaryInfo();
     	d4.setAvgTop(81221L);
     	d4.setBlockId(99);
     	d4.setBlockName("控江路");
@@ -320,7 +319,7 @@ public class CommonMockService {
     	d4.setPv((int)(Math.random()*90+10));
     	d4.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d4);
-    	BlockSummaryInfo d5 = new BlockSummaryInfo();
+    	SummaryInfo d5 = new SummaryInfo();
     	d5.setAvgTop(90769L);
     	d5.setBlockId(100);
     	d5.setBlockName("五角场");
@@ -330,7 +329,7 @@ public class CommonMockService {
     	d5.setPv((int)(Math.random()*90+10));
     	d5.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d5);
-    	BlockSummaryInfo d6 = new BlockSummaryInfo();
+    	SummaryInfo d6 = new SummaryInfo();
     	d6.setAvgTop(89190L);
     	d6.setBlockId(101);
     	d6.setBlockName("新江湾城");
@@ -340,7 +339,7 @@ public class CommonMockService {
     	d6.setPv((int)(Math.random()*90+10));
     	d6.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d6);
-    	BlockSummaryInfo d7 = new BlockSummaryInfo();
+    	SummaryInfo d7 = new SummaryInfo();
     	d7.setAvgTop(85769L);
     	d7.setBlockId(102);
     	d7.setBlockName("周家嘴路");
@@ -350,7 +349,7 @@ public class CommonMockService {
     	d7.setPv((int)(Math.random()*90+10));
     	d7.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d7);
-    	BlockSummaryInfo d8 = new BlockSummaryInfo();
+    	SummaryInfo d8 = new SummaryInfo();
     	d8.setAvgTop(77676L);
     	d8.setBlockId(103);
     	d8.setBlockName("中原");
@@ -369,8 +368,8 @@ public class CommonMockService {
 
     public Map<String, Object> getMacInfoByBlock() {
     	Map<String, Object> result = new HashMap<>();
-    	List<ResidenceSummaryInfo> summaryInfoList = new ArrayList<ResidenceSummaryInfo>();
-    	ResidenceSummaryInfo d1 = new ResidenceSummaryInfo();
+    	List<SummaryInfo> summaryInfoList = new ArrayList<SummaryInfo>();
+    	SummaryInfo d1 = new SummaryInfo();
     	d1.setAvgTop(83221L);
     	d1.setResidenceId(3573);
     	d1.setResidenceName("大学路127号");
@@ -380,7 +379,7 @@ public class CommonMockService {
     	d1.setPv((int)(Math.random()*90+10));
     	d1.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d1);
-    	ResidenceSummaryInfo d2 = new ResidenceSummaryInfo();
+    	SummaryInfo d2 = new SummaryInfo();
     	d2.setAvgTop(84321L);
     	d2.setResidenceId(3574);
     	d2.setResidenceName("大学路163号");
@@ -390,7 +389,7 @@ public class CommonMockService {
     	d2.setPv((int)(Math.random()*90+10));
     	d2.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d2);
-    	ResidenceSummaryInfo d3 = new ResidenceSummaryInfo();
+    	SummaryInfo d3 = new SummaryInfo();
     	d3.setAvgTop(82239L);
     	d3.setResidenceId(3575);
     	d3.setResidenceName("大学路172号");
@@ -400,7 +399,7 @@ public class CommonMockService {
     	d3.setPv((int)(Math.random()*90+10));
     	d3.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d3);
-    	ResidenceSummaryInfo d4 = new ResidenceSummaryInfo();
+    	SummaryInfo d4 = new SummaryInfo();
     	d4.setAvgTop(82998L);
     	d4.setResidenceId(3576);
     	d4.setResidenceName("大学路199号");
@@ -410,7 +409,7 @@ public class CommonMockService {
     	d4.setPv((int)(Math.random()*90+10));
     	d4.setUv((int)(Math.random()*90+10));
     	summaryInfoList.add(d4);
-    	ResidenceSummaryInfo d5 = new ResidenceSummaryInfo();
+    	SummaryInfo d5 = new SummaryInfo();
     	d5.setAvgTop(83307L);
     	d5.setResidenceId(3577);
     	d5.setResidenceName("大学路217号");
@@ -434,8 +433,8 @@ public class CommonMockService {
         return result;
     }
 
-    public RealTimeSummary getRealTime() {
-        RealTimeSummary summary = new RealTimeSummary();
+    public RealTimeSummaryResult getRealTime() {
+        RealTimeSummaryResult summary = new RealTimeSummaryResult();
         RealTimeSummaryObj obj = new RealTimeSummaryObj();
         obj.setRefreshTime(new Date().getTime());
         obj.setUv(new Random().nextInt(30));
@@ -462,8 +461,8 @@ public class CommonMockService {
         return summary;
     }
 
-    public Trend trend() {
-        Trend trend = new Trend();
+    public TrendResult trend() {
+        TrendResult trendResult = new TrendResult();
         Map<String, List<TrendObj>> map = new HashMap<>();
         List<TrendObj> cur = new ArrayList<>();
         List<TrendObj> hiscusr = new ArrayList<>();
@@ -505,8 +504,8 @@ public class CommonMockService {
             hiscusr.add(t);
         }
         map.put("contrastive", hiscusr);
-        trend.setStatus("success");
-        trend.setTrend(map);
-        return trend;
+        trendResult.setStatus("success");
+        trendResult.setTrend(map);
+        return trendResult;
     }
 }

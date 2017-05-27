@@ -1,17 +1,14 @@
 package com.lezhi.statistics.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.lezhi.statistics.pojo.MacVisit;
-import com.lezhi.statistics.pojo.MacVisitHistoryInfo;
+import com.lezhi.statistics.mapper.MacMapper;
+import com.lezhi.statistics.pojo.HistoryListResult;
+import com.lezhi.statistics.pojo.MacInfoObj;
 import com.lezhi.statistics.pojo.MacVisitLogInfo;
 import com.lezhi.statistics.util.ListPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lezhi.statistics.mapper.MacMapper;
-import com.lezhi.statistics.pojo.MacInfoObj;
+import java.util.List;
 
 /**
  * Created by wangyh on 2017/3/13.
@@ -73,8 +70,8 @@ public class MacService {
 	 * @param mac,channelNo..
 	 * @return
 	 */
-	public MacVisit getMacVisitLog(String mac, String channelNo, Long startTime, long span, Integer districtId,
-									 Integer blockId, Integer residenceId,Integer pageNo, Integer pageSize) {
+	public HistoryListResult<MacVisitLogInfo> getMacVisitLog(String mac, String channelNo, Long startTime, long span, Integer districtId,
+															 Integer blockId, Integer residenceId, Integer pageNo, Integer pageSize) {
 		if (null != residenceId) {
 			districtId = null;
 			blockId = null;
@@ -97,10 +94,10 @@ public class MacService {
 		}
 		List<MacVisitLogInfo> macInfoList = macMapper.getMacVisitLog(mac,channelNo,start,end,districtId,blockId,residenceId);
 		if (null == macInfoList || macInfoList.size() == 0) {
-			return new MacVisit("success", new ArrayList<MacVisit>(), "");
+			return new HistoryListResult("success", null, "");
 		}
 		// 分页
-		MacVisit obj = new MacVisit();
+		HistoryListResult<MacVisitLogInfo> obj = new HistoryListResult<MacVisitLogInfo>();
 		ListPageUtil<MacVisitLogInfo> listPageUtil = new ListPageUtil<>(macInfoList, pageNo, pageSize);
 		List<MacVisitLogInfo> pagedList = listPageUtil.getPagedList();
 		obj.setHistories(pagedList);

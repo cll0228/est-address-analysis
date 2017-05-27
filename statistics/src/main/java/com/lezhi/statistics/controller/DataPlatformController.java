@@ -1,22 +1,18 @@
 package com.lezhi.statistics.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
 import com.lezhi.statistics.mock.CommonMockService;
+import com.lezhi.statistics.pojo.*;
+import com.lezhi.statistics.service.DataPlatformService;
 import com.lezhi.statistics.util.EnvUtil;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lezhi.statistics.pojo.*;
-import com.lezhi.statistics.service.DataPlatformService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  * Created by Cuill on 2017/3/13. 数据平台
@@ -44,17 +40,17 @@ public class DataPlatformController {
      */
     @RequestMapping(value = "realtime/summary")
     @ResponseBody
-    public RealTimeSummary realtime(@RequestParam(value = "channelNo",required = false) String channelNo,
-            @RequestParam(value = "period") Long period,
-            @RequestParam(value = "districtId", required = false) Integer districtId,
-            @RequestParam(value = "blockId", required = false) Integer blockId,
-            @RequestParam(value = "residenceId", required = false) Integer residenceId) {
+    public RealTimeSummaryResult realtime(@RequestParam(value = "channelNo",required = false) String channelNo,
+                                          @RequestParam(value = "period") Long period,
+                                          @RequestParam(value = "districtId", required = false) Integer districtId,
+                                          @RequestParam(value = "blockId", required = false) Integer blockId,
+                                          @RequestParam(value = "residenceId", required = false) Integer residenceId) {
         if (EnvUtil.isMockMode()) {
             return commonMockService.getRealTime();
         }
         // 1分钟，5分钟，15分钟
         if (period != 60 * 1000 && period != 300 * 1000 && period != 900 * 1000) {
-            return new RealTimeSummary("failed", new ArrayList<RealTimeSummaryObj>(), "参数不正确");
+            return new RealTimeSummaryResult("failed", new RealTimeSummaryObj(), "参数不正确");
         }
         if(null == channelNo){
             channelNo = "all";
@@ -76,18 +72,18 @@ public class DataPlatformController {
      */
     @RequestMapping(value = "trend")
     @ResponseBody
-    public Trend trend(@RequestParam(value = "channelNo", required = false) String channelNo,
-            @RequestParam(value = "startTime", required = false) Long startTime,
-            @RequestParam(value = "contrastiveStartTime", required = false) Long contrastiveStartTime,
-            @RequestParam(value = "span") Long span, @RequestParam(value = "scale") Long scale,
-            @RequestParam(value = "districtId", required = false) Integer districtId,
-            @RequestParam(value = "blockId", required = false) Integer blockId,
-            @RequestParam(value = "residenceId", required = false) Integer residenceId) throws Exception{
+    public TrendResult trend(@RequestParam(value = "channelNo", required = false) String channelNo,
+                             @RequestParam(value = "startTime", required = false) Long startTime,
+                             @RequestParam(value = "contrastiveStartTime", required = false) Long contrastiveStartTime,
+                             @RequestParam(value = "span") Long span, @RequestParam(value = "scale") Long scale,
+                             @RequestParam(value = "districtId", required = false) Integer districtId,
+                             @RequestParam(value = "blockId", required = false) Integer blockId,
+                             @RequestParam(value = "residenceId", required = false) Integer residenceId) throws Exception{
         if (EnvUtil.isMockMode()) {
             return commonMockService.trend();
         }
         if (null == span || null == scale) {
-            return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
+            return new TrendResult("failed", null, "参数不正确");
         }
         if (startTime == null) {
             // 走势统计-当前(小时)
@@ -116,21 +112,21 @@ public class DataPlatformController {
      */
     @RequestMapping(value = "mac/visit/history")
     @ResponseBody
-    private MacVisit vistHis(@RequestParam(value = "channelNo", required = false) String channelNo,
-            @RequestParam(value = "startTime", required = false) Long startTime,
-            @RequestParam(value = "span") Long span,
-            @RequestParam(value = "districtId", required = false) Integer districtId,
-            @RequestParam(value = "blockId", required = false) Integer blockId,
-            @RequestParam(value = "residenceId", required = false) Integer residenceId,
-            @RequestParam(value = "pageNo", required = false) Integer pageNo,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize) throws ParseException {
+    private HistoryListResult<?> vistHis(@RequestParam(value = "channelNo", required = false) String channelNo,
+                                         @RequestParam(value = "startTime", required = false) Long startTime,
+                                         @RequestParam(value = "span") Long span,
+                                         @RequestParam(value = "districtId", required = false) Integer districtId,
+                                         @RequestParam(value = "blockId", required = false) Integer blockId,
+                                         @RequestParam(value = "residenceId", required = false) Integer residenceId,
+                                         @RequestParam(value = "pageNo", required = false) Integer pageNo,
+                                         @RequestParam(value = "pageSize", required = false) Integer pageSize) throws ParseException {
 
         if (EnvUtil.isMockMode()) {
             return commonMockService.getMacVisitChannelHistoryInfo();
         }
         if (null == span) {
             // 提示必填参数不能为空
-            return new MacVisit("failed", new ArrayList<MacVisit>(), "必填参数不能为空");
+            return new HistoryListResult<MacVisitLogInfo>("failed", null, "必填参数不能为空");
         }
         span = 86400000L;// 仅支持24小时
         if (null == startTime) {
@@ -159,15 +155,15 @@ public class DataPlatformController {
      */
     @RequestMapping(value = "channel/summary")
     @ResponseBody
-    public Summary summary(@RequestParam(value = "channelNo", required = false) String channelNo,
-            @RequestParam(value = "startTime", required = false) Long startTime,
-            @RequestParam(value = "span") Long span, @RequestParam(value = "pageNo",required = false) Integer pageNo,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize) throws ParseException {
+    public SummaryResult summary(@RequestParam(value = "channelNo", required = false) String channelNo,
+                                 @RequestParam(value = "startTime", required = false) Long startTime,
+                                 @RequestParam(value = "span") Long span, @RequestParam(value = "pageNo",required = false) Integer pageNo,
+                                 @RequestParam(value = "pageSize", required = false) Integer pageSize) throws ParseException {
         if (EnvUtil.isMockMode()) {
             return commonMockService.getChannelVisitSummaryInfo();
         }
         if (null == span) {
-            return new Summary("failed", new ArrayList<ChannelSummaryObj>(), "参数不正确");
+            return new SummaryResult("failed", new ArrayList<ChannelSummaryObj>(), "参数不正确");
         }
         if (null == pageNo || pageNo <= 0) {
             pageNo = 1;

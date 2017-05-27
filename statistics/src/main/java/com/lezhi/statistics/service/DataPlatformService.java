@@ -1,20 +1,14 @@
 package com.lezhi.statistics.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.lezhi.statistics.mapper.DataPlatformMapper;
 import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.util.ListPageUtil;
 import com.lezhi.statistics.util.PropertyUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Cuill on 2017/3/13.
@@ -27,8 +21,8 @@ public class DataPlatformService {
     private DataPlatformMapper dataPlatformMapper;
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public MacVisit vistHis(String channelNo, long startTime, long span, Integer districtId, Integer blockId,
-            Integer residenceId, Integer pageNo, Integer pageSize) {
+    public HistoryListResult<MacVisitHistoryInfo> vistHis(String channelNo, long startTime, long span, Integer districtId, Integer blockId,
+                                                          Integer residenceId, Integer pageNo, Integer pageSize) {
         if (null != residenceId) {
             districtId = null;
             blockId = null;
@@ -39,10 +33,10 @@ public class DataPlatformService {
                 districtId, blockId,
                     residenceId);
         if (null == infos || infos.size() == 0) {
-            return new MacVisit("success", new ArrayList<MacVisit>(), "");
+            return new HistoryListResult("success", null, "");
         }
         // 分页
-        MacVisit obj = new MacVisit();
+        HistoryListResult<MacVisitHistoryInfo> obj = new HistoryListResult<MacVisitHistoryInfo>();
         ListPageUtil<MacVisitHistoryInfo> listPageUtil = new ListPageUtil<>(infos, pageNo, pageSize);
         List<MacVisitHistoryInfo> pagedList = listPageUtil.getPagedList();
         obj.setHistories(pagedList);
@@ -69,8 +63,8 @@ public class DataPlatformService {
         return obj;
     }
 
-    public RealTimeSummary realtime(String channelNo, Long period, Integer districtId, Integer blockId,
-            Integer residenceId) {
+    public RealTimeSummaryResult realtime(String channelNo, Long period, Integer districtId, Integer blockId,
+                                          Integer residenceId) {
         if (null != residenceId) {
             districtId = null;
             blockId = null;
@@ -80,24 +74,24 @@ public class DataPlatformService {
         RealTimeSummaryObj obj = dataPlatformMapper.realtime(channelNo, period, districtId, blockId,
                 residenceId);
         if (null == obj)
-            return new RealTimeSummary("success", null, "");
+            return new RealTimeSummaryResult("success", null, "");
 
-        RealTimeSummary summary = new RealTimeSummary();
+        RealTimeSummaryResult summary = new RealTimeSummaryResult();
         summary.setRealtimeSummary(obj);
         summary.setErrMsg("");
         summary.setStatus("success");
         return summary;
     }
 
-    public Trend trend(String channelNo, Long startTime, Long contrastiveStartTime, final long span, Long scale,
-            Integer districtId, Integer blockId, Integer residenceId) {
+    public TrendResult trend(String channelNo, Long startTime, Long contrastiveStartTime, final long span, Long scale,
+                             Integer districtId, Integer blockId, Integer residenceId) {
         if (null != residenceId) {
             districtId = null;
             blockId = null;
         } else if (null == residenceId && null != blockId) {
             districtId = null;
         }
-        Map<String, Object> map = new HashedMap();
+        Map<String, List<TrendObj>> map = new HashMap<>();
         List<TrendObj> current = null;
         List<TrendObj> contrastive = null;
 
@@ -105,13 +99,13 @@ public class DataPlatformService {
 
         if (null == startTime) {
             if (scale == 3600000 * 24) {// 天刻度
-                return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
+                return new TrendResult("failed", null, "参数不正确");
             }
             startTime = System.currentTimeMillis() - span;
             isRealTime = true;
         } else {
             if (scale == 60000) {
-                return new Trend("failed", new ArrayList<TrendObj>(), "参数不正确");
+                return new TrendResult("failed", null, "参数不正确");
             }
         }
         if (null == contrastiveStartTime) {
@@ -133,22 +127,22 @@ public class DataPlatformService {
         if (null == current) {
             map.put("current", new ArrayList<>());
         } else
-            map.put("current", current.toArray());
+            map.put("current", current);
 
         if (null == contrastive) {
             map.put("contrastive", new ArrayList<>());
         } else
-            map.put("contrastive", contrastive.toArray());
-        return new Trend("success", map, "");
+            map.put("contrastive", contrastive);
+        return new TrendResult("success", map, "");
     }
 
-    public Summary summary(String channelNo, long startTime, long span, Integer pageNo, Integer pageSize) {
+    public SummaryResult summary(String channelNo, long startTime, long span, Integer pageNo, Integer pageSize) {
         List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, startTime / 1000, span / 1000);
         if(null == summaryObjs || summaryObjs.size() == 0){
-            return new Summary("Success", new ArrayList<ChannelSummaryObj>(), "");
+            return new SummaryResult("Success", new ArrayList<ChannelSummaryObj>(), "");
         }
         // 分页
-        Summary obj = new Summary();
+        SummaryResult obj = new SummaryResult();
         ListPageUtil<ChannelSummaryObj> listPageUtil = new ListPageUtil<>(summaryObjs, pageNo, pageSize);
         List<ChannelSummaryObj> pagedList = listPageUtil.getPagedList();
         obj.setChannelSummaries(pagedList);

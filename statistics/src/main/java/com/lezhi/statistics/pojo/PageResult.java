@@ -3,7 +3,8 @@ package com.lezhi.statistics.pojo;
 /**
  * Created by Cuill on 2017/3/13.
  */
-public class PageResult {
+public class PageResult extends CommonResult {
+
     private Integer pageNo; // 分页参数，当前页码
 
     private Integer pageSize; // 分页参数，页面分页大小

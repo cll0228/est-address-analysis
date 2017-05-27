@@ -7,16 +7,16 @@
         <choose>
 
         <when test="null != residenceId and '' != residenceId">
-            channel_visit_summary_residence WHERE residence_id = #{residenceId}
+            channel_visit_summary WHERE residence_id = #{residenceId}
         </when>
         <when test="null != blockId and '' != blockId">
-            channel_visit_summary_block WHERE block_id= #{blockId}
+            channel_visit_summary WHERE block_id= #{blockId}
         </when>
         <when test="null != districtId and '' != districtId">
-            channel_visit_summary_district WHERE district_id = #{districtId}
+            channel_visit_summary WHERE district_id = #{districtId}
         </when>
         <otherwise>
-            channel_visit_summary_district WHERE 1= 1
+            channel_visit_summary WHERE 1= 1
         </otherwise>
         </choose>
         <if test="null != channelNo and '' != channelNo">
@@ -320,7 +320,7 @@
         SUM(a.pv) pv,
         COUNT(DISTINCT a.mac) uv
         FROM
-        statistics.channel_visit_summary_district a
+        statistics.channel_visit_summary a
         WHERE 1=1
         AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
         AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
@@ -332,7 +332,7 @@
         COUNT(mac) nv,
         channel_no
         FROM
-        statistics.channel_visit_summary_district a
+        statistics.channel_visit_summary a
         WHERE
         a.mac NOT IN (
         SELECT

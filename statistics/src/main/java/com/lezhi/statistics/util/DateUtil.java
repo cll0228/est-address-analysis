@@ -1,14 +1,13 @@
 package com.lezhi.statistics.util;
 
+import com.lezhi.statistics.mapper.DataPlatformMapper;
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.lezhi.statistics.mapper.DataPlatformMapper;
 
 /**
  * Created by Cuill on 2017/3/27.

@@ -1,18 +1,17 @@
 package com.lezhi.statistics.service;
 
+import com.lezhi.statistics.mapper.DataPlatformMapper;
+import com.lezhi.statistics.pojo.HisTrendInfo;
+import com.lezhi.statistics.pojo.Log;
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.lezhi.statistics.mapper.DataPlatformMapper;
-import com.lezhi.statistics.pojo.HisTrendInfo;
-import com.lezhi.statistics.pojo.Log;
 
 /**
  * Created by Cuill on 2017/3/28.

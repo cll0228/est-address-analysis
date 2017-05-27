@@ -3,9 +3,13 @@ package com.lezhi.statistics.pojo;
 /**
  * Created by wangyh on 2017/3/15.
  */
-public class DistrictSummaryInfo {
+public class SummaryInfo {
 	private Integer districtId;// 区县ID
 	private String districtName;// 区县名称
+	private Integer blockId;
+	private String blockName;
+	private Integer residenceId;
+	private String residenceName;
 	private Double lat;// 坐标latitude
 	private Double lon;// 坐标longitude
 	private Integer uv;// 时间段内频道独立访客数（unique visitor）
@@ -60,13 +64,54 @@ public class DistrictSummaryInfo {
 	public void setAvgTop(Long avgTop) {
 		this.avgTop = avgTop;
 	}
-	@Override
-	public String toString() {
-		return "DistrictSummaryInfo [districtId=" + districtId
-				+ ", districtName=" + districtName + ", lat=" + lat + ", lon="
-				+ lon + ", uv=" + uv + ", pv=" + pv + ", nv=" + nv
-				+ ", avgTop=" + avgTop + "]";
+
+	public Integer getBlockId() {
+		return blockId;
 	}
 
-	
+	public void setBlockId(Integer blockId) {
+		this.blockId = blockId;
+	}
+
+	public String getBlockName() {
+		return blockName;
+	}
+
+	public void setBlockName(String blockName) {
+		this.blockName = blockName;
+	}
+
+	public Integer getResidenceId() {
+		return residenceId;
+	}
+
+	public void setResidenceId(Integer residenceId) {
+		this.residenceId = residenceId;
+	}
+
+	public String getResidenceName() {
+		return residenceName;
+	}
+
+	public void setResidenceName(String residenceName) {
+		this.residenceName = residenceName;
+	}
+
+	@Override
+	public String toString() {
+		return "SummaryInfo{" +
+				"districtId=" + districtId +
+				", districtName='" + districtName + '\'' +
+				", blockId=" + blockId +
+				", blockName='" + blockName + '\'' +
+				", residenceId='" + residenceId + '\'' +
+				", residenceName='" + residenceName + '\'' +
+				", lat=" + lat +
+				", lon=" + lon +
+				", uv=" + uv +
+				", pv=" + pv +
+				", nv=" + nv +
+				", avgTop=" + avgTop +
+				'}';
+	}
 }

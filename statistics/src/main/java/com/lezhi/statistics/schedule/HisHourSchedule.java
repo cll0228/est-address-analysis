@@ -1,21 +1,19 @@
 package com.lezhi.statistics.schedule;
 
-import java.text.ParseException;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
+import com.lezhi.statistics.mapper.DataPlatformMapper;
+import com.lezhi.statistics.pojo.Log;
 import com.lezhi.statistics.pojo.NewVisitorInfo;
+import com.lezhi.statistics.service.HisTrendTask;
+import com.lezhi.statistics.util.DateUtil;
 import com.lezhi.statistics.util.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.lezhi.statistics.mapper.DataPlatformMapper;
-import com.lezhi.statistics.pojo.Log;
-import com.lezhi.statistics.service.HisTrendTask;
-import com.lezhi.statistics.util.DateUtil;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Cuill on 2017/3/30.

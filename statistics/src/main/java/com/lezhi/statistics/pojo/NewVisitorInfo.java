@@ -1,8 +1,5 @@
 package com.lezhi.statistics.pojo;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by chendl on 2017/3/31.
  */

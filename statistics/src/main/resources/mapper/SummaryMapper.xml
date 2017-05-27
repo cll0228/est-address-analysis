@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lezhi.statistics.mapper.SummaryMapper">
-	<resultMap id="BaseResultMap" type="com.lezhi.statistics.pojo.DistrictSummaryInfo">
+	<resultMap id="BaseResultMap" type="com.lezhi.statistics.pojo.SummaryInfo">
         <id column="district_id" property="districtId" jdbcType="INTEGER"/>
         <result column="district_name" property="districtName" jdbcType="VARCHAR"/>
         <result column="lon" property="lon" jdbcType="DOUBLE"/>
@@ -11,7 +11,7 @@
         <result column="nv" property="nv" jdbcType="INTEGER"/>
         <result column="avg_top" property="avgTop" jdbcType="BIGINT"/>
     </resultMap>
-    <resultMap id="BlockResultMap" type="com.lezhi.statistics.pojo.BlockSummaryInfo">
+    <resultMap id="BlockResultMap" type="com.lezhi.statistics.pojo.SummaryInfo">
         <id column="block_id" property="blockId" jdbcType="INTEGER"/>
         <result column="block_name" property="blockName" jdbcType="VARCHAR"/>
         <result column="lon" property="lon" jdbcType="DOUBLE"/>
@@ -21,7 +21,7 @@
         <result column="nv" property="nv" jdbcType="INTEGER"/>
         <result column="avg_top" property="avgTop" jdbcType="BIGINT"/>
     </resultMap>
-    <resultMap id="ResidenceResultMap" type="com.lezhi.statistics.pojo.ResidenceSummaryInfo">
+    <resultMap id="ResidenceResultMap" type="com.lezhi.statistics.pojo.SummaryInfo">
         <id column="residence_id" property="residenceId" jdbcType="INTEGER"/>
         <result column="residence_name" property="residenceName" jdbcType="VARCHAR"/>
         <result column="lon" property="lon" jdbcType="DOUBLE"/>
@@ -52,7 +52,7 @@
 					b.center_lat lat,
 					SUM(a.total_top) avgTop
 				FROM
-					statistics.channel_visit_summary_district a
+					statistics.channel_visit_summary a
 				LEFT JOIN ocn_address.of_district b ON a.district_id = b.district_id
 				WHERE
 					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
@@ -68,7 +68,7 @@
 				COUNT(mac) nv,
 				a.district_id
 			FROM
-				statistics.channel_visit_summary_district a
+				statistics.channel_visit_summary a
 			WHERE
 				a.mac NOT IN (
 					SELECT
@@ -110,7 +110,7 @@
 					b.center_lat lat,
 					SUM(a.total_top) avgTop
 				FROM
-					statistics.channel_visit_summary_block a
+					statistics.channel_visit_summary a
 				LEFT JOIN df_estate_db_v2.sh_block b ON a.block_id = b.block_id
 				WHERE
 					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
@@ -127,7 +127,7 @@
 				COUNT(mac) nv,
 				a.block_id
 			FROM
-				statistics.channel_visit_summary_block a
+				statistics.channel_visit_summary a
 			WHERE
 				a.mac NOT IN (
 					SELECT
@@ -170,7 +170,7 @@
 					b.lat,
 					SUM(a.total_top) avgTop
 				FROM
-					statistics.channel_visit_summary_residence a
+					statistics.channel_visit_summary a
 				LEFT JOIN ocn_address.of_residence b ON a.residence_id = b.id
 				WHERE
 					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
@@ -187,7 +187,7 @@
 				COUNT(mac) nv,
 				a.residence_id
 			FROM
-				statistics.channel_visit_summary_residence a
+				statistics.channel_visit_summary a
 			WHERE
 				a.mac NOT IN (
 					SELECT
@@ -224,7 +224,7 @@
 					b.lat,
 					SUM(a.total_top) avgTop
 				FROM
-					statistics.channel_visit_summary_residence a
+					statistics.channel_visit_summary a
 				LEFT JOIN ocn_address.of_residence b ON a.residence_id = b.id
 				WHERE
 					a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')

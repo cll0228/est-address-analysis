@@ -1,23 +1,14 @@
 package com.lezhi.statistics.schedule;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.lezhi.statistics.pojo.LogGenerator;
+import com.lezhi.statistics.service.LogService;
+import com.lezhi.statistics.util.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.lezhi.statistics.pojo.LogGeneratorBlock;
-import com.lezhi.statistics.pojo.LogGeneratorDistrict;
-import com.lezhi.statistics.pojo.LogGeneratorResidence;
-import com.lezhi.statistics.service.LogService;
-import com.lezhi.statistics.util.PropertyUtil;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * 日志解析
@@ -29,19 +20,19 @@ public class LogGeneratorSchedule {
 	@Autowired
 	private LogService logService;
 	
-	@Scheduled(cron = "${log.district}")
+	@Scheduled(cron = "${log.prepare}")
 	public void logDistrict() throws Exception {
-		List<LogGeneratorDistrict> logList = new ArrayList<LogGeneratorDistrict>();
+		List<LogGenerator> logList = new ArrayList<LogGenerator>();
 		String startTime = PropertyUtil.getStartHour(new Date()); 
 		String endTime = PropertyUtil.getEndHour(new Date());
 		 
 		/*String startTime = "2017-03-14 00:00:00";
 		String endTime = "2017-03-14 00:59:59";*/
 
-		logList = logService.getDistrictResult(startTime, endTime);
+		logList = logService.getResult(startTime, endTime);
 		
-		Map<String, LogGeneratorDistrict> map = new HashMap<String, LogGeneratorDistrict>();
-		for (LogGeneratorDistrict logGeneratorDistrict : logList) {
+		Map<String, LogGenerator> map = new HashMap<String, LogGenerator>();
+		for (LogGenerator logGeneratorDistrict : logList) {
 			if (map.get(logGeneratorDistrict.getMac()
 					+ logGeneratorDistrict.getChannelNo()) == null) {
 				map.put(logGeneratorDistrict.getMac()
@@ -49,7 +40,7 @@ public class LogGeneratorSchedule {
 						logGeneratorDistrict);
 			} else if (map.get(logGeneratorDistrict.getMac()
 					+ logGeneratorDistrict.getChannelNo()) != null) {
-				LogGeneratorDistrict temp = new LogGeneratorDistrict();
+				LogGenerator temp = new LogGenerator();
 				temp = map.get(logGeneratorDistrict.getMac()
 						+ logGeneratorDistrict.getChannelNo());
 				logGeneratorDistrict.setPv(logGeneratorDistrict.getPv()
@@ -69,107 +60,12 @@ public class LogGeneratorSchedule {
 			Entry<?, ?> mapentry = (Entry<?, ?>) iterator.next();
 			System.out.println(mapentry.getKey() + "/"
 					+ mapentry.getValue().toString());
-			LogGeneratorDistrict logGeneratorDistrict = (LogGeneratorDistrict) mapentry
+			LogGenerator logGeneratorDistrict = (LogGenerator) mapentry
 					.getValue();
 			logGeneratorDistrict.setBeginTime(startTime);
 			logGeneratorDistrict.setEndTime(endTime);
-			logService.insertSummaryDistrict(logGeneratorDistrict);
+			logService.insertSummary(logGeneratorDistrict);
 		}
 	}
-	
-	@Scheduled(cron = "${log.block}")
-	public void logBlock() throws Exception {
-		List<LogGeneratorBlock> logList = new ArrayList<LogGeneratorBlock>();
-		String startTime = PropertyUtil.getStartHour(new Date()); 
-		String endTime = PropertyUtil.getEndHour(new Date());
-		 
-		/*String startTime = "2017-03-14 00:00:00";
-		String endTime = "2017-03-14 00:59:59";*/
 
-		logList = logService.getBlockResult(startTime, endTime);
-		
-		Map<String, LogGeneratorBlock> map = new HashMap<String, LogGeneratorBlock>();
-		for (LogGeneratorBlock logGeneratorBlock : logList) {
-			if (map.get(logGeneratorBlock.getMac()
-					+ logGeneratorBlock.getChannelNo()) == null) {
-				map.put(logGeneratorBlock.getMac()
-						+ logGeneratorBlock.getChannelNo(),
-						logGeneratorBlock);
-			} else if (map.get(logGeneratorBlock.getMac()
-					+ logGeneratorBlock.getChannelNo()) != null) {
-				LogGeneratorBlock temp = new LogGeneratorBlock();
-				temp = map.get(logGeneratorBlock.getMac()
-						+ logGeneratorBlock.getChannelNo());
-				logGeneratorBlock.setPv(logGeneratorBlock.getPv()
-						+ temp.getPv());
-				logGeneratorBlock.setTotalTop(logGeneratorBlock
-						.getTotalTop() + temp.getTotalTop());
-				map.remove(logGeneratorBlock.getMac()
-						+ logGeneratorBlock.getChannelNo());
-				map.put(logGeneratorBlock.getMac()
-						+ logGeneratorBlock.getChannelNo(),
-						logGeneratorBlock);
-			}
-		}
-		Set<?> set = map.entrySet();
-		Iterator<?> iterator = set.iterator();
-		while (iterator.hasNext()) {
-			Entry<?, ?> mapentry = (Entry<?, ?>) iterator.next();
-			System.out.println(mapentry.getKey() + "/"
-					+ mapentry.getValue().toString());
-			LogGeneratorBlock logGeneratorBlock = (LogGeneratorBlock) mapentry
-					.getValue();
-			logGeneratorBlock.setBeginTime(startTime);
-			logGeneratorBlock.setEndTime(endTime);
-			logService.insertSummaryBlock(logGeneratorBlock);
-		}
-	}
-	
-	@Scheduled(cron = "${log.residence}")
-	public void logResidence() throws Exception {
-		List<LogGeneratorResidence> logList = new ArrayList<LogGeneratorResidence>();
-		String startTime = PropertyUtil.getStartHour(new Date()); 
-		String endTime = PropertyUtil.getEndHour(new Date());
-		 
-		/*String startTime = "2017-03-14 00:00:00";
-		String endTime = "2017-03-14 00:59:59";*/
-
-		logList = logService.getResidenceResult(startTime, endTime);
-		
-		Map<String, LogGeneratorResidence> map = new HashMap<String, LogGeneratorResidence>();
-		for (LogGeneratorResidence logGeneratorBlock : logList) {
-			if (map.get(logGeneratorBlock.getMac()
-					+ logGeneratorBlock.getChannelNo()) == null) {
-				map.put(logGeneratorBlock.getMac()
-						+ logGeneratorBlock.getChannelNo(),
-						logGeneratorBlock);
-			} else if (map.get(logGeneratorBlock.getMac()
-					+ logGeneratorBlock.getChannelNo()) != null) {
-				LogGeneratorResidence temp = new LogGeneratorResidence();
-				temp = map.get(logGeneratorBlock.getMac()
-						+ logGeneratorBlock.getChannelNo());
-				logGeneratorBlock.setPv(logGeneratorBlock.getPv()
-						+ temp.getPv());
-				logGeneratorBlock.setTotalTop(logGeneratorBlock
-						.getTotalTop() + temp.getTotalTop());
-				map.remove(logGeneratorBlock.getMac()
-						+ logGeneratorBlock.getChannelNo());
-				map.put(logGeneratorBlock.getMac()
-						+ logGeneratorBlock.getChannelNo(),
-						logGeneratorBlock);
-			}
-		}
-		Set<?> set = map.entrySet();
-		Iterator<?> iterator = set.iterator();
-		while (iterator.hasNext()) {
-			Entry<?, ?> mapentry = (Entry<?, ?>) iterator.next();
-			System.out.println(mapentry.getKey() + "/"
-					+ mapentry.getValue().toString());
-			LogGeneratorResidence logGeneratorResidence = (LogGeneratorResidence) mapentry
-					.getValue();
-			logGeneratorResidence.setBeginTime(startTime);
-			logGeneratorResidence.setEndTime(endTime);
-			logService.insertSummaryResidence(logGeneratorResidence);
-		}
-	}
 }

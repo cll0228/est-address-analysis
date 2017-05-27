@@ -1,22 +1,20 @@
 package com.lezhi.statistics.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.lezhi.statistics.mock.CommonMockService;
-import com.lezhi.statistics.pojo.MacVisit;
+import com.lezhi.statistics.pojo.HistoryListResult;
+import com.lezhi.statistics.pojo.MacInfoObj;
+import com.lezhi.statistics.service.MacService;
 import com.lezhi.statistics.util.EnvUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lezhi.statistics.pojo.MacInfoObj;
-import com.lezhi.statistics.service.MacService;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wangyh on 2017/3/13.
@@ -169,7 +167,7 @@ public class MacController {
 	 */
 	@RequestMapping(value = "visit/log")
 	@ResponseBody
-	public MacVisit getMacVisitLog(
+	public HistoryListResult<?> getMacVisitLog(
 			@RequestParam(value = "mac", required = false) String mac
 			,@RequestParam(value = "channelNo", required = false) String channelNo
 			,@RequestParam(value = "startTime", required = false) Long startTime
@@ -184,7 +182,7 @@ public class MacController {
 		}
 		if (null == span) {
 			// 提示必填参数不能为空
-			return new MacVisit("failed", new ArrayList<MacVisit>(), "必填参数不能为空");
+			return new HistoryListResult<Object>("failed", null, "必填参数不能为空");
 		}
 		Map<String, Object> result = new HashMap<>();
 		return macService.getMacVisitLog(mac,channelNo,startTime,span,districtId,blockId,residenceId,pageNo,pageSize);

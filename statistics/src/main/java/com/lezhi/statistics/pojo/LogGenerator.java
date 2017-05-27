@@ -4,8 +4,18 @@ package com.lezhi.statistics.pojo;
 /**
  * Created by wangyh on 2017/3/30.
  */
-public class LogGeneratorResidence {
+public class LogGenerator {
 	private Integer id;
+
+	public Integer getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(Integer districtId) {
+		this.districtId = districtId;
+	}
+
+	private Integer districtId;
 	private Integer residenceId;
 	private Integer blockId;
 	private String channelNo;

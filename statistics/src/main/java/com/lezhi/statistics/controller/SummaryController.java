@@ -1,22 +1,19 @@
 package com.lezhi.statistics.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.lezhi.statistics.mock.CommonMockService;
+import com.lezhi.statistics.pojo.SummaryInfo;
+import com.lezhi.statistics.service.SummaryService;
+import com.lezhi.statistics.util.EnvUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lezhi.statistics.mock.CommonMockService;
-import com.lezhi.statistics.pojo.BlockSummaryInfo;
-import com.lezhi.statistics.pojo.DistrictSummaryInfo;
-import com.lezhi.statistics.pojo.ResidenceSummaryInfo;
-import com.lezhi.statistics.service.SummaryService;
-import com.lezhi.statistics.util.EnvUtil;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wangyh on 2017/3/15.
@@ -54,11 +51,11 @@ public class SummaryController {
 		if(startTime==null) {
 			startTime = System.currentTimeMillis() - span;
 		}
-		List<DistrictSummaryInfo> summaryInfoList = summaryService
+		List<SummaryInfo> summaryInfoList = summaryService
 				.getDistrictSummaryList(channelNo, startTime, span);
 		if (summaryInfoList == null||summaryInfoList.size()==0) {
 			result.put("status", "failed");
-			result.put("summaries", new ArrayList<DistrictSummaryInfo>());
+			result.put("summaries", new ArrayList<SummaryInfo>());
 			result.put("errMsg", "未找到记录");
 			return result;
 		}
@@ -94,11 +91,11 @@ public class SummaryController {
 		if(startTime==null) {
 			startTime = System.currentTimeMillis() - span;
 		}
-		List<BlockSummaryInfo> summaryInfoList = summaryService
+		List<SummaryInfo> summaryInfoList = summaryService
 				.getBlockSummaryList(channelNo, startTime, span, districtId);
 		if (summaryInfoList == null||summaryInfoList.size()==0) {
 			result.put("status", "failed");
-			result.put("summaries", new ArrayList<DistrictSummaryInfo>());
+			result.put("summaries", new ArrayList<SummaryInfo>());
 			result.put("errMsg", "未找到记录");
 			return result;
 		}
@@ -162,7 +159,7 @@ public class SummaryController {
 		if(startTime == null) {
 			startTime = System.currentTimeMillis() - span;
 		}
-		List<ResidenceSummaryInfo> residenceInfoList = summaryService
+		List<SummaryInfo> residenceInfoList = summaryService
 				.getResidenceSummaryList(channelNo, startTime, span, blockId, defaultPageNo, defaultPageSize);
 		if (residenceInfoList != null && residenceInfoList.size() > 0) {
 			realPageSize = residenceInfoList.size();
@@ -179,7 +176,7 @@ public class SummaryController {
 			}
 		} else {
 			result.put("status", "failed");
-			result.put("summaries", new ArrayList<DistrictSummaryInfo>());
+			result.put("summaries", new ArrayList<SummaryInfo>());
 			result.put("errMsg", "未找到记录");
 			return result;
 		}

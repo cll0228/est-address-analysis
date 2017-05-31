@@ -1,48 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lezhi.statistics.mapper.LogMapper">
-	<select id="getResult" resultType="com.lezhi.statistics.pojo.LogGenerator">
-       SELECT
-			a.channel channelNo,
-			a.mac,
-			a.`session`,
-			(
-				unix_timestamp(MAX(a.timestamp)) - unix_timestamp(MIN(a.timestamp))
-			) * 10 totalTop,
-			unix_timestamp(MIN(a.timestamp))
-		begin
-			,
-			unix_timestamp(MAX(a.timestamp))
-		end,
-		 b.district_id districtId,
-		 b.block_id blockId,
-		 b.residence_id residenceId,
-		 count(a.mac) pv
-		FROM
-			statistics.api_logs_shfctv a
-		INNER JOIN statistics.mac_info b ON a.mac = b.mac
-		WHERE
-			a.`timestamp` &gt;= #{startTime}
-		AND a.`timestamp` &lt;= #{endTime}
-		GROUP BY
-			a.mac,
-			a.channel,
-			a.`session`
-    </select>
 
-    <select id="getSpanResult" resultType="com.lezhi.statistics.pojo.LogGeneratorCountSpan">
-        SELECT
-			COUNT(*) count,
-			unix_timestamp(#{startTime}) spanTime
-		FROM
-			statistics.api_logs_shfctv a
-		WHERE
-			a.`timestamp` &lt; #{startTime}
-		AND a.`session` = #{session}
-    </select>
-
-    <insert id="insertSummary">
-        INSERT INTO statistics.channel_visit_summary (
+    <insert id="insertSummary" parameterType="com.lezhi.statistics.pojo.ChannelVisitSummary">
+        INSERT INTO channel_visit_summary (
 			district_id,
 			block_id,
 			residence_id,
@@ -54,15 +15,17 @@
 			total_top
 		)
 		VALUES
-			(#{logGenerator.districtId},
-			#{logGenerator.blockId},
-			#{logGenerator.residenceId},
-			#{logGenerator.channelNo},
-			#{logGenerator.mac},
-			#{logGenerator.pv},
-			#{logGenerator.beginTime},
-			#{logGenerator.endTime},
-			#{logGenerator.totalTop})
+		<foreach collection="buildings" item="channelVisitSummary" index="index" separator=",">
+			(#{channelVisitSummary.districtId},
+			#{channelVisitSummary.blockId},
+			#{channelVisitSummary.residenceId},
+			#{channelVisitSummary.channelNo},
+			#{channelVisitSummary.mac},
+			#{channelVisitSummary.pv},
+			#{channelVisitSummary.beginTime},
+			#{channelVisitSummary.endTime},
+			#{channelVisitSummary.totalTop})
+		</foreach>
     </insert>
     
 </mapper>

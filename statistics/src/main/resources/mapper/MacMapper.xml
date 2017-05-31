@@ -105,23 +105,27 @@
 
     <select id="getMacVisitLog" resultType="com.lezhi.statistics.pojo.MacVisitLogInfo">
         SELECT
-		  a.mac,a.channel_no as channelNo,a.district_id as districtId,a.block_id as blockId,a.residence_id as residenceId
-		  ,unix_timestamp(a.create_time) time,b.district_name as districtName,c.block_name as blockName
+		  a.id, a.mac,a.channel_no as channelNo,a.district_id as districtId,a.block_id as blockId,a.residence_id as residenceId
+		  ,unix_timestamp(a.create_time)*1000 time,b.district_name as districtName,c.block_name as blockName
 		  ,d.residence_name as residenceName
 		FROM
 			mac_visit_log a
 		LEFT JOIN ocn_address.of_district b ON a.district_id = b.district_id
 		LEFT JOIN df_estate_db_v2.sh_block c ON a.block_id = c.block_id
-		LEFT JOIN ocn_address.of_residence d ON a.residence_id = d.id
+		LEFT JOIN df_estate_db_v2.of_residence d ON a.residence_id = d.id
 		WHERE 1=1
-		<if test="mac != null and channelNo != ''">
+		<if test="mac != null">
             AND a.mac = #{mac}
         </if>
-        <if test="null != channelNo and '' != channelNo">
+        <if test="null != channelNo and '' != channelNo and 'all' != channelNo">
             AND a.channel_no = #{channelNo}
         </if>
-        AND a.create_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.create_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+        <if test="startTime != null" >
+            AND a.create_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="endTime != null" >
+            AND a.create_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+        </if>
         <if test="null != residenceId and '' != residenceId">
             AND a.residence_id = #{residenceId}
         </if>
@@ -130,6 +134,9 @@
         </if>
         <if test="null != districtId and '' != districtId">
             AND a.district_id = #{districtId}
+        </if>
+        <if test="minIdExclude != null">
+            AND a.id > #{minIdExclude}
         </if>
         order by create_time desc
     </select>
@@ -178,4 +185,13 @@
         </if>
         AND a.mac is not null
     </select>
+
+    <insert id="newVisitorSchedule">
+        INSERT INTO statistics.new_visitor(channel_no, mac, first_visit_time)
+           SELECT a.channel, a.mac, max(a.`timestamp`)
+           FROM api_logs_shfctv a
+                LEFT JOIN new_visitor b ON a.mac = b.mac AND a.channel = b.channel_no
+           WHERE b.id IS NULL
+           GROUP BY a.mac, a.channel
+    </insert>
 </mapper>

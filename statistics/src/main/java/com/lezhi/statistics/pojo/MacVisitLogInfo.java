@@ -4,6 +4,7 @@ package com.lezhi.statistics.pojo;
  * Created by chendl on 2017/3/24.
  */
 public class MacVisitLogInfo {
+	private Integer id;
 	private String mac;// 机顶盒mac地址
 	private String channelNo;// 频道号
 	private Integer districtId;// 区县ID
@@ -13,6 +14,14 @@ public class MacVisitLogInfo {
 	private Integer residenceId;// 小区ID
 	private String residenceName;// 小区名称
 	private Long time;// 日志时间。 unix time, 单位ms
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getMac() {
 		return mac;

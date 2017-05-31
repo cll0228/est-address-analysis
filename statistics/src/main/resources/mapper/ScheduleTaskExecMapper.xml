@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lezhi.statistics.mapper.ScheduleTaskExecMapper">
+
+    <select id="findById" resultType="com.lezhi.statistics.pojo.ScheduleTaskExec">
+      SELECT id, last_exec_time as lastExecTime, ref_id as refId
+FROM schedule_task_exec
+where id=#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.lezhi.statistics.pojo.ScheduleTaskExec">
+        update schedule_task_exec set ref_id = #{scheduleTaskExec.refId} , last_exec_time = #{scheduleTaskExec.lastExecTime}
+        where id = #{scheduleTaskExec.id}
+    </update>
+</mapper>

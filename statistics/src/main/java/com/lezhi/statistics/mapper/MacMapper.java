@@ -35,11 +35,13 @@ public interface MacMapper {
 	List<MacVisitLogInfo> getMacVisitLog(@Param("mac")String mac, @Param("channelNo") String channelNo,
 										 @Param("startTime") Long startTime, @Param("endTime") Long endTime,
 										 @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
-										 @Param("residenceId") Integer residenceId);
+										 @Param("residenceId") Integer residenceId, @Param("minIdExclude") Integer minIdExclude);
 
 	List<MacVisitLogInfo> selectForRealtimeSummary(@Param("channelNo") String channelNo, @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
 												   @Param("residenceId") Integer residenceId, @Param("timeFrom") Date timeFrom, @Param("now") Date now);
 
 	Integer nvForRealtimeSummary(@Param("channelNo") String channelNo, @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
 								 @Param("residenceId") Integer residenceId, @Param("timeFrom") Date timeFrom, @Param("now") Date now);
+
+	Integer newVisitorSchedule();
 }

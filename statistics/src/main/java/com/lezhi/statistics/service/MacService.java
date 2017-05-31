@@ -92,9 +92,9 @@ public class MacService {
 		if (null == pageSize || pageSize <= 0) {
 			pageSize = 20;
 		}
-		List<MacVisitLogInfo> macInfoList = macMapper.getMacVisitLog(mac,channelNo,start,end,districtId,blockId,residenceId);
+		List<MacVisitLogInfo> macInfoList = macMapper.getMacVisitLog(mac,channelNo,start,end,districtId,blockId,residenceId, null);
 		if (null == macInfoList || macInfoList.size() == 0) {
-			return new HistoryListResult("success", null, "");
+			return new HistoryListResult<>("success", null, "");
 		}
 		// 分页
 		HistoryListResult<MacVisitLogInfo> obj = new HistoryListResult<MacVisitLogInfo>();

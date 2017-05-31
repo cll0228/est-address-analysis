@@ -2,10 +2,8 @@ package com.lezhi.statistics.schedule;
 
 import com.lezhi.statistics.mapper.DataPlatformMapper;
 import com.lezhi.statistics.pojo.Log;
-import com.lezhi.statistics.pojo.NewVisitorInfo;
 import com.lezhi.statistics.service.HisTrendTask;
 import com.lezhi.statistics.util.DateUtil;
-import com.lezhi.statistics.util.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -126,8 +124,4 @@ public class HisHourSchedule {
 
     }
 
-    @Scheduled(fixedDelay = 60 * 1000, initialDelay = 20 * 1000)
-    public void newVisitor() throws Exception {
-        // TODO
-    }
 }

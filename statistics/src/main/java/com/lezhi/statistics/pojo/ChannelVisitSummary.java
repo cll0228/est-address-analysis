@@ -1,10 +1,12 @@
 package com.lezhi.statistics.pojo;
 
 
+import java.util.Date;
+
 /**
  * Created by wangyh on 2017/3/30.
  */
-public class LogGenerator {
+public class ChannelVisitSummary {
 	private Integer id;
 
 	public Integer getDistrictId() {
@@ -22,8 +24,8 @@ public class LogGenerator {
 	private String mac;
 	private String session;
 	private Integer pv;
-	private String beginTime;
-	private String endTime;
+	private Date beginTime;
+	private Date endTime;
 	private Long totalTop;
 	private Long begin;
 	private Long end;
@@ -69,16 +71,16 @@ public class LogGenerator {
 	public void setPv(Integer pv) {
 		this.pv = pv;
 	}
-	public String getBeginTime() {
+	public Date getBeginTime() {
 		return beginTime;
 	}
-	public void setBeginTime(String beginTime) {
+	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
 	}
-	public String getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(String endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 	public Long getTotalTop() {

@@ -507,7 +507,7 @@
             m.block_id blockId,
             m.residence_id residenceId
         FROM
-	    `api_logs_shfctv_01` log LEFT JOIN mac_info m ON log.mac = m.mac
+	    `api_logs_shfctv` log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
         log.timestamp &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
         AND log.timestamp &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') GROUP BY log.mac,log.`session` ORDER BY log.`timestamp` desc

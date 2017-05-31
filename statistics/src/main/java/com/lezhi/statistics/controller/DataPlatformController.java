@@ -93,16 +93,17 @@ public class DataPlatformController {
         if (null == span || null == scale) {
             return new TrendResult("failed", null, "参数不正确");
         }
+        //span : 跨度 ；scale : 刻度
         if (startTime == null) {
-            if (span == 60 * 60 * 1000) {
+            if (span == 60 * 60 * 1000) { //startTIme为null；跨度是一小时，刻度只能是一分钟
                 // 走势统计-当前(小时)
-                if (scale != 60 * 1000) {
+                if (scale != 60 * 1000) { //刻度只能是一分钟
                     return new TrendResult("failed", null, "参数不正确");
                 }
                 dataPlatformService.updateRealTimeTrendInfoByMinute();
-            } else if (span == 24 * 60 * 60 * 1000) {
+            } else if (span == 24 * 60 * 60 * 1000) {//跨度为天 刻度只能是小时
                 // 走势统计-当前（天）
-                if (scale != 60 * 60 * 1000) {
+                if (scale != 60 * 60 * 1000) {//小时
                     return new TrendResult("failed", null, "参数不正确");
                 }
                 dataPlatformService.updateRealTimeTrendInfoByHour();
@@ -110,7 +111,7 @@ public class DataPlatformController {
                 return new TrendResult("failed", null, "参数不正确");
             }
         } else {
-            if (scale != 24 * 60 * 60 * 1000 && scale != 60 * 60 * 1000) {
+            if (scale != 24 * 60 * 60 * 1000 && scale != 60 * 60 * 1000) {//天  小时
                 return new TrendResult("failed", null, "参数不正确");
             }
         }

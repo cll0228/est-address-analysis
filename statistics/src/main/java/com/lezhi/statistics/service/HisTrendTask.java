@@ -1,17 +1,20 @@
 package com.lezhi.statistics.service;
 
-import com.lezhi.statistics.mapper.DataPlatformMapper;
-import com.lezhi.statistics.pojo.HisTrendInfo;
-import com.lezhi.statistics.pojo.Log;
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lezhi.statistics.mapper.DataPlatformMapper;
+import com.lezhi.statistics.pojo.HisTrendInfo;
+import com.lezhi.statistics.pojo.Log;
+
+import jdk.nashorn.internal.objects.annotations.Constructor;
 
 /**
  * Created by Cuill on 2017/3/28.
@@ -32,27 +35,6 @@ public class HisTrendTask {
     static SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
 
     static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    public static void main(String[] args) throws ParseException {
-        int sum = 0;
-        for (int x =1; x<=100;x++){ sum=sum+x;}
-        System.out.println(sum);
-        // 获取当前时间
-        // Long startTime = format.parse(DateUtil.reduce1Hour(format.format(new Date()),
-        // -1)).getTime() / 1000;// 秒单位
-        Long startTime = 1489420800L;
-        // 当前计算结束时间
-        // Long endTime = format.parse(DateUtil.reduce1Second(format.format(new
-        // Date()))).getTime()/1000;
-        Long endTime = 1489424399L;
-
-        // 当前时间段内日志
-//        List<Log> logs = mapper.selectLog(startTime, endTime);
-//        if (null == logs)
-//            return;
-
-        // calc("block", logs, startTime, endTime);
-    }
 
     public void calcHour(String type, List<Log> logs, Long startTime, Long endTime) throws ParseException {
         Map<String, HisTrendInfo> map = new HashedMap();

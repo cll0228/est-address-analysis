@@ -76,7 +76,7 @@
         nv,
         avg_top avgTop FROM
         <choose>
-        <when test="scale = 60000">
+        <when test="scale == 60000">
             <if test="null != residenceId and '' != residenceId">
                 realtime_trend_60m_residence WHERE residence_id = #{residenceId}
                 <if test="null != channelNo and '' != channelNo">
@@ -122,7 +122,7 @@
                 </if>
             </if>
             <if test="null == districtId and null == blockId and null == residenceId">
-                realtime_trend_24h_district WHERE district_id = #{districtId}
+                realtime_trend_24h_district WHERE 1=1
                 <if test="null != channelNo and '' != channelNo">
                     AND channel_no = #{channelNo}
                 </if>
@@ -142,7 +142,7 @@
         nv,
         avg_top avgTop FROM
         <choose>
-            <when test="scale = 3600000">
+            <when test="scale == 3600000">
                 <if test="null != residenceId and '' != residenceId">
                     his_trend_hour_residence WHERE residence_id = #{residenceId}
                     <if test="null != channelNo and '' != channelNo">
@@ -167,6 +167,8 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
+                AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')   &lt;= begin_time AND
+                FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -193,10 +195,10 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
+                AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d')   &lt;= begin_time AND
+                FROM_UNIXTIME(${startTime+span},'%Y-%m-%d') &gt;= end_time
             </otherwise>
         </choose>
-        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-        FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
         GROUP BY begin_time DESC
     </select>
 
@@ -208,7 +210,7 @@
         nv,
         avg_top avgTop FROM
         <choose>
-            <when test="scale = 60000">
+            <when test="scale == 60000">
                 <if test="null != residenceId and '' != residenceId">
                     realtime_trend_60m_residence WHERE residence_id = #{residenceId}
                     <if test="null != channelNo and '' != channelNo">
@@ -274,7 +276,7 @@
         nv,
         avg_top avgTop FROM
         <choose>
-            <when test="scale = 3600000">
+            <when test="scale == 3600000">
                 <if test="null != residenceId and '' != residenceId">
                     his_trend_hour_residence WHERE residence_id = #{residenceId}
                     <if test="null != channelNo and '' != channelNo">
@@ -299,6 +301,8 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
+                AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
+                FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -325,10 +329,11 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
+                AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d') &lt;= begin_time AND
+                FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d') &gt;= end_time
             </otherwise>
         </choose>
-        AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-        FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+
         GROUP BY begin_time DESC
     </select>
 
@@ -524,7 +529,7 @@
         WHERE `timestamp` &gt;= '2017-03-14 00:00:00' AND `timestamp` &lt;= '2017-03-14 01:00:00' GROUP BY mac,`session` ORDER BY `timestamp` desc;*/
     </select>
     <select id="selectLogBySession" resultType="com.lezhi.statistics.pojo.Log">
-      SELECT log_id logId,channel,mac,`timestamp` timeStamp,session FROM api_logs_shfctv_01 WHERE session = #{log.session} AND timestamp  &lt; #{log.timeStamp} AND timestamp &gt;
+      SELECT log_id logId,channel,mac,`timestamp` timeStamp,session FROM api_logs_shfctv WHERE session = #{log.session} AND timestamp  &lt; #{log.timeStamp} AND timestamp &gt;
        DATE_ADD(#{log.timeStamp},
        INTERVAL -2 HOUR)
     </select>
@@ -539,7 +544,7 @@
         m.block_id blockId,
         m.residence_id residenceId
         FROM
-        api_logs_shfctv_01 log LEFT JOIN mac_info m ON log.mac = m.mac
+        api_logs_shfctv log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
         log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
         AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp WHERE temp.channel = #{log.channel}
@@ -564,7 +569,7 @@
         m.block_id blockId,
         m.residence_id residenceId
         FROM
-        api_logs_shfctv_01 log LEFT JOIN mac_info m ON log.mac = m.mac
+        api_logs_shfctv log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
         log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
         AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp WHERE temp.channel = #{log.channel}
@@ -592,7 +597,7 @@
         m.block_id blockId,
         m.residence_id residenceId
         FROM
-        api_logs_shfctv_01 log LEFT JOIN mac_info m ON log.mac = m.mac
+        api_logs_shfctv log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
         log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
         AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp
@@ -616,7 +621,7 @@
     </select>
 
     <select id="selectSameSession" resultType="com.lezhi.statistics.pojo.Log">
-       SELECT log_id logId,channel,mac,`timestamp` timeStamp,session FROM api_logs_shfctv_01 WHERE timestamp  &gt; #{log.timestamp} AND mac = #{log.mac}
+       SELECT log_id logId,channel,mac,`timestamp` timeStamp,session FROM api_logs_shfctv WHERE timestamp  &gt; #{log.timestamp} AND mac = #{log.mac}
       and channel = #{log.channle} AND  session = #{log.session}  ORDER BY `timestamp` DESC
 </select>
     <select id="selectBlockId" resultType="java.lang.Integer">
@@ -633,7 +638,7 @@
         min(`timestamp`) TIMESTAMP,
         SESSION
         FROM
-        api_logs_shfctv_01
+        api_logs_shfctv
         WHERE
         TIMESTAMP &lt; #{log.timeStamp} AND `timestamp`  &gt;  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
         AND mac = #{log.mac}

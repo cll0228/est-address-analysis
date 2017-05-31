@@ -14,48 +14,22 @@ import java.util.*;
  */
 public class DateUtil {
 
-    static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:00:00 ");
+    static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:00:00");
 
-    static SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd 00:00:00 ");
+    static SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 
-    public static SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:00 ");
+    public static SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
 
-    public static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+    public static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     static Calendar calendar = Calendar.getInstance();
 
     static DataPlatformMapper mapper;
 
-    static {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-                "/conf/applicationContext.xml");
-        context.start();
-        mapper = context.getBean(DataPlatformMapper.class);
-    }
 
     public static void main(String[] args) throws Exception {
-        his_trend_day();
-
-        int span = 30 * 60000;// 间隔 ms
-        List<Time> times = new ArrayList<>();
-        Long start = null;
-        Long last;// 临界点访问时间
-        Long temp = null;
-        for (int i = 0; i < times.size(); i++) {
-            // 第一次
-            if (null == start) {
-                start = times.get(i).getTime();// 转换ms
-                temp = start + span;
-            } else {
-                if (times.get(i).getTime() > temp) {
-                    last = times.get(i - 1).getTime();
-                    // 打印
-                    System.out.println(new Date(start) + "  " + new Date(last) + "  " + (last - start));
-                    start = null;
-                }
-            }
-
-        }
+       Long l= format1.parse(DateUtil.updateDay(new Date(), -1)).getTime()/1000;
+        System.out.println(l);
     }
 
     /**
@@ -100,8 +74,8 @@ public class DateUtil {
         for (int i = 0; i < 360; i++) {
             Map<String, Object> map = new HashedMap();
             map.put("channelNo", 999);
-            map.put("beginTime", updateDay(format3.format(new Date()), i));
-            map.put("endTime", reduce1Second(updateDay(map.get("beginTime").toString(), 1)));
+            map.put("beginTime", updateDay(new Date(), i));
+            map.put("endTime", reduce1Second(updateDay(format1.parse(map.get("beginTime").toString()), 1)));
             map.put("uv", (i + 2) * Math.random() + 10);
             map.put("pv", (i + 1) * Math.random() + 5);
             map.put("nv", 1);
@@ -134,9 +108,8 @@ public class DateUtil {
         return format1.format(calendar.getTime());
     }
 
-    public static String updateDay(String time, Integer day) throws ParseException {
-        Date parse = format1.parse(time);
-        calendar.setTime(parse);
+    public static String updateDay(Date time, Integer day) throws ParseException {
+        calendar.setTime(time);
         calendar.add(calendar.DAY_OF_YEAR, day);
         return format1.format(calendar.getTime());
     }

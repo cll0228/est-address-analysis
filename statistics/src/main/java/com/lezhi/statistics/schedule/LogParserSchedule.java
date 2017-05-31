@@ -31,7 +31,7 @@ public class LogParserSchedule {
     @Scheduled(cron = "${log.prepare}")
     @Transactional
     //@Scheduled(fixedDelay = 60 * 60 * 1000, initialDelay = 0)
-    public synchronized void newVisitor() throws Exception {
+    public synchronized void parse() throws Exception {
         ScheduleTaskExec taskExec = scheduleTaskExecMapper.findById(1);
         Integer minIdExclude = taskExec.getRefId();
         List<MacVisitLogInfo> logs = this.macMapper.getMacVisitLog(null, null, null, null, null, null, null, minIdExclude);

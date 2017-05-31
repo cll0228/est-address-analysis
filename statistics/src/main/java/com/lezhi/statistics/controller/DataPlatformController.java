@@ -55,7 +55,15 @@ public class DataPlatformController {
         if(null == channelNo){
             channelNo = "all";
         }
-        return dataPlatformService.realtime(channelNo, period, districtId, blockId, residenceId);
+
+        if (null != residenceId) {
+            districtId = null;
+            blockId = null;
+        } else if (null != blockId) {
+            districtId = null;
+        }
+
+        return dataPlatformService.realtimeSummary(channelNo, period, districtId, blockId, residenceId);
     }
 
     /**

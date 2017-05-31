@@ -133,4 +133,49 @@
         </if>
         order by create_time desc
     </select>
+
+    <select id="selectForRealtimeSummary" resultType="com.lezhi.statistics.pojo.MacVisitLogInfo">
+        select
+        a.mac,a.channel_no as channelNo,a.district_id as districtId,a.block_id as blockId,a.residence_id as residenceId,a.create_time as `time`
+        from mac_visit_log a
+        where a.create_time >= #{timeFrom} and a.create_time &lt;= #{now}
+        <if test="channelNo != null and channelNo != 'all'">
+            and a.channel_no = #{channelNo}
+        </if>
+        <if test="districtId != null">
+            and a.district_id = #{districtId}
+        </if>
+        <if test="blockId != null">
+            and a.block_id = #{blockId}
+        </if>
+        <if test="residenceId != null">
+            and a.residence_id = #{residenceId}
+        </if>
+    </select>
+
+    <select id="nvForRealtimeSummary" resultType="java.lang.Integer">
+        select
+        count( distinct a.mac)
+        from mac_visit_log a left join new_visitor b on a.mac = b.mac
+        <if test="channelNo != null and channelNo != 'all'">
+            and a.channel_no = b.channel
+        </if>
+        and b.first_visit_time &lt;= #{timeFrom}
+
+        where a.create_time >= #{timeFrom} and a.create_time &lt;= #{now}
+        and b.id is null
+        <if test="channelNo != null and channelNo != 'all'">
+            and a.channel_no = #{channelNo}
+        </if>
+        <if test="districtId != null">
+            and a.district_id = #{districtId}
+        </if>
+        <if test="blockId != null">
+            and a.block_id = #{blockId}
+        </if>
+        <if test="residenceId != null">
+            and a.residence_id = #{residenceId}
+        </if>
+        AND a.mac is not null
+    </select>
 </mapper>

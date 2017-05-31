@@ -126,7 +126,7 @@ public class HisHourSchedule {
 
     }
 
-    @Scheduled(cron = "${visitor.new}")
+    @Scheduled(fixedDelay = 60 * 1000, initialDelay = 20 * 1000)
     public void newVisitor() throws Exception {
         Date date = new Date();
         String startTime = PropertyUtil.getStartMinute(date);

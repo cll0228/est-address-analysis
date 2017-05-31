@@ -1,9 +1,11 @@
 package com.lezhi.statistics.service;
 
 import com.lezhi.statistics.mapper.DataPlatformMapper;
+import com.lezhi.statistics.mapper.MacMapper;
 import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.util.ListPageUtil;
 import com.lezhi.statistics.util.PropertyUtil;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class DataPlatformService {
     @Autowired
     private DataPlatformMapper dataPlatformMapper;
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    @Autowired
+    private MacMapper macMapper;
 
     public HistoryListResult<MacVisitHistoryInfo> vistHis(String channelNo, long startTime, long span, Integer districtId, Integer blockId,
                                                           Integer residenceId, Integer pageNo, Integer pageSize) {
@@ -63,21 +68,51 @@ public class DataPlatformService {
         return obj;
     }
 
-    public RealTimeSummaryResult realtime(String channelNo, Long period, Integer districtId, Integer blockId,
-                                          Integer residenceId) {
-        if (null != residenceId) {
-            districtId = null;
-            blockId = null;
-        } else if (null != blockId) {
-            districtId = null;
+    private synchronized RealTimeSummaryObj refreshRealtimeSummary(String channelNo, Long period, Integer districtId, Integer blockId, Integer residenceId, Date now) {
+        Date timeFrom = new Date(now.getTime() - period);
+        List<MacVisitLogInfo> logs = this.macMapper.selectForRealtimeSummary(channelNo, districtId, blockId, residenceId, timeFrom, now);
+        Integer nv = macMapper.nvForRealtimeSummary(channelNo, districtId, blockId, residenceId, timeFrom, now);
+        if (logs == null)
+            logs = new ArrayList<>();
+
+        RealTimeSummaryObj obj = new RealTimeSummaryObj();
+        obj.setRefreshTime(now.getTime());
+        obj.setPv(logs.size());
+        Set<String> macs = new HashSet<>();
+        for (MacVisitLogInfo info : logs) {
+            macs.add(info.getMac());
         }
-        RealTimeSummaryObj obj = dataPlatformMapper.realtime(channelNo, period, districtId, blockId,
-                residenceId);
-        if (null == obj)
+        obj.setUv(macs.size());
+        obj.setNv(nv);
+        // TODO persist to db
+        return obj;
+    }
+
+    private RealTimeSummaryObj checkRealtimeSummary(String channelNo, Long period, Integer districtId, Integer blockId, Integer residenceId, RealTimeSummaryObj obj) {
+        Date now = DateUtils.truncate(new Date(), Calendar.MINUTE);
+        if (obj != null) {
+            if (obj.getRefreshTime() > now.getTime()) {
+                dataPlatformMapper.putDownRealtimeSummary(obj.getId(), now);
+                return obj;
+            } else if (obj.getRefreshTime() == now.getTime()) {
+                return obj;
+            } else {
+                return refreshRealtimeSummary(channelNo, period, districtId, blockId, residenceId, now);
+            }
+        }
+        return refreshRealtimeSummary(channelNo, period, districtId, blockId, residenceId, now);
+    }
+
+    public RealTimeSummaryResult realtimeSummary(String channelNo, Long period, Integer districtId, Integer blockId,
+                                                 Integer residenceId) {
+        RealTimeSummaryObj obj = dataPlatformMapper.realtime(channelNo, period, districtId, blockId, residenceId);
+
+        RealTimeSummaryObj result = checkRealtimeSummary(channelNo, period, districtId, blockId, residenceId, obj);
+        if (null == result)
             return new RealTimeSummaryResult("success", null, "");
 
         RealTimeSummaryResult summary = new RealTimeSummaryResult();
-        summary.setRealtimeSummary(obj);
+        summary.setRealtimeSummary(result);
         summary.setErrMsg("");
         summary.setStatus("success");
         return summary;
@@ -138,7 +173,7 @@ public class DataPlatformService {
 
     public SummaryResult summary(String channelNo, long startTime, long span, Integer pageNo, Integer pageSize) {
         List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, startTime / 1000, span / 1000);
-        if(null == summaryObjs || summaryObjs.size() == 0){
+        if (null == summaryObjs || summaryObjs.size() == 0) {
             return new SummaryResult("Success", new ArrayList<ChannelSummaryObj>(), "");
         }
         // 分页
@@ -169,15 +204,15 @@ public class DataPlatformService {
         return obj;
     }
 
-    public void updateRealTimeTrendInfoByMinute() throws Exception{
+    public void updateRealTimeTrendInfoByMinute() throws Exception {
         Date date = new Date();
         // 一个小时前时间
         String stime = PropertyUtil.getBeforeHour(date);
         Date startDate = null;
         String startTime = null;
         String endTime = null;
-        for(int i = 0;i < 60;i++){
-            if(i == 0){
+        for (int i = 0; i < 60; i++) {
+            if (i == 0) {
                 startTime = stime;
             } else {
                 startTime = PropertyUtil.getNextMinute(startDate);
@@ -196,14 +231,14 @@ public class DataPlatformService {
 
     }
 
-    public void updateRealTimeTrendInfoByHour() throws Exception{
+    public void updateRealTimeTrendInfoByHour() throws Exception {
         Date date = new Date();
         // 一天前时间
         String stime = PropertyUtil.getLastDay(date);
         Date startDate = null;
         String startTime = null;
         String endTime = null;
-        for(int i = 0;i < 24;i++) {
+        for (int i = 0; i < 24; i++) {
             if (i == 0) {
                 startTime = stime;
             } else {
@@ -211,7 +246,7 @@ public class DataPlatformService {
             }
             startDate = df.parse(startTime);
             endTime = PropertyUtil.getEndHour(startDate);
-            System.out.println("stime="+startTime + ", "+"etime="+endTime);
+            System.out.println("stime=" + startTime + ", " + "etime=" + endTime);
             // 更新区县实时统计数据
             dataPlatformMapper.updateRealTimeTrendInfoByHourBlock(startTime, endTime);
             // 更新板块实时统计数据

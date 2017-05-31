@@ -3,6 +3,7 @@ package com.lezhi.statistics.mapper;
 import com.lezhi.statistics.pojo.*;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -91,5 +92,7 @@ public interface DataPlatformMapper {
     void inertAllNewVistor(@Param("startTime")String startTime);
 
     void inertNewVistor(@Param("lastVisitTime")String lastVisitTime, @Param("mac")String mac);
+
+    void putDownRealtimeSummary(@Param("id") int id, @Param("now")Date now);
 }
 

@@ -4,6 +4,7 @@ import com.lezhi.statistics.pojo.MacInfoObj;
 import com.lezhi.statistics.pojo.MacVisitLogInfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,4 +36,10 @@ public interface MacMapper {
 										 @Param("startTime") Long startTime, @Param("endTime") Long endTime,
 										 @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
 										 @Param("residenceId") Integer residenceId);
+
+	List<MacVisitLogInfo> selectForRealtimeSummary(@Param("channelNo") String channelNo, @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
+												   @Param("residenceId") Integer residenceId, @Param("timeFrom") Date timeFrom, @Param("now") Date now);
+
+	Integer nvForRealtimeSummary(@Param("channelNo") String channelNo, @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
+								 @Param("residenceId") Integer residenceId, @Param("timeFrom") Date timeFrom, @Param("now") Date now);
 }

@@ -28,20 +28,45 @@
     </select>
 
     <select id="realtime" resultType="com.lezhi.statistics.pojo.RealTimeSummaryObj">
-        SELECT sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time)*1000 refreshTime FROM
-        <if test="residenceId != null and '' != residenceId">
-            real_time_channel${channelNo}_residence WHERE residence_id = #{residenceId} AND period = #{period}
-        </if>
-        <if test="blockId != null and '' != blockId">
-            real_time_channel${channelNo}_block WHERE block_id = #{blockId} AND period = #{period}
-        </if>
-        <if test="districtId != null and '' != districtId">
-            real_time_channel${channelNo}_district WHERE district_id = #{districtId} AND period = #{period}
-        </if>
-        <if test="residenceId == null and blockId == null and districtId == null">
-            real_time_channel${channelNo}_district WHERE period = #{period}
+        SELECT id, sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time)*1000 refreshTime FROM
+        <choose>
+            <when test="residenceId != null and '' != residenceId">
+                realtime_summary_residence WHERE residence_id = #{residenceId}
+            </when>
+            <when test="blockId != null and '' != blockId">
+                realtime_summary_block WHERE block_id = #{blockId}
+            </when>
+            <when test="districtId != null and '' != districtId">
+                realtime_summary_district WHERE district_id = #{districtId}
+            </when>
+            <otherwise>
+                realtime_summary_city WHERE 1= 1
+            </otherwise>
+        </choose>
+        AND period = #{period}
+        <if test="channelNo != null and channelNo != 'all'">
+            and channel_no = #{channelNo}
         </if>
     </select>
+
+    <update id="putDownRealtimeSummary">
+        UPDATE
+        <choose>
+            <when test="residenceId != null and '' != residenceId">
+                realtime_summary_residence
+            </when>
+            <when test="blockId != null and '' != blockId">
+                realtime_summary_block
+            </when>
+            <when test="districtId != null and '' != districtId">
+                realtime_summary_district
+            </when>
+            <otherwise>
+                realtime_summary_city
+            </otherwise>
+        </choose>
+        set refresh_time = #{now} where id = #{id}
+    </update>
 
     <select id="current" resultType="com.lezhi.statistics.pojo.TrendObj">
         SELECT 	unix_timestamp(begin_time)*1000 timeBegin,

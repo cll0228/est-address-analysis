@@ -87,12 +87,6 @@ public interface DataPlatformMapper {
 
     void deleteRealTimeTrendInfoByHour(@Param("stime")String stime);
 
-    List<NewVisitorInfo> getApiLogsInfo();
-
-    void inertAllNewVistor(@Param("startTime")String startTime);
-
-    void inertNewVistor(@Param("lastVisitTime")String lastVisitTime, @Param("mac")String mac);
-
     void putDownRealtimeSummary(@Param("id") int id, @Param("now")Date now);
 }
 

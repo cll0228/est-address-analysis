@@ -128,17 +128,6 @@ public class HisHourSchedule {
 
     @Scheduled(fixedDelay = 60 * 1000, initialDelay = 20 * 1000)
     public void newVisitor() throws Exception {
-        Date date = new Date();
-        String startTime = PropertyUtil.getStartMinute(date);
-        // 扫描new visitor
-        List<NewVisitorInfo> newVisitorInfos = dataPlatformMapper.getApiLogsInfo();
-        if(newVisitorInfos.size() == 0){
-            // 获取并写入日志表所有新的独立访客首次访问信息
-            dataPlatformMapper.inertAllNewVistor(startTime);
-        } else {
-            String lastVisitTime = newVisitorInfos.get(newVisitorInfos.size()-1).getFirstVisitTime();
-            String mac = newVisitorInfos.get(newVisitorInfos.size()-1).getMac();
-            dataPlatformMapper.inertNewVistor(lastVisitTime, mac);
-        }
+        // TODO
     }
 }

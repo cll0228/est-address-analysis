@@ -94,13 +94,24 @@ public class DataPlatformController {
             return new TrendResult("failed", null, "参数不正确");
         }
         if (startTime == null) {
-            // 走势统计-当前(小时)
-            if (span == 3600000) {
+            if (span == 60 * 60 * 1000) {
+                // 走势统计-当前(小时)
+                if (scale != 60 * 1000) {
+                    return new TrendResult("failed", null, "参数不正确");
+                }
                 dataPlatformService.updateRealTimeTrendInfoByMinute();
-            }
-            // 走势统计-当前（天）
-            if (span == 3600000 * 24) {
+            } else if (span == 24 * 60 * 60 * 1000) {
+                // 走势统计-当前（天）
+                if (scale != 60 * 60 * 1000) {
+                    return new TrendResult("failed", null, "参数不正确");
+                }
                 dataPlatformService.updateRealTimeTrendInfoByHour();
+            } else {
+                return new TrendResult("failed", null, "参数不正确");
+            }
+        } else {
+            if (scale != 24 * 60 * 60 * 1000 && scale != 60 * 60 * 1000) {
+                return new TrendResult("failed", null, "参数不正确");
             }
         }
         return dataPlatformService.trend(channelNo, startTime, contrastiveStartTime, span, scale, districtId,

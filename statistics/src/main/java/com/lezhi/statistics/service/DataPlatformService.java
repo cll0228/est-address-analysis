@@ -133,15 +133,8 @@ public class DataPlatformService {
         boolean isRealTime = false;
 
         if (null == startTime) {
-            if (scale == 3600000 * 24) {// 天刻度
-                return new TrendResult("failed", null, "参数不正确");
-            }
             startTime = System.currentTimeMillis() - span;
             isRealTime = true;
-        } else {
-            if (scale == 60000) {
-                return new TrendResult("failed", null, "参数不正确");
-            }
         }
         if (null == contrastiveStartTime) {
             contrastiveStartTime = startTime - span;

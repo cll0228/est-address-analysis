@@ -796,33 +796,4 @@
         DELETE FROM statistics.realtime_trend_24h_residence WHERE begin_time &lt; #{stime};
     </delete>
 
-    <select id="getApiLogsInfo" resultType="com.lezhi.statistics.pojo.NewVisitorInfo">
-        SELECT * FROM statistics.new_visitor ORDER BY first_visit_time
-    </select>
-
-    <insert id="inertAllNewVistor">
-        INSERT INTO statistics.new_vistor
-        (id,channel_no,mac,first_visit_time)
-        SELECT NULL,channel,mac,timestamp
-        FROM statistics.api_logs_shfctv
-        WHERE timestamp &lt;= #{startTime}
-        GROUP BY mac
-    </insert>
-
-    <insert id="inertNewVistor">
-        INSERT INTO statistics.new_visitor
-        (id,channel_no,mac,first_visit_time)
-        SELECT NULL,a.channel,a.mac,a.timestamp
-        FROM statistics.api_logs_shfctv a
-        LEFT JOIN statistics.new_visitor b
-        ON a.mac = b.mac
-        WHERE b.id is NULL
-        AND log_id &gt;(
-          SELECT log_id
-          FROM statistics.api_logs_shfctv
-          WHERE mac = #{mac}
-          AND timestamp = #{lastVisitTime}
-        )
-        GROUP BY a.mac
-    </insert>
 </mapper>

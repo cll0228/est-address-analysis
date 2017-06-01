@@ -165,7 +165,7 @@
         count( distinct a.mac)
         from mac_visit_log a left join new_visitor b on a.mac = b.mac
         <if test="channelNo != null and channelNo != 'all'">
-            and a.channel_no = b.channel
+            and a.channel_no = b.channel_no
         </if>
         and b.first_visit_time &lt;= #{timeFrom}
 

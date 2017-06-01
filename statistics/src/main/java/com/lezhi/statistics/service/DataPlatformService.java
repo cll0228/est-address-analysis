@@ -84,6 +84,7 @@ public class DataPlatformService {
         }
         obj.setUv(macs.size());
         obj.setNv(nv);
+        obj.setId(1);
         // TODO persist to db
         return obj;
     }

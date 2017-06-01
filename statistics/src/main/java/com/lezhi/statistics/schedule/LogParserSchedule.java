@@ -102,7 +102,7 @@ public class LogParserSchedule {
         }
         logService.insertSummary(channelVisitSummaries);
         taskExec.setId(1);
-        taskExec.setRefId(900);
+        taskExec.setRefId(maxId);
         taskExec.setLastExecTime(new Date());
         scheduleTaskExecMapper.updateById(taskExec);
     }

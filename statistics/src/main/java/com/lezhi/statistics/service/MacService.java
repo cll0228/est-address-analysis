@@ -70,7 +70,7 @@ public class MacService {
 	 * @param mac,channelNo..
 	 * @return
 	 */
-	public HistoryListResult<MacVisitLogInfo> getMacVisitLog(String mac, String channelNo, Long startTime, long span, Integer districtId,
+	public HistoryListResult<MacVisitLogInfo> getMacVisitLog(String mac, String channelNo, long startTime, long endTime, Integer districtId,
 															 Integer blockId, Integer residenceId, Integer pageNo, Integer pageSize) {
 		if (null != residenceId) {
 			districtId = null;
@@ -79,12 +79,6 @@ public class MacService {
 			districtId = null;
 		}
 
-		if (startTime == null || startTime <= 0) {
-			startTime = System.currentTimeMillis() - span;
-		}
-
-		long start = startTime / 1000;
-		long end = (startTime + span) / 1000;
 
 		if (null == pageNo) {
 			pageNo = 1;
@@ -92,7 +86,7 @@ public class MacService {
 		if (null == pageSize || pageSize <= 0) {
 			pageSize = 20;
 		}
-		List<MacVisitLogInfo> macInfoList = macMapper.getMacVisitLog(mac,channelNo,start,end,districtId,blockId,residenceId, null);
+		List<MacVisitLogInfo> macInfoList = macMapper.getMacVisitLog(mac,channelNo,startTime / 1000, endTime / 1000, districtId,blockId,residenceId, null);
 		if (null == macInfoList || macInfoList.size() == 0) {
 			return new HistoryListResult<>("success", null, "");
 		}

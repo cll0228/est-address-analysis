@@ -4,6 +4,7 @@ import com.lezhi.statistics.mock.CommonMockService;
 import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.service.DataPlatformService;
 import com.lezhi.statistics.util.EnvUtil;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Cuill on 2017/3/13. 数据平台
@@ -134,7 +137,7 @@ public class DataPlatformController extends BaseController {
     @ResponseBody
     private HistoryListResult<?> vistHis(@RequestParam(value = "channelNo", required = false) String channelNo,
                                          @RequestParam(value = "startTime", required = false) Long startTime,
-                                         @RequestParam(value = "span") Long span,
+                                         @RequestParam(value = "span") long span,
                                          @RequestParam(value = "districtId", required = false) Integer districtId,
                                          @RequestParam(value = "blockId", required = false) Integer blockId,
                                          @RequestParam(value = "residenceId", required = false) Integer residenceId,
@@ -144,14 +147,14 @@ public class DataPlatformController extends BaseController {
         if (EnvUtil.isMockMode()) {
             return commonMockService.getMacVisitChannelHistoryInfo();
         }
-        if (null == span) {
-            // 提示必填参数不能为空
-            return new HistoryListResult<MacVisitLogInfo>("failed", null, "必填参数不能为空");
-        }
-        span = 86400000L;// 仅支持24小时
-        if (null == startTime) {
+
+        if(startTime==null) {
             startTime = System.currentTimeMillis() - span;
         }
+        startTime = DateUtils.truncate(new Date(startTime), Calendar.DATE).getTime();
+
+        long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.DATE).getTime();
+
         if (null == pageNo) {
             pageNo = 1;
         }
@@ -159,7 +162,7 @@ public class DataPlatformController extends BaseController {
             pageSize = 20;
         }
 
-        return dataPlatformService.vistHis(channelNo, startTime, span, districtId, blockId, residenceId,
+        return dataPlatformService.vistHis(channelNo, startTime, endTime, districtId, blockId, residenceId,
                 pageNo, pageSize);
 
     }
@@ -177,14 +180,19 @@ public class DataPlatformController extends BaseController {
     @ResponseBody
     public SummaryResult summary(@RequestParam(value = "channelNo", required = false) String channelNo,
                                  @RequestParam(value = "startTime", required = false) Long startTime,
-                                 @RequestParam(value = "span") Long span, @RequestParam(value = "pageNo",required = false) Integer pageNo,
+                                 @RequestParam(value = "span") long span, @RequestParam(value = "pageNo",required = false) Integer pageNo,
                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) throws ParseException {
         if (EnvUtil.isMockMode()) {
             return commonMockService.getChannelVisitSummaryInfo();
         }
-        if (null == span) {
-            return new SummaryResult("failed", new ArrayList<ChannelSummaryObj>(), "参数不正确");
+
+        if(startTime==null) {
+            startTime = System.currentTimeMillis() - span;
         }
+        startTime = DateUtils.truncate(new Date(startTime), Calendar.DATE).getTime();
+
+        long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.DATE).getTime();
+
         if (null == pageNo || pageNo <= 0) {
             pageNo = 1;
         }
@@ -192,12 +200,7 @@ public class DataPlatformController extends BaseController {
             pageSize = 20;
         }
 
-        span = 86400000L;// 仅支持24小时
-        if (null == startTime) {
-            startTime = System.currentTimeMillis() - span;
-        }
-
-        return dataPlatformService.summary(channelNo, startTime, span, pageNo, pageSize);
+        return dataPlatformService.summary(channelNo, startTime, endTime, pageNo, pageSize);
     }
 
 }

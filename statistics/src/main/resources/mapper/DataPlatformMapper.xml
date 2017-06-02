@@ -356,7 +356,7 @@
         AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
         GROUP BY
         a.channel_no
-        ) c,
+        ) c LEFT JOIN
         (
         SELECT
         COUNT(mac) nv,
@@ -375,10 +375,10 @@
         GROUP BY
         a.channel_no
         ) d
-        WHERE
+        ON
         c.channel_no = d.channel_no
         <if test="null != channelNo and '' != channelNo">
-            AND c.channel_no = #{channelNo}
+            WHERE c.channel_no = #{channelNo}
         </if>
     </select>
 

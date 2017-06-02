@@ -168,7 +168,7 @@ public class DataPlatformService {
     public SummaryResult summary(String channelNo, long startTime, long span, Integer pageNo, Integer pageSize) {
         List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, startTime / 1000, span / 1000);
         if (null == summaryObjs || summaryObjs.size() == 0) {
-            return new SummaryResult("Success", new ArrayList<ChannelSummaryObj>(), "");
+            return new SummaryResult("success", new ArrayList<ChannelSummaryObj>(), "");
         }
         // 分页
         SummaryResult obj = new SummaryResult();

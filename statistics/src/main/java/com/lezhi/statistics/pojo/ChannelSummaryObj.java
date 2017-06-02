@@ -18,6 +18,7 @@ public class ChannelSummaryObj {
     }
 
     public Integer getUv() {
+        if(null == this.uv) return 0;
         return uv;
     }
 
@@ -26,6 +27,7 @@ public class ChannelSummaryObj {
     }
 
     public Integer getNv() {
+        if(null == this.nv) return 0;
         return nv;
     }
 
@@ -34,6 +36,7 @@ public class ChannelSummaryObj {
     }
 
     public Integer getPv() {
+        if(null == this.pv) return 0;
         return pv;
     }
 

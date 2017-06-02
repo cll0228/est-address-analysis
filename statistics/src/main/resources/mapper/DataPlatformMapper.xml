@@ -368,7 +368,7 @@
         SELECT
         b.mac
         FROM
-        statistics.new_visitor b
+        statistics.new_visitor b WHERE first_visit_time &lt;= FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
         )
         AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
         AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')

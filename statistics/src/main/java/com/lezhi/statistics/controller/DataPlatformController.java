@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 @Controller
 @RequestMapping
-public class DataPlatformController {
+public class DataPlatformController extends BaseController {
 
     @Autowired
     private DataPlatformService dataPlatformService;

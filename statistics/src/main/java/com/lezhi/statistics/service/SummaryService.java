@@ -16,22 +16,22 @@ public class SummaryService {
 	private SummaryMapper summaryMapper;
 
 	public List<SummaryInfo> getDistrictSummaryList(String channelNo,
-													long startTime, long span) {
+													long startTime, long endTime) {
 		return summaryMapper.getDistrictSummaryList(channelNo, startTime / 1000,
-				(startTime + span) / 1000);
+				endTime / 1000);
 	}
 
 	public List<SummaryInfo> getBlockSummaryList(String channelNo,
-													  long startTime, long span, Integer districtId) {
-		return summaryMapper.getBlockSummaryList(channelNo, startTime / 1000, (startTime + span) / 1000,
+													  long startTime, long endTime, Integer districtId) {
+		return summaryMapper.getBlockSummaryList(channelNo, startTime / 1000, endTime / 1000,
 				districtId);
 	}
 
 	public List<SummaryInfo> getResidenceSummaryList(String channelNo,
-															  long startTime, long span, Integer blockId, Integer start,
+															  long startTime, long endTime, Integer blockId, Integer start,
 			Integer size) {
 		return summaryMapper.getResidenceSummaryList(channelNo, startTime / 1000,
-				(startTime + span) / 1000, blockId, start, size);
+				endTime / 1000, blockId, start, size);
 	}
 
 	public Integer totalCount(String channelNo, long startTime, long span,

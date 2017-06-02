@@ -4,23 +4,21 @@ import com.lezhi.statistics.mock.CommonMockService;
 import com.lezhi.statistics.pojo.SummaryInfo;
 import com.lezhi.statistics.service.SummaryService;
 import com.lezhi.statistics.util.EnvUtil;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wangyh on 2017/3/15.
  */
 @Controller
 @RequestMapping("/summary/")
-public class SummaryController {
+public class SummaryController extends BaseController {
 	@Autowired
 	private SummaryService summaryService;
 
@@ -51,8 +49,17 @@ public class SummaryController {
 		if(startTime==null) {
 			startTime = System.currentTimeMillis() - span;
 		}
-		List<SummaryInfo> summaryInfoList = summaryService
-				.getDistrictSummaryList(channelNo, startTime, span);
+		startTime = DateUtils.truncate(new Date(startTime), Calendar.DATE).getTime();
+
+		long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.DATE).getTime();
+
+		if (endTime <= startTime) {
+			result.put("status", "failed");
+			result.put("summaries", new ArrayList<SummaryInfo>());
+			result.put("errMsg", "时间跨度至少是一天");
+			return result;
+		}
+		List<SummaryInfo> summaryInfoList = summaryService.getDistrictSummaryList(channelNo, startTime, endTime);
 		if (summaryInfoList == null||summaryInfoList.size()==0) {
 			result.put("status", "failed");
 			result.put("summaries", new ArrayList<SummaryInfo>());
@@ -88,11 +95,22 @@ public class SummaryController {
             return commonMockService.getMacInfoByDistrict();
         }
 		Map<String, Object> result = new HashMap<>();
+
 		if(startTime==null) {
 			startTime = System.currentTimeMillis() - span;
 		}
+		startTime = DateUtils.truncate(new Date(startTime), Calendar.DATE).getTime();
+
+		long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.DATE).getTime();
+
+		if (endTime <= startTime) {
+			result.put("status", "failed");
+			result.put("summaries", new ArrayList<SummaryInfo>());
+			result.put("errMsg", "时间跨度至少是一天");
+			return result;
+		}
 		List<SummaryInfo> summaryInfoList = summaryService
-				.getBlockSummaryList(channelNo, startTime, span, districtId);
+				.getBlockSummaryList(channelNo, startTime, endTime, districtId);
 		if (summaryInfoList == null||summaryInfoList.size()==0) {
 			result.put("status", "failed");
 			result.put("summaries", new ArrayList<SummaryInfo>());
@@ -156,15 +174,25 @@ public class SummaryController {
 		if (defaultPageNo == 1) {
 			defaultPageNo = 0;
 		}
-		if(startTime == null) {
+		if(startTime==null) {
 			startTime = System.currentTimeMillis() - span;
 		}
+		startTime = DateUtils.truncate(new Date(startTime), Calendar.DATE).getTime();
+
+		long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.DATE).getTime();
+
+		if (endTime <= startTime) {
+			result.put("status", "failed");
+			result.put("summaries", new ArrayList<SummaryInfo>());
+			result.put("errMsg", "时间跨度至少是一天");
+			return result;
+		}
 		List<SummaryInfo> residenceInfoList = summaryService
-				.getResidenceSummaryList(channelNo, startTime, span, blockId, defaultPageNo, defaultPageSize);
+				.getResidenceSummaryList(channelNo, startTime, endTime, blockId, defaultPageNo, defaultPageSize);
 		if (residenceInfoList != null && residenceInfoList.size() > 0) {
 			realPageSize = residenceInfoList.size();
 			// 查询总记录数计算总页数等信息
-			totalCount = summaryService.totalCount(channelNo, startTime, span, blockId);
+			totalCount = summaryService.totalCount(channelNo, startTime, endTime, blockId);
 			int mod = totalCount % defaultPageSize;
 			totalPageCount = mod > 0 ? (totalCount / defaultPageSize) + 1
 					: (totalCount / defaultPageSize);

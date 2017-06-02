@@ -28,12 +28,13 @@ public class LogParserSchedule {
     private LogService logService;
 
     // every hour
-    @Scheduled(cron = "${log.prepare}")
+   @Scheduled(cron = "${log.prepare}")
     @Transactional
     //@Scheduled(fixedDelay = 60 * 60 * 1000, initialDelay = 0)
     public synchronized void parse() throws Exception {
         ScheduleTaskExec taskExec = scheduleTaskExecMapper.findById(1);
         Integer minIdExclude = taskExec.getRefId();
+        // todo  是否考虑， 发送过期日志
         List<MacVisitLogInfo> logs = this.macMapper.getMacVisitLog(null, null, null, null, null, null, null, minIdExclude);
         if (logs == null)
             return;

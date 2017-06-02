@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/mac/")
-public class MacController {
+public class MacController extends BaseController  {
 	@Autowired
 	private MacService macService;
 	@Autowired

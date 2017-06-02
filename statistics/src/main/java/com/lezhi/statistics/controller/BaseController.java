@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by Colin Yan on 2017/6/1.
  */
-public class BaseController {
+public abstract class BaseController {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 

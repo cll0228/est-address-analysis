@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping
-public class IndexController {
+public class IndexController extends BaseController  {
 
     @RequestMapping(value = "/")
     public void home(HttpServletResponse response) throws IOException {

@@ -12,11 +12,12 @@ import java.util.List;
  */
 @Service
 public class LogService {
-	@Autowired
-	private LogMapper logMapper;
+    @Autowired
+    private LogMapper logMapper;
 
-	public void insertSummary(List<ChannelVisitSummary> channelVisitSummaries) {
-		logMapper.insertSummary(channelVisitSummaries);
-	}
-	
+    public void insertSummary(List<ChannelVisitSummary> channelVisitSummaries) {
+        if (channelVisitSummaries != null && channelVisitSummaries.size() > 0)
+            logMapper.insertSummary(channelVisitSummaries);
+    }
+
 }

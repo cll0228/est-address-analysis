@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ import com.lezhi.statistics.pojo.Log;
 @SuppressWarnings("all")
 @Service
 public class HisTrendTask {
+
+    protected static final org.apache.commons.logging.Log LOGGER = LogFactory.getLog(HisTrendTask.class);
 
     static Calendar calendar = Calendar.getInstance();
 
@@ -47,7 +50,7 @@ public class HisTrendTask {
                 // 之前无记录，查询后面
                 continue;
             } else {
-                System.out.println("当前mac=" + log.getMac() + "在该时间段前有记录，正在处理。。");
+                LOGGER.debug("当前mac=" + log.getMac() + "在该时间段前有记录，正在处理。。");
                 task.setChannelNo(log.getChannel());
                 task.setUv(mapper.selectUv(log, startTime, endTime, type));
                 task.setNv(mapper.selectNv(log, startTime, endTime, type));
@@ -62,7 +65,7 @@ public class HisTrendTask {
                 List<Log> same = mapper.selectTimeBySameMacAndSession(log, startTime);
                 if (null == same || same.size() == 0) {
                     // 访问时长从当前时间点算起
-                    System.out.println("未找到当前数据在该时间段内同一session记录" + log.getSession());
+                    LOGGER.debug("未找到当前数据在该时间段内同一session记录" + log.getSession());
                     task.setTotalTop(log.getTimeStamp().getTime() / 1000 - startTime);
                 } else
                     task.setTotalTop(log.getTimeStamp().getTime() / 1000
@@ -92,7 +95,7 @@ public class HisTrendTask {
     }
 
     private void saveDisInfo(Map<String, HisTrendInfo> district_map, String type) {
-        System.out.println("calcHour_正在保存type=" + type + "记录数size=" + district_map.size());
+        LOGGER.debug("calcHour_正在保存type=" + type + "记录数size=" + district_map.size());
         for (String key : district_map.keySet()) {
             mapper.saveDis(district_map.get(key), type);
         }
@@ -156,7 +159,7 @@ public class HisTrendTask {
     }
 
     private void saveDisInfo_day(Map<String, HisTrendInfo> map, String type) {
-        System.out.println("calcDay_正在保存type=" + type + "记录数size=" + map.size());
+        LOGGER.debug("calcDay_正在保存type=" + type + "记录数size=" + map.size());
         for (String key : map.keySet()) {
             mapper.saveDis_day(map.get(key), type);
         }

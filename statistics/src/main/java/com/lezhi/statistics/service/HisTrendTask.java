@@ -14,17 +14,12 @@ import com.lezhi.statistics.mapper.DataPlatformMapper;
 import com.lezhi.statistics.pojo.HisTrendInfo;
 import com.lezhi.statistics.pojo.Log;
 
-import jdk.nashorn.internal.objects.annotations.Constructor;
-
 /**
  * Created by Cuill on 2017/3/28.
  */
 @SuppressWarnings("all")
 @Service
 public class HisTrendTask {
-
-    @Autowired
-    private DataPlatformMapper mapper;
 
     static Calendar calendar = Calendar.getInstance();
 
@@ -35,6 +30,9 @@ public class HisTrendTask {
     static SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
 
     static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    @Autowired
+    private DataPlatformMapper mapper;
 
     public void calcHour(String type, List<Log> logs, Long startTime, Long endTime) throws ParseException {
         Map<String, HisTrendInfo> map = new HashedMap();
@@ -94,6 +92,7 @@ public class HisTrendTask {
     }
 
     private void saveDisInfo(Map<String, HisTrendInfo> district_map, String type) {
+        System.out.println("calcHour_正在保存type=" + type + "记录数size=" + district_map.size());
         for (String key : district_map.keySet()) {
             mapper.saveDis(district_map.get(key), type);
         }
@@ -157,6 +156,7 @@ public class HisTrendTask {
     }
 
     private void saveDisInfo_day(Map<String, HisTrendInfo> map, String type) {
+        System.out.println("calcDay_正在保存type=" + type + "记录数size=" + map.size());
         for (String key : map.keySet()) {
             mapper.saveDis_day(map.get(key), type);
         }

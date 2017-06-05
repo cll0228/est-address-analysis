@@ -5,16 +5,15 @@ import com.lezhi.statistics.pojo.HistoryListResult;
 import com.lezhi.statistics.pojo.MacInfoObj;
 import com.lezhi.statistics.service.MacService;
 import com.lezhi.statistics.util.EnvUtil;
+import com.lezhi.statistics.util.PageUtil;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wangyh on 2017/3/13.
@@ -115,9 +114,10 @@ public class MacController extends BaseController  {
 				isLastPage = true;
 			}
 		} else {
-			result.put("status", "failed");
+			result.put("status", "success");
 			result.put("datalist", new ArrayList<MacInfoObj>());
-			result.put("errMsg", "未找到记录");
+			result.put("errMsg", "");
+			PageUtil.emptyPage(result);
 			return result;
 		}
 		// 封装返回对象
@@ -149,7 +149,7 @@ public class MacController extends BaseController  {
 		if (macInfo == null) {
 			result.put("status", "failed");
 			result.put("macInfo", null);
-			result.put("errMsg", "未找到记录");
+			result.put("errMsg", "mac地址不存在");
 			return result;
 		}
 		// 封装返回对象
@@ -180,11 +180,13 @@ public class MacController extends BaseController  {
 		if (EnvUtil.isMockMode()) {
 			return commonMockService.getMacVisitLogInfo();
 		}
-		if (null == span) {
-			// 提示必填参数不能为空
-			return new HistoryListResult<Object>("failed", null, "必填参数不能为空");
+		if(startTime==null) {
+			startTime = System.currentTimeMillis() - span;
 		}
+		startTime = DateUtils.truncate(new Date(startTime), Calendar.DATE).getTime();
+
+		long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.DATE).getTime();
 		Map<String, Object> result = new HashMap<>();
-		return macService.getMacVisitLog(mac,channelNo,startTime,span,districtId,blockId,residenceId,pageNo,pageSize);
+		return macService.getMacVisitLog(mac,channelNo,startTime,endTime,districtId,blockId,residenceId,pageNo,pageSize);
 	}
 }

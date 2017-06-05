@@ -4,6 +4,7 @@ import com.lezhi.statistics.mock.CommonMockService;
 import com.lezhi.statistics.pojo.SummaryInfo;
 import com.lezhi.statistics.service.SummaryService;
 import com.lezhi.statistics.util.EnvUtil;
+import com.lezhi.statistics.util.PageUtil;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,9 +62,10 @@ public class SummaryController extends BaseController {
 		}
 		List<SummaryInfo> summaryInfoList = summaryService.getDistrictSummaryList(channelNo, startTime, endTime);
 		if (summaryInfoList == null||summaryInfoList.size()==0) {
-			result.put("status", "failed");
+			result.put("status", "success");
 			result.put("summaries", new ArrayList<SummaryInfo>());
-			result.put("errMsg", "未找到记录");
+			result.put("errMsg", "");
+			PageUtil.emptyPage(result);
 			return result;
 		}
 		// 封装返回对象
@@ -112,9 +114,10 @@ public class SummaryController extends BaseController {
 		List<SummaryInfo> summaryInfoList = summaryService
 				.getBlockSummaryList(channelNo, startTime, endTime, districtId);
 		if (summaryInfoList == null||summaryInfoList.size()==0) {
-			result.put("status", "failed");
+			result.put("status", "success");
 			result.put("summaries", new ArrayList<SummaryInfo>());
-			result.put("errMsg", "未找到记录");
+			result.put("errMsg", "");
+			PageUtil.emptyPage(result);
 			return result;
 		}
 		// 封装返回对象
@@ -187,8 +190,7 @@ public class SummaryController extends BaseController {
 			result.put("errMsg", "时间跨度至少是一天");
 			return result;
 		}
-		List<SummaryInfo> residenceInfoList = summaryService
-				.getResidenceSummaryList(channelNo, startTime, endTime, blockId, defaultPageNo, defaultPageSize);
+		List<SummaryInfo> residenceInfoList = summaryService.getResidenceSummaryList(channelNo, startTime, endTime, blockId, defaultPageNo, defaultPageSize);
 		if (residenceInfoList != null && residenceInfoList.size() > 0) {
 			realPageSize = residenceInfoList.size();
 			// 查询总记录数计算总页数等信息
@@ -203,9 +205,10 @@ public class SummaryController extends BaseController {
 				isLastPage = true;
 			}
 		} else {
-			result.put("status", "failed");
+			result.put("status", "success");
 			result.put("summaries", new ArrayList<SummaryInfo>());
-			result.put("errMsg", "未找到记录");
+			result.put("errMsg", "");
+			PageUtil.emptyPage(result);
 			return result;
 		}
 		// 封装返回对象

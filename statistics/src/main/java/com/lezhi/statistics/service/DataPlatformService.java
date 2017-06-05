@@ -26,7 +26,7 @@ public class DataPlatformService {
     @Autowired
     private MacMapper macMapper;
 
-    public HistoryListResult<MacVisitHistoryInfo> vistHis(String channelNo, long startTime, long span, Integer districtId, Integer blockId,
+    public HistoryListResult<MacVisitHistoryInfo> vistHis(String channelNo, long startTime, long endTime, Integer districtId, Integer blockId,
                                                           Integer residenceId, Integer pageNo, Integer pageSize) {
         if (null != residenceId) {
             districtId = null;
@@ -34,7 +34,7 @@ public class DataPlatformService {
         } else if (null == residenceId && null != blockId) {
             districtId = null;
         }
-        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, startTime / 1000, span / 1000,
+        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, startTime / 1000, endTime / 1000,
                 districtId, blockId,
                     residenceId);
         if (null == infos || infos.size() == 0) {
@@ -119,7 +119,7 @@ public class DataPlatformService {
         return summary;
     }
 
-    public TrendResult trend(String channelNo, Long startTime, Long contrastiveStartTime, final long span, Long scale,
+    public TrendResult trend(String channelNo, Long startTime, Long contrastiveStartTime, final long span, long scale,
                              Integer districtId, Integer blockId, Integer residenceId) {
         if (null != residenceId) {
             districtId = null;
@@ -137,19 +137,22 @@ public class DataPlatformService {
             startTime = System.currentTimeMillis() - span;
             isRealTime = true;
         }
+        long endTime = startTime + span;
+
         if (null == contrastiveStartTime) {
             contrastiveStartTime = startTime - span;
         }
+        long contrastiveEndTime = contrastiveStartTime + span;
 
         if (isRealTime) {// 当前走势 包括分钟 和 小时 两种刻度
-            current = dataPlatformMapper.current(channelNo, startTime / 1000, span / 1000, scale, districtId, blockId,
+            current = dataPlatformMapper.current(channelNo, startTime / 1000, endTime / 1000, scale, districtId, blockId,
                     residenceId);
-            contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime / 1000, span / 1000, scale,
+            contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime / 1000, contrastiveEndTime / 1000, scale,
                     districtId, blockId, residenceId);
         } else {
-            current = dataPlatformMapper.his_current(channelNo, startTime / 1000, span / 1000, scale, districtId, blockId,
+            current = dataPlatformMapper.his_current(channelNo, startTime / 1000, endTime / 1000, scale, districtId, blockId,
                     residenceId);
-            contrastive = dataPlatformMapper.his_contrastive(channelNo, contrastiveStartTime / 1000, span / 1000, scale,
+            contrastive = dataPlatformMapper.his_contrastive(channelNo, contrastiveStartTime / 1000, contrastiveEndTime / 1000, scale,
                     districtId, blockId, residenceId);
         }
         // 本周期走势数据节点
@@ -165,8 +168,8 @@ public class DataPlatformService {
         return new TrendResult("success", map, "");
     }
 
-    public SummaryResult summary(String channelNo, long startTime, long span, Integer pageNo, Integer pageSize) {
-        List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, startTime / 1000, span / 1000);
+    public SummaryResult summary(String channelNo, long startTime, long endTime, Integer pageNo, Integer pageSize) {
+        List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, startTime / 1000, endTime / 1000);
         if (null == summaryObjs || summaryObjs.size() == 0) {
             return new SummaryResult("success", new ArrayList<ChannelSummaryObj>(), "");
         }

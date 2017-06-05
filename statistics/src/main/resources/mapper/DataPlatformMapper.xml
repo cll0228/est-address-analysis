@@ -23,7 +23,7 @@
             AND channel_no = #{channelNo}
         </if>
         AND begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
+        AND end_time &lt;= FROM_UNIXTIME(${endTime},'%Y-%m-%d %H:%i:%s')
         GROUP BY mac
     </select>
 
@@ -130,7 +130,7 @@
         </otherwise>
         </choose>
         AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-        FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+        FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s') &gt;= end_time
         GROUP BY begin_time DESC
     </select>
 
@@ -168,7 +168,7 @@
                     </if>
                 </if>
                 AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')   &lt;= begin_time AND
-                FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+                FROM_UNIXTIME(${endTime},'%Y-%m-%d %H:%i:%s') &gt;= end_time
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -196,7 +196,7 @@
                     </if>
                 </if>
                 AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d')   &lt;= begin_time AND
-                FROM_UNIXTIME(${startTime+span},'%Y-%m-%d') &gt;= end_time
+                FROM_UNIXTIME(${endTime},'%Y-%m-%d') &gt;= end_time
             </otherwise>
         </choose>
         GROUP BY begin_time DESC
@@ -264,7 +264,7 @@
             </otherwise>
         </choose>
         AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-        FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+        FROM_UNIXTIME(${contrastiveEndTime},'%Y-%m-%d %H:%i:%s') &gt;= end_time
         GROUP BY begin_time DESC
     </select>
 
@@ -302,7 +302,7 @@
                     </if>
                 </if>
                 AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-                FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+                FROM_UNIXTIME(${contrastiveEndTime},'%Y-%m-%d %H:%i:%s') &gt;= end_time
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -330,7 +330,7 @@
                     </if>
                 </if>
                 AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d') &lt;= begin_time AND
-                FROM_UNIXTIME(${contrastiveStartTime+span},'%Y-%m-%d') &gt;= end_time
+                FROM_UNIXTIME(${contrastiveEndTime},'%Y-%m-%d') &gt;= end_time
             </otherwise>
         </choose>
 
@@ -353,7 +353,7 @@
         statistics.channel_visit_summary a
         WHERE 1=1
         AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(${endTime},'%Y-%m-%d %H:%i:%s')
         GROUP BY
         a.channel_no
         ) c LEFT JOIN
@@ -371,7 +371,7 @@
         statistics.new_visitor b WHERE first_visit_time &lt;= FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
         )
         AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.end_time &lt;= FROM_UNIXTIME(${startTime+span},'%Y-%m-%d %H:%i:%s')
+        AND a.end_time &lt;= FROM_UNIXTIME(${endTime},'%Y-%m-%d %H:%i:%s')
         GROUP BY
         a.channel_no
         ) d

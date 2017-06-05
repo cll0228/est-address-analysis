@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public interface DataPlatformMapper {
     List<MacVisitHistoryInfo> selectVistHis(@Param("channelNo") String channelNo,
-            @Param("startTime") Long startTime, @Param("span") Long span,
+            @Param("startTime") long startTime, @Param("endTime") long endTime,
             @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
             @Param("residenceId") Integer residenceId);
 
@@ -21,22 +21,22 @@ public interface DataPlatformMapper {
             @Param("residenceId") Integer residenceId) ;
 
     List<TrendObj> current(@Param("channelNo") String channelNo, @Param("startTime") Long startTime,
-            @Param("span") Long span, @Param("scale") Long scale, @Param("districtId") Integer districtId,
+            @Param("endTime") Long endTime, @Param("scale") Long scale, @Param("districtId") Integer districtId,
             @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
 
     List<TrendObj> contrastive(@Param("channelNo") String channelNo, @Param("contrastiveStartTime") Long contrastiveStartTime,
-                               @Param("span") Long span, @Param("scale") Long scale, @Param("districtId") Integer districtId,
+                               @Param("contrastiveEndTime") Long contrastiveEndTime, @Param("scale") Long scale, @Param("districtId") Integer districtId,
                                @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
 
-    List<ChannelSummaryObj> summary(@Param("channelNo") String channelNo, @Param("startTime") Long startTime,
-            @Param("span") Long span);
+    List<ChannelSummaryObj> summary(@Param("channelNo") String channelNo, @Param("startTime") long startTime,
+            @Param("endTime") long endTime);
 
     List<TrendObj> his_current(@Param("channelNo") String channelNo, @Param("startTime") Long startTime,
-                               @Param("span") Long span, @Param("scale") Long scale, @Param("districtId") Integer districtId,
+                               @Param("endTime") Long endTime, @Param("scale") Long scale, @Param("districtId") Integer districtId,
                                @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
 
     List<TrendObj> his_contrastive(@Param("channelNo") String channelNo, @Param("contrastiveStartTime") Long contrastiveStartTime,
-                                   @Param("span") Long span, @Param("scale") Long scale, @Param("districtId") Integer districtId,
+                                   @Param("contrastiveEndTime") Long contrastiveEndTime, @Param("scale") Long scale, @Param("districtId") Integer districtId,
                                    @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
 
     void inert(@Param("Map") Map<String, Object> Map, @Param("type") String type);

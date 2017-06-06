@@ -24,10 +24,10 @@
 		<script>
 			var headerParameters = {
 				env : 'production',
-				publichost : '',
-				statichost : 'http://localhost',
-				apihost : 'http://soa.dooioo.com',
-				quxianhost : 'http://localhost:8080/admin-lj',
+				publichost : '${ctx}',
+				statichost : '${ctx}',
+				apihost : '${ctx}',
+				quxianhost : '${ctx}',
 				cityCode : 'sh',
 				cityName: '上海',
 				cityCoordinate : {//城市中心坐标

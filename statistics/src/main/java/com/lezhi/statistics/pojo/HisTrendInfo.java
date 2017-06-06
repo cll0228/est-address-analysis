@@ -8,7 +8,7 @@ public class HisTrendInfo extends TrendObj{
     private Integer blockId;
     private Integer id;
     private Integer residenceId;
-    private Integer channelNo;
+    private String channelNo;
     private Long totalTop;
 
     //区县
@@ -138,11 +138,11 @@ public class HisTrendInfo extends TrendObj{
         this.id = id;
     }
 
-    public Integer getChannelNo() {
+    public String getChannelNo() {
         return channelNo;
     }
 
-    public void setChannelNo(Integer channelNo) {
+    public void setChannelNo(String channelNo) {
         this.channelNo = channelNo;
     }
 }

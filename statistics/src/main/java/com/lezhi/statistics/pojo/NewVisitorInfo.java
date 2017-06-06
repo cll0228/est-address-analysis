@@ -5,7 +5,7 @@ package com.lezhi.statistics.pojo;
  */
 public class NewVisitorInfo {
     private Integer id;
-    private Integer channelNo;
+    private String channelNo;
     private String mac;
     private String firstVisitTime;
 
@@ -17,11 +17,11 @@ public class NewVisitorInfo {
         this.id = id;
     }
 
-    public Integer getChannelNo() {
+    public String getChannelNo() {
         return channelNo;
     }
 
-    public void setChannelNo(Integer channelNo) {
+    public void setChannelNo(String channelNo) {
         this.channelNo = channelNo;
     }
 

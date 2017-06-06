@@ -106,13 +106,11 @@
     <select id="getMacVisitLog" resultType="com.lezhi.statistics.pojo.MacVisitLogInfo">
         SELECT
 		  a.id, a.mac,a.channel_no as channelNo,a.district_id as districtId,a.block_id as blockId,a.residence_id as residenceId
-		  ,unix_timestamp(a.create_time)*1000 time,b.district_name as districtName,c.block_name as blockName
-		  ,d.residence_name as residenceName
+		  ,unix_timestamp(a.create_time)*1000 as `time`,a.district_name as districtName,a.block_name as blockName
+		  ,a.residence_name as residenceName
+          ,a.first_visit_id_if_ever_visited as firstVisitIdIfEverVisited
 		FROM
 			mac_visit_log a
-		LEFT JOIN ocn_address.of_district b ON a.district_id = b.district_id
-		LEFT JOIN df_estate_db_v2.sh_block c ON a.block_id = c.block_id
-		LEFT JOIN df_estate_db_v2.of_residence d ON a.residence_id = d.id
 		WHERE 1=1
 		<if test="mac != null">
             AND a.mac = #{mac}
@@ -138,7 +136,7 @@
         <if test="minIdExclude != null">
             AND a.id > #{minIdExclude}
         </if>
-        order by create_time desc
+        order by a.create_time desc
     </select>
 
     <select id="selectForRealtimeSummary" resultType="com.lezhi.statistics.pojo.MacVisitLogInfo">

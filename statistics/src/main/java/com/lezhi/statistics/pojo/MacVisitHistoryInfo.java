@@ -8,13 +8,13 @@ public class MacVisitHistoryInfo {
 
     private Integer pv;// 期间访问量
 
-    private Integer channelNo;
+    private String channelNo;
 
-    public Integer getChannelNo() {
+    public String getChannelNo() {
         return channelNo;
     }
 
-    public void setChannelNo(Integer channelNo) {
+    public void setChannelNo(String channelNo) {
         this.channelNo = channelNo;
     }
 

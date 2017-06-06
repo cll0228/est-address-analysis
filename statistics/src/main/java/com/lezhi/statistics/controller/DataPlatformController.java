@@ -93,6 +93,9 @@ public class DataPlatformController extends BaseController {
         if (EnvUtil.isMockMode()) {
             return commonMockService.trend();
         }
+        if (channelNo == null)
+            channelNo = "all";
+
         if (null == span || null == scale) {
             return new TrendResult("failed", null, "参数不正确");
         }

@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class Log {
     private Integer logId;
-    private Integer channel;
+    private String channel;
     private String mac;
     private Date timeStamp;
     private String session;
@@ -48,11 +48,11 @@ public class Log {
         this.logId = logId;
     }
 
-    public Integer getChannel() {
+    public String getChannel() {
         return channel;
     }
 
-    public void setChannel(Integer channel) {
+    public void setChannel(String channel) {
         this.channel = channel;
     }
 

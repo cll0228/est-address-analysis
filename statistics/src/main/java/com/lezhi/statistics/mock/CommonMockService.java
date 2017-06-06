@@ -27,7 +27,7 @@ public class CommonMockService {
             MacVisitHistoryInfo macVisitHistoryInfo = new MacVisitHistoryInfo();
             macVisitHistoryInfo.setMac(macs[i]);
             String channelNo = getRandomString(channels);
-            macVisitHistoryInfo.setChannelNo(Integer.valueOf(channelNo));
+            macVisitHistoryInfo.setChannelNo(channelNo);
             macVisitHistoryInfo.setPv(pv);
             macVisitHistoryInfo.setFirstVisitTime(Long.valueOf("1495641600000"));
             macVisitHistoryInfo.setLastVisitTime(Long.valueOf("1495727999000"));
@@ -55,7 +55,7 @@ public class CommonMockService {
             int pv = new Random().nextInt(500) + 1;
             int nv = new Random().nextInt(100) + 1;
             ChannelSummaryObj channelSummaryObj = new ChannelSummaryObj();
-            channelSummaryObj.setChannelNo(Integer.valueOf(channels[i]));
+            channelSummaryObj.setChannelNo(channels[i]);
             channelSummaryObj.setPv(pv);
             channelSummaryObj.setNv(nv);
             channelSummaryObj.setUv(uv);

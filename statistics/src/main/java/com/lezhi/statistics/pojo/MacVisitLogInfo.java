@@ -15,6 +15,17 @@ public class MacVisitLogInfo {
 	private String residenceName;// 小区名称
 	private Long time;// 日志时间。 unix time, 单位ms
 
+	// null表示新用户，非null表示老用户；查询的时候如果指定了频道，就是相对该频道，否则相对全局
+	private Integer firstVisitIdIfEverVisited;
+
+	public Integer getFirstVisitIdIfEverVisited() {
+		return firstVisitIdIfEverVisited;
+	}
+
+	public void setFirstVisitIdIfEverVisited(Integer firstVisitIdIfEverVisited) {
+		this.firstVisitIdIfEverVisited = firstVisitIdIfEverVisited;
+	}
+
 	public Integer getId() {
 		return id;
 	}

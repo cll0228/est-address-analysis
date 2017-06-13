@@ -5,6 +5,7 @@ import com.lezhi.statistics.pojo.SummaryInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,26 +18,26 @@ public class SummaryService {
 
 	public List<SummaryInfo> getDistrictSummaryList(String channelNo,
 													long startTime, long endTime) {
-		return summaryMapper.getDistrictSummaryList(channelNo, startTime / 1000,
-				endTime / 1000);
+		return summaryMapper.getDistrictSummaryList(channelNo, new Date(startTime),
+				new Date(endTime));
 	}
 
 	public List<SummaryInfo> getBlockSummaryList(String channelNo,
 													  long startTime, long endTime, Integer districtId) {
-		return summaryMapper.getBlockSummaryList(channelNo, startTime / 1000, endTime / 1000,
+		return summaryMapper.getBlockSummaryList(channelNo, new Date(startTime), new Date(endTime),
 				districtId);
 	}
 
 	public List<SummaryInfo> getResidenceSummaryList(String channelNo,
 															  long startTime, long endTime, Integer blockId, Integer start,
 			Integer size) {
-		return summaryMapper.getResidenceSummaryList(channelNo, startTime / 1000,
-				endTime / 1000, blockId, start, size);
+		return summaryMapper.getResidenceSummaryList(channelNo, new Date(startTime),
+				new Date(endTime), blockId, start, size);
 	}
 
 	public Integer totalCount(String channelNo, long startTime, long span,
 			Integer blockId) {
-		Integer count = summaryMapper.totalCount(channelNo, startTime / 1000, (startTime + span) / 1000,
+		Integer count = summaryMapper.totalCount(channelNo, new Date(startTime), new Date(startTime + span),
 				blockId);
 		return count;
 	}

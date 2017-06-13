@@ -33,7 +33,7 @@ public interface MacMapper {
 	 * @return
 	 */
 	List<MacVisitLogInfo> getMacVisitLog(@Param("mac")String mac, @Param("channelNo") String channelNo,
-										 @Param("startTime") Long startTime, @Param("endTime") Long endTime,
+										 @Param("startTime") Date startTime, @Param("endTime") Date endTime,
 										 @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
 										 @Param("residenceId") Integer residenceId, @Param("minIdExclude") Integer minIdExclude);
 

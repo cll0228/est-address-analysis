@@ -2,9 +2,7 @@ package com.lezhi.statistics.util;
 
 import com.lezhi.statistics.mapper.DataPlatformMapper;
 import org.apache.commons.collections.map.HashedMap;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -28,46 +26,6 @@ public class DateUtil {
 
 
     public static void main(String[] args) throws Exception {
-       Long l= format1.parse(DateUtil.updateDay(new Date(), -1)).getTime()/1000;
-        System.out.println(l);
-    }
-
-    /**
-     * 实时24小时表添加数据 修改map.put id即可
-     * 
-     * @throws Exception
-     */
-    public static void realtime_trend_24h() throws Exception {
-        for (int i = 0; i < 48; i++) {
-            Map<String, Object> map = new HashedMap();
-            map.put("channelNo", 997);
-            map.put("beginTime", reduce1Hour(format.format(new Date()), i));
-            map.put("endTime", reduce1Second(reduce1Hour(map.get("beginTime").toString(), 1)));
-            map.put("uv", (i + 2) * Math.random());
-            map.put("pv", (i + 1) * Math.random());
-            map.put("nv", 1);
-            map.put("avgTop", (i + 1) * Math.random() * 10);
-            map.put("residenceId", 24571);
-            mapper.inert(map, "residence");
-        }
-    }
-
-    /**
-     * 实时分钟添加数据
-     */
-    public static void realtime_trend_60m() throws Exception {
-        for (int i = 0; i < 60; i++) {
-            Map<String, Object> map = new HashedMap();
-            map.put("channelNo", 999);
-            map.put("beginTime", update1Min(format2.format(new Date()), i));
-            map.put("endTime", reduce1Second(update1Min(map.get("beginTime").toString(), 1)));
-            map.put("uv", (i + 2) * Math.random() + 10);
-            map.put("pv", (i + 1) * Math.random() + 5);
-            map.put("nv", 1);
-            map.put("avgTop", (i + 1) * Math.random() * 10);
-            map.put("blockId", 48);
-            mapper.inert_trend(map, "block");
-        }
     }
 
     public static void his_trend_day()throws Exception{
@@ -81,7 +39,7 @@ public class DateUtil {
             map.put("nv", 1);
             map.put("avgTop", (i + 1) * Math.random() * 10);
             map.put("districtId", 310106);
-            mapper.inert_trend_day(map, "district");
+            mapper.insert_trend_day(map, "district");
         }
     }
 

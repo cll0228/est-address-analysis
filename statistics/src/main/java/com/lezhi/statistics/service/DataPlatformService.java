@@ -1,10 +1,11 @@
 package com.lezhi.statistics.service;
 
+import com.lezhi.statistics.BusinessException;
+import com.lezhi.statistics.enums.TrendScaleType;
 import com.lezhi.statistics.mapper.DataPlatformMapper;
 import com.lezhi.statistics.mapper.MacMapper;
 import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.util.ListPageUtil;
-import com.lezhi.statistics.util.PropertyUtil;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class DataPlatformService {
         } else if (null == residenceId && null != blockId) {
             districtId = null;
         }
-        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, new Date(startTime), new Date(endTime),
+        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVisitHis(channelNo, new Date(startTime), new Date(endTime),
                 districtId, blockId,
                     residenceId);
         if (null == infos || infos.size() == 0) {
@@ -76,7 +77,7 @@ public class DataPlatformService {
             logs = new ArrayList<>();
 
         RealTimeSummaryObj obj = new RealTimeSummaryObj();
-        obj.setRefreshTime(now.getTime());
+        obj.setRefreshTime(now);
         obj.setPv(logs.size());
         Set<String> macs = new HashSet<>();
         for (MacVisitLogInfo info : logs) {
@@ -85,17 +86,15 @@ public class DataPlatformService {
         obj.setUv(macs.size());
         obj.setNv(nv);
         obj.setId(1);
-        // TODO persist to db
         return obj;
     }
 
     private RealTimeSummaryObj checkRealtimeSummary(String channelNo, Long period, Integer districtId, Integer blockId, Integer residenceId, RealTimeSummaryObj obj) {
         Date now = DateUtils.truncate(new Date(), Calendar.MINUTE);
         if (obj != null) {
-            if (obj.getRefreshTime() > now.getTime()) {
-                dataPlatformMapper.putDownRealtimeSummary(obj.getId(), now);
+            if (obj.getRefreshTime().getTime() > now.getTime()) {
                 return obj;
-            } else if (obj.getRefreshTime() == now.getTime()) {
+            } else if (obj.getRefreshTime().getTime() == now.getTime()) {
                 return obj;
             } else {
                 return refreshRealtimeSummary(channelNo, period, districtId, blockId, residenceId, now);
@@ -106,9 +105,7 @@ public class DataPlatformService {
 
     public RealTimeSummaryResult realtimeSummary(String channelNo, Long period, Integer districtId, Integer blockId,
                                                  Integer residenceId) {
-        RealTimeSummaryObj obj = dataPlatformMapper.realtime(channelNo, period, districtId, blockId, residenceId);
-
-        RealTimeSummaryObj result = checkRealtimeSummary(channelNo, period, districtId, blockId, residenceId, obj);
+        RealTimeSummaryObj result = checkRealtimeSummary(channelNo, period, districtId, blockId, residenceId, null);
         if (null == result)
             return new RealTimeSummaryResult("success", null, "");
 
@@ -119,7 +116,7 @@ public class DataPlatformService {
         return summary;
     }
 
-    public TrendResult trend(String channelNo, Long startTime, Long contrastiveStartTime, final long span, long scale,
+    public TrendResult realtimeTrend(String channelNo, final TrendScaleType type,
                              Integer districtId, Integer blockId, Integer residenceId) {
         if (null != residenceId) {
             districtId = null;
@@ -127,45 +124,72 @@ public class DataPlatformService {
         } else if (null == residenceId && null != blockId) {
             districtId = null;
         }
-        Map<String, List<TrendObj>> map = new HashMap<>();
-        List<TrendObj> current = null;
-        List<TrendObj> contrastive = null;
 
-        boolean isRealTime = false;
+        Map<String, List<TrendObj>> trendData = new HashMap<>();
 
-        if (null == startTime) {
-            startTime = System.currentTimeMillis() - span;
-            isRealTime = true;
-        }
-        long endTime = startTime + span;
+        // 当前走势 包括分钟 和 小时 两种刻度
 
-        if (null == contrastiveStartTime) {
-            contrastiveStartTime = startTime - span;
-        }
-        long contrastiveEndTime = contrastiveStartTime + span;
-
-        if (isRealTime) {// 当前走势 包括分钟 和 小时 两种刻度
-            current = dataPlatformMapper.current(channelNo, startTime / 1000, endTime / 1000, scale, districtId, blockId,
-                    residenceId);
-            contrastive = dataPlatformMapper.contrastive(channelNo, contrastiveStartTime / 1000, contrastiveEndTime / 1000, scale,
-                    districtId, blockId, residenceId);
+        if (type == TrendScaleType.minute) {
+            trendData = calcTrendInfoByMinute(channelNo, districtId, blockId, residenceId);
         } else {
-            current = dataPlatformMapper.his_current(channelNo, startTime / 1000, endTime / 1000, scale, districtId, blockId,
-                    residenceId);
-            contrastive = dataPlatformMapper.his_contrastive(channelNo, contrastiveStartTime / 1000, contrastiveEndTime / 1000, scale,
-                    districtId, blockId, residenceId);
-        }
-        // 本周期走势数据节点
-        if (null == current) {
-            map.put("current", new ArrayList<>());
-        } else
-            map.put("current", current);
+            Date startTime = DateUtils.truncate(new Date(), Calendar.HOUR_OF_DAY);
+            Date contrastiveStartTime = DateUtils.addDays(startTime, -1);
 
-        if (null == contrastive) {
-            map.put("contrastive", new ArrayList<>());
-        } else
-            map.put("contrastive", contrastive);
-        return new TrendResult("success", map, "");
+            trendData = calcTrendInfoByHour(startTime, contrastiveStartTime, 24, channelNo, districtId, blockId, residenceId);
+        }
+
+        return new TrendResult("success", trendData, "");
+    }
+
+    public TrendResult historyTrend(String channelNo, long _startTime, Long _contrastiveStartTime, final long span, TrendScaleType type,
+                                    Integer districtId, Integer blockId, Integer residenceId) {
+        if (null != residenceId) {
+            districtId = null;
+            blockId = null;
+        } else if (null == residenceId && null != blockId) {
+            districtId = null;
+        }
+
+
+        Map<String, List<TrendObj>> trendData = new HashMap<>();
+
+        // 当前走势 包括分钟 和 小时 两种刻度
+
+        if (type == TrendScaleType.hour) {
+            Date startTime = DateUtils.truncate(new Date(_startTime), Calendar.HOUR_OF_DAY);
+            int hours = (int) (span / 1000 / 60 / 60);
+            Date endTime = DateUtils.addHours(startTime, hours);
+            if (endTime.getTime() <= startTime.getTime()) {
+                throw new BusinessException("没有跨小时");
+            }
+            Date contrastiveStartTime;
+            if (null == _contrastiveStartTime) {
+                contrastiveStartTime = DateUtils.addHours(startTime, -hours);
+            } else {
+                contrastiveStartTime = DateUtils.truncate(_contrastiveStartTime, Calendar.HOUR_OF_DAY);
+            }
+
+            Date contrastiveEndTime = DateUtils.addHours(contrastiveStartTime, hours);
+            trendData = calcTrendInfoByHour(startTime, contrastiveStartTime, hours, channelNo, districtId, blockId, residenceId);
+        } else {
+            Date startTime = DateUtils.truncate(new Date(_startTime), Calendar.DAY_OF_MONTH);
+            int days = (int) (span / 1000 / 60 / 60 / 24);
+            Date endTime = DateUtils.addDays(startTime, days);
+            if (endTime.getTime() <= startTime.getTime()) {
+                throw new BusinessException("没有跨day");
+            }
+            Date contrastiveStartTime;
+            if (null == _contrastiveStartTime) {
+                contrastiveStartTime = DateUtils.addDays(startTime, -days);
+            } else {
+                contrastiveStartTime = DateUtils.truncate(_contrastiveStartTime, Calendar.DAY_OF_MONTH);
+            }
+
+            Date contrastiveEndTime = DateUtils.addDays(contrastiveStartTime, days);
+
+            trendData = calcTrendInfoByDay(startTime, contrastiveStartTime, days, channelNo, districtId, blockId, residenceId);
+        }
+        return new TrendResult("success", trendData, "");
     }
 
     public SummaryResult summary(String channelNo, long startTime, long endTime, Integer pageNo, Integer pageSize) {
@@ -201,57 +225,210 @@ public class DataPlatformService {
         return obj;
     }
 
-    public void updateRealTimeTrendInfoByMinute() throws Exception {
-        Date date = new Date();
-        // 一个小时前时间
-        String stime = PropertyUtil.getBeforeHour(date);
-        Date startDate = null;
-        String startTime = null;
-        String endTime = null;
-        for (int i = 0; i < 60; i++) {
-            if (i == 0) {
-                startTime = stime;
-            } else {
-                startTime = PropertyUtil.getNextMinute(startDate);
-            }
-            startDate = df.parse(startTime);
-            endTime = PropertyUtil.getEndMinute(startDate);
-            // 更新区县实时统计数据
-            dataPlatformMapper.updateRealTimeTrendInfoByMinuteBlock(startTime, endTime);
-            // 更新板块实时统计数据
-            dataPlatformMapper.updateRealTimeTrendInfoByMinuteDistrict(startTime, endTime);
-            // 更新小区实时统计数据
-            dataPlatformMapper.updateRealTimeTrendInfoByMinuteResidence(startTime, endTime);
+    private void fillIn(Map<Integer, List<MacVisitLogInfo>> map, int size) {
+        for (int i = 0; i < size; i++) {
+            map.put(i, new ArrayList<>());
         }
-        // 删除一个小时前数据
-        dataPlatformMapper.deleteRealTimeTrendInfoByMinute(stime);
-
     }
 
-    public void updateRealTimeTrendInfoByHour() throws Exception {
-        Date date = new Date();
-        // 一天前时间
-        String stime = PropertyUtil.getLastDay(date);
-        Date startDate = null;
-        String startTime = null;
-        String endTime = null;
-        for (int i = 0; i < 24; i++) {
-            if (i == 0) {
-                startTime = stime;
-            } else {
-                startTime = PropertyUtil.getNextHour(startDate);
-            }
-            startDate = df.parse(startTime);
-            endTime = PropertyUtil.getEndHour(startDate);
-            System.out.println("stime=" + startTime + ", " + "etime=" + endTime);
-            // 更新区县实时统计数据
-            dataPlatformMapper.updateRealTimeTrendInfoByHourBlock(startTime, endTime);
-            // 更新板块实时统计数据
-            dataPlatformMapper.updateRealTimeTrendInfoByHourDistrict(startTime, endTime);
-            // 更新小区实时统计数据
-            dataPlatformMapper.updateRealTimeTrendInfoByHourResidence(startTime, endTime);
+    private void fillUvAndPv(List<MacVisitLogInfo> logs, TrendObj t) {
+        Set<String> macs = new HashSet<>();
+        int nv = 0;
+        for (MacVisitLogInfo log : logs) {
+            macs.add(log.getMac());
+            if (log.getFirstVisitIdIfEverVisited()!=null && log.getFirstVisitIdIfEverVisited() > 0)
+                nv++;
         }
-        // 删除一天前数据
-        dataPlatformMapper.deleteRealTimeTrendInfoByHour(stime);
+        t.setUv(macs.size());
+        t.setNv(nv);
+    }
+
+    private void box(Map<Integer, List<MacVisitLogInfo>> map, List<MacVisitLogInfo> logs, Date from, long scale, int maxIndexExclude) {
+        for (MacVisitLogInfo log : logs) {
+            long dis = log.getTime().getTime() - from.getTime();
+            int index = (int) (dis / scale);
+            if (index >= maxIndexExclude) {
+                throw new RuntimeException();
+            }
+            map.get(index).add(log);
+        }
+    }
+
+    public Map<String, List<TrendObj>> calcTrendInfoByMinute(String channelNo, Integer districtId, Integer blockId,
+                                                             Integer residenceId) {
+        Date now = DateUtils.truncate(new Date(), Calendar.MINUTE);
+        Date from = DateUtils.addHours(now, -2);
+
+        List<MacVisitLogInfo> logs = this.macMapper.getMacVisitLog(null, channelNo, from, now,
+                districtId, blockId, residenceId, null);
+
+        Map<Integer, List<MacVisitLogInfo>> map = new HashMap<>();
+        fillIn(map, 120);
+        for (MacVisitLogInfo log : logs) {
+            long dis = log.getTime().getTime() - from.getTime();
+            int index = (int )(dis / 1000 / 60);
+            if (index >= 120) {
+                throw new RuntimeException();
+            }
+            map.get(index).add(log);
+        }
+
+        List<TrendObj> current = new ArrayList<>();
+        List<TrendObj> contrastive = new ArrayList<>();
+
+        Map<String, List<TrendObj>> result = new HashMap<>();
+        result.put("current", current);
+        result.put("contrastive", contrastive);
+
+        for (int i = 0; i < 120 ; i ++) {
+            Date begin = DateUtils.addMinutes(from, i);   // 0 ~ 59
+            Date end = DateUtils.addMinutes(from, i + 1);   // 0 ~ 59
+
+            TrendObj t = new TrendObj();
+            t.setTimeBegin(begin);
+            t.setTimeEnd(end);
+            t.setPv(map.get(i).size());
+            t.setAvgTop(0L);
+
+            fillUvAndPv(map.get(i), t);
+
+            if (i < 60) {
+                contrastive.add(t);
+            } else {
+                current.add(t);
+            }
+        }
+
+        return result;
+    }
+
+    public Map<String, List<TrendObj>> calcTrendInfoByHour(Date startTime, Date contrastiveStartTime, int hours,
+                                                           String channelNo, Integer districtId, Integer blockId,
+                                                           Integer residenceId) {
+        if (hours < 1) {
+            throw new BusinessException("span没有跨小时");
+        }
+        if (startTime == null || contrastiveStartTime == null)
+            throw new IllegalArgumentException();
+
+        startTime = DateUtils.truncate(startTime, Calendar.HOUR_OF_DAY);
+        Date endTime = DateUtils.addHours(startTime, hours);
+        contrastiveStartTime = DateUtils.truncate(contrastiveStartTime, Calendar.HOUR_OF_DAY);
+        Date contrastiveEndTime = DateUtils.addHours(contrastiveStartTime, hours);
+
+        List<MacVisitLogInfo> currentLogs = this.macMapper.getMacVisitLog(null, channelNo, startTime, endTime, districtId, blockId, residenceId, null);
+        List<MacVisitLogInfo> contrastiveLogs = this.macMapper.getMacVisitLog(null, channelNo, contrastiveStartTime, contrastiveEndTime, districtId, blockId, residenceId, null);
+
+        Map<Integer, List<MacVisitLogInfo>> currentMap = new HashMap<>();
+        Map<Integer, List<MacVisitLogInfo>> contrastiveMap = new HashMap<>();
+
+        this.fillIn(currentMap, hours);
+        this.fillIn(contrastiveMap, hours);
+
+        box(currentMap, currentLogs, startTime, (long )(1000 * 60 * 60), hours);
+        box(contrastiveMap, contrastiveLogs, contrastiveStartTime, (long )(1000 * 60 * 60), hours);
+
+        List<TrendObj> current = new ArrayList<>();
+        List<TrendObj> contrastive = new ArrayList<>();
+
+        Map<String, List<TrendObj>> result = new HashMap<>();
+        result.put("current", current);
+        result.put("contrastive", contrastive);
+
+        for (int i = 0; i < hours ; i ++) {
+            Date begin = DateUtils.addHours(startTime, i);   // 0 ~ 59
+            Date end = DateUtils.addHours(startTime, i + 1);   // 0 ~ 59
+
+            TrendObj t = new TrendObj();
+            t.setTimeBegin(begin);
+            t.setTimeEnd(end);
+            t.setPv(currentMap.get(i).size());
+            t.setAvgTop(0L);    //TODO
+            fillUvAndPv(currentMap.get(i), t);
+            current.add(t);
+        }
+        for (int i = 0; i < hours ; i ++) {
+            Date begin = DateUtils.addHours(contrastiveStartTime, i);   // 0 ~ 59
+            Date end = DateUtils.addHours(contrastiveStartTime, i + 1);   // 0 ~ 59
+
+            TrendObj t = new TrendObj();
+            t.setTimeBegin(begin);
+            t.setTimeEnd(end);
+            t.setPv(contrastiveMap.get(i).size());
+            t.setAvgTop(0L);    //TODO
+            fillUvAndPv(contrastiveMap.get(i), t);
+            contrastive.add(t);
+        }
+
+        return result;
+    }
+
+
+    public Map<String, List<TrendObj>> calcTrendInfoByDay(Date startTime, Date contrastiveStartTime, int days, String channelNo, Integer districtId, Integer blockId,
+                                                           Integer residenceId) {
+        if (days < 1) {
+            throw new BusinessException("没有跨天");
+        }
+        if (startTime == null || contrastiveStartTime == null)
+            throw new IllegalArgumentException();
+
+        startTime = DateUtils.truncate(startTime, Calendar.DAY_OF_MONTH);
+        Date endTime = DateUtils.addDays(startTime, days);
+        contrastiveStartTime = DateUtils.truncate(contrastiveStartTime, Calendar.DAY_OF_MONTH);
+        Date contrastiveEndTime = DateUtils.addDays(contrastiveStartTime, days);
+
+        List<MacVisitLogInfo> currentLogs = this.macMapper.getMacVisitLog(null, channelNo, startTime, endTime, districtId, blockId, residenceId, null);
+        List<MacVisitLogInfo> contrastiveLogs = this.macMapper.getMacVisitLog(null, channelNo, contrastiveStartTime, contrastiveEndTime, districtId, blockId, residenceId, null);
+
+        Map<Integer, List<MacVisitLogInfo>> currentMap = new HashMap<>();
+        Map<Integer, List<MacVisitLogInfo>> contrastiveMap = new HashMap<>();
+
+        this.fillIn(currentMap, days);
+        this.fillIn(contrastiveMap, days);
+
+        box(currentMap, currentLogs, startTime, (long )(1000 * 60 * 60 * 24), days);
+        box(contrastiveMap, contrastiveLogs, contrastiveStartTime, (long )(1000 * 60 * 60 * 24), days);
+
+        List<TrendObj> current = new ArrayList<>();
+        List<TrendObj> contrastive = new ArrayList<>();
+
+        Map<String, List<TrendObj>> result = new HashMap<>();
+        result.put("current", current);
+        result.put("contrastive", contrastive);
+
+        for (int i = 0; i < days ; i ++) {
+            Date begin = DateUtils.addDays(startTime, i);   // 0 ~ 59
+            Date end = DateUtils.addDays(startTime, i + 1);   // 0 ~ 59
+
+            TrendObj t = new TrendObj();
+            t.setTimeBegin(begin);
+            t.setTimeEnd(end);
+            t.setPv(currentMap.get(i).size());
+            t.setAvgTop(0L);    //TODO
+            fillUvAndPv(currentMap.get(i), t);
+            current.add(t);
+        }
+        for (int i = 0; i < days ; i ++) {
+            Date begin = DateUtils.addDays(contrastiveStartTime, i);   // 0 ~ 59
+            Date end = DateUtils.addDays(contrastiveStartTime, i + 1);   // 0 ~ 59
+
+            TrendObj t = new TrendObj();
+            t.setTimeBegin(begin);
+            t.setTimeEnd(end);
+            t.setPv(contrastiveMap.get(i).size());
+            t.setAvgTop(0L);    //TODO
+            fillUvAndPv(contrastiveMap.get(i), t);
+            contrastive.add(t);
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Date startTime = new Date();
+
+        startTime = DateUtils.truncate(startTime, Calendar.HOUR_OF_DAY);
+
+        System.out.println(startTime);
     }
 }

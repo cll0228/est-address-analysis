@@ -32,22 +32,22 @@ public class HisHourSchedule {
     static SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     // 计算走势统计-历史 按小时
-    @Scheduled(cron = "0 0 * * * ?")
+    //@Scheduled(cron = "0 0 * * * ?")
     public void method() {
         // 获取当前时间
-        Long startTime = null;
-        Long endTime = null;
+        Date startTime = null;
+        Date endTime = null;
         try {
-            startTime = format1.parse(DateUtil.reduce1Hour(format1.format(new Date()), -1)).getTime() / 1000;// 秒单位
+            startTime = format1.parse(DateUtil.reduce1Hour(format1.format(new Date()), -1));
 //              startTime = 1496210400L;
-            System.out.println("当前开始时间startTime= " + format1.format(new Date(startTime * 1000)));
+            System.out.println("当前开始时间startTime= " + format1.format(startTime));
             // 当前计算结束时间
-            endTime = format1.parse(DateUtil.reduce1Second(format1.format(new Date()))).getTime() / 1000;
+            endTime = format1.parse(DateUtil.reduce1Second(format1.format(new Date())));
 //              endTime = 1496213999L;
         } catch (Exception e) {
             System.out.println("获取时间失败time = " + new Date());
         }
-        System.out.println("当前统计结束时间endTime=" + format1.format(new Date(endTime * 1000)));
+        System.out.println("当前统计结束时间endTime=" + format1.format(endTime));
 
         // 当前时间段内日志
         List<Log> logs = dataPlatformMapper.selectLog(startTime, endTime);
@@ -80,17 +80,17 @@ public class HisHourSchedule {
     /**
      * 按照天计算走势统计-历史
      */
-    @Scheduled(cron = "0 0 0 * * ?") // 每天0点触发
+    //@Scheduled(cron = "0 0 0 * * ?") // 每天0点触发
     public void method1() {
         // 获取当前时间
-        Long startTime = null;
-        Long endTime = null;
+        Date startTime = null;
+        Date endTime = null;
         try {
-            startTime = format1.parse(DateUtil.updateDay(new Date(), -1)).getTime() / 1000;// 秒单位
-            System.out.println("当前开始时间startTime= " + format1.format(new Date(startTime * 1000)));
+            startTime = format1.parse(DateUtil.updateDay(new Date(), -1));
+            System.out.println("当前开始时间startTime= " + format1.format(startTime ));
             // 当前计算结束时间
-            endTime = format1.parse(DateUtil.reduce1Second(format1.format(new Date()))).getTime() / 1000;
-            System.out.println("当前统计结束时间endTime=" + format1.format(new Date(endTime * 1000)));
+            endTime = format1.parse(DateUtil.reduce1Second(format1.format(new Date())));
+            System.out.println("当前统计结束时间endTime=" + format1.format(endTime));
         } catch (Exception e) {
             System.out.println(e);
             System.out.println("解析日期失败！");

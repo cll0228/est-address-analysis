@@ -29,8 +29,8 @@ public class CommonMockService {
             String channelNo = getRandomString(channels);
             macVisitHistoryInfo.setChannelNo(channelNo);
             macVisitHistoryInfo.setPv(pv);
-            macVisitHistoryInfo.setFirstVisitTime(Long.valueOf("1495641600000"));
-            macVisitHistoryInfo.setLastVisitTime(Long.valueOf("1495727999000"));
+            macVisitHistoryInfo.setFirstVisitTime(new Date(1495641600000L));
+            macVisitHistoryInfo.setLastVisitTime(new Date(1495727999000L));
             macVisitHistoryInfo.setTotalTop((long) top);
             pagedList.add(macVisitHistoryInfo);
         }
@@ -86,7 +86,7 @@ public class CommonMockService {
 		macVisitLogInfo.setBlockName("万祥镇");
 		macVisitLogInfo.setResidenceId(2);
 		macVisitLogInfo.setResidenceName("祥安竹苑");
-		macVisitLogInfo.setTime(System.currentTimeMillis());
+		macVisitLogInfo.setTime(new Date());
 		macInfoList.add(macVisitLogInfo);
 
 		MacVisitLogInfo macVisitLogInfo1 = new MacVisitLogInfo();
@@ -98,7 +98,7 @@ public class CommonMockService {
 		macVisitLogInfo1.setBlockName("漕河泾");
 		macVisitLogInfo1.setResidenceId(9882);
 		macVisitLogInfo1.setResidenceName("钦江大楼");
-		macVisitLogInfo1.setTime(System.currentTimeMillis());
+		macVisitLogInfo1.setTime(new Date());
 		macInfoList.add(macVisitLogInfo1);
 
 		MacVisitLogInfo macVisitLogInfo2 = new MacVisitLogInfo();
@@ -110,7 +110,7 @@ public class CommonMockService {
 		macVisitLogInfo2.setBlockName("漕河泾");
 		macVisitLogInfo2.setResidenceId(10339);
 		macVisitLogInfo2.setResidenceName("虹梅小区");
-		macVisitLogInfo2.setTime(System.currentTimeMillis());
+		macVisitLogInfo2.setTime(new Date());
 		macInfoList.add(macVisitLogInfo2);
 
 		MacVisitLogInfo macVisitLogInfo3 = new MacVisitLogInfo();
@@ -122,7 +122,7 @@ public class CommonMockService {
 		macVisitLogInfo3.setBlockName("长风");
 		macVisitLogInfo3.setResidenceId(3402);
 		macVisitLogInfo3.setResidenceName("梅岭新村");
-		macVisitLogInfo3.setTime(System.currentTimeMillis());
+		macVisitLogInfo3.setTime(new Date());
 		macInfoList.add(macVisitLogInfo3);
 
 		MacVisitLogInfo macVisitLogInfo4 = new MacVisitLogInfo();
@@ -134,7 +134,7 @@ public class CommonMockService {
 		macVisitLogInfo4.setBlockName("长风");
 		macVisitLogInfo4.setResidenceId(14400);
 		macVisitLogInfo4.setResidenceName("爱建新村");
-		macVisitLogInfo4.setTime(System.currentTimeMillis());
+		macVisitLogInfo4.setTime(new Date());
 		macInfoList.add(macVisitLogInfo4);
 
 		MacVisitLogInfo macVisitLogInfo5 = new MacVisitLogInfo();
@@ -146,7 +146,7 @@ public class CommonMockService {
 		macVisitLogInfo5.setBlockName("中远两湾城");
 		macVisitLogInfo5.setResidenceId(33019);
 		macVisitLogInfo5.setResidenceName("中远两湾城");
-		macVisitLogInfo5.setTime(System.currentTimeMillis());
+		macVisitLogInfo5.setTime(new Date());
 		macInfoList.add(macVisitLogInfo5);
 
 		MacVisitLogInfo macVisitLogInfo6 = new MacVisitLogInfo();
@@ -158,7 +158,7 @@ public class CommonMockService {
 		macVisitLogInfo6.setBlockName("东外滩");
 		macVisitLogInfo6.setResidenceId(3304);
 		macVisitLogInfo6.setResidenceName("惠民新苑");
-		macVisitLogInfo6.setTime(System.currentTimeMillis());
+		macVisitLogInfo6.setTime(new Date());
 		macInfoList.add(macVisitLogInfo6);
 
 		MacVisitLogInfo macVisitLogInfo7 = new MacVisitLogInfo();
@@ -170,7 +170,7 @@ public class CommonMockService {
 		macVisitLogInfo7.setBlockName("虹桥");
 		macVisitLogInfo7.setResidenceId(1334);
 		macVisitLogInfo7.setResidenceName("安顺路273号");
-		macVisitLogInfo7.setTime(System.currentTimeMillis());
+		macVisitLogInfo7.setTime(new Date());
 		macInfoList.add(macVisitLogInfo7);
 
 		MacVisitLogInfo macVisitLogInfo8 = new MacVisitLogInfo();
@@ -182,7 +182,7 @@ public class CommonMockService {
 		macVisitLogInfo8.setBlockName("人民广场");
 		macVisitLogInfo8.setResidenceId(1388);
 		macVisitLogInfo8.setResidenceName("新昌路61弄");
-		macVisitLogInfo8.setTime(System.currentTimeMillis());
+		macVisitLogInfo8.setTime(new Date());
 		macInfoList.add(macVisitLogInfo8);
 
 		MacVisitLogInfo macVisitLogInfo9 = new MacVisitLogInfo();
@@ -194,7 +194,7 @@ public class CommonMockService {
 		macVisitLogInfo9.setBlockName("静安寺");
 		macVisitLogInfo9.setResidenceId(2367);
 		macVisitLogInfo9.setResidenceName("愚园路601号");
-		macVisitLogInfo9.setTime(System.currentTimeMillis());
+		macVisitLogInfo9.setTime(new Date());
 		macInfoList.add(macVisitLogInfo9);
         obj.setHistories(macInfoList);
         obj.setStatus("success");
@@ -436,7 +436,7 @@ public class CommonMockService {
     public RealTimeSummaryResult getRealTime() {
         RealTimeSummaryResult summary = new RealTimeSummaryResult();
         RealTimeSummaryObj obj = new RealTimeSummaryObj();
-        obj.setRefreshTime(new Date().getTime());
+        obj.setRefreshTime(new Date());
         obj.setUv(new Random().nextInt(30));
         obj.setPv(new Random().nextInt(50));
         obj.setNv(new Random().nextInt(30));
@@ -477,11 +477,11 @@ public class CommonMockService {
             try {
                 if (null == tmp) {
                     tmp = new TrendObj();
-                    t.setTimeEnd(DateUtil.format1.parse(DateUtil.reduce1Second(format)).getTime());
-                    t.setTimeBegin(DateUtil.format1.parse(DateUtil.update1Min(format, -i)).getTime());
+                    t.setTimeEnd(DateUtil.format1.parse(DateUtil.reduce1Second(format)));
+                    t.setTimeBegin(DateUtil.format1.parse(DateUtil.update1Min(format, -i)));
                 } else {
-                    t.setTimeBegin(tmp.getTimeBegin() - 60 * 1000);
-                    t.setTimeEnd(tmp.getTimeBegin() - 1000);
+                    t.setTimeBegin(new Date(tmp.getTimeBegin().getTime() - 60 * 1000));
+                    t.setTimeEnd(new Date(tmp.getTimeBegin().getTime() - 1000));
                 }
                 tmp = t;
             } catch (ParseException e) {
@@ -498,8 +498,8 @@ public class CommonMockService {
             t.setNv(i * (new Random().nextInt(10)));
             t.setPv((i + 2) * (new Random().nextInt(20)));
             t.setUv(i * (new Random().nextInt(15)));
-            t.setTimeBegin(tmp.getTimeBegin() - 60 * 1000);
-            t.setTimeEnd(tmp.getTimeBegin() - 1000);
+            t.setTimeBegin(new Date(tmp.getTimeBegin().getTime() - 60 * 1000));
+            t.setTimeEnd(new Date(tmp.getTimeBegin().getTime() - 1000));
             tmp = t;
             hiscusr.add(t);
         }

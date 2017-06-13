@@ -3,6 +3,7 @@ package com.lezhi.statistics.mapper;
 import com.lezhi.statistics.pojo.SummaryInfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,21 +12,21 @@ import java.util.List;
 public interface SummaryMapper {
 	List<SummaryInfo> getDistrictSummaryList(
 			@Param("channelNo") String channelNo,
-			@Param("startTime") Long startTime, @Param("endTime") Long endTime);
+			@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
 	List<SummaryInfo> getBlockSummaryList(
 			@Param("channelNo") String channelNo,
-			@Param("startTime") Long startTime, @Param("endTime") Long endTime,
+			@Param("startTime") Date startTime, @Param("endTime") Date endTime,
 			@Param("districtId") Integer districtId);
 
 	List<SummaryInfo> getResidenceSummaryList(
 			@Param("channelNo") String channelNo,
-			@Param("startTime") Long startTime, @Param("endTime") Long endTime,
+			@Param("startTime") Date startTime, @Param("endTime") Date endTime,
 			@Param("blockId") Integer blockId,
 			@Param("start") Integer start, @Param("size") Integer size);
 
 	Integer totalCount(@Param("channelNo") String channelNo,
-			@Param("startTime") Long startTime, @Param("endTime") Long endTime,
+			@Param("startTime") Date startTime, @Param("endTime") Date endTime,
 			@Param("blockId") Integer blockId);
 
 }

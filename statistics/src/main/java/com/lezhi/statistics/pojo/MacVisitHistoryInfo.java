@@ -1,5 +1,7 @@
 package com.lezhi.statistics.pojo;
 
+import java.util.Date;
+
 /**
  * Created by Cuill on 2017/3/13.
  */
@@ -18,9 +20,9 @@ public class MacVisitHistoryInfo {
         this.channelNo = channelNo;
     }
 
-    private Long firstVisitTime;// 期间首次访问时间。 unix time, 单位ms
+    private Date firstVisitTime;// 期间首次访问时间。 unix time, 单位ms
 
-    private Long lastVisitTime;// 期间最后访问时间。 unix time, 单位ms
+    private Date lastVisitTime;// 期间最后访问时间。 unix time, 单位ms
 
     private Long totalTop;// 期间总访问时间(time on page) 。unix time, 单位ms
 
@@ -40,19 +42,19 @@ public class MacVisitHistoryInfo {
         this.pv = pv;
     }
 
-    public Long getFirstVisitTime() {
+    public Date getFirstVisitTime() {
         return firstVisitTime;
     }
 
-    public void setFirstVisitTime(Long firstVisitTime) {
+    public void setFirstVisitTime(Date firstVisitTime) {
         this.firstVisitTime = firstVisitTime;
     }
 
-    public Long getLastVisitTime() {
+    public Date getLastVisitTime() {
         return lastVisitTime;
     }
 
-    public void setLastVisitTime(Long lastVisitTime) {
+    public void setLastVisitTime(Date lastVisitTime) {
         this.lastVisitTime = lastVisitTime;
     }
 

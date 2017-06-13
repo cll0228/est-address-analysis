@@ -8,6 +8,7 @@ import com.lezhi.statistics.util.ListPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -86,7 +87,7 @@ public class MacService {
 		if (null == pageSize || pageSize <= 0) {
 			pageSize = 20;
 		}
-		List<MacVisitLogInfo> macInfoList = macMapper.getMacVisitLog(mac,channelNo,startTime / 1000, endTime / 1000, districtId,blockId,residenceId, null);
+		List<MacVisitLogInfo> macInfoList = macMapper.getMacVisitLog(mac,channelNo, new Date(startTime), new Date(endTime), districtId,blockId,residenceId, null);
 		if (null == macInfoList || macInfoList.size() == 0) {
 			return new HistoryListResult<>("success", null, "");
 		}

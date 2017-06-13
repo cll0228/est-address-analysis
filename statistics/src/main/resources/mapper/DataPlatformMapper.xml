@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lezhi.statistics.mapper.DataPlatformMapper">
-    <select id="selectVistHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
-        SELECT mac, channel_no channelNo, sum(pv) pv, unix_timestamp(begin_time)*1000 firstVisitTime,
-        unix_timestamp(end_time)*1000 lastVisitTime, sum(total_top) totalTop FROM
+    <select id="selectVisitHis" resultType="com.lezhi.statistics.pojo.MacVisitHistoryInfo">
+        SELECT mac, channel_no channelNo, sum(pv) pv, begin_time firstVisitTime,
+        end_time lastVisitTime, sum(total_top) totalTop FROM
         <choose>
 
         <when test="null != residenceId and '' != residenceId">
@@ -27,116 +27,9 @@
         GROUP BY mac
     </select>
 
-    <select id="realtime" resultType="com.lezhi.statistics.pojo.RealTimeSummaryObj">
-        SELECT id, sum(uv) uv,sum(pv) pv,sum(nv) nv,unix_timestamp(refresh_time)*1000 refreshTime FROM
-        <choose>
-            <when test="residenceId != null and '' != residenceId">
-                realtime_summary_residence WHERE residence_id = #{residenceId}
-            </when>
-            <when test="blockId != null and '' != blockId">
-                realtime_summary_block WHERE block_id = #{blockId}
-            </when>
-            <when test="districtId != null and '' != districtId">
-                realtime_summary_district WHERE district_id = #{districtId}
-            </when>
-            <otherwise>
-                realtime_summary_city WHERE 1= 1
-            </otherwise>
-        </choose>
-        AND period = #{period}
-        <if test="channelNo != null and channelNo != 'all'">
-            and channel_no = #{channelNo}
-        </if>
-    </select>
-
-    <update id="putDownRealtimeSummary">
-        UPDATE
-        <choose>
-            <when test="residenceId != null and '' != residenceId">
-                realtime_summary_residence
-            </when>
-            <when test="blockId != null and '' != blockId">
-                realtime_summary_block
-            </when>
-            <when test="districtId != null and '' != districtId">
-                realtime_summary_district
-            </when>
-            <otherwise>
-                realtime_summary_city
-            </otherwise>
-        </choose>
-        set refresh_time = #{now} where id = #{id}
-    </update>
-
-    <select id="current" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
-        unix_timestamp(end_time)*1000 timeEnd,
-        uv,
-        pv,
-        nv,
-        avg_top avgTop FROM
-        <choose>
-        <when test="scale == 60000">
-            <if test="null != residenceId and '' != residenceId">
-                realtime_trend_60m_residence WHERE residence_id = #{residenceId}
-                <if test="null != channelNo and '' != channelNo">
-                   AND channel_no = #{channelNo}
-                </if>
-            </if>
-            <if test="null != blockId and '' != blockId">
-                realtime_trend_60m_block WHERE block_id = #{blockId}
-                <if test="null != channelNo and '' != channelNo">
-                    AND channel_no = #{channelNo}
-                </if>
-            </if>
-            <if test="null != districtId and '' != districtId">
-                realtime_trend_60m_district WHERE district_id = #{districtId}
-                <if test="null != channelNo and '' != channelNo">
-                    AND channel_no = #{channelNo}
-                </if>
-            </if>
-            <if test="null == districtId and null == blockId and null == residenceId">
-                realtime_trend_60m_district WHERE 1=1
-                <if test="null != channelNo and '' != channelNo">
-                    AND channel_no = #{channelNo}
-                </if>
-            </if>
-        </when>
-        <otherwise>
-            <if test="null != residenceId and '' != residenceId">
-                realtime_trend_24h_residence WHERE residence_id = #{residenceId}
-                <if test="null != channelNo and '' != channelNo">
-                    AND channel_no = #{channelNo}
-                </if>
-            </if>
-            <if test="null != blockId and '' != blockId">
-                realtime_trend_24h_block WHERE block_id = #{blockId}
-                <if test="null != channelNo and '' != channelNo">
-                    AND channel_no = #{channelNo}
-                </if>
-            </if>
-            <if test="null != districtId and '' != districtId">
-                realtime_trend_24h_district WHERE district_id = #{districtId}
-                <if test="null != channelNo and '' != channelNo">
-                    AND channel_no = #{channelNo}
-                </if>
-            </if>
-            <if test="null == districtId and null == blockId and null == residenceId">
-                realtime_trend_24h_district WHERE 1=1
-                <if test="null != channelNo and '' != channelNo">
-                    AND channel_no = #{channelNo}
-                </if>
-            </if>
-        </otherwise>
-        </choose>
-        AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-        FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s') &gt;= end_time
-        GROUP BY begin_time DESC
-    </select>
-
     <select id="his_current" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
-        unix_timestamp(end_time)*1000 timeEnd,
+        SELECT begin_time timeBegin,
+        end_time timeEnd,
         uv,
         pv,
         nv,
@@ -167,8 +60,8 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
-                AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')   &lt;= begin_time AND
-                FROM_UNIXTIME(${endTime},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+                AND #{startTime} &lt;= begin_time AND
+                #{endTime &gt;= end_time
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -195,82 +88,16 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
-                AND FROM_UNIXTIME(#{startTime},'%Y-%m-%d')   &lt;= begin_time AND
-                FROM_UNIXTIME(${endTime},'%Y-%m-%d') &gt;= end_time
+                AND #{startTime} &lt;= begin_time AND
+                #{endTime} &gt;= end_time
             </otherwise>
         </choose>
-        GROUP BY begin_time DESC
-    </select>
-
-    <select id="contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT unix_timestamp(begin_time)*1000 timeBegin,
-        unix_timestamp(end_time)*1000 timeEnd,
-        uv,
-        pv,
-        nv,
-        avg_top avgTop FROM
-        <choose>
-            <when test="scale == 60000">
-                <if test="null != residenceId and '' != residenceId">
-                    realtime_trend_60m_residence WHERE residence_id = #{residenceId}
-                    <if test="null != channelNo and '' != channelNo">
-                        AND channel_no = #{channelNo}
-                    </if>
-                </if>
-                <if test="null != blockId and '' != blockId">
-                    realtime_trend_60m_block WHERE block_id = #{blockId}
-                    <if test="null != channelNo and '' != channelNo">
-                        AND channel_no = #{channelNo}
-                    </if>
-                </if>
-                <if test="null != districtId and '' != districtId">
-                    realtime_trend_60m_district WHERE district_id = #{districtId}
-                    <if test="null != channelNo and '' != channelNo">
-                        AND channel_no = #{channelNo}
-                    </if>
-                </if>
-                <if test="null == districtId and null == blockId and null == residenceId">
-                    realtime_trend_60m_district WHERE 1=1
-                    <if test="null != channelNo and '' != channelNo">
-                        AND channel_no = #{channelNo}
-                    </if>
-                </if>
-            </when>
-            <otherwise>
-                <if test="null != residenceId and '' != residenceId">
-                    realtime_trend_24h_residence WHERE residence_id = #{residenceId}
-                    <if test="null != channelNo and '' != channelNo">
-                        AND channel_no = #{channelNo}
-                    </if>
-                </if>
-                <if test="null != blockId and '' != blockId">
-                    realtime_trend_24h_block WHERE block_id = #{blockId}
-                    <if test="null != channelNo and '' != channelNo">
-                        AND channel_no = #{channelNo}
-                    </if>
-                </if>
-                <if test="null != districtId and '' != districtId">
-                    realtime_trend_24h_district WHERE district_id = #{districtId}
-                    <if test="null != channelNo and '' != channelNo">
-                        AND channel_no = #{channelNo}
-                    </if>
-                </if>
-                <if test="null == districtId and null == blockId and null == residenceId">
-                    realtime_trend_24h_district WHERE 1=1
-                    <if test="null != channelNo and '' != channelNo">
-                        AND channel_no = #{channelNo}
-                    </if>
-                </if>
-            </otherwise>
-        </choose>
-        AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-        FROM_UNIXTIME(${contrastiveEndTime},'%Y-%m-%d %H:%i:%s') &gt;= end_time
         GROUP BY begin_time DESC
     </select>
 
     <select id="his_contrastive" resultType="com.lezhi.statistics.pojo.TrendObj">
-        SELECT 	unix_timestamp(begin_time)*1000 timeBegin,
-        unix_timestamp(end_time)*1000 timeEnd,
+        SELECT 	begin_time timeBegin,
+        end_time timeEnd,
         uv,
         pv,
         nv,
@@ -301,8 +128,8 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
-                AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d %H:%i:%s') &lt;= begin_time AND
-                FROM_UNIXTIME(${contrastiveEndTime},'%Y-%m-%d %H:%i:%s') &gt;= end_time
+                AND #{contrastiveStartTime} &lt;= begin_time AND
+                #{contrastiveEndTime} &gt;= end_time
             </when>
             <otherwise>
                 <if test="null != residenceId and '' != residenceId">
@@ -329,8 +156,8 @@
                         AND channel_no = #{channelNo}
                     </if>
                 </if>
-                AND FROM_UNIXTIME(#{contrastiveStartTime},'%Y-%m-%d') &lt;= begin_time AND
-                FROM_UNIXTIME(${contrastiveEndTime},'%Y-%m-%d') &gt;= end_time
+                AND #{contrastiveStartTime} &lt;= begin_time AND
+                #{contrastiveEndTime} &gt;= end_time
             </otherwise>
         </choose>
 
@@ -382,7 +209,7 @@
         </if>
     </select>
 
-    <insert id="inert" parameterType="java.util.Map">
+    <insert id="insert" parameterType="java.util.Map">
         INSERT INTO statistics.realtime_trend_24h_${type} (
         `channel_no`,
         `begin_time`,
@@ -422,7 +249,7 @@
         );
     </insert>
 
-    <insert id="inert_trend">
+    <insert id="insert_trend">
         INSERT INTO statistics.realtime_trend_60m_${type} (
         `channel_no`,
         `begin_time`,
@@ -462,7 +289,7 @@
         )
     </insert>
 
-    <insert id="inert_trend_day" parameterType="java.util.Map">
+    <insert id="insert_trend_day" parameterType="java.util.Map">
         INSERT INTO statistics.his_trend_day_${type} (
         `channel_no`,
         `begin_time`,
@@ -514,8 +341,8 @@
         FROM
 	    `api_logs_shfctv` log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
-        log.timestamp &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
-        AND log.timestamp &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') GROUP BY log.mac,log.`session` ORDER BY log.`timestamp` desc
+        log.timestamp &lt;= #{endTime}
+        AND log.timestamp &gt;=  #{startTime} GROUP BY log.mac,log.`session` ORDER BY log.`timestamp` desc
 
        /* SELECT log.channel,
             log.mac,
@@ -546,8 +373,8 @@
         FROM
         api_logs_shfctv log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
-        log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
-        AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp WHERE temp.channel = #{log.channel}
+        log.`timestamp` &lt;= #{endTime}
+        AND log.`timestamp` &gt;= #{startTime}) temp WHERE temp.channel = #{log.channel}
         <if test="type == 'district'">
             AND temp.districtId = #{log.districtId}
         </if>
@@ -571,8 +398,8 @@
         FROM
         api_logs_shfctv log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
-        log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
-        AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp WHERE temp.channel = #{log.channel}
+        log.`timestamp` &lt;= #{endTime}
+        AND log.`timestamp` &gt;= #{startTime}) temp WHERE temp.channel = #{log.channel}
         <if test="type == 'district'">
             AND temp.districtId = #{log.districtId}
         </if>
@@ -599,8 +426,8 @@
         FROM
         api_logs_shfctv log LEFT JOIN mac_info m ON log.mac = m.mac
         WHERE
-        log.`timestamp` &lt;= FROM_UNIXTIME(#{endTime}, '%Y-%m-%d %H:%i:%s')
-        AND log.`timestamp` &gt;=  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s') ) temp
+        log.`timestamp` &lt;= #{endTime
+        AND log.`timestamp` &gt;= #{startTime}) temp
         WHERE
         temp.channel = #{log.channel}
         <if test="type == 'district'">
@@ -640,7 +467,7 @@
         FROM
         api_logs_shfctv
         WHERE
-        TIMESTAMP &lt; #{log.timeStamp} AND `timestamp`  &gt;  FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
+        TIMESTAMP &lt; #{log.timeStamp} AND `timestamp`  &gt; #{startTime}
         AND mac = #{log.mac}
         AND channel = #{log.channel} AND  session = #{log.session}
     </select>
@@ -666,8 +493,8 @@
         VALUES
         (
         #{his.channelNo},
-        from_unixtime(#{his.timeBegin}),
-        from_unixtime(#{his.timeEnd}),
+        #{his.timeBegin},
+        #{his.timeEnd},
         #{his.uv},
         #{his.pv},
         #{his.nv},
@@ -705,8 +532,8 @@
         VALUES
         (
         #{his.channelNo},
-        from_unixtime(#{his.timeBegin}),
-        from_unixtime(#{his.timeEnd}),
+        #{his.timeBegin},
+        #{his.timeEnd},
         #{his.uv},
         #{his.pv},
         #{his.nv},
@@ -723,82 +550,5 @@
         )
     </insert>
 
-    <insert id="updateRealTimeTrendInfoByMinuteBlock">
-        INSERT INTO statistics.realtime_trend_60m_block
-        (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,block_id)
-        SELECT NULL,a.channel,#{startTime},#{endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.block_id
-        FROM statistics.api_logs_shfctv a
-        INNER JOIN statistics.mac_info b ON a.mac = b.mac
-        LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
-        WHERE a.timestamp &gt;= #{startTime} and a.timestamp &lt;= #{endTime}
-        GROUP BY b.block_id,a.channel
-    </insert>
-
-    <insert id="updateRealTimeTrendInfoByMinuteDistrict">
-        INSERT INTO statistics.realtime_trend_60m_district
-        (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,district_id)
-        SELECT NULL,a.channel,#{startTime},#{endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.district_id
-        FROM statistics.api_logs_shfctv a
-        INNER JOIN statistics.mac_info b ON a.mac = b.mac
-        LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
-        WHERE a.timestamp &gt;= #{startTime} and a.timestamp &lt;= #{endTime}
-        GROUP BY b.district_id,a.channel
-    </insert>
-
-    <insert id="updateRealTimeTrendInfoByMinuteResidence">
-        INSERT INTO statistics.realtime_trend_60m_residence
-        (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,residence_id)
-        SELECT NULL,a.channel,#{startTime},#{endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.residence_id
-        FROM statistics.api_logs_shfctv a
-        INNER JOIN statistics.mac_info b ON a.mac = b.mac
-        LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
-        WHERE a.timestamp &gt;= #{startTime} and a.timestamp &lt;= #{endTime}
-        GROUP BY b.residence_id,a.channel
-    </insert>
-
-    <delete id="deleteRealTimeTrendInfoByMinute">
-        DELETE FROM statistics.realtime_trend_60m_block WHERE begin_time &lt; #{stime};
-        DELETE FROM statistics.realtime_trend_60m_residence WHERE begin_time &lt; #{stime};
-        DELETE FROM statistics.realtime_trend_60m_residence WHERE begin_time &lt; #{stime};
-    </delete>
-
-    <insert id="updateRealTimeTrendInfoByHourBlock">
-        INSERT INTO statistics.realtime_trend_24h_block
-        (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,block_id)
-        SELECT NULL,a.channel,#{startTime},#{endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.block_id
-        FROM statistics.api_logs_shfctv a
-        INNER JOIN statistics.mac_info b ON a.mac = b.mac
-        LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
-        WHERE a.timestamp &gt;= #{startTime} and a.timestamp &lt;= #{endTime}
-        GROUP BY b.block_id,a.channel
-    </insert>
-
-    <insert id="updateRealTimeTrendInfoByHourDistrict">
-        INSERT INTO statistics.realtime_trend_24h_district
-        (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,district_id)
-        SELECT NULL,a.channel,#{startTime},#{endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.district_id
-        FROM statistics.api_logs_shfctv a
-        INNER JOIN statistics.mac_info b ON a.mac = b.mac
-        LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
-        WHERE a.timestamp &gt;= #{startTime} and a.timestamp &lt;= #{endTime}
-        GROUP BY b.district_id,a.channel
-    </insert>
-
-    <insert id="updateRealTimeTrendInfoByHourResidence">
-        INSERT INTO statistics.realtime_trend_24h_residence
-        (id,channel_no,begin_time,end_time,uv,pv,nv,avg_top,residence_id)
-        SELECT NULL,a.channel,#{startTime},#{endTime},count(DISTINCT(a.mac)),count(a.log_id),count(c.id),NULL,b.residence_id
-        FROM statistics.api_logs_shfctv a
-        INNER JOIN statistics.mac_info b ON a.mac = b.mac
-        LEFT JOIN statistics.new_visitor c ON b.mac = c.mac
-        WHERE a.timestamp &gt;= #{startTime} and a.timestamp &lt;= #{endTime}
-        GROUP BY b.residence_id,a.channel
-    </insert>
-
-    <delete id="deleteRealTimeTrendInfoByHour">
-        DELETE FROM statistics.realtime_trend_24h_block WHERE begin_time &lt; #{stime};
-        DELETE FROM statistics.realtime_trend_24h_residence WHERE begin_time &lt; #{stime};
-        DELETE FROM statistics.realtime_trend_24h_residence WHERE begin_time &lt; #{stime};
-    </delete>
 
 </mapper>

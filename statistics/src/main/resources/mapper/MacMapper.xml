@@ -106,7 +106,7 @@
     <select id="getMacVisitLog" resultType="com.lezhi.statistics.pojo.MacVisitLogInfo">
         SELECT
 		  a.id, a.mac,a.channel_no as channelNo,a.district_id as districtId,a.block_id as blockId,a.residence_id as residenceId
-		  ,unix_timestamp(a.create_time)*1000 as `time`,a.district_name as districtName,a.block_name as blockName
+		  ,a.create_time as `time`,a.district_name as districtName,a.block_name as blockName
 		  ,a.residence_name as residenceName
           ,a.first_visit_id_if_ever_visited as firstVisitIdIfEverVisited
 		FROM
@@ -119,10 +119,10 @@
             AND a.channel_no = #{channelNo}
         </if>
         <if test="startTime != null" >
-            AND a.create_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
+            AND a.create_time &gt;= #{startTime}
         </if>
         <if test="endTime != null" >
-            AND a.create_time &lt;= FROM_UNIXTIME(#{endTime},'%Y-%m-%d %H:%i:%s')
+            AND a.create_time &lt;= #{endTime}
         </if>
         <if test="null != residenceId and '' != residenceId">
             AND a.residence_id = #{residenceId}

@@ -48,7 +48,7 @@ public class LogParserSchedule {
                 maxId = info.getId();
 
             Map<String, Map<String, List<MacVisitLogInfo>>> partMap;
-            Date hourDate = DateUtils.truncate(new Date(info.getTime()), Calendar.HOUR_OF_DAY);
+            Date hourDate = DateUtils.truncate(info.getTime(), Calendar.HOUR_OF_DAY);
             if (map.containsKey(hourDate)) {
                 partMap = map.get(hourDate);
             } else {

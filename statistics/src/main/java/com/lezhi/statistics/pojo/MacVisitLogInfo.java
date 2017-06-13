@@ -1,5 +1,7 @@
 package com.lezhi.statistics.pojo;
 
+import java.util.Date;
+
 /**
  * Created by chendl on 2017/3/24.
  */
@@ -13,7 +15,7 @@ public class MacVisitLogInfo {
 	private String blockName;// 板块
 	private Integer residenceId;// 小区ID
 	private String residenceName;// 小区名称
-	private Long time;// 日志时间。 unix time, 单位ms
+	private Date time;// 日志时间
 
 	// null表示新用户，非null表示老用户；查询的时候如果指定了频道，就是相对该频道，否则相对全局
 	private Integer firstVisitIdIfEverVisited;
@@ -90,11 +92,11 @@ public class MacVisitLogInfo {
 		this.residenceName = residenceName;
 	}
 
-	public Long getTime() {
+	public Date getTime() {
 		return time;
 	}
 
-	public void setTime(Long time) {
+	public void setTime(Date time) {
 		this.time = time;
 	}
 

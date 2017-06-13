@@ -1,5 +1,6 @@
 package com.lezhi.statistics.controller;
 
+import com.lezhi.statistics.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +22,11 @@ public abstract class BaseController {
         logger.error("catch:", ex);
         Map<String, Object> result = new HashMap<>();
         result.put("status", "failed");
-        result.put("errMsg", "当你看到这个提示的时候，说明系统发生了一些错误");
+        if (ex instanceof BusinessException) {
+            result.put("errMsg", ex.getMessage());
+        } else {
+            result.put("errMsg", "当你看到这个提示的时候，说明系统发生了一些错误");
+        }
         return result;
     }
 }

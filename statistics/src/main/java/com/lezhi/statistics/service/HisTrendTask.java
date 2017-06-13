@@ -3,6 +3,7 @@ package com.lezhi.statistics.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class HisTrendTask {
     @Autowired
     private DataPlatformMapper mapper;
 
-    public void calcHour(String type, List<Log> logs, Long startTime, Long endTime) throws ParseException {
+    public void calcHour(String type, List<Log> logs, Date startTime, Date endTime) throws ParseException {
         Map<String, HisTrendInfo> map = new HashedMap();
         for (Log log : logs) {
             if (log.getMac().equals("00196843A7A3")) {
@@ -55,7 +56,7 @@ public class HisTrendTask {
                 task.setUv(mapper.selectUv(log, startTime, endTime, type));
                 task.setNv(mapper.selectNv(log, startTime, endTime, type));
                 task.setPv(null == mapper.selectPv(log, startTime, endTime, type) ? 0
-                        : mapper.selectPv(log, startTime, endTime, type).size());
+                        : mapper.selectPv(log, startTime,endTime, type).size());
                 task.setDistrictId(mapper.selectDistrictId(log));
                 task.setBlockId(mapper.selectBlockId(log));
                 task.setResidenceId(mapper.selectResidenceId(log));
@@ -66,10 +67,10 @@ public class HisTrendTask {
                 if (null == same || same.size() == 0) {
                     // 访问时长从当前时间点算起
                     LOGGER.debug("未找到当前数据在该时间段内同一session记录" + log.getSession());
-                    task.setTotalTop(log.getTimeStamp().getTime() / 1000 - startTime);
+                    task.setTotalTop(log.getTimeStamp().getTime() - startTime.getTime());
                 } else
-                    task.setTotalTop(log.getTimeStamp().getTime() / 1000
-                            - same.get(0).getTimeStamp().getTime() / 1000);
+                    task.setTotalTop(log.getTimeStamp().getTime()
+                            - same.get(0).getTimeStamp().getTime());
 
                 // 保存记录
                 String key = null;
@@ -101,7 +102,7 @@ public class HisTrendTask {
         }
     }
 
-    public void calcDay(String type, List<Log> logs, Long startTime, Long endTime) throws ParseException {
+    public void calcDay(String type, List<Log> logs, Date startTime, Date endTime) throws ParseException {
         Map<String, HisTrendInfo> map = new HashedMap();
         for (Log log : logs) {
             if (log.getMac().equals("00196843A7A3")) {
@@ -130,10 +131,10 @@ public class HisTrendTask {
                 if (null == same || same.size() == 0) {
                     // 访问时长从当前时间点算起
                     System.out.println("未找到当前数据在该时间段内同一session记录" + log.getSession());
-                    task.setTotalTop(log.getTimeStamp().getTime() / 1000 - startTime);
+                    task.setTotalTop(log.getTimeStamp().getTime() - startTime.getTime());
                 } else
-                    task.setTotalTop(log.getTimeStamp().getTime() / 1000
-                            - same.get(0).getTimeStamp().getTime() / 1000);
+                    task.setTotalTop(log.getTimeStamp().getTime()
+                            - same.get(0).getTimeStamp().getTime());
 
                 // 保存记录
                 String key = null;

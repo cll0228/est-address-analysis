@@ -1,5 +1,6 @@
 package com.lezhi.statistics.controller;
 
+import com.lezhi.statistics.enums.TrendScaleType;
 import com.lezhi.statistics.mock.CommonMockService;
 import com.lezhi.statistics.pojo.*;
 import com.lezhi.statistics.service.DataPlatformService;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -86,7 +86,7 @@ public class DataPlatformController extends BaseController {
     public TrendResult trend(@RequestParam(value = "channelNo", required = false) String channelNo,
                              @RequestParam(value = "startTime", required = false) Long startTime,
                              @RequestParam(value = "contrastiveStartTime", required = false) Long contrastiveStartTime,
-                             @RequestParam(value = "span") Long span, @RequestParam(value = "scale") Long scale,
+                             @RequestParam(value = "span") long span, @RequestParam(value = "scale") long scale,
                              @RequestParam(value = "districtId", required = false) Integer districtId,
                              @RequestParam(value = "blockId", required = false) Integer blockId,
                              @RequestParam(value = "residenceId", required = false) Integer residenceId) throws Exception{
@@ -94,33 +94,37 @@ public class DataPlatformController extends BaseController {
             return commonMockService.trend();
         }
 
-        if (null == span || null == scale) {
-            return new TrendResult("failed", null, "参数不正确");
-        }
         //span : 跨度 ；scale : 刻度
         if (startTime == null) {
+            TrendScaleType type = null;
             if (span == 60 * 60 * 1000) { //startTIme为null；跨度是一小时，刻度只能是一分钟
                 // 走势统计-当前(小时)
                 if (scale != 60 * 1000) { //刻度只能是一分钟
                     return new TrendResult("failed", null, "参数不正确");
                 }
-                dataPlatformService.updateRealTimeTrendInfoByMinute();
+                type = TrendScaleType.minute;
             } else if (span == 24 * 60 * 60 * 1000) {//跨度为天 刻度只能是小时
                 // 走势统计-当前（天）
                 if (scale != 60 * 60 * 1000) {//小时
                     return new TrendResult("failed", null, "参数不正确");
                 }
-                dataPlatformService.updateRealTimeTrendInfoByHour();
+                type = TrendScaleType.hour;
             } else {
                 return new TrendResult("failed", null, "参数不正确");
             }
+            return dataPlatformService.realtimeTrend(channelNo, type, districtId, blockId, residenceId);
         } else {
-            if (scale != 24 * 60 * 60 * 1000 && scale != 60 * 60 * 1000) {//天  小时
+            TrendScaleType type = null;
+            if (scale == 24 * 60 * 60 * 1000) {//天
+                type = TrendScaleType.day;
+            } else if (scale == 60 * 60 * 1000) {//小时
+                type = TrendScaleType.hour;
+            } else {
                 return new TrendResult("failed", null, "参数不正确");
             }
+            return dataPlatformService.historyTrend(channelNo, startTime, contrastiveStartTime, span, type, districtId,
+                    blockId, residenceId);
         }
-        return dataPlatformService.trend(channelNo, startTime, contrastiveStartTime, span, scale, districtId,
-                blockId, residenceId);
     }
 
     /**

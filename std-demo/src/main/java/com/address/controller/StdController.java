@@ -190,34 +190,35 @@ public class StdController {
                     } else {
                     	result.put("school", null);
                     }
-                	
-                	//估价
-            		AssessParam assessParam = new AssessParam();
-            		assessParam.setResidenceId(ofHouse.getDelResId());
-            		assessParam.setRoomNum(ofHouse.getRoomNum());
-            		assessParam.setHallNum(ofHouse.getHallNum());
-            		//assessParam.setToiletNum(toiletNum);
-            		assessParam.setBuildingNo(returnParam.getBuilding().replace("号", ""));
-            		assessParam.setRoom(ofHouse.getRoomNo());
-            		assessParam.setPropertyArea(ofHouse.getArea());
-            		//assessParam.setPropertyStorey(totalFloor);
-            		assessParam.setPropertyType(ofHouse.getPropertyType());
-            		assessParam.setFloor(ofHouse.getPlaceFloor());
-            		if(null!=ofHouse.getTowards()) {
-            			assessParam.setToward(Integer.parseInt(ofHouse.getTowards()));
-            		}
-            		//assessParam.setLandScape(landScape);
-            		//assessParam.setNearStreet(nearStreet);
-            		assessParam.setPlaneType(ofHouse.getPlaneType());
 
-            		AssessResult dto = assService.assHouse(assessParam);
-            		Double assTotalPrice = dto.getTotalPrice();
-            		Integer assUnitPrice = dto.getUnitPrice();
-            		if(assTotalPrice != null && assUnitPrice != null){
-            			result.put("assTotalPrice",assTotalPrice);
-            			result.put("assUnitPrice",assUnitPrice);
-            		}
+                    try {
+                        //估价
+                        AssessParam assessParam = new AssessParam();
+                        assessParam.setResidenceId(ofHouse.getResidenceId());
+                        assessParam.setRoomNum(ofHouse.getRoomNum());
+                        assessParam.setHallNum(ofHouse.getHallNum());
+                        //assessParam.setToiletNum(toiletNum);
+                        assessParam.setBuildingNo(returnParam.getBuilding().replace("号", ""));
+                        assessParam.setRoom(ofHouse.getRoomNo());
+                        assessParam.setPropertyArea(ofHouse.getArea());
+                        //assessParam.setPropertyStorey(totalFloor);
+                        assessParam.setPropertyType(ofHouse.getPropertyType());
+                        assessParam.setFloor(ofHouse.getPlaceFloor());
+                        if (null != ofHouse.getTowards()) {
+                            assessParam.setToward(Integer.parseInt(ofHouse.getTowards()));
+                        }
+                        //assessParam.setLandScape(landScape);
+                        //assessParam.setNearStreet(nearStreet);
+                        assessParam.setPlaneType(ofHouse.getPlaneType());
 
+                        AssessResult dto = assService.assHouse(assessParam);
+                        Double assTotalPrice = dto.getTotalPrice();
+                        Integer assUnitPrice = dto.getUnitPrice();
+                        if (assTotalPrice != null && assUnitPrice != null) {
+                            result.put("assTotalPrice", assTotalPrice);
+                            result.put("assUnitPrice", assUnitPrice);
+                        }
+                    } catch (Exception e) {}
             		//统计二手房交易量
                    List<Double> list = stdMapper.countHouseDealInfo(detail.getId());
                     Double totalPrice = 0.0;

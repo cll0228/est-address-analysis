@@ -1,29 +1,31 @@
 package com.lezhi.statistics.pojo;
 
+import java.util.Date;
+
 /**
  * Created by Cuill on 2017/3/21.
  */
 public class TrendObj {
-    private Long timeBegin;
-    private Long timeEnd;
+    private Date timeBegin;
+    private Date timeEnd;
     private Integer uv;
     private Integer pv;
     private Integer nv;
     private Long avgTop;
 
-    public Long getTimeBegin() {
+    public Date getTimeBegin() {
         return timeBegin;
     }
 
-    public void setTimeBegin(Long timeBegin) {
+    public void setTimeBegin(Date timeBegin) {
         this.timeBegin = timeBegin;
     }
 
-    public Long getTimeEnd() {
+    public Date getTimeEnd() {
         return timeEnd;
     }
 
-    public void setTimeEnd(Long timeEnd) {
+    public void setTimeEnd(Date timeEnd) {
         this.timeEnd = timeEnd;
     }
 

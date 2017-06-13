@@ -34,7 +34,7 @@ public class DataPlatformService {
         } else if (null == residenceId && null != blockId) {
             districtId = null;
         }
-        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, startTime / 1000, endTime / 1000,
+        List<MacVisitHistoryInfo> infos = dataPlatformMapper.selectVistHis(channelNo, new Date(startTime), new Date(endTime),
                 districtId, blockId,
                     residenceId);
         if (null == infos || infos.size() == 0) {
@@ -169,7 +169,7 @@ public class DataPlatformService {
     }
 
     public SummaryResult summary(String channelNo, long startTime, long endTime, Integer pageNo, Integer pageSize) {
-        List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, startTime / 1000, endTime / 1000);
+        List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, new Date(startTime), new Date(endTime));
         if (null == summaryObjs || summaryObjs.size() == 0) {
             return new SummaryResult("success", new ArrayList<ChannelSummaryObj>(), "");
         }

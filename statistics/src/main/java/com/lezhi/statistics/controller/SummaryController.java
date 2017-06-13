@@ -204,6 +204,18 @@ public class SummaryController extends BaseController {
 			if (pageNo != null && pageNo == totalPageCount) {
 				isLastPage = true;
 			}
+			// 封装返回对象
+			result.put("status", "success");
+			result.put("summaries", residenceInfoList);
+			result.put("errMsg", "");
+			result.put("pageNo", pageNo);
+			result.put("pageSize", defaultPageSize);
+			result.put("realPageSize", realPageSize);
+			result.put("totalPageCount", totalPageCount);
+			result.put("totalCount", totalCount);
+			result.put("isFirstPage", isFirstPage);
+			result.put("isLastPage", isLastPage);
+			return result;
 		} else {
 			result.put("status", "success");
 			result.put("summaries", new ArrayList<SummaryInfo>());
@@ -211,17 +223,6 @@ public class SummaryController extends BaseController {
 			PageUtil.emptyPage(result);
 			return result;
 		}
-		// 封装返回对象
-		result.put("status", "success");
-		result.put("datalist", residenceInfoList);
-		result.put("errMsg", "");
-		result.put("pageNo", pageNo);
-		result.put("pageSize", defaultPageSize);
-		result.put("realPageSize", realPageSize);
-		result.put("totalPageCount", totalPageCount);
-		result.put("totalCount", totalCount);
-		result.put("isFirstPage", isFirstPage);
-		result.put("isLastPage", isLastPage);
-		return result;
+
 	}
 }

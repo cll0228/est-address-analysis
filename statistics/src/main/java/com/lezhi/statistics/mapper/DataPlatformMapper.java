@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public interface DataPlatformMapper {
     List<MacVisitHistoryInfo> selectVistHis(@Param("channelNo") String channelNo,
-            @Param("startTime") long startTime, @Param("endTime") long endTime,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime,
             @Param("districtId") Integer districtId, @Param("blockId") Integer blockId,
             @Param("residenceId") Integer residenceId);
 
@@ -28,8 +28,8 @@ public interface DataPlatformMapper {
                                @Param("contrastiveEndTime") Long contrastiveEndTime, @Param("scale") Long scale, @Param("districtId") Integer districtId,
                                @Param("blockId") Integer blockId, @Param("residenceId") Integer residenceId);
 
-    List<ChannelSummaryObj> summary(@Param("channelNo") String channelNo, @Param("startTime") long startTime,
-            @Param("endTime") long endTime);
+    List<ChannelSummaryObj> summary(@Param("channelNo") String channelNo, @Param("startTime") Date startTime,
+            @Param("endTime") Date endTime);
 
     List<TrendObj> his_current(@Param("channelNo") String channelNo, @Param("startTime") Long startTime,
                                @Param("endTime") Long endTime, @Param("scale") Long scale, @Param("districtId") Integer districtId,

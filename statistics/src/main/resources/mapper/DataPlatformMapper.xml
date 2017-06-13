@@ -22,8 +22,8 @@
         <if test="null != channelNo and '' != channelNo">
             AND channel_no = #{channelNo}
         </if>
-        AND begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND end_time &lt;= FROM_UNIXTIME(${endTime},'%Y-%m-%d %H:%i:%s')
+        AND begin_time &gt;= #{startTime}
+        AND end_time &lt;= #{endTime}
         GROUP BY mac
     </select>
 
@@ -352,8 +352,8 @@
         FROM
         statistics.channel_visit_summary a
         WHERE 1=1
-        AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.end_time &lt;= FROM_UNIXTIME(${endTime},'%Y-%m-%d %H:%i:%s')
+        AND a.begin_time &gt;= #{startTime}
+        AND a.end_time &lt;= #{endTime}
         GROUP BY
         a.channel_no
         ) c LEFT JOIN
@@ -368,10 +368,10 @@
         SELECT
         b.mac
         FROM
-        statistics.new_visitor b WHERE first_visit_time &lt;= FROM_UNIXTIME(#{startTime}, '%Y-%m-%d %H:%i:%s')
+        statistics.new_visitor b WHERE first_visit_time &lt;= #{startTime}
         )
-        AND a.begin_time &gt;= FROM_UNIXTIME(#{startTime},'%Y-%m-%d %H:%i:%s')
-        AND a.end_time &lt;= FROM_UNIXTIME(${endTime},'%Y-%m-%d %H:%i:%s')
+        AND a.begin_time &gt;=#{startTime}
+        AND a.end_time &lt;= #{endTime}
         GROUP BY
         a.channel_no
         ) d

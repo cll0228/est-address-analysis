@@ -171,7 +171,7 @@ public class MacController extends BaseController  {
 			@RequestParam(value = "mac", required = false) String mac
 			,@RequestParam(value = "channelNo", required = false) String channelNo
 			,@RequestParam(value = "startTime", required = false) Long startTime
-			,@RequestParam(value = "span", required = true) Long span
+			,@RequestParam(value = "span", required = true) long span
 			,@RequestParam(value = "districtId", required = false) Integer districtId
 			,@RequestParam(value = "blockId", required = false) Integer blockId
 			,@RequestParam(value = "residenceId", required = false) Integer residenceId
@@ -183,10 +183,8 @@ public class MacController extends BaseController  {
 		if(startTime==null) {
 			startTime = System.currentTimeMillis() - span;
 		}
-		startTime = DateUtils.truncate(new Date(startTime), Calendar.DATE).getTime();
 
-		long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.DATE).getTime();
-		Map<String, Object> result = new HashMap<>();
+		long endTime = startTime + span;
 		return macService.getMacVisitLog(mac,channelNo,startTime,endTime,districtId,blockId,residenceId,pageNo,pageSize);
 	}
 }

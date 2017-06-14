@@ -1,6 +1,7 @@
 package com.lezhi.statistics.pojo;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -109,5 +110,16 @@ public class ChannelVisitSummary {
 				+ ", beginTime=" + beginTime + ", endTime=" + endTime
 				+ ", totalTop=" + totalTop + ", begin=" + begin + ", end="
 				+ end + "]";
+	}
+
+	public String getBeginTimeUTC_8() {
+		if (beginTime == null)
+			return null;
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(beginTime);
+	}
+	public String getEndTimeUTC_8() {
+		if (endTime == null)
+			return null;
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endTime);
 	}
 }

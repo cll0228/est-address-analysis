@@ -1,5 +1,6 @@
 package com.lezhi.statistics.pojo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -16,6 +17,12 @@ public class MacVisitLogInfo {
 	private Integer residenceId;// 小区ID
 	private String residenceName;// 小区名称
 	private Date time;// 日志时间
+
+	public String getTimeUTC_8() {
+		if (time == null)
+			return null;
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
+	}
 
 	// null表示新用户，非null表示老用户；查询的时候如果指定了频道，就是相对该频道，否则相对全局
 	private Integer firstVisitIdIfEverVisited;

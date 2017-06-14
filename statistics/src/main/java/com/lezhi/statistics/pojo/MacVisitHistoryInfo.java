@@ -1,5 +1,6 @@
 package com.lezhi.statistics.pojo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -23,6 +24,17 @@ public class MacVisitHistoryInfo {
     private Date firstVisitTime;// 期间首次访问时间。 unix time, 单位ms
 
     private Date lastVisitTime;// 期间最后访问时间。 unix time, 单位ms
+
+    public String getFirstVisitTimeUTC_8() {
+        if (firstVisitTime == null)
+            return null;
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(firstVisitTime);
+    }
+    public String getLastVisitTimeUTC_8() {
+        if (lastVisitTime == null)
+            return null;
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(lastVisitTime);
+    }
 
     private Long totalTop;// 期间总访问时间(time on page) 。unix time, 单位ms
 

@@ -1,5 +1,6 @@
 package com.lezhi.statistics.pojo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,6 +13,17 @@ public class TrendObj {
     private Integer pv;
     private Integer nv;
     private Long avgTop;
+
+    public String getTimeBeginUTC_8() {
+        if (timeBegin == null)
+            return null;
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timeBegin);
+    }
+    public String getTimeEndUTC_8() {
+        if (timeEnd == null)
+            return null;
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timeEnd);
+    }
 
     public Date getTimeBegin() {
         return timeBegin;

@@ -6,14 +6,16 @@ import com.lezhi.statistics.pojo.MacInfoObj;
 import com.lezhi.statistics.service.MacService;
 import com.lezhi.statistics.util.EnvUtil;
 import com.lezhi.statistics.util.PageUtil;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wangyh on 2017/3/13.

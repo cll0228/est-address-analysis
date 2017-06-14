@@ -132,7 +132,7 @@ public class DataPlatformService {
         if (type == TrendScaleType.minute) {
             trendData = calcTrendInfoByMinute(channelNo, districtId, blockId, residenceId);
         } else {
-            Date startTime = DateUtils.truncate(new Date(), Calendar.HOUR_OF_DAY);
+            Date startTime = DateUtils.addHours(DateUtils.truncate(new Date(), Calendar.HOUR_OF_DAY), -24);
             Date contrastiveStartTime = DateUtils.addDays(startTime, -1);
 
             trendData = calcTrendInfoByHour(startTime, contrastiveStartTime, 24, channelNo, districtId, blockId, residenceId);
@@ -150,7 +150,6 @@ public class DataPlatformService {
             districtId = null;
         }
 
-
         Map<String, List<TrendObj>> trendData = new HashMap<>();
 
         // 当前走势 包括分钟 和 小时 两种刻度
@@ -166,7 +165,7 @@ public class DataPlatformService {
             if (null == _contrastiveStartTime) {
                 contrastiveStartTime = DateUtils.addHours(startTime, -hours);
             } else {
-                contrastiveStartTime = DateUtils.truncate(_contrastiveStartTime, Calendar.HOUR_OF_DAY);
+                contrastiveStartTime = DateUtils.truncate(new Date(_contrastiveStartTime), Calendar.HOUR_OF_DAY);
             }
 
             Date contrastiveEndTime = DateUtils.addHours(contrastiveStartTime, hours);
@@ -192,8 +191,8 @@ public class DataPlatformService {
         return new TrendResult("success", trendData, "");
     }
 
-    public SummaryResult summary(String channelNo, long startTime, long endTime, Integer pageNo, Integer pageSize) {
-        List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.summary(channelNo, new Date(startTime), new Date(endTime));
+    public SummaryResult channelSummary(String channelNo, long startTime, long endTime, Integer pageNo, Integer pageSize) {
+        List<ChannelSummaryObj> summaryObjs = dataPlatformMapper.channelSummary(channelNo, new Date(startTime), new Date(endTime));
         if (null == summaryObjs || summaryObjs.size() == 0) {
             return new SummaryResult("success", new ArrayList<ChannelSummaryObj>(), "");
         }
@@ -231,13 +230,15 @@ public class DataPlatformService {
         }
     }
 
-    private void fillUvAndPv(List<MacVisitLogInfo> logs, TrendObj t) {
+    private void fillUvAndNv(List<MacVisitLogInfo> logs, TrendObj t) {
         Set<String> macs = new HashSet<>();
         int nv = 0;
         for (MacVisitLogInfo log : logs) {
-            macs.add(log.getMac());
-            if (log.getFirstVisitIdIfEverVisited()!=null && log.getFirstVisitIdIfEverVisited() > 0)
-                nv++;
+            if (!macs.contains(log.getMac())) {
+                macs.add(log.getMac());
+                if (log.getFirstVisitIdIfEverVisited()!=null && log.getFirstVisitIdIfEverVisited() > 0)
+                    nv++;
+            }
         }
         t.setUv(macs.size());
         t.setNv(nv);
@@ -290,7 +291,7 @@ public class DataPlatformService {
             t.setPv(map.get(i).size());
             t.setAvgTop(0L);
 
-            fillUvAndPv(map.get(i), t);
+            fillUvAndNv(map.get(i), t);
 
             if (i < 60) {
                 contrastive.add(t);
@@ -344,7 +345,7 @@ public class DataPlatformService {
             t.setTimeEnd(end);
             t.setPv(currentMap.get(i).size());
             t.setAvgTop(0L);    //TODO
-            fillUvAndPv(currentMap.get(i), t);
+            fillUvAndNv(currentMap.get(i), t);
             current.add(t);
         }
         for (int i = 0; i < hours ; i ++) {
@@ -356,7 +357,7 @@ public class DataPlatformService {
             t.setTimeEnd(end);
             t.setPv(contrastiveMap.get(i).size());
             t.setAvgTop(0L);    //TODO
-            fillUvAndPv(contrastiveMap.get(i), t);
+            fillUvAndNv(contrastiveMap.get(i), t);
             contrastive.add(t);
         }
 
@@ -405,7 +406,7 @@ public class DataPlatformService {
             t.setTimeEnd(end);
             t.setPv(currentMap.get(i).size());
             t.setAvgTop(0L);    //TODO
-            fillUvAndPv(currentMap.get(i), t);
+            fillUvAndNv(currentMap.get(i), t);
             current.add(t);
         }
         for (int i = 0; i < days ; i ++) {
@@ -417,18 +418,11 @@ public class DataPlatformService {
             t.setTimeEnd(end);
             t.setPv(contrastiveMap.get(i).size());
             t.setAvgTop(0L);    //TODO
-            fillUvAndPv(contrastiveMap.get(i), t);
+            fillUvAndNv(contrastiveMap.get(i), t);
             contrastive.add(t);
         }
 
         return result;
     }
 
-    public static void main(String[] args) {
-        Date startTime = new Date();
-
-        startTime = DateUtils.truncate(startTime, Calendar.HOUR_OF_DAY);
-
-        System.out.println(startTime);
-    }
 }

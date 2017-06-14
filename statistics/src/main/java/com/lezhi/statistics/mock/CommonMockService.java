@@ -1,10 +1,8 @@
 package com.lezhi.statistics.mock;
 
 import com.lezhi.statistics.pojo.*;
-import com.lezhi.statistics.util.DateUtil;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -462,50 +460,6 @@ public class CommonMockService {
     }
 
     public TrendResult trend() {
-        TrendResult trendResult = new TrendResult();
-        Map<String, List<TrendObj>> map = new HashMap<>();
-        List<TrendObj> cur = new ArrayList<>();
-        List<TrendObj> hiscusr = new ArrayList<>();
-        TrendObj tmp = null;
-        for (int i = 1; i <= 60; i++) {
-            TrendObj t = new HisTrendInfo();
-            t.setAvgTop(Long.valueOf(i * new Random().nextInt()));
-            t.setNv(i * (new Random().nextInt(10)));
-            t.setPv((i + 2) * (new Random().nextInt(20)));
-            t.setUv(i * (new Random().nextInt(15)));
-            String format = DateUtil.format2.format(new Date());// 当前时间整分钟
-            try {
-                if (null == tmp) {
-                    tmp = new TrendObj();
-                    t.setTimeEnd(DateUtil.format1.parse(DateUtil.reduce1Second(format)));
-                    t.setTimeBegin(DateUtil.format1.parse(DateUtil.update1Min(format, -i)));
-                } else {
-                    t.setTimeBegin(new Date(tmp.getTimeBegin().getTime() - 60 * 1000));
-                    t.setTimeEnd(new Date(tmp.getTimeBegin().getTime() - 1000));
-                }
-                tmp = t;
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            cur.add(t);
-        }
-
-        map.put("current", cur);
-
-        for (int i = 1; i <= 60; i++) {
-            TrendObj t = new HisTrendInfo();
-            t.setAvgTop(Long.valueOf(i * new Random().nextInt()));
-            t.setNv(i * (new Random().nextInt(10)));
-            t.setPv((i + 2) * (new Random().nextInt(20)));
-            t.setUv(i * (new Random().nextInt(15)));
-            t.setTimeBegin(new Date(tmp.getTimeBegin().getTime() - 60 * 1000));
-            t.setTimeEnd(new Date(tmp.getTimeBegin().getTime() - 1000));
-            tmp = t;
-            hiscusr.add(t);
-        }
-        map.put("contrastive", hiscusr);
-        trendResult.setStatus("success");
-        trendResult.setTrend(map);
-        return trendResult;
+        return null;
     }
 }

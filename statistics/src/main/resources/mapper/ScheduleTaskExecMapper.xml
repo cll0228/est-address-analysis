@@ -4,8 +4,8 @@
 
     <select id="findById" resultType="com.lezhi.statistics.pojo.ScheduleTaskExec">
       SELECT id, last_exec_time as lastExecTime, ref_id as refId
-FROM schedule_task_exec
-where id=#{id}
+        FROM schedule_task_exec
+        where id=#{id}
     </select>
 
     <update id="updateById" parameterType="com.lezhi.statistics.pojo.ScheduleTaskExec">

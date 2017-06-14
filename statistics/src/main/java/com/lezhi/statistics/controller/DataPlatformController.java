@@ -140,7 +140,7 @@ public class DataPlatformController extends BaseController {
      */
     @RequestMapping(value = "mac/visit/history")
     @ResponseBody
-    private HistoryListResult<?> vistHis(@RequestParam(value = "channelNo", required = false) String channelNo,
+    private HistoryListResult<?> visitHis(@RequestParam(value = "channelNo", required = false) String channelNo,
                                          @RequestParam(value = "startTime", required = false) Long startTime,
                                          @RequestParam(value = "span") long span,
                                          @RequestParam(value = "districtId", required = false) Integer districtId,
@@ -156,9 +156,9 @@ public class DataPlatformController extends BaseController {
         if(startTime==null) {
             startTime = System.currentTimeMillis() - span;
         }
-        startTime = DateUtils.truncate(new Date(startTime), Calendar.DATE).getTime();
+        startTime = DateUtils.truncate(new Date(startTime), Calendar.HOUR_OF_DAY).getTime();
 
-        long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.DATE).getTime();
+        long endTime = DateUtils.truncate(new Date(startTime + span), Calendar.HOUR_OF_DAY).getTime();
 
         if (null == pageNo) {
             pageNo = 1;
@@ -205,7 +205,7 @@ public class DataPlatformController extends BaseController {
             pageSize = 20;
         }
 
-        return dataPlatformService.summary(channelNo, startTime, endTime, pageNo, pageSize);
+        return dataPlatformService.channelSummary(channelNo, startTime, endTime, pageNo, pageSize);
     }
 
 }

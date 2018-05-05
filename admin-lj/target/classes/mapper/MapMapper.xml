@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lezhi.adminlj.mapper.MapMapper">
+    <select id="getDistrictCenterTude" resultType="com.lezhi.adminlj.pojo.ShDistrict">
+      SELECT
+            d.district_id districtId,
+            d.district_name district,
+            d.center_lng centerLongitude,
+            d.center_lat centerLatitude,
+        count(a.PROD_INST_ID) hdUserNum
+        FROM
+            ocn_address.of_district d
+        LEFT JOIN hsrjop.intelligence_hd_addr_info a ON d.district_id = of_district_id WHERE 1=1
+        <if test="districtId != null">
+           AND d.district_id = #{districtId}
+        </if>
+        AND d.is_available = 1 GROUP BY a.of_district_id
+    </select>
+    <select id="getDistrictBoundryInfo" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.ShDistrict">
+        SELECT latitude centerLatitude,longitude centerLongitude FROM hsrjop.lianjia_boundary_data WHERE new_district_id  = #{districtId};
+    </select>
+    <select id="showtown" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Town">
+        SELECT
+        re.*,
+        d.center_lng cenLon,
+        d.center_lat cenLat,
+        sum(a.user_count) hdUserNum
+        FROM
+        hsrjop.of_residence a LEFT JOIN ocn_address.of_residence res on a.id = res.id,
+        (
+        SELECT
+        t.town_id townId,
+        t.town_name townName,
+        t.district_id districtId,
+        t.latitude latitude,
+        t.longitude longitude
+        FROM
+        ocn_address.of_town t
+        WHERE t.latitude != ''
+        <if test="townId != null">
+            AND   t.town_id = #{townId}
+        </if>
+        <if test="lng != null and '' != lng">
+             AND  hsrjop.calcDistance(#{lng},#{lat},t.longitude,t.latitude) &lt;8000
+        </if>
+        ) re LEFT JOIN
+        ocn_address.of_district d on d.district_id = re.districtId
+        WHERE
+        res.of_town_id = re.townId
+        AND re.districtId = d.district_id
+        <if test="districtId != null">
+            and d.district_id = #{districtId}
+        </if>
+        GROUP BY
+        res.of_town_id HAVING hdUserNum  != 0
+    </select>
+    <select id="neighborhood" parameterType="java.lang.Integer" resultType="com.lezhi.adminlj.pojo.Neighborhood">
+        SELECT
+        re.*,
+        d.longitude cenLon,
+        d.latitude cenLat,
+        sum(a.user_count) hdUserNum
+        FROM
+        hsrjop.of_residence a LEFT JOIN ocn_address.of_residence res on a.id = res.id,
+        (
+        SELECT
+        t.neighborhood_id neighborhoodId,
+        t.neighborhood_name neighborhoodName,
+        t.town_id townId,
+        t.lng lng,
+        t.lat lat
+        FROM
+        ocn_address.of_neighborhood t
+        WHERE
+        t.lng != ''
+        <if test="neighborhoodId != null and '' != neighborhoodId">
+            AND t.neighborhood_id = #{neighborhoodId}
+        </if>
+        <if test="lng != null and '' != lng">
+            AND  hsrjop.calcDistance(#{lng},#{lat},t.lng,t.lat) &lt;1500
+        </if>
+        ) re,
+        ocn_address.of_town d
+        WHERE
+        res.of_neighborhood_id = re.neighborhoodId AND res.of_town_id = d.town_id
+        <if test="townId != null and '' != townId">
+            AND re.townId = #{townId}
+        </if>
+        GROUP BY
+        res.of_neighborhood_id HAVING hdUserNum != 0
+
+    </select>
+    <select id="residence" parameterType="java.lang.String" resultType="com.lezhi.adminlj.pojo.Residence">
+        SELECT
+        re.*,  a.user_count hdUserNum,
+        a.house_count2 houseCount,
+        FORMAT(a.user_count/a.house_count2*100,2) rate ,
+        n.lng cenLon,
+        n.lat cenLat
+        FROM
+        hsrjop.of_residence a,
+        (
+        SELECT
+        r.id residenceId,
+        r.residence_name residenceName,
+        r.of_neighborhood_id neighborhoodId,
+        r.lon lon,
+        r.lat lat
+        FROM
+        ocn_address.of_residence r
+        WHERE r.lon != ''
+        <if test="residenceId != null and '' != residenceId">
+           and r.id = #{residenceId}
+        </if>
+        <if test="lng != null and '' != lng">
+           and hsrjop.calcDistance (
+            #{lng},
+           #{lat},
+            r.lon,
+            r.lat
+            ) &lt;800
+        </if>
+        ) re ,ocn_address.of_neighborhood n
+        WHERE
+        re.residenceId = a.id /*and re.neighborhoodId = n.neighborhood_id*/
+        <if test="neighborhoodId != null and '' != neighborhoodId">
+          and  re.neighborhoodId = #{neighborhoodId}
+        </if>
+        GROUP BY
+        a.id HAVING hdUserNum != 0
+    </select>
+</mapper>

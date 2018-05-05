@@ -18,8 +18,6 @@ public class PoiDetail {
 
     private Double baiduLat;
 
-
-
     public String getPoiKind() {
         return poiKind;
     }

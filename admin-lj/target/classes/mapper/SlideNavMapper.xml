@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lezhi.adminlj.mapper.SlideNavMapper">
+	<resultMap id="BaseResultMap" type="com.lezhi.adminlj.pojo.District">
+        <id column="district_id" property="districtId" jdbcType="INTEGER"/>
+        <result column="district_name" property="districtName" jdbcType="VARCHAR"/>
+        <result column="center_lng" property="centerLng" jdbcType="DOUBLE"/>
+        <result column="center_lat" property="centerLat" jdbcType="DOUBLE"/>
+        <collection property="townList" ofType="com.lezhi.adminlj.pojo.Town" javaType="ArrayList">
+        	<id column="town_id" property="townId" jdbcType="INTEGER"/>
+        	<result column="town_name" property="townName" jdbcType="VARCHAR"/>
+        	<result column="longitude" property="longitude" jdbcType="DOUBLE"/>
+        	<result column="latitude" property="latitude" jdbcType="DOUBLE"/>
+        	<collection property="neighborhoodList" ofType="com.lezhi.adminlj.pojo.Neighborhood" javaType="ArrayList">
+	        	<id column="neighborhood_id" property="neighborhoodId" jdbcType="DOUBLE"/>
+	        	<result column="neighborhood_name" property="neighborhoodName" jdbcType="VARCHAR"/>
+	        	<result column="neighborhood_addr" property="neighborhoodAddr" jdbcType="VARCHAR"/>
+	        	<result column="lng" property="lng" jdbcType="DOUBLE"/>
+	        	<result column="lat" property="lat" jdbcType="DOUBLE"/>
+        	</collection>
+        </collection>
+    </resultMap>
+    
+    <select id="districtList" resultMap="BaseResultMap">
+        SELECT
+			d.district_id,
+			d.district_name,
+			d.center_lng,
+			d.center_lat,
+			t.town_id,
+			t.town_name,
+			t.longitude,
+			t.latitude,
+			n.neighborhood_id,
+			n.neighborhood_name,
+			n.neighborhood_addr,
+			n.lng,
+			n.lat
+		FROM
+			of_district d
+		LEFT JOIN of_town t ON d.district_id = t.district_id
+		LEFT JOIN of_neighborhood n ON t.town_id = n.town_id
+    </select>
+    
+    <select id="districtCount" resultType="com.lezhi.adminlj.pojo.CountParam">
+        SELECT
+			a.*, b.levelHouseCount,
+			a.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					count(a.STD_ADDR_ID) AS households,
+					c.district_name AS levelName,
+					c.center_lng AS lon,
+					c.center_lat AS lat,
+					a.of_district_id AS levelId,
+					a.of_district_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				LEFT JOIN
+					ocn_address.of_district c
+				ON
+					a.of_district_id = c.district_id
+				WHERE
+					a.RN = 1
+				AND district_name IS NOT NULL and district_name!='闸北区'
+				GROUP BY
+					a.of_district_id
+			) a
+		INNER JOIN (
+			SELECT
+				of_district_id,
+				sum(house_count) AS levelHouseCount
+			FROM
+				ocn_address.of_residence
+			WHERE
+				of_district_id IS NOT NULL
+			GROUP BY
+				of_district_id
+		) b ON a.of_district_id = b.of_district_id
+		ORDER BY proportion DESC
+		<!-- SELECT
+			a.*, b.levelHouseCount,
+			b.households,
+			b.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					c.district_name AS levelName,
+					c.center_lng AS lon,
+					c.center_lat AS lat,
+					a.of_district_id AS levelId,
+					a.of_district_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				LEFT JOIN
+					ocn_address.of_district c
+				ON
+					a.of_district_id = c.district_id
+				WHERE
+					district_name IS NOT NULL and district_name!='闸北区'
+				GROUP BY
+					a.of_district_id
+			) a
+		INNER JOIN (
+			SELECT
+				d.of_district_id,
+				sum(c.user_count) AS households,
+				sum(c.house_count2) AS levelHouseCount
+			FROM
+				hsrjop.of_residence c
+			LEFT JOIN
+				ocn_address.of_residence d
+			ON
+				c.id=d.id
+			WHERE
+				d.of_district_id IS NOT NULL
+			GROUP BY
+				d.of_district_id
+		) b ON a.of_district_id = b.of_district_id
+		ORDER BY proportion DESC -->
+    </select>
+    
+    <select id="levelOneCount" resultType="com.lezhi.adminlj.pojo.CountParam">
+        SELECT
+			a.*, b.levelHouseCount,
+			a.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					count(a.STD_ADDR_ID) AS households,
+					a.town_name AS levelName,
+					a.of_town_id AS levelId,
+					a.of_town_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				WHERE
+					a.RN = 1 AND
+					district_name IS NOT NULL and district_name!='闸北区'
+				AND 
+					a.of_district_id = #{districtId}
+				GROUP BY
+					a.of_town_id
+			) a
+		INNER JOIN (
+			SELECT
+				of_town_id,
+				sum(house_count) AS levelHouseCount
+			FROM
+				ocn_address.of_residence
+			WHERE
+				of_town_id IS NOT NULL
+			AND 
+				of_district_id = #{districtId}
+			GROUP BY
+				of_town_id
+		) b ON a.of_town_id = b.of_town_id
+    </select>
+    
+    <select id="levelTwoCount" resultType="com.lezhi.adminlj.pojo.CountParam">
+        SELECT
+			a.*, b.levelHouseCount,
+			a.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					count(a.STD_ADDR_ID) AS households,
+					a.neighborhood_name AS levelName,
+					a.of_neighborhood_id AS levelId,
+					a.of_neighborhood_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				WHERE a.RN = 1 AND
+					district_name IS NOT NULL and district_name!='闸北区'
+				AND 
+					a.of_town_id = #{townId}
+				GROUP BY
+					a.of_neighborhood_id
+			) a
+		INNER JOIN (
+			SELECT
+				of_neighborhood_id,
+				sum(house_count) AS levelHouseCount
+			FROM
+				ocn_address.of_residence
+			WHERE
+				of_neighborhood_id IS NOT NULL
+			AND 
+				of_town_id = #{townId}
+			GROUP BY
+				of_neighborhood_id
+		) b ON a.of_neighborhood_id = b.of_neighborhood_id
+    </select>
+
+    <select id="searchKey" resultType="com.lezhi.adminlj.pojo.LuceneSearchDto">
+		SELECT CONVERT (1, signed) AS type, NULL district_id, NULL district_name, NULL town_id, NULL town_name, NULL neighborhood_id,
+			NULL neighborhood_name, district_id AS id, district_name AS name, NULL AS addr, NULL longitude, NULL latitude, center_lng, center_lat
+		FROM of_district
+		where district_name LIKE "%${keyWord}%"
+		UNION ALL
+		SELECT CONVERT (2, signed) AS type, d.district_id, d.district_name, NULL town_id, NULL town_name, NULL neighborhood_id, NULL neighborhood_name,
+			t.town_id AS id, t.town_name AS name, NULL AS addr, NULL longitude, NULL latitude, t.longitude center_lng, t.latitude center_lat
+		FROM of_town t
+		LEFT JOIN of_district d ON d.district_id = t.district_id
+			where t.town_name LIKE "%${keyWord}%"
+		UNION ALL
+		SELECT CONVERT (3, signed) AS type, d.district_id, d.district_name, t.town_id, t.town_name, NULL neighborhood_id, NULL neighborhood_name,
+			n.neighborhood_id AS id, n.neighborhood_name AS name, n.neighborhood_addr AS addr, n.lng AS longitude, n.lat AS latitude, NULL center_lng, NULL center_lat
+		FROM of_neighborhood n
+		LEFT JOIN of_town t ON n.town_id = t.town_id
+		LEFT JOIN of_district d ON n.district_id = d.district_id
+			where n.neighborhood_name LIKE "%${keyWord}%"
+		UNION ALL
+		SELECT CONVERT (4, signed) AS type, NULL district_id, NULL district_name, NULL town_id, NULL town_name, NULL neighborhood_id, NULL neighborhood_name,
+			r.id AS id, r.road_name AS name, NULL addr, NULL longitude, NULL latitude, NULL center_lng, NULL center_lat
+		FROM of_std_road r
+		where r.road_name LIKE "%${keyWord}%"
+		UNION ALL
+		SELECT CONVERT (5, signed) AS type, d.district_id, d.district_name, t.town_id, t.town_name, n.neighborhood_id, n.neighborhood_name, r.id AS id,
+			r.residence_name AS name, r.residence_addr AS addr, r.lon AS longitude, r.lat AS latitude, NULL center_lng, NULL center_lat
+		FROM of_residence r
+		LEFT JOIN of_town t ON r.of_town_id = t.town_id
+		LEFT JOIN of_district d ON r.of_district_id = d.district_id
+		LEFT JOIN of_neighborhood n ON r.of_neighborhood_id = n.neighborhood_id
+		where r.residence_name LIKE "%${keyWord}%" OR r.residence_addr LIKE "%${keyWord}%"
+		LIMIT 10
+	</select>
+
+    <select id="levelThreeCount" resultType="com.lezhi.adminlj.pojo.CountParam">
+        SELECT
+			a.*, b.levelHouseCount,
+			a.households / b.levelHouseCount * 100 AS proportion
+		FROM
+			(
+				SELECT
+					count(a.STD_ADDR_ID) AS households,
+					a.residence_name AS levelName,
+					a.residence_id AS levelId,
+					a.residence_id
+				FROM
+					hsrjop.intelligence_hd_addr_info a
+				WHERE a.RN = 1 AND
+					district_name IS NOT NULL and district_name!='闸北区'
+				AND 
+					a.of_neighborhood_id = #{neighborhoodId}
+				GROUP BY
+					a.residence_id
+			) a
+		INNER JOIN (
+			SELECT
+				id,
+				sum(house_count) AS levelHouseCount
+			FROM
+				ocn_address.of_residence
+			WHERE
+				id IS NOT NULL
+			AND 
+				of_neighborhood_id = #{neighborhoodId}
+			GROUP BY
+				id
+		) b ON a.residence_id = b.id
+    </select>
+
+	<select id="searchKeyword" resultType="com.lezhi.adminlj.pojo.CountParam">
+		SELECT
+		a.*, b.levelHouseCount,
+		a.households / b.levelHouseCount * 100 AS proportion,
+		b.lat,
+		b.lon
+		FROM
+		(select count(h.STD_ADDR_ID) AS households
+		,od.district_name AS districtName
+		,ot.town_name AS townNname
+		,ne.neighborhood_name AS neighborhoodName
+		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
+			,od.district_name AS levelName,
+			h.of_district_id AS levelId,
+			h.of_district_id
+		</if>
+		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			,ot.town_name AS levelName,
+			h.of_town_id AS levelId,
+			h.of_town_id
+		</if>
+		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			,ne.neighborhood_name AS levelName,
+			h.of_neighborhood_id AS levelId,
+			h.of_neighborhood_id
+		</if>
+		<if test='paramInfo.keyType == "4"'>
+			,h.residence_name AS levelName,
+			h.residence_id AS levelId,
+			h.residence_id
+		</if>
+		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
+			,h.residence_name AS levelName,
+			h.residence_id AS levelId,
+			h.residence_id
+		</if>
+		FROM
+		(select i.STD_ADDR_ID,i.of_district_id,i.of_town_id,i.of_neighborhood_id,
+		i.residence_id,i.residence_name
+		from hsrjop.intelligence_hd_addr_info i
+		INNER JOIN hsrjop.of_residence r ON i.residence_id = r.id
+		WHERE i.RN = 1
+		<if test='paramInfo.keyType == "1"'>
+			and i.of_district_id = #{paramInfo.keyId}
+		</if>
+		<if test='paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			and i.of_district_id = #{paramInfo.dataId}
+		</if>
+		<if test='paramInfo.keyType == "2"'>
+			and i.of_town_id = #{paramInfo.keyId}
+		</if>
+		<if test='paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			and i.of_town_id = #{paramInfo.dataId}
+		</if>
+		<if test='paramInfo.keyType == "3"'>
+			and i.of_neighborhood_id = #{paramInfo.keyId}
+		</if>
+		<if test='paramInfo.siteType == "xiaoqu"'>
+			and i.of_neighborhood_id = #{paramInfo.dataId}
+		</if>
+		<if test='paramInfo.keyType == "4"'>
+			and i.residence_addr like "%${paramInfo.keyword}%"
+		</if>
+		<if test='paramInfo.keyType == "5"'>
+			and i.residence_id = #{paramInfo.keyId}
+		</if>
+		<!--	<if test='paramInfo.siteType == "xiaoqu"'>
+                and i.residence_id = #{paramInfo.dataId}
+            </if>-->
+		<!--	<if test='paramInfo.a != null or paramInfo.p != null or paramInfo.t != null or paramInfo.c != null'>
+				and i.residence_id = r.id
+			</if>-->
+		<!-- 用户规模 -->
+		<if test='paramInfo.a == "a1"'>
+			and r.user_count &lt; 100
+		</if>
+		<if test='paramInfo.a == "a2"'>
+			and r.user_count  BETWEEN 100 and 200
+		</if>
+		<if test='paramInfo.a == "a3"'>
+			and r.user_count  BETWEEN 200 and 500
+		</if>
+		<if test='paramInfo.a == "a4"'>
+			and r.user_count &gt;= 500
+		</if>
+		<!-- 小区总户数 -->
+		<if test='paramInfo.l == "l500"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id)&lt;500
+		</if>
+		<if test='paramInfo.l == "l1000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) BETWEEN 500 and 1000
+		</if>
+		<if test='paramInfo.l == "l2000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) BETWEEN 1000 and 2000
+		</if>
+		<if test='paramInfo.l == "l3000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = i.residence_id) &gt;= 2000
+		</if>
+		<!-- 小区均价 -->
+		<if test='paramInfo.p == "p2"'>
+			and r.residence_avg_price &lt; 30000
+		</if>
+		<if test='paramInfo.p == "p3"'>
+			and r.residence_avg_price BETWEEN 30000 and 50000
+		</if>
+		<if test='paramInfo.p == "p4"'>
+			and r.residence_avg_price BETWEEN 50000 and 80000
+		</if>
+		<if test='paramInfo.p == "p5"'>
+			and r.residence_avg_price BETWEEN 80000 and 100000
+		</if>
+		<if test='paramInfo.p == "p6"'>
+			and r.residence_avg_price &gt;= 100000
+		</if>
+		<!-- 小区分类 -->
+		<if test='paramInfo.t == "t1"'>
+			and r.residence_level_id =1
+		</if>
+		<if test='paramInfo.t == "t2"'>
+			and r.residence_level_id =2
+		</if>
+		<if test='paramInfo.t == "t3"'>
+			and r.residence_level_id =3
+		</if>
+		<!-- 小区用户占比 -->
+		<if test='paramInfo.c == "c1"'>
+			and r.residence_rate &lt; 0.1
+		</if>
+		<if test='paramInfo.c == "c2"'>
+			and r.residence_rate  BETWEEN 0.1 and 0.2
+		</if>
+		<if test='paramInfo.c == "c3"'>
+			and r.residence_rate BETWEEN 0.2 and 0.3
+		</if>
+		<if test='paramInfo.c == "c4"'>
+			and r.residence_rate BETWEEN 0.3 and 0.5
+		</if>
+		<if test='paramInfo.c == "c5"'>
+			and r.residence_rate &gt;= 0.5
+		</if>
+		<if test='paramInfo.jdh != null'>
+			and i.TYPE_NAME in(${paramInfo.jdh})
+		</if>
+		<!--	&lt;!&ndash; 不动产估值 &ndash;&gt;
+			<if test='g == "g300"'>
+				and i.house_estate_price &lt; 300
+			</if>
+			<if test='g == "g500"'>
+				and i.house_estate_price BETWEEN 300 and 500
+			</if>
+			<if test='g == "g800"'>
+				and i.house_estate_price BETWEEN 500 and 800
+			</if>
+			<if test='g == "g1000"'>
+				and i.house_estate_price BETWEEN 800 and 1000
+			</if>
+			<if test='g == "g1500"'>
+				and i.house_estate_price BETWEEN 1000 and 1500
+			</if>
+			<if test='g == "g3000"'>
+				and i.house_estate_price BETWEEN 1500 and 3000
+			</if>
+			<if test='g == "g3100"'>
+				and i.house_estate_price &gt;= 3000
+			</if>
+			&lt;!&ndash; 账单活跃度 &ndash;&gt;
+			<if test='o == "o3"'>
+				and i.activeid = 3
+			</if>
+			<if test='o == "o6"'>
+				and i.activeid = 6
+			</if>
+			<if test='o == "o12"'>
+				and i.activeid = 12
+			</if>
+			<if test='o == "o24"'>
+				and i.activeid = 24
+			</if>
+			&lt;!&ndash; 是否订阅增值节目 &ndash;&gt;
+			<if test='f == "f1"'>
+				and i.isadded = 1
+			</if>
+			<if test='f == "f2"'>
+				and i.isadded = 0
+			</if>-->
+		) h
+		LEFT JOIN ocn_address.of_district od on h.of_district_id = od.district_id AND od.is_available = 1
+		LEFT JOIN ocn_address.of_town ot on h.of_town_id = ot.town_id
+		LEFT JOIN ocn_address.of_neighborhood ne on h.of_neighborhood_id = ne.neighborhood_id
+		GROUP BY
+		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
+			h.of_district_id
+		</if>
+		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			h.of_town_id
+		</if>
+		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			h.of_neighborhood_id
+		</if>
+		<if test='paramInfo.keyType == "4"'>
+			h.residence_id
+		</if>
+		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
+			h.residence_id
+		</if>
+		)a
+		INNER JOIN (
+		SELECT
+		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
+			of_district_id,
+			sum(house_count) AS levelHouseCount,
+			od.center_lat AS lat,
+			od.center_lng AS lon
+		</if>
+		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			of_town_id,
+			sum(house_count) AS levelHouseCount,
+			ot.latitude AS lat,
+			ot.longitude AS lon
+		</if>
+		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			of_neighborhood_id,
+			sum(house_count) AS levelHouseCount,
+			one.lat AS lat,
+			one.lng as lon
+		</if>
+		<if test='paramInfo.keyType == "4"'>
+			id,
+			sum(house_count) AS levelHouseCount,
+			re.lat,
+			re.lon
+		</if>
+		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
+			id,
+			sum(house_count) AS levelHouseCount,
+			re.lat,
+			re.lon
+		</if>
+		FROM ocn_address.of_residence re
+		left JOIN ocn_address.of_district od on re.of_district_id = od.district_id AND od.is_available = 1
+		left JOIN ocn_address.of_town ot on re.of_town_id = ot.town_id
+		left JOIN ocn_address.of_neighborhood one on re.of_neighborhood_id = one.neighborhood_id
+		WHERE 1=1
+		<!-- 小区总户数 -->
+		<if test='paramInfo.l == "l500"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id)&lt;500
+		</if>
+		<if test='paramInfo.l == "l1000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id) BETWEEN 500 and 1000
+		</if>
+		<if test='paramInfo.l == "l2000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id) BETWEEN 1000 and 2000
+		</if>
+		<if test='paramInfo.l == "l3000"'>
+			and (select sum(house_count) from ocn_address.of_residence res where res.id = re.id) &gt;= 2000
+		</if>
+		<if test='paramInfo.keyType == "1" and paramInfo.siteType != "quyu"'>
+			AND of_district_id IS NOT NULL AND od.is_available = 1
+			AND of_district_id = #{paramInfo.keyId}
+			GROUP BY
+			of_district_id
+		</if>
+		<if test='paramInfo.siteType == "quyu"'>
+			AND of_district_id IS NOT NULL AND od.is_available = 1
+			GROUP BY
+			of_district_id
+		</if>
+		<if test='paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			AND of_district_id IS NOT NULL AND od.is_available = 1
+			AND of_district_id = #{paramInfo.dataId}
+			GROUP BY
+			of_town_id
+		</if>
+		<if test='paramInfo.keyType == "2" and paramInfo.siteType != "juwei" and paramInfo.siteType != "alljuwei"'>
+			AND of_town_id IS NOT NULL
+			AND of_town_id = #{paramInfo.keyId}
+			GROUP BY
+			of_town_id
+		</if>
+		<if test='paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			AND of_town_id IS NOT NULL
+			AND of_town_id = #{paramInfo.dataId}
+			GROUP BY
+			of_neighborhood_id
+		</if>
+		<if test='paramInfo.keyType == "3" and paramInfo.siteType != "xiaoqu"'>
+			AND of_neighborhood_id IS NOT NULL
+			AND of_neighborhood_id = #{paramInfo.keyId}
+			GROUP BY
+			of_neighborhood_id
+		</if>
+		<if test='paramInfo.siteType == "xiaoqu"'>
+			AND of_neighborhood_id IS NOT NULL
+			AND of_neighborhood_id = #{paramInfo.dataId}
+			GROUP BY
+			id
+		</if>
+		<if test='paramInfo.keyType == "4"'>
+			AND id IS NOT NULL
+			AND residence_addr like "%${paramInfo.keyword}%"
+			GROUP BY
+			id
+		</if>
+		<if test='paramInfo.keyType == "5"'>
+			AND id IS NOT NULL
+			AND id = #{paramInfo.keyId}
+			GROUP BY
+			id
+		</if>
+		) b
+		ON
+		<if test='paramInfo.keyType == "1" or paramInfo.siteType == "quyu"'>
+			a.of_district_id = b.of_district_id
+		</if>
+		<if test='paramInfo.keyType == "2" or paramInfo.siteType == "jiedao" or paramInfo.siteType == "alljiedao"'>
+			a.of_town_id = b.of_town_id
+		</if>
+		<if test='paramInfo.keyType == "3" or paramInfo.siteType == "juwei" or paramInfo.siteType == "alljuwei"'>
+			a.of_neighborhood_id = b.of_neighborhood_id
+		</if>
+		<if test='paramInfo.keyType == "4"'>
+			a.residence_id = b.id
+		</if>
+		<if test='paramInfo.keyType == "5" or paramInfo.siteType == "xiaoqu"'>
+			a.residence_id = b.id
+		</if>
+		ORDER BY proportion DESC
+	</select>
+</mapper>

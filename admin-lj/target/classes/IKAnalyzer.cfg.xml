@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">  
+<properties>
+<comment>IK Analyzer 扩展配置</comment>
+<!--用户可以在这里配置自己的扩展字典
+<entry key="ext_dict">/mydict.dic;</entry>
+-->
+<entry key="ext_dict">ik_dic/1.of_district.dic;ik_dic/2.of_town.dic;ik_dic/3.of_neighborhood.dic;ik_dic/4.of_road.dic;ik_dic/5.of_residence.dic</entry>
+<!--用户可以在这里配置自己的扩展停止词字典-->
+<entry key="ext_stopwords">ext_stopword.dic</entry>
+
+
+</properties>
